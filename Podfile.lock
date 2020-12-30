@@ -1,0 +1,23 @@
+PODS:
+  - IQListKit (1.0.0)
+  - SwiftLint (0.41.0)
+
+DEPENDENCIES:
+  - IQListKit (from `.`)
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - SwiftLint
+
+EXTERNAL SOURCES:
+  IQListKit:
+    :path: "."
+
+SPEC CHECKSUMS:
+  IQListKit: 00a29e8317f4e5d82da3044e70c5e18e3439277e
+  SwiftLint: c585ebd615d9520d7fbdbe151f527977b0534f1e
+
+PODFILE CHECKSUM: 1214372ba79ca0e01db86cad495a9b2a27c9ae0f
+
+COCOAPODS: 1.10.0
