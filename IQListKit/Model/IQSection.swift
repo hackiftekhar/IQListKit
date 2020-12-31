@@ -50,8 +50,8 @@ public struct IQSection: Hashable {
     public var footerSize: CGSize?
 
     public init(identifier: AnyHashable,
-                header: String? = nil, footer: String? = nil,
-                headerSize: CGSize? = nil, footerSize: CGSize? = nil) {
+                header: String? = nil, headerSize: CGSize? = nil,
+                footer: String? = nil, footerSize: CGSize? = nil) {
         self.identifier = identifier
         self.header = header
         self.footer = footer
