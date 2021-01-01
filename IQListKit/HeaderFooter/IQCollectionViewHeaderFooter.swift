@@ -33,7 +33,11 @@ public class IQCollectionViewHeaderFooter: UICollectionReusableView {
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.numberOfLines = 0
         textLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        textLabel.textColor = UIColor.label
+        if #available(iOS 13.0, *) {
+            textLabel.textColor = UIColor.label
+        } else {
+            textLabel.textColor = UIColor.darkText
+        }
         self.addSubview(textLabel)
 
         let views: [String: UIView] = ["headerFooterView": self, "textLabel": textLabel]

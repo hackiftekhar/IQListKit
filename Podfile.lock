@@ -1,5 +1,9 @@
 PODS:
-  - IQListKit (1.0.0)
+  - DifferenceKit/Core (1.1.5)
+  - DifferenceKit/UIKitExtension (1.1.5):
+    - DifferenceKit/Core
+  - IQListKit (1.0.0):
+    - DifferenceKit/UIKitExtension (~> 1.1.5)
   - SwiftLint (0.41.0)
 
 DEPENDENCIES:
@@ -8,6 +12,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - DifferenceKit
     - SwiftLint
 
 EXTERNAL SOURCES:
@@ -15,7 +20,8 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  IQListKit: 00a29e8317f4e5d82da3044e70c5e18e3439277e
+  DifferenceKit: 516f12e336ed65a3a0665847b5c3cb5cad4bd4ea
+  IQListKit: 12078aeefaeada5c82153e210649402cad02ea0d
   SwiftLint: c585ebd615d9520d7fbdbe151f527977b0534f1e
 
 PODFILE CHECKSUM: 1214372ba79ca0e01db86cad495a9b2a27c9ae0f

@@ -115,7 +115,11 @@ public class IQEmptyStateView: UIScrollView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        label.textColor = UIColor.label
+        if #available(iOS 13.0, *) {
+            label.textColor = UIColor.label
+        } else {
+            label.textColor = UIColor.darkText
+        }
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -126,7 +130,11 @@ public class IQEmptyStateView: UIScrollView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
-        label.textColor = UIColor.secondaryLabel
+        if #available(iOS 13.0, *) {
+            label.textColor = UIColor.secondaryLabel
+        } else {
+            label.textColor = UIColor.gray
+        }
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -135,7 +143,11 @@ public class IQEmptyStateView: UIScrollView {
         let button = UIButton(type: .system)
         button.isHidden = true
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.buttonFontSize)
-        button.setTitleColor(.link, for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setTitleColor(.link, for: .normal)
+        } else {
+            button.setTitleColor(UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1), for: .normal)
+        }
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

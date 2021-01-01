@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C02D4377259FB63700D55523 /* UserListNormalTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02D4376259FB63700D55523 /* UserListNormalTableViewController.swift */; };
 		C0A0D8FD259C9168008CD05F /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D8FC259C9168008CD05F /* BookCell.swift */; };
 		C0A0D900259C918F008CD05F /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D8FF259C918F008CD05F /* Book.swift */; };
 		C0A0D90F259CA646008CD05F /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D90E259CA646008CD05F /* People.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		85F60F513481884CC8186C9B /* Pods_ListKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ListKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF09D68FC465E675FA2D3C6D /* Pods-ListKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListKit.release.xcconfig"; path = "Target Support Files/Pods-ListKit/Pods-ListKit.release.xcconfig"; sourceTree = "<group>"; };
+		C02D4376259FB63700D55523 /* UserListNormalTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListNormalTableViewController.swift; sourceTree = "<group>"; };
 		C0A0D8FC259C9168008CD05F /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		C0A0D8FF259C918F008CD05F /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		C0A0D90E259CA646008CD05F /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				C0A2AB70259A28CA00F06BFC /* AppDelegate.swift */,
 				C0A2AB72259A28CA00F06BFC /* SceneDelegate.swift */,
 				C0A2AB74259A28CA00F06BFC /* UserListTableViewController.swift */,
+				C02D4376259FB63700D55523 /* UserListNormalTableViewController.swift */,
 				C0D6D3B5259AFD2800F5B3C4 /* UserViewController.swift */,
 				C0A2AB76259A28CA00F06BFC /* Main.storyboard */,
 				C0A2AB79259A28CB00F06BFC /* Assets.xcassets */,
@@ -270,6 +273,7 @@
 				C0A2AB71259A28CA00F06BFC /* AppDelegate.swift in Sources */,
 				C0D6D3B1259AFCB600F5B3C4 /* UserCell.swift in Sources */,
 				C0A2AB73259A28CA00F06BFC /* SceneDelegate.swift in Sources */,
+				C02D4377259FB63700D55523 /* UserListNormalTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,7 +423,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ListKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -440,7 +444,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ListKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

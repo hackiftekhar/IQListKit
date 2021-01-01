@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: Improved DiffableDataSource of UICollectionView
 
+@available(iOS 13.0, *)
 internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
@@ -66,6 +67,7 @@ internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataS
     }
 }
 
+@available(iOS 13.0, *)
 extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout {
 
     // MARK: - Header Footer
@@ -114,6 +116,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
     }
 }
 
+@available(iOS 13.0, *)
 extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
 
     // MARK: - Selection

@@ -12,7 +12,7 @@
     "Iftekhar Qurashi": "hack.iftekhar@gmail.com"
   },
   "platforms": {
-    "ios": "13.0"
+    "ios": "9.0"
   },
   "swift_versions": [
     "5.0",
@@ -25,5 +25,10 @@
     "UIKit",
     "Foundation"
   ],
+  "dependencies": {
+      "DifferenceKit/UIKitExtension": [
+          "~> 1.1.5"
+      ]
+  },
   "requires_arc": true
 }
