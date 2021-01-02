@@ -4,7 +4,7 @@ Model driven UITableView/UICollectionView
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
-IQListKit allows you to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take of rest including the animations of all changes.
+IQListKit allows you to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take care of rest including the animations of all changes.
 
 For iOS13: Thanks to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot)
 
@@ -15,7 +15,8 @@ For iOS12 and below: Thanks to Ryo Aoyama for [DiffableDataSources](https://gith
 
 | Library                | Language | Minimum iOS Target | Minimum Xcode Version |
 |------------------------|----------|--------------------|-----------------------|
-| IQListKit (1.0.0)      | Swift    | iOS 9.0            | Xcode 11              |
+| IQListKit (1.0.0)      | Swift    | iOS 13.0           | Xcode 11              |
+| IQListKit (1.1.0)      | Swift    | iOS 9.0            | Xcode 11              |
 
 #### Swift versions support
 5.0 and above
@@ -103,7 +104,7 @@ struct User: Hashable {
     let name: String
 }
 ```
-But if we would like to manually confirm, we have to implement **func hash(into hasher: inout Hasher)** and preferably we should also confirm the to Equatable protocol by implementing **static func == (lhs: User, rhs: User) -> Bool** like below:
+But if we would like to manually confirm, we have to implement **func hash(into hasher: inout Hasher)** and preferably we should also confirm to the Equatable protocol by implementing **static func == (lhs: User, rhs: User) -> Bool** like below:
 
 ```swift
 struct User: Hashable {
@@ -211,8 +212,8 @@ class UsersTableViewController: UITableViewController {
     }
 }
 ```
-Now we'll be creating an instance of IQList and providing it the list of models and cells
-The listView parameter accepts either a UITableView or UICollectionView object.
+Now we'll be creating an instance of IQList and providing it the list of models and cell types.
+The listView parameter accepts either a UITableView or UICollectionView.
 The delegateDataSource parameter is optional, but preferable when we would like
 to do additional configuration in our cell before display
 or to get callbacks when the cell is clicked.
@@ -262,16 +263,20 @@ Let's do this in a separate function called refreshUI
             
             list.append(section)
 
-            //Getting the list of users
-            for user in users {
-                //Telling to the list that the model should render in UserCell
+            //Telling to the list that the models should render in UserCell
 
-                //If model created using Method 1 or Method 2
-                list.append(UserCell.self, model: user, section: section) 
-                
-                //If model created using Method 3
-                //  list.append(UserCell.self, model: UserCell.Model(user: user), section: section)
+            //If model created using Method 1 or Method 2
+            list.append(UserCell.self, models: users, section: section) 
+            
+            /*
+            If model created using Method 3
+            var models = [UserCell.Model]()
+
+            for user in users {
+                models.append(.init(user: user))
             }
+            list.append(UserCell.self, models: models, section: section)
+            */
 
         }, animatingDifferences: animated, completion: nil) //controls if the changes should animate or not while reloading
     }
@@ -299,8 +304,8 @@ Now whenever our users array changes, we will be calling the refreshUI() method 
 Additional configuration before cell display.
 ==========================
 
-#### I would like to do additional configuration like setting some delegate of UserCell. Where is my old `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`?
-The IQListKit is a model-driven framework, so we'll be dealing with the Cell and models instead of the indexPath.row or indexPath.section. The IQListKit provides a couple of delegates to modify the cell or do additional configuration before the cell display. To do this, we can implement a delegate method of IQList like below:-
+#### I would like to do additional configuration like setting some delegate of UserCell. Where is my old friend `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`?
+The IQListKit is a model-driven framework, so we'll be dealing with the Cell and models instead of the indexPath.row or indexPath.section. The IQListKit provides a couple of delegates to modify the cell or do additional configuration based on their model before the cell display. To do this, we can implement a delegate method of IQList like below:-
 
 ```swift
 extension TableViewController: IQListViewDelegateDataSource {
@@ -310,11 +315,11 @@ extension TableViewController: IQListViewDelegateDataSource {
             cell.delegate = self
             //Or additional work with the UserCell
             
-            //Top get the user object associated with the cell
+            //Get the user object associated with the cell
             let user = cell.model
 
             //We discourage to use the indexPath variable to get the model object
-            //let user = users[indexPath.row] //Don't do like this since we are model-driven list, not the index driven list.
+            //let user = users[indexPath.row] //Don't do like this since we are model-driven list, not the indexPath driven list.
         }
     }
 }
@@ -322,8 +327,8 @@ extension TableViewController: IQListViewDelegateDataSource {
 
 Callback when Cell is selected
 ==========================
-#### I would like to move to UserDetailViewController when user tapped on UserCell. Where is my old friend `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`?
-Ahh, Don't worry about getting your user model by using the indexPath.row. We'll provide you the user model associated with the cell directly. It's interesting!
+#### I would like to move to UserDetailViewController when UserCell is selected. Where is my old friend `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`?
+Ahh, Don't worry about that. We'll provide you the user model associated with the cell directly. It's interesting!
 
 ```swift
 extension TableViewController: IQListViewDelegateDataSource {
