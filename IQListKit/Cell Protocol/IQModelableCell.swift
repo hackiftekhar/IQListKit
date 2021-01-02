@@ -67,10 +67,9 @@ public extension IQModelableCell {
 public extension IQCellActionsProvider {
 
     @available(iOS 11.0, *)
-    func leadingSwipeActions() -> [UIContextualAction]? { return nil }
+    func leadingSwipeActions() -> [IQContextualAction]? { return nil }
 
-    @available(iOS 11.0, *)
-    func trailingSwipeActions() -> [UIContextualAction]? { return nil }
+    func trailingSwipeActions() -> [IQContextualAction]? { return nil }
 
     @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? { return nil }

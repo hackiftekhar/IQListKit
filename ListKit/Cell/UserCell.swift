@@ -61,8 +61,9 @@ class UserCell: UITableViewCell, IQModelableCell {
 //        return false
 //    }
 
-    func leadingSwipeActions() -> [UIContextualAction]? {
-        let action = UIContextualAction(style: .normal, title: "Hello Leading") { (_, _, completionHandler) in
+    @available(iOS 11.0, *)
+    func leadingSwipeActions() -> [IQContextualAction]? {
+        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (_, completionHandler) in
             completionHandler(true)
         }
         action.backgroundColor = UIColor.orange
@@ -70,9 +71,9 @@ class UserCell: UITableViewCell, IQModelableCell {
         return [action]
     }
 
-    func trailingSwipeActions() -> [UIContextualAction]? {
+    func trailingSwipeActions() -> [IQContextualAction]? {
 
-        let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, completionHandler) in
+        let action1 = IQContextualAction(style: .destructive, title: "Delete 1") { [weak self] (_, completionHandler) in
             completionHandler(true)
             guard let self = self, let user = self.model?.user else {
                 return
@@ -80,7 +81,17 @@ class UserCell: UITableViewCell, IQModelableCell {
             self.delegate?.userCell(self, didDelete: user)
         }
 
-        return [action]
+        let action2 = IQContextualAction(style: .normal, title: "Delete 2") { [weak self] (_, completionHandler) in
+            completionHandler(true)
+            guard let self = self, let user = self.model?.user else {
+                return
+            }
+            self.delegate?.userCell(self, didDelete: user)
+        }
+
+        action2.backgroundColor = UIColor.purple
+
+        return [action1, action2]
     }
 
     @available(iOS 13.0, *)

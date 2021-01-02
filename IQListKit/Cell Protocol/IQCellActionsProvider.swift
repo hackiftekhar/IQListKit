@@ -28,11 +28,10 @@ public protocol IQCellActionsProvider where Self: IQListCell {
 
     //leading swipe actions of cell
     @available(iOS 11.0, *)
-    func leadingSwipeActions() -> [UIContextualAction]?
+    func leadingSwipeActions() -> [IQContextualAction]?
 
     //trailing swipe actions of cell
-    @available(iOS 11.0, *)
-    func trailingSwipeActions() -> [UIContextualAction]?
+    func trailingSwipeActions() -> [IQContextualAction]?
 
     //contextMenu configuration of the cell
     @available(iOS 13.0, *)

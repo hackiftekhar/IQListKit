@@ -21,77 +21,28 @@
 //  THE SOFTWARE.
 
 import UIKit
+import DiffableDataSources
 
-private struct DiffableDataSourceSnapshotWrapper {
-
-    typealias SectionIdentifierType = IQSection
-    typealias ItemIdentifierType = IQItem
-
-    init() {
-        if #available(iOS 13.0, *) {
-            _privateSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>()
-        } else {
-            snapshotFallback = NSDiffableDataSourceSnapshotFallback<SectionIdentifierType, ItemIdentifierType>()
-        }
-    }
-
-    private var _privateSnapshot: Any? = {
-        if #available(iOS 13.0, *) {
-            let snapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>()
-            return snapshot
-        } else {
-            return nil
-        }
-    }()
-
-    @available(iOS 13.0, *)
-    fileprivate var snapshot: NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>? {
-        get {
-            return _privateSnapshot as? NSDiffableDataSourceSnapshot
-        }
-        set {
-            _privateSnapshot = newValue
-        }
-    }
-
-    fileprivate var snapshotFallback: NSDiffableDataSourceSnapshotFallback<SectionIdentifierType, ItemIdentifierType>? = nil
-
-    public mutating func appendItems(_ identifiers: [ItemIdentifierType],
-                                     toSection sectionIdentifier: SectionIdentifierType? = nil) {
-        if #available(iOS 13.0, *) {
-            snapshot?.appendItems(identifiers, toSection: sectionIdentifier)
-        } else {
-            snapshotFallback?.appendItems(identifiers, toSection: sectionIdentifier)
-        }
-    }
-
-    public mutating func appendSections(_ identifiers: [SectionIdentifierType]) {
-        if #available(iOS 13.0, *) {
-            snapshot?.appendSections(identifiers)
-        } else {
-            snapshotFallback?.appendSections(identifiers)
-        }
-    }
-}
-
-private protocol TableViewDiffableDataSource where Self: UITableViewDataSource, Self: UITableViewDelegate {
+private protocol _TableViewDiffableDataSource where Self: UITableViewDataSource, Self: UITableViewDelegate {
     var delegate: IQListViewDelegate? { get set }
     var dataSource: IQListViewDataSource? { get set }
     var defaultRowAnimation: UITableView.RowAnimation { get set }
 }
-@available(iOS 13.0, *)
-extension IQTableViewDiffableDataSource: TableViewDiffableDataSource {}
-@available(iOS, deprecated: 13.0)
-extension IQTableViewDiffableDataSourceFallback: TableViewDiffableDataSource {}
 
-private protocol CollectionViewDiffableDataSource where Self: UICollectionViewDataSource, Self: UICollectionViewDelegate {
+@available(iOS 13.0, *)
+extension IQTableViewDiffableDataSource: _TableViewDiffableDataSource {}
+@available(iOS, deprecated: 13.0)
+extension DDSTableViewDiffableDataSource: _TableViewDiffableDataSource {}
+
+private protocol _CollectionViewDiffableDataSource
+where Self: UICollectionViewDataSource, Self: UICollectionViewDelegate {
     var delegate: IQListViewDelegate? { get set }
     var dataSource: IQListViewDataSource? { get set }
 }
 @available(iOS 13.0, *)
-extension IQCollectionViewDiffableDataSource: CollectionViewDiffableDataSource {}
+extension IQCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource {}
 @available(iOS, deprecated: 13.0)
-extension IQCollectionViewDiffableDataSourceFallback: CollectionViewDiffableDataSource {}
+extension DDSCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource {}
 
 public class IQList: NSObject {
 
@@ -142,10 +93,10 @@ public class IQList: NSObject {
                     numberOfAllItems = snapshot.numberOfItems
                 }
             } else {
-                let snapshot: NSDiffableDataSourceSnapshotFallback<IQSection, IQItem>?
-                if let tableViewDataSource = tableViewDataSource as? IQTableViewDiffableDataSourceFallback {
+                let snapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
+                if let tableViewDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
                     snapshot = tableViewDataSource.snapshot()
-                } else if let collectionViewDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSourceFallback {
+                } else if let collectionViewDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
                     snapshot = collectionViewDataSource.snapshot()
                 } else {
                     snapshot = nil
@@ -194,11 +145,23 @@ public class IQList: NSObject {
     private var registeredCells = [UIView.Type]()
     private var registeredHeaderFooterViews = [UIView.Type]()
 
-    private var batchSnapshot: DiffableDataSourceSnapshotWrapper?
+    private var _privateBatchSnapshot: Any?
+    @available(iOS 13.0, *)
+    private var batchSnapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>? {
+        get {
+            return _privateBatchSnapshot as? NSDiffableDataSourceSnapshot
+        }
+        set {
+            _privateBatchSnapshot = newValue
+        }
+    }
 
-    private var tableViewDataSource: TableViewDiffableDataSource?
+    @available(iOS, deprecated: 13.0)
+    private var ddsBatchSnapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
 
-    private var collectionViewDataSource: CollectionViewDiffableDataSource?
+    private var tableViewDataSource: _TableViewDiffableDataSource?
+
+    private var collectionViewDataSource: _CollectionViewDiffableDataSource?
 
     // MARK: - Initialization
 
@@ -240,8 +203,8 @@ public class IQList: NSObject {
                                                                     cellProvider: cellProvider)
                 tableViewDataSource = tableDataSource
             } else {
-                let tableDataSource = IQTableViewDiffableDataSourceFallback(tableView: tableView,
-                                                                            cellProvider: cellProvider)
+                let tableDataSource = DDSTableViewDiffableDataSource(tableView: tableView,
+                                                                     cellProvider: cellProvider)
                 tableViewDataSource = tableDataSource
             }
 
@@ -276,8 +239,8 @@ public class IQList: NSObject {
                                                                               cellProvider: cellProvider)
                 collectionViewDataSource = collectionDataSource
             } else {
-                let collectionDataSource = IQCollectionViewDiffableDataSourceFallback(collectionView: collectionView,
-                                                                                      cellProvider: cellProvider)
+                let collectionDataSource = DDSCollectionViewDiffableDataSource(collectionView: collectionView,
+                                                                               cellProvider: cellProvider)
                 collectionViewDataSource = collectionDataSource
             }
 
@@ -419,27 +382,43 @@ public extension IQList {
             items.append(item)
         }
 
-        if let section = section {
-            batchSnapshot?.appendItems(items, toSection: section)
+        if #available(iOS 13.0, *) {
+            if let section = section {
+                batchSnapshot?.appendItems(items, toSection: section)
+            } else {
+                batchSnapshot?.appendItems(items)
+            }
         } else {
-            batchSnapshot?.appendItems(items)
+            if let section = section {
+                ddsBatchSnapshot?.appendItems(items, toSection: section)
+            } else {
+                ddsBatchSnapshot?.appendItems(items)
+            }
         }
     }
 
     //This method can also be used in background thread
     func append(_ section: IQSection) {
-        batchSnapshot?.appendSections([section])
+        if #available(iOS 13.0, *) {
+            batchSnapshot?.appendSections([section])
+        } else {
+            ddsBatchSnapshot?.appendSections([section])
+        }
     }
 
     //This method can also be used in background thread
     func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
                         completion: (() -> Void)? = nil) {
-        batchSnapshot = DiffableDataSourceSnapshotWrapper()
+        if #available(iOS 13.0, *) {
+            batchSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>()
+        } else {
+            ddsBatchSnapshot = DiffableDataSourceSnapshot<IQSection, IQItem>()
+        }
 
         updates()
 
         if #available(iOS 13.0, *) {
-            if let snapshot = batchSnapshot?.snapshot {
+            if let snapshot = batchSnapshot {
                 batchSnapshot = nil
 
                 if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
@@ -459,12 +438,12 @@ public extension IQList {
                 }
             }
         } else {
-            if let snapshot = batchSnapshot?.snapshotFallback {
-                batchSnapshot = nil
+            if let snapshot = ddsBatchSnapshot {
+                ddsBatchSnapshot = nil
 
-                if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSourceFallback {
+                if let dataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
                     dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-                } else if let dataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSourceFallback {
+                } else if let dataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
                     dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
                 }
 

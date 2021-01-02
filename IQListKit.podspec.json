@@ -26,8 +26,8 @@
     "Foundation"
   ],
   "dependencies": {
-      "DifferenceKit/UIKitExtension": [
-          "~> 1.1.5"
+      "DiffableDataSources": [
+          "~> 0.4.0"
       ]
   },
   "requires_arc": true

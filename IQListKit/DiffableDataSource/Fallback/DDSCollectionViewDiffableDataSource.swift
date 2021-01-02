@@ -1,5 +1,5 @@
 //
-//  IQCollectionViewDiffableDataSourceFallback.swift
+//  DDSCollectionViewDiffableDataSource.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,12 @@
 //  THE SOFTWARE.
 
 import UIKit
+import DiffableDataSources
 
 // MARK: Improved DiffableDataSource of UICollectionView
 
 @available(iOS, deprecated: 13.0)
-internal class IQCollectionViewDiffableDataSourceFallback:
-    UICollectionViewDiffableDataSourceFallback<IQSection, IQItem> {
+internal class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
@@ -69,7 +69,7 @@ internal class IQCollectionViewDiffableDataSourceFallback:
 }
 
 @available(iOS, deprecated: 13.0)
-extension IQCollectionViewDiffableDataSourceFallback: UICollectionViewDelegateFlowLayout {
+extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout {
 
     // MARK: - Header Footer
 
@@ -118,7 +118,7 @@ extension IQCollectionViewDiffableDataSourceFallback: UICollectionViewDelegateFl
 }
 
 @available(iOS, deprecated: 13.0)
-extension IQCollectionViewDiffableDataSourceFallback: UICollectionViewDelegate {
+extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegate {
 
     // MARK: - Selection
 

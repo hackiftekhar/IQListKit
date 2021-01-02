@@ -1,5 +1,5 @@
 //
-//  IQTableViewDiffableDataSourceFallback.swift
+//  DDSTableViewDiffableDataSource.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +21,12 @@
 //  THE SOFTWARE.
 
 import UIKit
+import DiffableDataSources
 
 // MARK: Improved DiffableDataSource of UITableView
 
 @available(iOS, deprecated: 13.0)
-internal class IQTableViewDiffableDataSourceFallback: UITableViewDiffableDataSourceFallback<IQSection, IQItem> {
+internal class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
@@ -50,7 +51,7 @@ internal class IQTableViewDiffableDataSourceFallback: UITableViewDiffableDataSou
 }
 
 @available(iOS, deprecated: 13.0)
-extension IQTableViewDiffableDataSourceFallback: UITableViewDelegate {
+extension DDSTableViewDiffableDataSource: UITableViewDelegate {
 
     // MARK: - Header Footer
 
@@ -157,18 +158,51 @@ extension IQTableViewDiffableDataSourceFallback: UITableViewDelegate {
     }
 
     // MARK: - Swipe actions
-
     func tableView(_ tableView: UITableView,
                    editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none
+        if #available(iOS 11.0, *) {
+            return .none
+        } else {
+            if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+                      cell.trailingSwipeActions() != nil {
+                //editActionsForRowAt does not getting called if we provide .none
+                //So adding it as a workaround, the delete button will not be shown btw
+                return .delete
+            } else {
+                return .none
+            }
+        }
+    }
+
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+           let swipeActions = cell.trailingSwipeActions() {
+
+            var rowActions = [UITableViewRowAction]()
+
+            for action in swipeActions {
+                rowActions.append(action.rowAction())
+            }
+
+            return rowActions
+        }
+
+        return nil
     }
 
     @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-           let leadingSwipeActions = cell.leadingSwipeActions() {
-            return UISwipeActionsConfiguration(actions: leadingSwipeActions)
+           let swipeActions = cell.leadingSwipeActions() {
+
+            var contextualSwipeActions = [UIContextualAction]()
+
+            for action in swipeActions {
+                contextualSwipeActions.append(action.contextualAction())
+            }
+
+            return UISwipeActionsConfiguration(actions: contextualSwipeActions)
         }
 
         return nil
@@ -179,8 +213,15 @@ extension IQTableViewDiffableDataSourceFallback: UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
         if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-           let trailingSwipeActions = cell.trailingSwipeActions() {
-            return UISwipeActionsConfiguration(actions: trailingSwipeActions)
+           let swipeActions = cell.trailingSwipeActions() {
+
+            var contextualSwipeActions = [UIContextualAction]()
+
+            for action in swipeActions {
+                contextualSwipeActions.append(action.contextualAction())
+            }
+
+            return UISwipeActionsConfiguration(actions: contextualSwipeActions)
         }
 
         return nil

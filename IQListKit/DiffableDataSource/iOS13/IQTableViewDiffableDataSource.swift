@@ -163,11 +163,33 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         return .none
     }
 
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+           let swipeActions = cell.trailingSwipeActions() {
+
+            var rowActions = [UITableViewRowAction]()
+
+            for action in swipeActions {
+                rowActions.append(action.rowAction())
+            }
+
+            return rowActions
+        }
+
+        return nil
+    }
+
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-           let leadingSwipeActions = cell.leadingSwipeActions() {
-            return UISwipeActionsConfiguration(actions: leadingSwipeActions)
+           let swipeActions = cell.leadingSwipeActions() {
+            var contextualSwipeActions = [UIContextualAction]()
+
+            for action in swipeActions {
+                contextualSwipeActions.append(action.contextualAction())
+            }
+
+            return UISwipeActionsConfiguration(actions: contextualSwipeActions)
         }
 
         return nil
@@ -177,8 +199,14 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
         if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-           let trailingSwipeActions = cell.trailingSwipeActions() {
-            return UISwipeActionsConfiguration(actions: trailingSwipeActions)
+           let swipeActions = cell.trailingSwipeActions() {
+            var contextualSwipeActions = [UIContextualAction]()
+
+            for action in swipeActions {
+                contextualSwipeActions.append(action.contextualAction())
+            }
+
+            return UISwipeActionsConfiguration(actions: contextualSwipeActions)
         }
 
         return nil

@@ -45,7 +45,7 @@ extension UserListTableViewController {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .ordinal
 
-        for index in 1...5 {
+        for index in 1...1000 {
             if let string = numberFormatter.string(from: NSNumber.init(value: index)) {
                 userItems.append(.init(name: string))
                 defaultCellItems.append(.init(text: string, detail: "Loaded using Class"))
