@@ -4,14 +4,18 @@ Model driven UITableView/UICollectionView
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
-IQListKit allows you to use UITableView/UICollectionView without implementing the dataSource. Just provide it the section and their models with cell type, and will take of of rest including the animations of all changes. Thanks to Apple for [NSDiffableDataSourceSnapshot]([https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot])
+IQListKit allows you to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take of rest including the animations of all changes.
+
+For iOS13: Thanks to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot)
+
+For iOS12 and below: Thanks to Ryo Aoyama for [DiffableDataSources](https://github.com/ra1028/DiffableDataSources)
 
 ## Requirements
 [![Platform iOS](https://img.shields.io/badge/Platform-iOS-blue.svg?style=fla)]()
 
 | Library                | Language | Minimum iOS Target | Minimum Xcode Version |
 |------------------------|----------|--------------------|-----------------------|
-| IQListKit (1.0.0)      | Swift    | iOS 13.0           | Xcode 11              |
+| IQListKit (1.0.0)      | Swift    | iOS 9.0            | Xcode 11              |
 
 #### Swift versions support
 5.0 and above
@@ -30,7 +34,7 @@ it, simply add the following line to your Podfile:
 pod 'IQListKit'
 ```
 
-*Or you can choose the version you need based on Swift support table from [Requirements](README.md#requirements)*
+*Or you can choose the version you need based on the Swift support table from [Requirements](README.md#requirements)*
 
 ```ruby
 pod 'IQListKit', '1.0.0'
@@ -71,7 +75,7 @@ How to use IQListKit?
 
 We'll be learning IQListKit using a simple example.
 
-Let's say we have to show a list of users in a **UITableView**, and for that we have **User Model** like this:
+Let's say we have to show a list of users in a **UITableView** and for that, we have **User Model** like this:
 
 ```swift
 struct User {
@@ -84,22 +88,22 @@ struct User {
 Before going deep into the implementation, we have to learn about the [Hashable](https://developer.apple.com/documentation/swift/hashable) protocol.
 
 #### Now what is [Hashable](https://developer.apple.com/documentation/swift/hashable)? I never used it before.
-Basically a Hashable protocol is used to determine the uniqueness of object/variable. Technically a hashable is a type that has hashValue in the form of an integer that can be compared across different types.
+A Hashable protocol is used to determine the uniqueness of the object/variable. Technically a hashable is a type that has hashValue in the form of an integer that can be compared across different types.
 
-Many types in the standard library conform to Hashable: **String, Int, Float, Double and Bool** values, and even **Set** are hashable by default.
-To confirm to the Hashable protocol, we have to modify our model a little bit like below:
+Many types in the standard library conform to Hashable: **String, Int, Float, Double and Bool** values and even **Set** are hashable by default.
+To confirm the Hashable protocol, we have to modify our model a little bit like below:
 
 ```swift
-//We have Int and String variables in struct
-//That's why we do not have to manually confirm to the hashable protocol
-//It will work out of the box by just adding protocol to the User struct
+//We have Int and String variables in the struct
+//That's why we do not have to manually confirm the hashable protocol
+//It will work out of the box by just adding the hashable protocol to the User struct
 struct User: Hashable {
 
     let id: Int
     let name: String
 }
 ```
-But if we would like to manually confirm, we have to implement **func hash(into hasher: inout Hasher)** and preferrably we should also confirm the to Equatable protocol by implementing **static func == (lhs: User, rhs: User) -> Bool** like below:
+But if we would like to manually confirm, we have to implement **func hash(into hasher: inout Hasher)** and preferably we should also confirm the to Equatable protocol by implementing **static func == (lhs: User, rhs: User) -> Bool** like below:
 
 ```swift
 struct User: Hashable {
@@ -122,7 +126,7 @@ Now let's come back to the implementation part. To use the IQListKit, we have to
 ### Step 1) Confirm our "UserCell" to "IQModelableCell" protocol
 
 #### What is IQModelableCell protocol? and how we should confirm it?
-The **IQModelableCell** protocol says that, whoever adopt me, have to expose a variable named **model**, and it can be any type confirming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
+The **IQModelableCell** protocol says that, whoever adopts me, have to expose a variable named **model** and it can be any type conforming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
 
 Let's say we have **UserCell** like this:
 ```swift
@@ -157,7 +161,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 ```
 
 #### Method 3: By creating a Hashable struct in each cell (Preferred)
-This method is preferrable because it will have the ability to use multiple parameters in model
+This method is preferable because it will have the ability to use multiple parameters in the model
 
 ```swift
 class UserCell: UITableViewCell, IQModelableCell {
@@ -176,7 +180,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 ```
 
 ### Step 2) Connect the model with the cell
-To do this, we could easily do by implementing the didSet of our model variable
+To do this, we could easily do it by implementing the didSet of our model variable
 ```swift
 class UserCell: UITableViewCell, IQModelableCell {
 
@@ -208,10 +212,10 @@ class UsersTableViewController: UITableViewController {
 }
 ```
 Now we'll be creating an instance of IQList and providing it the list of models and cells
-The listView parameter accept either UITableView or UICollectionView object.
-The delegateDataSource paramter is optional, but preferrable when we would like
+The listView parameter accepts either a UITableView or UICollectionView object.
+The delegateDataSource parameter is optional, but preferable when we would like
 to do additional configuration in our cell before display
-or to get callbacks when cell is clicked.
+or to get callbacks when the cell is clicked.
 
 ```swift
 class UsersTableViewController: UITableViewController {
@@ -235,13 +239,13 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 }
 ```
 
-### Step 4) Provide the models with cell types to the IQList in performUpdates method
+### Step 4) Provide the models with cell types to the IQList in the performUpdates method
 Let's do this in a separate function called refreshUI
 
 ```swift
     func refreshUI(animated: Bool = true) {
 
-        //This is the actual method which reload the data.
+        //This is the actual method that reloads the data.
         //You could think it like a tableView.reloadData()
         //It does all the needed thing
         list.performUpdates({
@@ -290,13 +294,13 @@ Let's do this in a separate function called refreshUI
     }
 ```
 
-Now whenver our users array changes, we will be calling the refreshUI() method to reload tableView and that's it.
+Now whenever our users array changes, we will be calling the refreshUI() method to reload tableView and that's it.
 
 Additional configuration before cell display.
 ==========================
 
 #### I would like to do additional configuration like setting some delegate of UserCell. Where is my old `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`?
-Basically the IQListKit is a model driven framework, so we'll be dealing with the Cell and models instead of indexPath.row or indexPath.section. The IQListKit provide a couple of delegates to modify the cell or do additional configuration before the cell display. To do this, we can implement a delegate method of IQList like below:-
+The IQListKit is a model-driven framework, so we'll be dealing with the Cell and models instead of the indexPath.row or indexPath.section. The IQListKit provides a couple of delegates to modify the cell or do additional configuration before the cell display. To do this, we can implement a delegate method of IQList like below:-
 
 ```swift
 extension TableViewController: IQListViewDelegateDataSource {
@@ -310,7 +314,7 @@ extension TableViewController: IQListViewDelegateDataSource {
             let user = cell.model
 
             //We discourage to use the indexPath variable to get the model object
-            //let user = users[indexPath.row] //Don't do like this since we are model driven list, not the index driven list.
+            //let user = users[indexPath.row] //Don't do like this since we are model-driven list, not the index driven list.
         }
     }
 }
@@ -319,7 +323,7 @@ extension TableViewController: IQListViewDelegateDataSource {
 Callback when Cell is selected
 ==========================
 #### I would like to move to UserDetailViewController when user tapped on UserCell. Where is my old friend `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`?
-Ahh, Don't worry about getting your user model by using indexPath.row. We'll provide you the user model associated with the cell directly. It's really intesting!
+Ahh, Don't worry about getting your user model by using the indexPath.row. We'll provide you the user model associated with the cell directly. It's interesting!
 
 ```swift
 extension TableViewController: IQListViewDelegateDataSource {
@@ -336,7 +340,7 @@ extension TableViewController: IQListViewDelegateDataSource {
 }
 ```
 
-Other useful delgate methods
+Other useful delegate methods
 ==========================
 
 ```swift
@@ -371,5 +375,4 @@ Any contribution is more than welcome! You can contribute through pull requests 
 
 Author
 ---
-If you wish to contact me, email at: hack.iftekhar@gmail.com
-
+If you wish to contact me, email me: hack.iftekhar@gmail.com
