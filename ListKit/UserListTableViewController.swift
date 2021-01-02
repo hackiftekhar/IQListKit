@@ -8,7 +8,7 @@
 import UIKit
 import IQListKit
 
-class TableViewController: UITableViewController {
+class UserListTableViewController: UITableViewController {
 
     typealias Item = User
     typealias Cell = UserCell
@@ -17,10 +17,13 @@ class TableViewController: UITableViewController {
     private var defaultCellItems = [IQTableViewCell.Model]()
     private var bookCellItems = [Book]()
 
-    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
+    private var list: IQList!
+//    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        list = IQList(listView: tableView, delegateDataSource: self)
 
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Items"
@@ -28,11 +31,11 @@ class TableViewController: UITableViewController {
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
         tableView.tableFooterView = UIView()
-        refreshUI(animated: false)
+//        refreshUI(animated: false)
     }
 }
 
-extension TableViewController {
+extension UserListTableViewController {
     @IBAction func refresh(_ sender: Any) {
 
         var userItems = [Item]()
@@ -76,18 +79,18 @@ extension TableViewController {
                 let defaultCellItem = defaultCellItems[index]
                 let bookCellItem = bookCellItems[index]
 
-                list.append(Cell.self, model: Cell.Model(user: userItem, people: nil), section: section1)
+                list.append(Cell.self, models: [Cell.Model(user: userItem, people: nil)], section: section1)
 
-                list.append(IQTableViewCell.self, model: defaultCellItem, section: section1)
+                list.append(IQTableViewCell.self, models: [defaultCellItem], section: section1)
 
-                list.append(BookCell.self, model: bookCellItem, section: section1)
+                list.append(BookCell.self, models: [bookCellItem], section: section1)
             }
 
         }, animatingDifferences: animated, completion: nil)
     }
 }
 
-extension TableViewController: IQListViewDelegateDataSource {
+extension UserListTableViewController: IQListViewDelegateDataSource {
 
     func listView(_ listView: IQLisView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
         if let cell = cell as? Cell {
@@ -98,7 +101,7 @@ extension TableViewController: IQListViewDelegateDataSource {
     func listView(_ listView: IQLisView, didSelect item: IQItem, at indexPath: IndexPath) {
         if let model = item.model as? Cell.Model {
             if let controller = UIStoryboard(name: "Main", bundle: nil)
-                .instantiateViewController(identifier: "UserViewController") as? UserViewController {
+                .instantiateViewController(withIdentifier: "UserViewController") as? UserViewController {
                 controller.user = model.user
 //                controller.user = model
                 self.navigationController?.pushViewController(controller, animated: true)
@@ -107,7 +110,7 @@ extension TableViewController: IQListViewDelegateDataSource {
     }
 }
 
-extension TableViewController: UserCellDelegate {
+extension UserListTableViewController: UserCellDelegate {
     func userCell(_ cell: UserCell, didDelete item: User) {
         if let index = userItems.firstIndex(of: item) {
             userItems.remove(at: index)

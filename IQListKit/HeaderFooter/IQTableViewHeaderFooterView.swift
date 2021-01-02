@@ -47,7 +47,11 @@ public class IQTableViewHeaderFooterView: UITableViewHeaderFooterView {
     private func setup() {
 
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        titleLabel.textColor = UIColor.label
+        if #available(iOS 13.0, *) {
+            titleLabel.textColor = UIColor.label
+        } else {
+            titleLabel.textColor = UIColor.darkText
+        }
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
         self.contentView.addSubview(titleLabel)

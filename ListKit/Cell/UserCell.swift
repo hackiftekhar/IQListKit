@@ -83,6 +83,7 @@ class UserCell: UITableViewCell, IQModelableCell {
         return [action]
     }
 
+    @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? {
 
         let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil,
@@ -130,6 +131,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 //        return detailTextLabel
 //    }
 
+    @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,
                               animator: UIContextMenuInteractionCommitAnimating) {
         if let previewViewController = animator.previewViewController, let parent = viewParentController {

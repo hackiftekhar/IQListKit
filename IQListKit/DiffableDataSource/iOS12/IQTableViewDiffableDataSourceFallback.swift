@@ -1,5 +1,5 @@
 //
-//  IQTableViewDiffableDataSource.swift
+//  IQTableViewDiffableDataSourceFallback.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,8 @@ import UIKit
 
 // MARK: Improved DiffableDataSource of UITableView
 
-internal class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
+@available(iOS, deprecated: 13.0)
+internal class IQTableViewDiffableDataSourceFallback: UITableViewDiffableDataSourceFallback<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
@@ -48,7 +49,8 @@ internal class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSe
     }
 }
 
-extension IQTableViewDiffableDataSource: UITableViewDelegate {
+@available(iOS, deprecated: 13.0)
+extension IQTableViewDiffableDataSourceFallback: UITableViewDelegate {
 
     // MARK: - Header Footer
 
@@ -161,6 +163,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         return .none
     }
 
+    @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
@@ -171,6 +174,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         return nil
     }
 
+    @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
@@ -184,6 +188,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
     // MARK: - Context menu
 
+    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
@@ -197,6 +202,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         return nil
     }
 
+    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    previewForHighlightingContextMenuWithConfiguration
                     configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
@@ -209,6 +215,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         return nil
     }
 
+    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
                    animator: UIContextMenuInteractionCommitAnimating) {
@@ -219,6 +226,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         }
     }
 
+    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    previewForDismissingContextMenuWithConfiguration
                     configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
