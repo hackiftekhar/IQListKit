@@ -1,0 +1,18 @@
+matrix:
+  include:
+    - language: swift
+      branches:
+          only:
+              - master
+      os: osx
+      osx_image: xcode12
+      xcode_workspace: ListKit.xcworkspace
+      xcode_project: ListKit.xcodeproj
+      xcode_scheme: ListKit
+      before_install:
+          - sudo gem install activesupport -v 4.2.6
+          - rvm install 2.3.1
+          - rvm use 2.3.1
+          - sudo gem install cocoapods
+      script:
+        - xcodebuild -workspace ListKit.xcworkspace -scheme ListKit -sdk iphonesimulator
