@@ -13,9 +13,7 @@ class UserListNormalTableViewController: UITableViewController {
     typealias Item = User
     typealias Cell = UserCell
 
-    private var userItems = [Item]()
-    private var defaultCellItems = [IQTableViewCell.Model]()
-    private var bookCellItems = [Book]()
+    private var users = [Item]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,32 +25,24 @@ class UserListNormalTableViewController: UITableViewController {
 extension UserListNormalTableViewController {
     @IBAction func refresh(_ sender: Any) {
 
-        var userItems = [Item]()
-        var defaultCellItems = [IQTableViewCell.Model]()
-        var bookCellItems = [Book]()
+        var users = [Item]()
 
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .ordinal
 
-        for index in 1...10000 {
+        for index in 1...100 {
             if let string = numberFormatter.string(from: NSNumber.init(value: index)) {
-                userItems.append(.init(name: string))
-                defaultCellItems.append(.init(text: string, detail: "Loaded using Class"))
-                bookCellItems.append(.init(name: string))
+                users.append(.init(name: string))
             }
         }
 
-        self.userItems = userItems
-        self.defaultCellItems = defaultCellItems
-        self.bookCellItems = bookCellItems
+        self.users = users
 
         refreshUI()
     }
 
     @IBAction func empty(_ sender: UIBarButtonItem) {
-        self.userItems = []
-        self.defaultCellItems = []
-        self.bookCellItems = []
+        self.users = []
         refreshUI()
     }
 
@@ -69,7 +59,7 @@ extension UserListNormalTableViewController: IQListViewDelegateDataSource {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.userItems.count
+        return self.users.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,7 +67,7 @@ extension UserListNormalTableViewController: IQListViewDelegateDataSource {
             fatalError("Unable to dequeue UserCell")
         }
 
-        cell.model = UserCell.Model(user: self.userItems[indexPath.row], people: nil)
+        cell.model = users[indexPath.row]
         cell.delegate = self
         return cell
     }
@@ -87,7 +77,7 @@ extension UserListNormalTableViewController: IQListViewDelegateDataSource {
 
         if let controller = UIStoryboard(name: "Main", bundle: nil)
             .instantiateViewController(withIdentifier: "UserViewController") as? UserViewController {
-            controller.user = self.userItems[indexPath.row]
+            controller.user = users[indexPath.row]
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }
@@ -95,8 +85,8 @@ extension UserListNormalTableViewController: IQListViewDelegateDataSource {
 
 extension UserListNormalTableViewController: UserCellDelegate {
     func userCell(_ cell: UserCell, didDelete item: User) {
-        if let index = userItems.firstIndex(of: item) {
-            userItems.remove(at: index)
+        if let index = users.firstIndex(of: item) {
+            users.remove(at: index)
             refreshUI()
         }
     }

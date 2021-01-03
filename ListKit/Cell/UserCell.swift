@@ -29,46 +29,29 @@ class UserCell: UITableViewCell, IQModelableCell {
                 return
             }
 
-            if let user = model.user {
-                textLabel?.text = user.name
-            } else if let people = model.people {
-                textLabel?.text = people.name
-            }
-
+            textLabel?.text = model.name
             detailTextLabel?.text = "Loaded using XIB"
-
-//            textLabel?.text = model.name
-//            detailTextLabel?.text = model.email
         }
     }
 
-    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        return CGSize(width: listView.frame.width, height: 100)
-    }
-
-    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-
-        if let model = model as? Model {
-            var height: CGFloat = 100
-            //....
-            // return height based on the model
-            return CGSize(width: listView.frame.width, height: height)
-        }
-
-        //Or return a constant height
-        return CGSize(width: listView.frame.width, height: 100)
-
-        //Or UITableView.automaticDimension for dynamic behaviour
+//    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+//        if let model = model as? Model {
+//            if model.user.name == "First" {
+//                return CGSize(width: listView.frame.width, height: 100)
+//            } else {
+//                return CGSize(width: listView.frame.width, height: 50)
+//            }
+//        }
 //        return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
-    }
+//    }
 
-    var isHighlightable: Bool {
-        return true
-    }
-
-    var isSelectable: Bool {
-        return false
-    }
+//    var isHighlightable: Bool {
+//        return true
+//    }
+//
+//    var isSelectable: Bool {
+//        return false
+//    }
 
     @available(iOS 11.0, *)
     func leadingSwipeActions() -> [IQContextualAction]? {
@@ -82,16 +65,15 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     func trailingSwipeActions() -> [IQContextualAction]? {
 
-        let action1 = IQContextualAction(style: .normal, title: "Hello Trailing") { [weak self] (action, completionHandler) in
+        let action = IQContextualAction(style: .destructive, title: "Delete") { [weak self] (action, completionHandler) in
             completionHandler(true)
             guard let self = self, let user = self.model else {
                 return
             }
 
+            self.delegate?.userCell(self, didDelete: user)
             //Do your stuffs here
         }
-
-        action.backgroundColor = UIColor.purple
 
         return [action]
     }
@@ -118,10 +100,9 @@ class UserCell: UITableViewCell, IQModelableCell {
         return contextMenuConfiguration
     }
 
-    @available(iOS 13.0, *)
-    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
-        return detailTextLabel
-    }
+//    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
+//        return detailTextLabel
+//    }
 
     @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,

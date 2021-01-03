@@ -13,9 +13,9 @@ class UserListTableViewController: UITableViewController {
     typealias Item = User
     typealias Cell = UserCell
 
-    private var userItems = [Item]()
+    private var users = [Item]()
     private var defaultCellItems = [IQTableViewCell.Model]()
-    private var bookCellItems = [Book]()
+    private var books = [Book]()
 
     private var list: IQList!
 //    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
@@ -31,39 +31,39 @@ class UserListTableViewController: UITableViewController {
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
         tableView.tableFooterView = UIView()
-//        refreshUI(animated: false)
+        refreshUI(animated: false)
     }
 }
 
 extension UserListTableViewController {
     @IBAction func refresh(_ sender: Any) {
 
-        var userItems = [Item]()
+        var users = [Item]()
         var defaultCellItems = [IQTableViewCell.Model]()
-        var bookCellItems = [Book]()
+        var books = [Book]()
 
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .ordinal
 
-        for index in 1...1000 {
+        for index in 1...5 {
             if let string = numberFormatter.string(from: NSNumber.init(value: index)) {
-                userItems.append(.init(name: string))
+                users.append(.init(name: string))
                 defaultCellItems.append(.init(text: string, detail: "Loaded using Class"))
-                bookCellItems.append(.init(name: string))
+                books.append(.init(name: string))
             }
         }
 
-        self.userItems = userItems
+        self.users = users
         self.defaultCellItems = defaultCellItems
-        self.bookCellItems = bookCellItems
+        self.books = books
 
         refreshUI()
     }
 
     @IBAction func empty(_ sender: UIBarButtonItem) {
-        self.userItems = []
+        self.users = []
         self.defaultCellItems = []
-        self.bookCellItems = []
+        self.books = []
         refreshUI()
     }
 
@@ -74,16 +74,14 @@ extension UserListTableViewController {
             let section1 = IQSection(identifier: "firstSection")
             list.append(section1)
 
-            for index in 0..<userItems.count {
-                let userItem = userItems[index]
+            for index in 0..<users.count {
+                let user = users[index]
                 let defaultCellItem = defaultCellItems[index]
-                let bookCellItem = bookCellItems[index]
+                let book = books[index]
 
-                list.append(Cell.self, models: [Cell.Model(user: userItem, people: nil)], section: section1)
-
+                list.append(Cell.self, models: [user], section: section1)
                 list.append(IQTableViewCell.self, models: [defaultCellItem], section: section1)
-
-                list.append(BookCell.self, models: [bookCellItem], section: section1)
+                list.append(BookCell.self, models: [book], section: section1)
             }
 
         }, animatingDifferences: animated, completion: nil)
@@ -102,7 +100,7 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
         if let model = item.model as? Cell.Model {
             if let controller = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "UserViewController") as? UserViewController {
-                controller.user = model.user
+                controller.user = model
 //                controller.user = model
                 self.navigationController?.pushViewController(controller, animated: true)
             }
@@ -112,8 +110,8 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
 
 extension UserListTableViewController: UserCellDelegate {
     func userCell(_ cell: UserCell, didDelete item: User) {
-        if let index = userItems.firstIndex(of: item) {
-            userItems.remove(at: index)
+        if let index = users.firstIndex(of: item) {
+            users.remove(at: index)
             refreshUI()
         }
     }
