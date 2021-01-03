@@ -4,7 +4,7 @@ Model driven UITableView/UICollectionView
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
-IQListKit allows you to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take care of rest including the animations of all changes.
+IQListKit allows us to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take care of rest including the animations of all changes.
 
 For iOS13: Thanks to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot)
 
@@ -207,12 +207,27 @@ class UsersTableViewController: UITableViewController {
 
     private var users = [User]() //assuming the users array is loaded from somewhere e.g. API call response
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    //...
+
+    func loadDataFromAPI() {
+    
+        //Get users list from API
+        APIClient.getUsersList({ [weak self] result in
+        
+            switch result {
+
+                case .success(let users):
+                    self?.users = users   //Updates the users array
+                    self?.refreshUI()     //Refresh the data
+            
+                case .failure(let error):
+                    //Handle error
+            }
+        }
     }
 }
 ```
-Now we'll be creating an instance of IQList and providing it the list of models and cell types.
+Now we'll be creating an instance of IQList and providing it the list of models and cell type.
 The listView parameter accepts either a UITableView or UICollectionView.
 The delegateDataSource parameter is optional, but preferable when we would like
 to do additional configuration in our cell before display
@@ -221,7 +236,7 @@ or to get callbacks when the cell is clicked.
 ```swift
 class UsersTableViewController: UITableViewController {
 
-    private var users = [User]() //assuming the users array is loaded from somewhere e.g. API call response
+    //...
 
     private lazy var list = IQList(listView: tableView, delegateDataSource: self)
     
@@ -244,10 +259,14 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 Let's do this in a separate function called refreshUI
 
 ```swift
+class UsersTableViewController: UITableViewController {
+
+    //...
+
     func refreshUI(animated: Bool = true) {
 
         //This is the actual method that reloads the data.
-        //You could think it like a tableView.reloadData()
+        //We could think it like a tableView.reloadData()
         //It does all the needed thing
         list.performUpdates({
 
@@ -278,34 +297,23 @@ Let's do this in a separate function called refreshUI
             list.append(UserCell.self, models: models, section: section)
             */
 
-        }, animatingDifferences: animated, completion: nil) //controls if the changes should animate or not while reloading
+        //controls if the changes should animate or not while reloading
+        }, animatingDifferences: animated, completion: nil)
     }
-    
-    func loadDataFromAPI() {
-    
-        //Get users list from API or somewhere else
-        APIClient.getUsersList({ [weak self] result in
-        
-            switch result {
-
-                case .success(let users):
-                    self?.users = users   //Updates the users array
-                    self?.refreshUI()     //Refresh the data
-            
-                case .failure(let error):
-                    //Handle error
-            }
-        }
-    }
+}
 ```
 
-Now whenever our users array changes, we will be calling the refreshUI() method to reload tableView and that's it.
+Now whenever our users array changes, we will be calling the **refreshUI()** method to reload tableView and that's it.
 
-Old delegate and datasource replacements
+🥳
 ==========================
 
-#### `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`
-The IQListKit is a model-driven framework, so we'll be dealing with the Cell and models instead of the indexPath.row or indexPath.section. The IQListKit provides a couple of delegates to modify the cell or do additional configuration based on their model before the cell display. To do this, we can implement a delegate method of IQList like below:-
+UITableView/UICollectionView delegate and datasource replacements
+==========================
+
+#### - `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`
+
+The IQListKit is a model-driven framework, so we'll be dealing with the Cell and models instead of the IndexPath. The IQListKit provides a couple of delegates to modify the cell or do additional configuration based on their model before the cell display. To do this, we can implement a delegate method of IQList like below:-
 
 ```swift
 extension UsersTableViewController: IQListViewDelegateDataSource {
@@ -315,25 +323,27 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
             cell.delegate = self
             //Or additional work with the UserCell
             
-            //Get the user object associated with the cell
+            //🙂 Get the user object associated with the cell
             let user = cell.model
 
             //We discourage to use the indexPath variable to get the model object
-            //let user = users[indexPath.row] //Don't do like this since we are model-driven list, not the indexPath driven list.
+            //😤 Don't do like this since we are model-driven list, not the indexPath driven list.
+            //let user = users[indexPath.row]
         }
     }
 }
 ```
 
-#### `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`
+#### - `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`
 Ahh, Don't worry about that. We'll provide you the user model associated with the cell directly. It's interesting!
 
 ```swift
 extension UsersTableViewController: IQListViewDelegateDataSource {
 
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {
-        if let model = item.model as? UserCell.Model {
-            if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "UserDetailViewController") as? UserDetailViewController {
+        if let model = item.model as? UserCell.Model { //😍 We get the user model associated with the cell
+            if let controller = UIStoryboard(name: "Main", bundle: nil)
+            .instantiateViewController(identifier: "UserDetailViewController") as? UserDetailViewController {
                 controller.user = model //If used Method 1 or Method 2
                 //  controller.user = model.user  //If used method 3
                 self.navigationController?.pushViewController(controller, animated: true)
@@ -343,9 +353,9 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 }
 ```
 
-#### `func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat`
-#### `func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat`
-Because this method mostly return values based on cell and it's model, we have moved these configurations to cell.
+#### - `func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat`
+#### - `func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat`
+Because this method mostly return values based on cell and it's model, we have moved these configurations to cell. This is part of the **IQCellSizeProvider** protocol and we can override the default behaviour.
 
 ```swift
 class UserCell: UITableViewCell, IQModelableCell {
@@ -374,10 +384,10 @@ class UserCell: UITableViewCell, IQModelableCell {
 }
 ```
 
-#### `func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
-#### `func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
-#### `func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?`
-Well, this method also mostly return values based on the cell and it's model.                   
+#### - `func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
+#### - `func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
+#### - `func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?`
+Well, this method also mostly return values based on the cell and it's model, we have moved these configurations to cell. This is part of the **IQCellActionsProvider** protocol and we can override the default behaviour.
      
 ```swift
 class UserCell: UITableViewCell, IQModelableCell {
@@ -413,9 +423,9 @@ class UserCell: UITableViewCell, IQModelableCell {
 }
 ```
 
-#### `func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration?`
-#### `func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating)`
-This method also mostly return values based on the cell and it's model.                   
+#### - `func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration?`
+#### - `func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating)`
+This method also mostly return values based on the cell and it's model, we have moved these configurations to cell.  This is also part of the **IQCellActionsProvider** protocol and we can override the default behaviour.
                    
 ```swift
 class UserCell: UITableViewCell, IQModelableCell {
@@ -428,7 +438,7 @@ class UserCell: UITableViewCell, IQModelableCell {
         let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil,
                                                                   previewProvider: { () -> UIViewController? in
             let controller = UIStoryboard(name: "Main", bundle: nil)
-                .instantiateViewController(identifier: "UserViewController") as? UserViewController
+            .instantiateViewController(identifier: "UserViewController") as? UserViewController
             controller?.user = self.model
             return controller
         }, actionProvider: { (actions) -> UIMenu? in
@@ -512,11 +522,11 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
-    var isHighlightable: Bool {
+    var isHighlightable: Bool { //IQSelectableCell protocol
         return true
     }
 
-    var isSelectable: Bool {
+    var isSelectable: Bool {    //IQSelectableCell protocol
         return false
     }
 }
@@ -530,12 +540,49 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
+    //IQCellActionsProvider protocol
     func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
         return viewToBePreview
     }
 }
 ```
 
+Workarounds
+==========================
+#### IQListKit! 😠 Why are you not loading my cell created in storyboard?
+Well. If we are creating cell in storyboard, then to work with the IQListKit we must have to put the cell identifier exactly same as it's class name. If we are using The UICollectionView then we also have to manually register our cell using **list.registerCell(type: UserCell.self, registerType: .storyboard)** method because with the UICollectionView, there is no way to detect if a cell is created in storyboard.
+
+#### I have a large data set and `list.performUpdates` method takes time to animate the changes 😟. What can I do?
+You would not believe the **performUpdtes** method is **Background Thread Safe** 😍. We can call it in background and can show a loading indicator. In the completion handler we can hide the loading indicator. Under the hood, the change calculations will be done in background. Thanks again to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot) and Ryo Aoyama for [DiffableDataSources](https://github.com/ra1028/DiffableDataSources). The UITableView/UICollectionView will be reloaded in main thread. Please refer the below code:-
+
+```swift
+class UsersTableViewController: UITableViewController {
+
+    //...
+
+    func refreshUI(animated: Bool = true) {
+
+        //Show loading indicator
+        loadingIndicator.startAnimating()
+
+        //Perform updates in background
+        DispatchQueue.global().async {
+
+            self.list.performUpdates({
+
+                let section = IQSection(identifier: "first")
+                self.list.append(section)
+
+                self.list.append(UserCell.self, models: users, section: section)
+
+            }, animatingDifferences: animated, completion: {
+                //Hide loading indicator since the completion will be called in main thread
+                self.loadingIndicator.stopAnimating()
+            })
+        }
+    }
+}
+```
 
 LICENSE
 ---
