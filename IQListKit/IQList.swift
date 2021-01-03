@@ -48,7 +48,7 @@ public class IQList: NSObject {
 
     // MARK: - Public Properties
 
-    public private(set) var listView: IQLisView?
+    public private(set) var listView: IQListView?
 
     // MARK: - Empty States
 
@@ -165,7 +165,7 @@ public class IQList: NSObject {
 
     // MARK: - Initialization
 
-    public convenience init(listView: IQLisView? = nil,
+    public convenience init(listView: IQListView? = nil,
                             delegateDataSource: IQListViewDelegateDataSource? = nil,
                             defaultRowAnimation: UITableView.RowAnimation = .fade) {
         self.init(listView: listView,
@@ -173,7 +173,7 @@ public class IQList: NSObject {
                   defaultRowAnimation: defaultRowAnimation)
     }
 
-    public init(listView: IQLisView? = nil, delegate: IQListViewDelegate? = nil,
+    public init(listView: IQListView? = nil, delegate: IQListViewDelegate? = nil,
                 dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade) {
 
         self.listView = listView

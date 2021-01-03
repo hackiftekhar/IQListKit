@@ -310,7 +310,7 @@ The IQListKit is a model-driven framework, so we'll be dealing with the Cell and
 ```swift
 extension TableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQLisView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
         if let cell = cell as? UserCell { //Casting our cell as UserCell
             cell.delegate = self
             //Or additional work with the UserCell
@@ -333,7 +333,7 @@ Ahh, Don't worry about that. We'll provide you the user model associated with th
 ```swift
 extension TableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQLisView, didSelect item: IQItem, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {
         if let model = item.model as? UserCell.Model {
             if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "UserDetailViewController") as? UserDetailViewController {
                 controller.user = model //If used Method 1 or Method 2
@@ -350,10 +350,10 @@ Other useful delegate methods
 
 ```swift
     //Cell will about to display
-    func listView(_ listView: IQLisView, willDisplay cell: IQListCell, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, willDisplay cell: IQListCell, at indexPath: IndexPath)
 
     //Cell did end displaying
-    func listView(_ listView: IQLisView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
 ```
 
 Other useful data source methods
@@ -361,13 +361,13 @@ Other useful data source methods
 
 ```swift
     //Return the size of an Item, for tableView the size.height will only be effective
-    func listView(_ listView: IQLisView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
+    func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
     //Return the headerView of section
-    func listView(_ listView: IQLisView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
 
     //Return the footerView of section
-    func listView(_ listView: IQLisView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
 ```
 
 LICENSE

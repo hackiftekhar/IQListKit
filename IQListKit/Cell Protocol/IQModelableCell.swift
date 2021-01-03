@@ -45,11 +45,11 @@ public extension IQModelableCell {
 
 public extension IQModelableCell {
 
-    static func estimatedSize(for model: AnyHashable?, listView: IQLisView) -> CGSize {
+    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize {
         return size(for: model, listView: listView)
     }
 
-    static func size(for model: AnyHashable?, listView: IQLisView) -> CGSize {
+    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
         if let clv = listView as? UICollectionView, let cvfl = clv.collectionViewLayout as? UICollectionViewFlowLayout {
             return CGSize(width: clv.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 0)
         }

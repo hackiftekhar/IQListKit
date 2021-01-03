@@ -15,15 +15,15 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     weak var delegate: UserCellDelegate?
 
-    struct Model: Hashable {
-        let user: User?
-        let people: People?
-    }
+//    struct Model: Hashable {
+//        let user: User?
+//        let people: People?
+//    }
     //Or if we would like to use User as a model directly then
     // instead of implementing a struct, this can also be written as
 //    typealias Model = User
 
-    var model: Model? {
+    var model: User? {
         didSet {
             guard let model = model else {
                 return
@@ -42,28 +42,37 @@ class UserCell: UITableViewCell, IQModelableCell {
         }
     }
 
-//    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-//        if let model = model as? Model {
-//            if model.user.name == "First" {
-//                return CGSize(width: listView.frame.width, height: 100)
-//            } else {
-//                return CGSize(width: listView.frame.width, height: 50)
-//            }
-//        }
-//        return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
-//    }
+    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize {
+        return CGSize(width: listView.frame.width, height: 100)
+    }
 
-//    var isHighlightable: Bool {
-//        return true
-//    }
-//
-//    var isSelectable: Bool {
-//        return false
-//    }
+    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+
+        if let model = model as? Model {
+            var height: CGFloat = 100
+            //....
+            // return height based on the model
+            return CGSize(width: listView.frame.width, height: height)
+        }
+
+        //Or return a constant height
+        return CGSize(width: listView.frame.width, height: 100)
+
+        //Or UITableView.automaticDimension for dynamic behaviour
+//        return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
+    }
+
+    var isHighlightable: Bool {
+        return true
+    }
+
+    var isSelectable: Bool {
+        return false
+    }
 
     @available(iOS 11.0, *)
     func leadingSwipeActions() -> [IQContextualAction]? {
-        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (_, completionHandler) in
+        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (action, completionHandler) in
             completionHandler(true)
         }
         action.backgroundColor = UIColor.orange
@@ -73,25 +82,18 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     func trailingSwipeActions() -> [IQContextualAction]? {
 
-        let action1 = IQContextualAction(style: .destructive, title: "Delete 1") { [weak self] (_, completionHandler) in
+        let action1 = IQContextualAction(style: .normal, title: "Hello Trailing") { [weak self] (action, completionHandler) in
             completionHandler(true)
-            guard let self = self, let user = self.model?.user else {
+            guard let self = self, let user = self.model else {
                 return
             }
-            self.delegate?.userCell(self, didDelete: user)
+
+            //Do your stuffs here
         }
 
-        let action2 = IQContextualAction(style: .normal, title: "Delete 2") { [weak self] (_, completionHandler) in
-            completionHandler(true)
-            guard let self = self, let user = self.model?.user else {
-                return
-            }
-            self.delegate?.userCell(self, didDelete: user)
-        }
+        action.backgroundColor = UIColor.purple
 
-        action2.backgroundColor = UIColor.purple
-
-        return [action1, action2]
+        return [action]
     }
 
     @available(iOS 13.0, *)
@@ -101,36 +103,14 @@ class UserCell: UITableViewCell, IQModelableCell {
                                                                   previewProvider: { () -> UIViewController? in
             let controller = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(identifier: "UserViewController") as? UserViewController
-            controller?.user = self.model?.user
+            controller?.user = self.model
             return controller
         }, actionProvider: { (actions) -> UIMenu? in
 
             var actions = [UIMenuElement]()
-            let save = UIAction(title: "Save in Photos") { _ in
+            let action = UIAction(title: "Hello Action") { _ in
             }
-            actions.append(save)
-
-            let open = UIAction(title: "Open in Browser") { _ in
-            }
-            actions.append(open)
-
-            let mixed = UIAction(title: "Nothing") { _ in
-            }
-            actions.append(mixed)
-
-            do {
-                var nestedActions = [UIMenuElement]()
-                let save = UIAction(title: "Nested 1", attributes: .disabled) { _ in
-                }
-                nestedActions.append(save)
-
-                let open = UIAction(title: "Nested 2", attributes: .destructive) { _ in
-                }
-                nestedActions.append(open)
-
-                let nestedMenu = UIMenu(title: "Nested Menu", options: [], children: nestedActions)
-                actions.append(nestedMenu)
-            }
+            actions.append(action)
 
             return UIMenu(title: "Nested Menu", children: actions)
         })
@@ -138,9 +118,10 @@ class UserCell: UITableViewCell, IQModelableCell {
         return contextMenuConfiguration
     }
 
-//    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
-//        return detailTextLabel
-//    }
+    @available(iOS 13.0, *)
+    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
+        return detailTextLabel
+    }
 
     @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,

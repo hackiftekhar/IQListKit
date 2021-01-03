@@ -27,16 +27,16 @@ import UIKit
 public protocol IQListViewDelegate: UIScrollViewDelegate {
 
     //Will give a chance to modify or other configuration of cell if necessary
-    func listView(_ listView: IQLisView, modifyCell cell: IQListCell, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath)
 
     //Cell will about to display
-    func listView(_ listView: IQLisView, willDisplay cell: IQListCell, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, willDisplay cell: IQListCell, at indexPath: IndexPath)
 
     //Cell did end displaying
-    func listView(_ listView: IQLisView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
 
     //An item is selected
-    func listView(_ listView: IQLisView, didSelect item: IQItem, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath)
 }
 
 // MARK: IQListViewDataSource
@@ -44,13 +44,13 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
 public protocol IQListViewDataSource: class {
 
     //Return the size of an Item, for tableView the size.height will only be effective
-    func listView(_ listView: IQLisView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
+    func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
     //Return the headerView of section
-    func listView(_ listView: IQLisView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
 
     //Return the footerView of section
-    func listView(_ listView: IQLisView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
 }
 
 // MARK: Combined delegate/datasource
@@ -60,20 +60,20 @@ public typealias IQListViewDelegateDataSource = (IQListViewDelegate & IQListView
 
 public extension IQListViewDelegate {
 
-    func listView(_ listView: IQLisView, modifyCell cell: IQListCell, at indexPath: IndexPath) {}
+    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQLisView, willDisplay cell: IQListCell, at indexPath: IndexPath) {}
+    func listView(_ listView: IQListView, willDisplay cell: IQListCell, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQLisView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {}
+    func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQLisView, didSelect item: IQItem, at indexPath: IndexPath) {}
+    func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {}
 }
 
 public extension IQListViewDataSource {
 
-    func listView(_ listView: IQLisView, size item: IQItem, at indexPath: IndexPath) -> CGSize? { return nil }
+    func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize? { return nil }
 
-    func listView(_ listView: IQLisView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
+    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
 
-    func listView(_ listView: IQLisView, footerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
+    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
 }

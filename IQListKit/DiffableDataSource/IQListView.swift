@@ -22,9 +22,9 @@
 
 import UIKit
 
-@objc public protocol IQLisView where Self: UIScrollView {
+@objc public protocol IQListView where Self: UIScrollView {
     var backgroundView: UIView? { get set }
 }
 
-extension UICollectionView: IQLisView {}
-extension UITableView: IQLisView {}
+extension UICollectionView: IQListView {}
+extension UITableView: IQListView {}

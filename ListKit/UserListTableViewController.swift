@@ -92,13 +92,13 @@ extension UserListTableViewController {
 
 extension UserListTableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQLisView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
         if let cell = cell as? Cell {
             cell.delegate = self
         }
     }
 
-    func listView(_ listView: IQLisView, didSelect item: IQItem, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {
         if let model = item.model as? Cell.Model {
             if let controller = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "UserViewController") as? UserViewController {
