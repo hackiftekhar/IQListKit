@@ -2,6 +2,10 @@ IQListKit
 ==========================
 Model driven UITableView/UICollectionView
 
+<a href="https://youtu.be/3PwRnIEtj1o" target="_blank"><img src="http://img.youtube.com/vi/3PwRnIEtj1o/0.jpg"
+alt="IQListKit Demo Video" width="480" height="360" border="10" /></a>
+
+
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
 IQListKit allows us to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take care of rest including the animations of all changes.
