@@ -301,14 +301,14 @@ Let's do this in a separate function called refreshUI
 
 Now whenever our users array changes, we will be calling the refreshUI() method to reload tableView and that's it.
 
-Additional configuration before cell display.
+Old delegate and datasource replacements
 ==========================
 
-#### I would like to do additional configuration like setting some delegate of UserCell. Where is my old friend `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`?
+#### `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`
 The IQListKit is a model-driven framework, so we'll be dealing with the Cell and models instead of the indexPath.row or indexPath.section. The IQListKit provides a couple of delegates to modify the cell or do additional configuration based on their model before the cell display. To do this, we can implement a delegate method of IQList like below:-
 
 ```swift
-extension TableViewController: IQListViewDelegateDataSource {
+extension UsersTableViewController: IQListViewDelegateDataSource {
 
     func listView(_ listView: IQLisView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
         if let cell = cell as? UserCell { //Casting our cell as UserCell
@@ -325,13 +325,11 @@ extension TableViewController: IQListViewDelegateDataSource {
 }
 ```
 
-Callback when Cell is selected
-==========================
-#### I would like to move to UserDetailViewController when UserCell is selected. Where is my old friend `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`?
+#### `func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)`
 Ahh, Don't worry about that. We'll provide you the user model associated with the cell directly. It's interesting!
 
 ```swift
-extension TableViewController: IQListViewDelegateDataSource {
+extension UsersTableViewController: IQListViewDelegateDataSource {
 
     func listView(_ listView: IQLisView, didSelect item: IQItem, at indexPath: IndexPath) {
         if let model = item.model as? UserCell.Model {
@@ -345,22 +343,157 @@ extension TableViewController: IQListViewDelegateDataSource {
 }
 ```
 
+#### `func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat`
+#### `func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat`
+Because this method mostly return values based on cell and it's model, we have moved these configurations to cell.
+
+```swift
+class UserCell: UITableViewCell, IQModelableCell {
+
+    //...
+
+    static func estimatedSize(for model: AnyHashable?, listView: IQLisView) -> CGSize {
+        return CGSize(width: listView.frame.width, height: 100)
+    }
+
+    static func size(for model: AnyHashable?, listView: IQLisView) -> CGSize {
+
+        if let model = model as? Model {
+            var height: CGFloat = 100
+            //...
+            // return height based on the model
+            return CGSize(width: listView.frame.width, height: height)
+        }
+
+        //Or return a constant height
+        return CGSize(width: listView.frame.width, height: 100)
+
+        //Or UITableView.automaticDimension for dynamic behaviour
+//        return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
+    }
+}
+```
+
+#### `func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
+#### `func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
+#### `func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?`
+Well, this method also mostly return values based on the cell and it's model.                   
+     
+```swift
+class UserCell: UITableViewCell, IQModelableCell {
+
+    //...
+
+    @available(iOS 11.0, *)
+    func leadingSwipeActions() -> [IQContextualAction]? {
+        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (action, completionHandler) in
+            completionHandler(true)
+            //Do your stuffs here
+        }
+        action.backgroundColor = UIColor.orange
+
+        return [action]
+    }
+
+    func trailingSwipeActions() -> [IQContextualAction]? {
+
+        let action1 = IQContextualAction(style: .normal, title: "Hello Trailing") { [weak self] (action, completionHandler) in
+            completionHandler(true)
+            guard let self = self, let user = self.model else {
+                return
+            }
+
+            //Do your stuffs here
+        }
+
+        action.backgroundColor = UIColor.purple
+
+        return [action]
+    }
+}
+```
+
+#### `func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration?`
+#### `func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating)`
+This method also mostly return values based on the cell and it's model.                   
+                   
+```swift
+class UserCell: UITableViewCell, IQModelableCell {
+
+    //...
+
+    @available(iOS 13.0, *)
+    func contextMenuConfiguration() -> UIContextMenuConfiguration? {
+
+        let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil,
+                                                                  previewProvider: { () -> UIViewController? in
+            let controller = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(identifier: "UserViewController") as? UserViewController
+            controller?.user = self.model
+            return controller
+        }, actionProvider: { (actions) -> UIMenu? in
+
+            var actions = [UIMenuElement]()
+            let action = UIAction(title: "Hello Action") { _ in
+                //Do your stuffs here
+            }
+            actions.append(action)
+
+            return UIMenu(title: "Nested Menu", children: actions)
+        })
+
+        return contextMenuConfiguration
+    }
+    
+    @available(iOS 13.0, *)
+    func performPreviewAction(configuration: UIContextMenuConfiguration,
+                              animator: UIContextMenuInteractionCommitAnimating) {
+        if let previewViewController = animator.previewViewController, let parent = viewParentController {
+            animator.addAnimations {
+                (parent.navigationController ?? parent).show(previewViewController, sender: self)
+            }
+        }
+    }
+}
+
+private extension UIView {
+    var viewParentController: UIViewController? {
+        var parentResponder: UIResponder? = self
+        while let next = parentResponder?.next {
+            if let viewController = next as? UIViewController {
+                return viewController
+            } else {  parentResponder = next  }
+        }
+        return nil
+    }
+}
+```                   
+
 Other useful delegate methods
 ==========================
 
 ```swift
+extension UsersTableViewController: IQListViewDelegateDataSource {
+
+    //...
+
     //Cell will about to display
     func listView(_ listView: IQLisView, willDisplay cell: IQListCell, at indexPath: IndexPath)
 
     //Cell did end displaying
     func listView(_ listView: IQLisView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
+}
 ```
 
 Other useful data source methods
 ==========================
 
 ```swift
-    //Return the size of an Item, for tableView the size.height will only be effective
+extension UsersTableViewController: IQListViewDelegateDataSource {
+
+    //...
+
+     //Return the size of an Item, for tableView the size.height will only be effective
     func listView(_ listView: IQLisView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
     //Return the headerView of section
@@ -368,7 +501,41 @@ Other useful data source methods
 
     //Return the footerView of section
     func listView(_ listView: IQLisView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
+}
 ```
+
+Other useful IQModelableCell properties
+==========================
+
+```swift
+class UserCell: UITableViewCell, IQModelableCell {
+
+    //...
+
+    var isHighlightable: Bool {
+        return true
+    }
+
+    var isSelectable: Bool {
+        return false
+    }
+}
+```
+
+Other useful IQModelableCell methods
+==========================
+
+```swift
+class UserCell: UITableViewCell, IQModelableCell {
+
+    //...
+
+    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
+        return viewToBePreview
+    }
+}
+```
+
 
 LICENSE
 ---
