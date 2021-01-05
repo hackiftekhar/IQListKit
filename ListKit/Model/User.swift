@@ -7,10 +7,13 @@
 
 import Foundation
 
-struct User: Hashable, Comparable {
-    static func < (lhs: User, rhs: User) -> Bool {
-        lhs.name == rhs.name
+struct User: Hashable {
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 
+    let id: Int
     let name: String
+    let email: String
 }

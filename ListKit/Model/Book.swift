@@ -12,5 +12,6 @@ struct Book: Hashable, Comparable {
         lhs.name == rhs.name
     }
 
+    let id: Int
     let name: String
 }

@@ -165,8 +165,8 @@ extension DDSTableViewDiffableDataSource: UITableViewDelegate {
         } else {
             if let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
                       cell.trailingSwipeActions() != nil {
-                //editActionsForRowAt does not getting called if we provide .none
-                //So adding it as a workaround, the delete button will not be shown btw
+                // editActionsForRowAt does not getting called if we provide .none
+                // So adding it as a workaround, the delete button will not be shown btw
                 return .delete
             } else {
                 return .none

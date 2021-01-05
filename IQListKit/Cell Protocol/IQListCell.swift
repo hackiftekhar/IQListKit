@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: List Cell
 
-//This is used as a replacement of UITableViewCell/UICollectionViewCell
+// This is used as a replacement of UITableViewCell/UICollectionViewCell
 public protocol IQListCell where Self: UIView {
 }
 

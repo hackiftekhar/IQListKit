@@ -15,11 +15,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     weak var delegate: UserCellDelegate?
 
-//    struct Model: Hashable {
-//        let user: User?
-//        let people: People?
-//    }
-    //Or if we would like to use User as a model directly then
+    // Or if we would like to use User as a model directly then
     // instead of implementing a struct, this can also be written as
 //    typealias Model = User
 
@@ -30,34 +26,16 @@ class UserCell: UITableViewCell, IQModelableCell {
             }
 
             textLabel?.text = model.name
-            detailTextLabel?.text = "Loaded using XIB"
+            detailTextLabel?.text = model.email
         }
     }
 
-//    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-//        if let model = model as? Model {
-//            if model.user.name == "First" {
-//                return CGSize(width: listView.frame.width, height: 100)
-//            } else {
-//                return CGSize(width: listView.frame.width, height: 50)
-//            }
-//        }
-//        return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
-//    }
-
-//    var isHighlightable: Bool {
-//        return true
-//    }
-//
-//    var isSelectable: Bool {
-//        return false
-//    }
-
     @available(iOS 11.0, *)
     func leadingSwipeActions() -> [IQContextualAction]? {
-        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (action, completionHandler) in
+        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (_, completionHandler) in
             completionHandler(true)
         }
+
         action.backgroundColor = UIColor.orange
 
         return [action]
@@ -65,19 +43,19 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     func trailingSwipeActions() -> [IQContextualAction]? {
 
-        let action = IQContextualAction(style: .destructive, title: "Delete") { [weak self] (action, completionHandler) in
+        let action = IQContextualAction(style: .destructive, title: "Delete") { [weak self] (_, completionHandler) in
             completionHandler(true)
-            guard let self = self, let user = self.model else {
+            guard let self = self, let model = self.model else {
                 return
             }
 
-            self.delegate?.userCell(self, didDelete: user)
-            //Do your stuffs here
+            self.delegate?.userCell(self, didDelete: model)
+            // Do your stuffs here
         }
 
         return [action]
     }
-
+//
     @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? {
 
@@ -100,8 +78,9 @@ class UserCell: UITableViewCell, IQModelableCell {
         return contextMenuConfiguration
     }
 
+//    @available(iOS 13.0, *)
 //    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
-//        return detailTextLabel
+//        return textLabel
 //    }
 
     @available(iOS 13.0, *)

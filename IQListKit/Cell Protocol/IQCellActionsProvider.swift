@@ -26,22 +26,22 @@ import UIKit
 
 public protocol IQCellActionsProvider where Self: IQListCell {
 
-    //leading swipe actions of cell
+    // leading swipe actions of cell
     @available(iOS 11.0, *)
     func leadingSwipeActions() -> [IQContextualAction]?
 
-    //trailing swipe actions of cell
+    // trailing swipe actions of cell
     func trailingSwipeActions() -> [IQContextualAction]?
 
-    //contextMenu configuration of the cell
+    // contextMenu configuration of the cell
     @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration?
 
-    //contextMenu menu customized preview view (If different)
+    // contextMenu menu customized preview view (If different)
     @available(iOS 13.0, *)
     func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView?
 
-    //Context menu preview is tapped, now you probably need to show the preview controller
+    // Context menu preview is tapped, now you probably need to show the preview controller
     @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,
                               animator: UIContextMenuInteractionCommitAnimating)

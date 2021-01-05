@@ -34,7 +34,7 @@ public class IQTableViewCell: UITableViewCell, IQModelableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //Model property
+    // Model property
     public var model: Model? {
         didSet {
             textLabel?.text = model?.text
@@ -43,7 +43,7 @@ public class IQTableViewCell: UITableViewCell, IQModelableCell {
         }
     }
 
-    //Model associated type for this class
+    // Model associated type for this class
     public struct Model: Hashable {
 
         public func hash(into hasher: inout Hasher) {

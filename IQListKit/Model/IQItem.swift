@@ -34,10 +34,10 @@ public struct IQItem: Hashable {
         hasher.combine(model)
     }
 
-    //Type of the cell
+    // Type of the cell
     public let type: IQListCell.Type
 
-    //Model of the cell
+    // Model of the cell
     public let model: AnyHashable?
 
     // MARK: - Initializers

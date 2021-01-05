@@ -48,7 +48,7 @@ public class IQList: NSObject {
 
     // MARK: - Public Properties
 
-    public private(set) var listView: IQListView?
+    public private(set) var listView: IQListView
 
     // MARK: - Empty States
 
@@ -71,7 +71,7 @@ public class IQList: NSObject {
 
     // MARK: - Loading
 
-    //Will display in the middle if isLoading is true
+    // Will display in the middle if isLoading is true
     public let loadingIndicator = UIActivityIndicatorView(style: .gray)
 
     public var isLoading = false {
@@ -81,10 +81,10 @@ public class IQList: NSObject {
 
             if #available(iOS 13.0, *) {
                 let snapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>?
-                if let tableViewDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-                    snapshot = tableViewDataSource.snapshot()
-                } else if let collectionViewDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-                    snapshot = collectionViewDataSource.snapshot()
+                if let tvDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
+                    snapshot = tvDataSource.snapshot()
+                } else if let cvDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
+                    snapshot = cvDataSource.snapshot()
                 } else {
                     snapshot = nil
                 }
@@ -94,10 +94,10 @@ public class IQList: NSObject {
                 }
             } else {
                 let snapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
-                if let tableViewDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
-                    snapshot = tableViewDataSource.snapshot()
-                } else if let collectionViewDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
-                    snapshot = collectionViewDataSource.snapshot()
+                if let tvDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
+                    snapshot = tvDataSource.snapshot()
+                } else if let cvDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
+                    snapshot = cvDataSource.snapshot()
                 } else {
                     snapshot = nil
                 }
@@ -110,41 +110,68 @@ public class IQList: NSObject {
             if numberOfAllItems == 0 {
                 isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
                 if isLoading {
-                    listView?.backgroundView = loadingIndicator
-                    listView?.bounces = true
+                    listView.backgroundView = loadingIndicator
+                    listView.bounces = true
                     UIView.animate(withDuration: 0.3) { [weak self] in
                         self?.emptyStateView.alpha = 0.0
                     }
                 } else {
-                    listView?.backgroundView = emptyStateView
-                    listView?.bounces = false
+                    listView.backgroundView = emptyStateView
+                    listView.bounces = false
                     UIView.animate(withDuration: 0.3) { [weak self] in
                         self?.emptyStateView.alpha = 1.0
                     }
                 }
             } else {
                 loadingIndicator.stopAnimating()
-                listView?.bounces = true
-                if listView?.backgroundView == emptyStateView {
+                listView.bounces = true
+                if listView.backgroundView == emptyStateView {
                     UIView.animate(withDuration: 0.3, animations: { [weak self] in
                         self?.emptyStateView.alpha = 0.0
                     }, completion: { [weak self] success in
                         if success {
-                            self?.listView?.backgroundView = nil
+                            self?.listView.backgroundView = nil
                         }
                     })
                 } else {
-                    listView?.backgroundView = nil
+                    listView.backgroundView = nil
                 }
+            }
+        }
+    }
+
+    @available(iOS 13.0, *)
+    public func snapshot() -> NSDiffableDataSourceSnapshot<IQSection, IQItem> {
+        if let tableViewDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
+            return tableViewDataSource.snapshot()
+        } else if let collectionViewDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
+            return collectionViewDataSource.snapshot()
+        } else {
+            fatalError("No snapshot found")
+        }
+    }
+
+    @available(iOS, deprecated: 13.0)
+    public func ddsSnapshot() -> DiffableDataSourceSnapshot<IQSection, IQItem> {
+        if let tableViewDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
+            return tableViewDataSource.snapshot()
+        } else if let collectionViewDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
+            return collectionViewDataSource.snapshot()
+        } else {
+            if #available(iOS 13.0, *) {
+                fatalError("Please use snapshot() method for iOS 13.0 and above")
+            } else {
+                fatalError("No snapshot found")
             }
         }
     }
 
     // MARK: - Private Properties
 
-    private var registeredCells = [UIView.Type]()
-    private var registeredHeaderFooterViews = [UIView.Type]()
+    internal var registeredCells = [UIView.Type]()
+    internal var registeredHeaderFooterViews = [UIView.Type]()
 
+    // This tweak is written due to old iOS version compatibility
     private var _privateBatchSnapshot: Any?
     @available(iOS 13.0, *)
     private var batchSnapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>? {
@@ -165,7 +192,7 @@ public class IQList: NSObject {
 
     // MARK: - Initialization
 
-    public convenience init(listView: IQListView? = nil,
+    public convenience init(listView: IQListView,
                             delegateDataSource: IQListViewDelegateDataSource? = nil,
                             defaultRowAnimation: UITableView.RowAnimation = .fade) {
         self.init(listView: listView,
@@ -173,7 +200,7 @@ public class IQList: NSObject {
                   defaultRowAnimation: defaultRowAnimation)
     }
 
-    public init(listView: IQListView? = nil, delegate: IQListViewDelegate? = nil,
+    public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
                 dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade) {
 
         self.listView = listView
@@ -181,185 +208,97 @@ public class IQList: NSObject {
 
         if let tableView = listView as? UITableView {
 
-            let cellProvider: ((UITableView, IndexPath, IQItem) -> UITableViewCell?) = { [weak self] (tbv, idxp, item) in
-                let identifier = String(describing: item.type)
-                let cell = tbv.dequeueReusableCell(withIdentifier: identifier, for: idxp)
-
-                if let cell = cell as? IQModelModifiable {
-                    cell.setModel(item.model)
-                } else {
-                    print("""
-                        \(type(of: cell)) with identifier \(identifier) \
-                        does not confirm to the \(IQModelModifiable.self) protocol
-                        """)
-                }
-
-                self?.tableViewDataSource?.delegate?.listView(tbv, modifyCell: cell, at: idxp)
-                return cell
-            }
-
-            if #available(iOS 13.0, *) {
-                let tableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
-                                                                    cellProvider: cellProvider)
-                tableViewDataSource = tableDataSource
-            } else {
-                let tableDataSource = DDSTableViewDiffableDataSource(tableView: tableView,
-                                                                     cellProvider: cellProvider)
-                tableViewDataSource = tableDataSource
-            }
-
-            tableView.delegate = tableViewDataSource
-            tableView.dataSource = tableViewDataSource
-            tableViewDataSource?.defaultRowAnimation = defaultRowAnimation
-            tableViewDataSource?.delegate = delegate
-            tableViewDataSource?.dataSource = dataSource
-
-            registerHeaderFooter(type: IQTableViewHeaderFooterView.self)
+            initializeTableViewDataSource(tableView, delegate: delegate, dataSource: dataSource,
+                                          defaultRowAnimation: defaultRowAnimation)
 
         } else if let collectionView = listView as? UICollectionView {
 
-            let cellProvider: ((UICollectionView, IndexPath, IQItem) -> UICollectionViewCell?) = { [weak self] (clv, idxp, item) in
-                let identifier = String(describing: item.type)
-                let cell = clv.dequeueReusableCell(withReuseIdentifier: identifier, for: idxp)
-                if let cell = cell as? IQModelModifiable {
-                    cell.setModel(item.model)
-                } else {
-                    print("""
-                        \(type(of: cell)) with identifier \(identifier) \
-                        does not confirm to the \(IQModelModifiable.self) protocol
-                        """)
-                }
+            initializeCollectionViewDataSource(collectionView, delegate: delegate, dataSource: dataSource)
+        }
+    }
 
-                self?.collectionViewDataSource?.delegate?.listView(clv, modifyCell: cell, at: idxp)
-                return cell
-            }
+    private func initializeTableViewDataSource(_ tableView: UITableView, delegate: IQListViewDelegate?,
+                                               dataSource: IQListViewDataSource?,
+                                               defaultRowAnimation: UITableView.RowAnimation) {
 
-            if #available(iOS 13.0, *) {
-                let collectionDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
-                                                                              cellProvider: cellProvider)
-                collectionViewDataSource = collectionDataSource
+        typealias CellProvider = (UITableView, IndexPath, IQItem) -> UITableViewCell?
+
+        let provider: CellProvider = { [weak self] (tableView, indexPath, item) in
+            let identifier = String(describing: item.type)
+            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+
+            if let cell = cell as? IQModelModifiable {
+                cell.setModel(item.model)
             } else {
-                let collectionDataSource = DDSCollectionViewDiffableDataSource(collectionView: collectionView,
-                                                                               cellProvider: cellProvider)
-                collectionViewDataSource = collectionDataSource
+                print("""
+                    \(type(of: cell)) with identifier \(identifier) \
+                    does not confirm to the \(IQModelModifiable.self) protocol
+                    """)
             }
 
-            collectionViewDataSource?.delegate = delegate
-            collectionViewDataSource?.dataSource = dataSource
-            collectionView.delegate = collectionViewDataSource
-            collectionView.dataSource = collectionViewDataSource
-            collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
-
-            registerHeaderFooter(type: IQCollectionViewHeaderFooter.self)
-        }
-    }
-}
-
-// MARK: - Manual cell and header/footer registration
-
-public extension IQList {
-
-    enum RegisterType {
-        case `default`
-        case nib
-        case `class`
-        case storyboard
-    }
-
-    func registerCell<T: IQModelableCell>(type: T.Type, bundle: Bundle? = .main,
-                                          registerType: RegisterType = .default) {
-
-        guard registeredCells.contains(where: { $0 == type}) == false else {
-            return
+            self?.tableViewDataSource?.delegate?.listView(tableView, modifyCell: cell, at: indexPath)
+            return cell
         }
 
-        func internalRegisterCell() {
-            let identifier = String(describing: type)
-
-            if registerType == .default, let tableView = listView as? UITableView {
-                //Validate if the cell is configured in storyboard
-                if tableView.dequeueReusableCell(withIdentifier: identifier) != nil {
-                    registeredCells.append(type)
-                    return
-                }
-            }
-
-            if registerType == .storyboard {
-                registeredCells.append(type)
-            } else if (registerType == .default || registerType == .nib),
-               bundle?.path(forResource: identifier, ofType: "nib") != nil {
-                let nib = UINib(nibName: identifier, bundle: bundle)
-                if let tableView = listView as? UITableView {
-                    registeredCells.append(type)
-                    tableView.register(nib, forCellReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    registeredCells.append(type)
-                    collectionView.register(nib, forCellWithReuseIdentifier: identifier)
-                }
-            } else if registerType == .default || registerType == .class {
-                if let tableView = listView as? UITableView {
-                    registeredCells.append(type)
-                    tableView.register(type.self, forCellReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    registeredCells.append(type)
-                    collectionView.register(type.self, forCellWithReuseIdentifier: identifier)
-                }
-            }
-        }
-
-        if Thread.isMainThread {
-            internalRegisterCell()
+        if #available(iOS 13.0, *) {
+            let tableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
+                                                                cellProvider: provider)
+            tableViewDataSource = tableDataSource
         } else {
-            DispatchQueue.main.sync {
-                internalRegisterCell()
-            }
+            let tableDataSource = DDSTableViewDiffableDataSource(tableView: tableView,
+                                                                 cellProvider: provider)
+            tableViewDataSource = tableDataSource
         }
+
+        tableView.delegate = tableViewDataSource
+        tableView.dataSource = tableViewDataSource
+        tableViewDataSource?.defaultRowAnimation = defaultRowAnimation
+        tableViewDataSource?.delegate = delegate
+        tableViewDataSource?.dataSource = dataSource
+
+        registerHeaderFooter(type: IQTableViewHeaderFooterView.self)
     }
 
-    func registerHeaderFooter<T: UIView>(type: T.Type, bundle: Bundle? = .main) {
+    private func initializeCollectionViewDataSource(_ collectionView: UICollectionView,
+                                                    delegate: IQListViewDelegate?,
+                                                    dataSource: IQListViewDataSource?) {
 
-        guard registeredHeaderFooterViews.contains(where: { $0 == type}) == false else {
-            return
-        }
+        typealias CellProvider = (UICollectionView, IndexPath, IQItem) -> UICollectionViewCell?
 
-        func internalRegisterHeaderFooter() {
-            let identifier = String(describing: type)
-
-            if bundle?.path(forResource: identifier, ofType: "nib") != nil {
-                let nib = UINib(nibName: identifier, bundle: bundle)
-                if let tableView = listView as? UITableView {
-                    registeredHeaderFooterViews.append(type)
-                    tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    registeredHeaderFooterViews.append(type)
-                    collectionView.register(nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                            withReuseIdentifier: identifier)
-                    collectionView.register(nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                            withReuseIdentifier: identifier)
-                }
+        let provider: CellProvider = { [weak self] (collectionView, indexPath, item) in
+            let identifier = String(describing: item.type)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+            if let cell = cell as? IQModelModifiable {
+                cell.setModel(item.model)
             } else {
-                if let tableView = listView as? UITableView {
-                    registeredHeaderFooterViews.append(type)
-                    tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    registeredHeaderFooterViews.append(type)
-                    collectionView.register(type.self,
-                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                            withReuseIdentifier: identifier)
-                    collectionView.register(type.self,
-                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                            withReuseIdentifier: identifier)
-                }
+                print("""
+                    \(type(of: cell)) with identifier \(identifier) \
+                    does not confirm to the \(IQModelModifiable.self) protocol
+                    """)
             }
+
+            self?.collectionViewDataSource?.delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
+            return cell
         }
 
-        if Thread.isMainThread {
-            internalRegisterHeaderFooter()
+        if #available(iOS 13.0, *) {
+            let collectionDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
+                                                                          cellProvider: provider)
+            collectionViewDataSource = collectionDataSource
         } else {
-            DispatchQueue.main.sync {
-                internalRegisterHeaderFooter()
-            }
+            let collectionDataSource = DDSCollectionViewDiffableDataSource(collectionView: collectionView,
+                                                                           cellProvider: provider)
+            collectionViewDataSource = collectionDataSource
         }
+
+        collectionViewDataSource?.delegate = delegate
+        collectionViewDataSource?.dataSource = dataSource
+        collectionView.delegate = collectionViewDataSource
+        collectionView.dataSource = collectionViewDataSource
+        collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
+
+        registerHeaderFooter(type: UICollectionReusableView.self)
+        registerHeaderFooter(type: IQCollectionViewHeaderFooter.self)
     }
 }
 
@@ -369,7 +308,7 @@ public extension IQList {
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
 
-    //This method can also be used in background thread
+    // This method can also be used in background thread
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model?], section: IQSection? = nil) {
 
         if registeredCells.contains(where: { $0 == type}) == false {
@@ -397,7 +336,7 @@ public extension IQList {
         }
     }
 
-    //This method can also be used in background thread
+    // This method can also be used in background thread
     func append(_ section: IQSection) {
         if #available(iOS 13.0, *) {
             batchSnapshot?.appendSections([section])
@@ -406,7 +345,7 @@ public extension IQList {
         }
     }
 
-    //This method can also be used in background thread
+    // This method can also be used in background thread
     func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
                         completion: (() -> Void)? = nil) {
         if #available(iOS 13.0, *) {
@@ -430,10 +369,10 @@ public extension IQList {
                 let isLoading = self.isLoading
 
                 if Thread.isMainThread {
-                    self.isLoading = isLoading  //Updating the backgroundView
+                    self.isLoading = isLoading  // Updating the backgroundView
                 } else {
                     OperationQueue.main.addOperation {
-                        self.isLoading = isLoading  //Updating the backgroundView on main thread
+                        self.isLoading = isLoading  // Updating the backgroundView on main thread
                     }
                 }
             }
@@ -450,10 +389,10 @@ public extension IQList {
                 let isLoading = self.isLoading
 
                 if Thread.isMainThread {
-                    self.isLoading = isLoading  //Updating the backgroundView
+                    self.isLoading = isLoading  // Updating the backgroundView
                 } else {
                     OperationQueue.main.addOperation {
-                        self.isLoading = isLoading  //Updating the backgroundView on main thread
+                        self.isLoading = isLoading  // Updating the backgroundView on main thread
                     }
                 }
             }

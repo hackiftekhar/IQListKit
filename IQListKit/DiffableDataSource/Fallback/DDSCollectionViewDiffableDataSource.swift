@@ -64,7 +64,7 @@ internal class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSo
             }
         }
 
-        return UICollectionReusableView()
+        return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
     }
 }
 

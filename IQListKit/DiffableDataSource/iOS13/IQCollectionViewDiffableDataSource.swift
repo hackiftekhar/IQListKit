@@ -63,7 +63,7 @@ internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataS
             }
         }
 
-        return UICollectionReusableView()
+        return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
     }
 }
 

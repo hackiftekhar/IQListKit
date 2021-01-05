@@ -26,9 +26,9 @@ import UIKit
 
 public protocol IQCellSizeProvider where Self: IQListCell {
 
-    //Estimated size of the cell
+    // Estimated size of the cell
     static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize
 
-    //Size of the cell
+    // Size of the cell
     static func size(for model: AnyHashable?, listView: IQListView) -> CGSize
 }
