@@ -2,8 +2,9 @@ IQListKit
 ==========================
 Model driven UITableView/UICollectionView
 
-<a href="https://youtu.be/3PwRnIEtj1o" target="_blank"><img src="http://img.youtube.com/vi/3PwRnIEtj1o/0.jpg"
-alt="IQListKit Demo Video" width="480" height="360" border="10" /></a>
+[![User List](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/user_list.gif)]
+[![Insertion Sort](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/insertion_sort.gif)]
+[![Mountains](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/mountains.gif)]
 
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
