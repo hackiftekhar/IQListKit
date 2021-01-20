@@ -97,7 +97,7 @@ Before going deep into the implementation, we have to learn about the [Hashable]
 #### Now what is [Hashable](https://developer.apple.com/documentation/swift/hashable)? I never used it before.
 A Hashable protocol is used to determine the uniqueness of the object/variable. Technically a hashable is a type that has hashValue in the form of an integer that can be compared across different types.
 
-Many types in the standard library conform to Hashable: **String, Int, Float, Double and Bool** values and even **Set** are hashable by default.
+Many types in the standard library confirm to Hashable: **String, Int, Float, Double and Bool** values and even **Set** are hashable by default.
 To confirm the Hashable protocol, we have to modify our model a little bit like below:
 
 ```swift
@@ -133,7 +133,7 @@ Now let's come back to the implementation part. To use the IQListKit, we have to
 ### Step 1) Confirm our "UserCell" to "IQModelableCell" protocol
 
 #### What is IQModelableCell protocol? and how we should confirm it?
-The **IQModelableCell** protocol says that, whoever adopts me, have to expose a variable named **model** and it can be any type conforming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
+The **IQModelableCell** protocol says that, whoever adopts me, have to expose a variable named **model** and it can be any type confirming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
 
 Let's say we have **UserCell** like this:
 ```swift
