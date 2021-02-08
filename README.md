@@ -2,9 +2,9 @@ IQListKit
 ==========================
 Model driven UITableView/UICollectionView
 
-<a href="https://youtu.be/3PwRnIEtj1o" target="_blank"><img src="http://img.youtube.com/vi/3PwRnIEtj1o/0.jpg"
-alt="IQListKit Demo Video" width="480" height="360" border="10" /></a>
-
+[![User List](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/user_list.gif)]
+[![Insertion Sort](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/insertion_sort.gif)]
+[![Mountains](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/mountains.gif)]
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
@@ -78,6 +78,8 @@ To install IQListKit package via Xcode
 How to use IQListKit?
 ==========================
 
+If you wish to learn using a presentation then download the presentation PDF here: [Presentation PDF](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/IQListKitPresentation.pdf)
+
 We'll be learning IQListKit using a simple example.
 
 Let's say we have to show a list of users in a **UITableView** and for that, we have **User Model** like this:
@@ -95,7 +97,7 @@ Before going deep into the implementation, we have to learn about the [Hashable]
 #### Now what is [Hashable](https://developer.apple.com/documentation/swift/hashable)? I never used it before.
 A Hashable protocol is used to determine the uniqueness of the object/variable. Technically a hashable is a type that has hashValue in the form of an integer that can be compared across different types.
 
-Many types in the standard library conform to Hashable: **String, Int, Float, Double and Bool** values and even **Set** are hashable by default.
+Many types in the standard library confirm to Hashable: **String, Int, Float, Double and Bool** values and even **Set** are hashable by default.
 To confirm the Hashable protocol, we have to modify our model a little bit like below:
 
 ```swift
@@ -131,7 +133,7 @@ Now let's come back to the implementation part. To use the IQListKit, we have to
 ### Step 1) Confirm our "UserCell" to "IQModelableCell" protocol
 
 #### What is IQModelableCell protocol? and how we should confirm it?
-The **IQModelableCell** protocol says that, whoever adopts me, have to expose a variable named **model** and it can be any type conforming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
+The **IQModelableCell** protocol says that, whoever adopts me, have to expose a variable named **model** and it can be any type confirming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
 
 Let's say we have **UserCell** like this:
 ```swift
