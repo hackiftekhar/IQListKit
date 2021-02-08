@@ -48,6 +48,10 @@ internal class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSec
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        dataSource?.sectionIndexTitles(tableView)
+    }
 }
 
 @available(iOS, deprecated: 13.0)

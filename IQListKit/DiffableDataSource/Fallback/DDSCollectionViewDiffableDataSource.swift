@@ -66,6 +66,10 @@ internal class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSo
 
         return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
     }
+
+    func indexTitles(for collectionView: UICollectionView) -> [String]? {
+        dataSource?.sectionIndexTitles(collectionView)
+    }
 }
 
 @available(iOS, deprecated: 13.0)

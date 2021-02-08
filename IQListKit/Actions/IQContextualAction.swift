@@ -39,7 +39,7 @@ public class IQContextualAction: NSObject {
 
     open private(set) var handler: IQContextualAction.Handler
 
-    open var backgroundColor: UIColor! // a default background color is set from the action style
+    open var backgroundColor: UIColor? /// a default background color is set from the action style
 
     open var image: UIImage?
 

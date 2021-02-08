@@ -71,7 +71,7 @@ public class IQList: NSObject {
 
     // MARK: - Loading
 
-    // Will display in the middle if isLoading is true
+    /// Will display in the middle if isLoading is true
     public let loadingIndicator = UIActivityIndicatorView(style: .gray)
 
     public var isLoading = false {
@@ -171,7 +171,7 @@ public class IQList: NSObject {
     internal var registeredCells = [UIView.Type]()
     internal var registeredHeaderFooterViews = [UIView.Type]()
 
-    // This tweak is written due to old iOS version compatibility
+    /// This tweak is written due to old iOS version compatibility
     private var _privateBatchSnapshot: Any?
     @available(iOS 13.0, *)
     private var batchSnapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>? {
@@ -308,7 +308,7 @@ public class IQList: NSObject {
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
 
-    // This method can also be used in background thread
+    /// This method can also be used in background thread
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model?], section: IQSection? = nil) {
 
         if registeredCells.contains(where: { $0 == type}) == false {
@@ -336,7 +336,7 @@ public extension IQList {
         }
     }
 
-    // This method can also be used in background thread
+    /// This method can also be used in background thread
     func append(_ section: IQSection) {
         if #available(iOS 13.0, *) {
             batchSnapshot?.appendSections([section])
@@ -345,7 +345,7 @@ public extension IQList {
         }
     }
 
-    // This method can also be used in background thread
+    /// This method can also be used in background thread
     func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
                         completion: (() -> Void)? = nil) {
         if #available(iOS 13.0, *) {
@@ -369,10 +369,10 @@ public extension IQList {
                 let isLoading = self.isLoading
 
                 if Thread.isMainThread {
-                    self.isLoading = isLoading  // Updating the backgroundView
+                    self.isLoading = isLoading  /// Updating the backgroundView
                 } else {
                     OperationQueue.main.addOperation {
-                        self.isLoading = isLoading  // Updating the backgroundView on main thread
+                        self.isLoading = isLoading  /// Updating the backgroundView on main thread
                     }
                 }
             }
@@ -389,10 +389,10 @@ public extension IQList {
                 let isLoading = self.isLoading
 
                 if Thread.isMainThread {
-                    self.isLoading = isLoading  // Updating the backgroundView
+                    self.isLoading = isLoading  /// Updating the backgroundView
                 } else {
                     OperationQueue.main.addOperation {
-                        self.isLoading = isLoading  // Updating the backgroundView on main thread
+                        self.isLoading = isLoading  /// Updating the backgroundView on main thread
                     }
                 }
             }

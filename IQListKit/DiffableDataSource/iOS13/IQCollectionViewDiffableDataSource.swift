@@ -65,6 +65,10 @@ internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataS
 
         return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
     }
+
+    override func indexTitles(for collectionView: UICollectionView) -> [String]? {
+        dataSource?.sectionIndexTitles(collectionView)
+    }
 }
 
 @available(iOS 13.0, *)

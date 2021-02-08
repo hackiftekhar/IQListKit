@@ -22,7 +22,7 @@
 
 import UIKit
 
-// InfoView to show in the middle of the list when the list is empty
+/// InfoView to show in the middle of the list when the list is empty
 public class IQEmptyStateView: UIScrollView {
 
     override init(frame: CGRect) {

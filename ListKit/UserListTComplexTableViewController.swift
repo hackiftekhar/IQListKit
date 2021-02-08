@@ -24,7 +24,7 @@ class UserListTComplexTableViewController: UITableViewController {
         list.noItemMessage = "No users to display here."
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
-        tableView.tableFooterView = UIView()
+//        tableView.tableFooterView = UIView()
         refreshUI(animated: false)
     }
 }
@@ -106,24 +106,24 @@ extension UserListTComplexTableViewController {
             let section1 = IQSection(identifier: "firstSection")
             list.append(section1)
 
-//            for index in 0..<users.count {
-//                if index < defaultCellItems.count {
-//                    let defaultCellItem = defaultCellItems[index]
-//                    list.append(IQTableViewCell.self, models: [defaultCellItem], section: section1)
-//                }
-//
-//                let user = users[index]
-//                list.append(UserCell.self, models: [user], section: section1)
-//
-//                if index < books.count {
-//                    let book = books[index]
-//                    list.append(BookCell.self, models: [book], section: section1)
-//                }
-//            }
+            for index in 0..<users.count {
+                if index < defaultCellItems.count {
+                    let defaultCellItem = defaultCellItems[index]
+                    list.append(IQTableViewCell.self, models: [defaultCellItem], section: section1)
+                }
 
-            list.append(IQTableViewCell.self, models: defaultCellItems, section: section1)
-            list.append(UserCell.self, models: users, section: section1)
-            list.append(BookCell.self, models: books, section: section1)
+                let user = users[index]
+                list.append(UserCell.self, models: [user], section: section1)
+
+                if index < books.count {
+                    let book = books[index]
+                    list.append(BookCell.self, models: [book], section: section1)
+                }
+            }
+
+//            list.append(IQTableViewCell.self, models: defaultCellItems, section: section1)
+//            list.append(UserCell.self, models: users, section: section1)
+//            list.append(BookCell.self, models: books, section: section1)
 
         }, animatingDifferences: animated, completion: nil)
     }

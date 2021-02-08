@@ -15,9 +15,9 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     weak var delegate: UserCellDelegate?
 
-    // Or if we would like to use User as a model directly then
-    // instead of implementing a struct, this can also be written as
-//    typealias Model = User
+    /// Or if we would like to use User as a model directly then
+    /// instead of implementing a struct, this can also be written as
+    // typealias Model = User
 
     var model: User? {
         didSet {
@@ -28,6 +28,11 @@ class UserCell: UITableViewCell, IQModelableCell {
             textLabel?.text = model.name
             detailTextLabel?.text = model.email
         }
+    }
+
+
+    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+        return 2
     }
 
     @available(iOS 11.0, *)
@@ -55,7 +60,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 
         return [action]
     }
-//
+
     @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? {
 

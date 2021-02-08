@@ -38,14 +38,14 @@ public struct IQSection: Hashable {
         hasher.combine(identifier)
     }
 
-    // Unique identifier of the section
+    /// Unique identifier of the section
     public var identifier: AnyHashable
 
-    // Header text and size
+    /// Header text and size
     public var header: String?
     public var headerSize: CGSize?
 
-    // Footer text and size
+    /// Footer text and size
     public var footer: String?
     public var footerSize: CGSize?
 

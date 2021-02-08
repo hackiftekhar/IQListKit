@@ -26,16 +26,16 @@ import UIKit
 
 public protocol IQListViewDelegate: UIScrollViewDelegate {
 
-    // Will give a chance to modify or other configuration of cell if necessary
+    /// Will give a chance to modify or other configuration of cell if necessary
     func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath)
 
-    // Cell will about to display
+    /// Cell will about to display
     func listView(_ listView: IQListView, willDisplay cell: IQListCell, at indexPath: IndexPath)
 
-    // Cell did end displaying
+    /// Cell did end displaying
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
 
-    // An item is selected
+    /// An item is selected
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath)
 }
 
@@ -43,14 +43,17 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
 
 public protocol IQListViewDataSource: class {
 
-    // Return the size of an Item, for tableView the size.height will only be effective
+    /// Return the size of an Item, for tableView the size.height will only be effective
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
-    // Return the headerView of section
+    /// Return the headerView of section
     func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
 
-    // Return the footerView of section
+    /// Return the footerView of section
     func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
+
+    /// Return the sectionIndexTitles for tableView
+    func sectionIndexTitles(_ listView: IQListView) -> [String]?
 }
 
 // MARK: Combined delegate/datasource
@@ -76,4 +79,6 @@ public extension IQListViewDataSource {
     func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
 
     func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
+
+    func sectionIndexTitles(_ listView: IQListView) -> [String]? { return nil }
 }
