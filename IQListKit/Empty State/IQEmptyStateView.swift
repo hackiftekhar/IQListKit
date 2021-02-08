@@ -23,12 +23,10 @@
 import UIKit
 
 /// InfoView to show in the middle of the list when the list is empty
-public class IQEmptyStateView: UIScrollView {
+public class IQEmptyStateView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        alwaysBounceVertical = true
 
         self.addSubview(stackView)
         stackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true

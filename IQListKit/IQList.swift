@@ -110,31 +110,49 @@ public class IQList: NSObject {
             if numberOfAllItems == 0 {
                 isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
                 if isLoading {
-                    listView.backgroundView = loadingIndicator
-                    listView.bounces = true
+                    emptyStateView.removeFromSuperview()
+                    listView.insertSubview(loadingIndicator, at: 0)
+                    loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+                    loadingIndicator.centerXAnchor.constraint(equalTo: listView.centerXAnchor).isActive = true
+                    loadingIndicator.centerYAnchor.constraint(equalTo: listView.centerYAnchor).isActive = true
+
                     UIView.animate(withDuration: 0.3) { [weak self] in
                         self?.emptyStateView.alpha = 0.0
                     }
                 } else {
-                    listView.backgroundView = emptyStateView
-                    listView.bounces = false
+                    loadingIndicator.removeFromSuperview()
+                    listView.insertSubview(emptyStateView, at: 0)
+                    emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+                    if #available(iOS 11.0, *) {
+                        emptyStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
+                            .isActive = true
+                        emptyStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
+                            .isActive = true
+                        emptyStateView.topAnchor.constraint(equalTo: listView.contentLayoutGuide.topAnchor)
+                            .isActive = true
+                        emptyStateView.bottomAnchor.constraint(equalTo: listView.frameLayoutGuide.bottomAnchor)
+                            .isActive = true
+                    } else {
+                        emptyStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
+                        emptyStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
+                        emptyStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
+                        emptyStateView.heightAnchor.constraint(equalTo: listView.heightAnchor).isActive = true
+                    }
+
                     UIView.animate(withDuration: 0.3) { [weak self] in
                         self?.emptyStateView.alpha = 1.0
                     }
                 }
             } else {
                 loadingIndicator.stopAnimating()
-                listView.bounces = true
-                if listView.backgroundView == emptyStateView {
+                if emptyStateView.superview != nil {
                     UIView.animate(withDuration: 0.3, animations: { [weak self] in
                         self?.emptyStateView.alpha = 0.0
                     }, completion: { [weak self] success in
                         if success {
-                            self?.listView.backgroundView = nil
+                            self?.emptyStateView.removeFromSuperview()
                         }
                     })
-                } else {
-                    listView.backgroundView = nil
                 }
             }
         }
