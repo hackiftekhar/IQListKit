@@ -123,21 +123,24 @@ public class IQList: NSObject {
                     loadingIndicator.removeFromSuperview()
                     listView.insertSubview(emptyStateView, at: 0)
                     emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+
+                    let inset: UIEdgeInsets
+
                     if #available(iOS 11.0, *) {
+                        inset = listView.adjustedContentInset
                         emptyStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
                             .isActive = true
                         emptyStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
                             .isActive = true
-                        emptyStateView.topAnchor.constraint(equalTo: listView.contentLayoutGuide.topAnchor)
-                            .isActive = true
-                        emptyStateView.bottomAnchor.constraint(equalTo: listView.frameLayoutGuide.bottomAnchor)
-                            .isActive = true
                     } else {
+                        inset = listView.contentInset
                         emptyStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
                         emptyStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
-                        emptyStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
-                        emptyStateView.heightAnchor.constraint(equalTo: listView.heightAnchor).isActive = true
                     }
+
+                    emptyStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
+                    let height = listView.frame.height - inset.top - inset.bottom
+                    emptyStateView.heightAnchor.constraint(equalToConstant: height).isActive = true
 
                     UIView.animate(withDuration: 0.3) { [weak self] in
                         self?.emptyStateView.alpha = 1.0
