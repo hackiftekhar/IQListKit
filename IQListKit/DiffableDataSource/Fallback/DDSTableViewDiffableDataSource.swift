@@ -30,6 +30,7 @@ internal class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSec
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
+    var clearsSelectionOnDidSelect = true
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
@@ -154,10 +155,19 @@ extension DDSTableViewDiffableDataSource: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+
+        if clearsSelectionOnDidSelect {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
 
         if let item = itemIdentifier(for: indexPath) {
             delegate?.listView(tableView, didSelect: item, at: indexPath)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if let item = itemIdentifier(for: indexPath) {
+            delegate?.listView(tableView, didDeselect: item, at: indexPath)
         }
     }
 

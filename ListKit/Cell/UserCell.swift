@@ -30,7 +30,6 @@ class UserCell: UITableViewCell, IQModelableCell {
         }
     }
 
-
     static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
         return 2
     }

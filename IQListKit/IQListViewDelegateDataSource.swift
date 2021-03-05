@@ -37,6 +37,9 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
 
     /// An item is selected
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath)
+
+    /// An item is deselected
+    func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath)
 }
 
 // MARK: IQListViewDataSource
@@ -70,6 +73,8 @@ public extension IQListViewDelegate {
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {}
 
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {}
+
+    func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath) {}
 }
 
 public extension IQListViewDataSource {

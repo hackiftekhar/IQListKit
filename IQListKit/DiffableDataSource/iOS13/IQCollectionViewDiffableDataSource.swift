@@ -29,6 +29,7 @@ internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataS
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
+    var clearsSelectionOnDidSelect = true
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
@@ -144,10 +145,19 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+        if clearsSelectionOnDidSelect {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        }
 
         if let item = itemIdentifier(for: indexPath) {
             delegate?.listView(collectionView, didSelect: item, at: indexPath)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+
+        if let item = itemIdentifier(for: indexPath) {
+            delegate?.listView(collectionView, didDeselect: item, at: indexPath)
         }
     }
 

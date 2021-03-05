@@ -27,6 +27,7 @@ private protocol _TableViewDiffableDataSource where Self: UITableViewDataSource,
     var delegate: IQListViewDelegate? { get set }
     var dataSource: IQListViewDataSource? { get set }
     var defaultRowAnimation: UITableView.RowAnimation { get set }
+    var clearsSelectionOnDidSelect: Bool { get set }
 }
 
 @available(iOS 13.0, *)
@@ -38,6 +39,7 @@ private protocol _CollectionViewDiffableDataSource
 where Self: UICollectionViewDataSource, Self: UICollectionViewDelegate {
     var delegate: IQListViewDelegate? { get set }
     var dataSource: IQListViewDataSource? { get set }
+    var clearsSelectionOnDidSelect: Bool { get set }
 }
 @available(iOS 13.0, *)
 extension IQCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource {}
@@ -49,6 +51,12 @@ public class IQList: NSObject {
     // MARK: - Public Properties
 
     public private(set) var listView: IQListView
+    public var clearsSelectionOnDidSelect = true {
+        didSet {
+            tableViewDataSource?.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
+            collectionViewDataSource?.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
+        }
+    }
 
     // MARK: - Empty States
 
@@ -330,7 +338,7 @@ public class IQList: NSObject {
 public extension IQList {
 
     /// This method can also be used in background thread
-    func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model?], section: IQSection? = nil) {
+    func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model], section: IQSection? = nil) {
 
         if registeredCells.contains(where: { $0 == type}) == false {
             registerCell(type: type)
