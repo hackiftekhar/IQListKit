@@ -221,6 +221,11 @@ public class IQList: NSObject {
 
     // MARK: - Initialization
 
+    /// Convenience Initialization
+    /// - Parameters:
+    ///   - listView: UITableView or UICollectionView
+    ///   - delegateDataSource: the delegate and dataSource of the IQListView
+    ///   - defaultRowAnimation: default animation when reloading table
     public convenience init(listView: IQListView,
                             delegateDataSource: IQListViewDelegateDataSource? = nil,
                             defaultRowAnimation: UITableView.RowAnimation = .fade) {
@@ -229,6 +234,12 @@ public class IQList: NSObject {
                   defaultRowAnimation: defaultRowAnimation)
     }
 
+    /// Initialization
+    /// - Parameters:
+    ///   - listView: UITableView or UICollectionView
+    ///   - delegate: the delegate of the IQListView
+    ///   - dataSource: the dataSource of the IQListView
+    ///   - defaultRowAnimation: default animation when reloading table
     public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
                 dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade) {
 
@@ -246,6 +257,12 @@ public class IQList: NSObject {
         }
     }
 
+    /// Initialize the IQList with the UITableView
+    /// - Parameters:
+    ///   - tableView: the UITableView
+    ///   - delegate: the delegate of the IQListView
+    ///   - dataSource: the dataSource of the IQListView
+    ///   - defaultRowAnimation: default animation when reloading table
     private func initializeTableViewDataSource(_ tableView: UITableView, delegate: IQListViewDelegate?,
                                                dataSource: IQListViewDataSource?,
                                                defaultRowAnimation: UITableView.RowAnimation) {
@@ -288,6 +305,11 @@ public class IQList: NSObject {
         registerHeaderFooter(type: IQTableViewHeaderFooterView.self)
     }
 
+    /// Initialize the IQList with the UITableView
+    /// - Parameters:
+    ///   - collectionView: the UICollectionView
+    ///   - delegate: the delegate of the IQListView
+    ///   - dataSource: the dataSource of the IQListView
     private func initializeCollectionViewDataSource(_ collectionView: UICollectionView,
                                                     delegate: IQListViewDelegate?,
                                                     dataSource: IQListViewDataSource?) {
@@ -337,7 +359,12 @@ public class IQList: NSObject {
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
 
+    /// Append the models to the given section
     /// This method can also be used in background thread
+    /// - Parameters:
+    ///   - type: Type of the IQModelableCell
+    ///   - models: the models of type IQModelableCell.Model
+    ///   - section: section in which we'll be adding the models
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model], section: IQSection? = nil) {
 
         if registeredCells.contains(where: { $0 == type}) == false {
@@ -365,7 +392,9 @@ public extension IQList {
         }
     }
 
+    /// Appends a section to the list
     /// This method can also be used in background thread
+    /// - Parameter section: section which needs to be added to the list
     func append(_ section: IQSection) {
         if #available(iOS 13.0, *) {
             batchSnapshot?.appendSections([section])
@@ -374,7 +403,11 @@ public extension IQList {
         }
     }
 
-    /// This method can also be used in background thread
+    /// Performs the list reload
+    /// - Parameters:
+    ///   - updates: update block which will be called to generate the snapshot
+    ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
+    ///   - completion: the completion block will be called after reloading the list
     func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
                         completion: (() -> Void)? = nil) {
         if #available(iOS 13.0, *) {

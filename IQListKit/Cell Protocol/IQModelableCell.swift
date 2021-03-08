@@ -22,7 +22,7 @@
 
 import UIKit
 
-// MARK: Main Modelable Cell Protocol
+// MARK: - Main Modelable Cell Protocol
 
 public protocol IQModelableCell: IQModelModifiable, IQCellSizeProvider,
                                  IQSelectableCell, IQCellActionsProvider {
@@ -34,12 +34,12 @@ public protocol IQModelableCell: IQModelModifiable, IQCellSizeProvider,
     var model: Model? { get set }
 }
 
-// MARK: Default implementations of confirmed protocols
+// MARK: - Default implementations of confirmed protocols
 
 public extension IQModelableCell {
 
-    func setModel(_ newValue: AnyHashable?) {
-        self.model = newValue as? Model
+    func setModel(_ model: AnyHashable?) {
+        self.model = model as? Model
     }
 }
 

@@ -25,5 +25,6 @@ import Foundation
 public protocol IQModelModifiable where Self: IQListCell {
 
     /// This is used to set the model in cellForRowAtIndexPath method
-    func setModel(_ newValue: AnyHashable?)
+    /// - Parameter model: The model to set
+    func setModel(_ model: AnyHashable?)
 }

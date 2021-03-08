@@ -40,7 +40,10 @@ public struct IQItem: Hashable {
     /// Model of the cell
     public let model: AnyHashable?
 
-    // MARK: - Initializers
+    /// Initialize the item
+    /// - Parameters:
+    ///   - type: type of the Cell
+    ///   - model: Model of the cell
     public init<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
         self.type = type
         self.model = model

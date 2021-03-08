@@ -22,7 +22,7 @@
 
 import UIKit
 
-// MARK: Leading/Trailing Actions and ContextMenu provider
+// MARK: - Leading/Trailing Actions and ContextMenu provider
 
 public protocol IQCellActionsProvider where Self: IQListCell {
 

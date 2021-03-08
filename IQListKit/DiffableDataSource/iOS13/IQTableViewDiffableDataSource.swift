@@ -22,7 +22,7 @@
 
 import UIKit
 
-// MARK: Improved DiffableDataSource of UITableView
+// MARK: - Improved DiffableDataSource of UITableView
 
 @available(iOS 13.0, *)
 internal class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {

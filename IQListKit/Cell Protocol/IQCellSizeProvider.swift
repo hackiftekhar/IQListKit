@@ -22,16 +22,25 @@
 
 import UIKit
 
-// MARK: Cell Size Provider
+// MARK: - Cell Size Provider
 
 public protocol IQCellSizeProvider where Self: IQListCell {
 
     /// Estimated size of the cell
+    /// - Parameters:
+    ///   - model: Cell model
+    ///   - listView: The IQListView object
     static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize
 
     /// Size of the cell
+    /// - Parameters:
+    ///   - model: Cell model
+    ///   - listView: The IQListView object
     static func size(for model: AnyHashable?, listView: IQListView) -> CGSize
 
     /// indentationLevel of cell
+    /// - Parameters:
+    ///   - model: Cell model
+    ///   - listView: The IQListView object
     static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int
 }

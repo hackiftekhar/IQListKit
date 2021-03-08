@@ -22,7 +22,7 @@
 
 import UIKit
 
-// MARK: Improved DiffableDataSource of UICollectionView
+// MARK: - Improved DiffableDataSource of UICollectionView
 
 @available(iOS 13.0, *)
 internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {

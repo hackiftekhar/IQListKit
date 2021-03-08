@@ -22,7 +22,7 @@
 
 import UIKit
 
-// MARK: Basic implementation of IQModelableCell
+// MARK: - Basic implementation of IQModelableCell
 
 public class IQTableViewCell: UITableViewCell, IQModelableCell {
 

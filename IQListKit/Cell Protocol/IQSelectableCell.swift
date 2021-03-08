@@ -22,7 +22,7 @@
 
 import Foundation
 
-// MARK: Selection Provider
+// MARK: - Selection Provider
 
 public protocol IQSelectableCell where Self: IQListCell {
 

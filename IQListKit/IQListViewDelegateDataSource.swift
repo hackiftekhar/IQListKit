@@ -22,47 +22,80 @@
 
 import UIKit
 
-// MARK: IQListViewDelegate
+// MARK: - IQListViewDelegate
 
 public protocol IQListViewDelegate: UIScrollViewDelegate {
 
     /// Will give a chance to modify or other configuration of cell if necessary
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - cell: The IQListCell which can be typecased to your cell.
+    ///   - indexPath: indexPath in which the cell will display
     func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath)
 
     /// Cell will about to display
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - cell: The IQListCell which is about to display in the listView
+    ///   - indexPath: indexPath in which the cell is about to display
     func listView(_ listView: IQListView, willDisplay cell: IQListCell, at indexPath: IndexPath)
 
     /// Cell did end displaying
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - cell: The IQListCell which is about to be removed from UI
+    ///   - indexPath: indexPath in which the cell is displaying
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
 
     /// An item is selected
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is selected. item.type will be the cell type. item.model will be the Model
+    ///   - indexPath: indexPath which is selected
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath)
 
     /// An item is deselected
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is deselected. item.type will be the cell type. item.model will be the Model
+    ///   - indexPath: indexPath which is deselected
     func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath)
 }
 
-// MARK: IQListViewDataSource
+// MARK: - IQListViewDataSource
 
 public protocol IQListViewDataSource: class {
 
     /// Return the size of an Item, for tableView the size.height will only be effective
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is asked for it's size. item.type will be the cell type. item.model will be the Model
+    ///   - indexPath: indexPath of the item
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
     /// Return the headerView of section
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - section: section of the ListView
+    ///   - sectionIndex: section of the ListView
     func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
 
     /// Return the footerView of section
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - section: section of the ListView
+    ///   - sectionIndex: section of the ListView
     func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
 
     /// Return the sectionIndexTitles for tableView
+    /// - Parameter listView: The IQListView object
     func sectionIndexTitles(_ listView: IQListView) -> [String]?
 }
 
-// MARK: Combined delegate/datasource
+// MARK: - Combined delegate/datasource
 public typealias IQListViewDelegateDataSource = (IQListViewDelegate & IQListViewDataSource)
 
-// MARK: Default implementations of protocols
+// MARK: - Default implementations of protocols
 
 public extension IQListViewDelegate {
 

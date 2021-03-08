@@ -49,6 +49,13 @@ public struct IQSection: Hashable {
     public var footer: String?
     public var footerSize: CGSize?
 
+    /// Initialization
+    /// - Parameters:
+    ///   - identifier: section identifier
+    ///   - header: header text to display
+    ///   - headerSize: header size
+    ///   - footer: footer text to display
+    ///   - footerSize: footer size
     public init(identifier: AnyHashable,
                 header: String? = nil, headerSize: CGSize? = nil,
                 footer: String? = nil, footerSize: CGSize? = nil) {
