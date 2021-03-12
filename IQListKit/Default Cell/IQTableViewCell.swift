@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: - Basic implementation of IQModelableCell
 
-public class IQTableViewCell: UITableViewCell, IQModelableCell {
+public final class IQTableViewCell: UITableViewCell, IQModelableCell {
 
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)

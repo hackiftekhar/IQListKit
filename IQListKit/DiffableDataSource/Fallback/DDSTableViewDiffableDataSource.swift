@@ -26,7 +26,7 @@ import DiffableDataSources
 // MARK: Improved DiffableDataSource of UITableView
 
 @available(iOS, deprecated: 13.0)
-internal class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSection, IQItem> {
+internal final class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?

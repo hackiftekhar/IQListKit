@@ -26,7 +26,7 @@ import DiffableDataSources
 // MARK: Improved DiffableDataSource of UICollectionView
 
 @available(iOS, deprecated: 13.0)
-internal class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSource<IQSection, IQItem> {
+internal final class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?

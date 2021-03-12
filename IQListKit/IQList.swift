@@ -46,7 +46,7 @@ extension IQCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource 
 @available(iOS, deprecated: 13.0)
 extension DDSCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource {}
 
-public class IQList: NSObject {
+public final class IQList: NSObject {
 
     // MARK: - Public Properties
 

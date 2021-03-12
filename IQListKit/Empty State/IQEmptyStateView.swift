@@ -23,7 +23,7 @@
 import UIKit
 
 /// InfoView to show in the middle of the list when the list is empty
-public class IQEmptyStateView: UIView {
+public final class IQEmptyStateView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)

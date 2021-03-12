@@ -22,7 +22,7 @@
 
 import UIKit
 
-public class IQContextualAction: NSObject {
+public final class IQContextualAction: NSObject {
 
     public typealias Handler = (IQContextualAction, @escaping (Bool) -> Void) -> Void
 
@@ -33,15 +33,15 @@ public class IQContextualAction: NSObject {
         super.init()
     }
 
-    open private(set) var style: IQContextualAction.Style
+    public private(set) var style: IQContextualAction.Style
 
-    open var title: String?
+    public var title: String?
 
-    open private(set) var handler: IQContextualAction.Handler
+    public private(set) var handler: IQContextualAction.Handler
 
-    open var backgroundColor: UIColor? /// a default background color is set from the action style
+    public var backgroundColor: UIColor? /// a default background color is set from the action style
 
-    open var image: UIImage?
+    public var image: UIImage?
 
     public enum Style: Int {
 

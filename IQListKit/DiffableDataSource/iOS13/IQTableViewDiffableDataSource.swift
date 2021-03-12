@@ -25,7 +25,7 @@ import UIKit
 // MARK: - Improved DiffableDataSource of UITableView
 
 @available(iOS 13.0, *)
-internal class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
+internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?

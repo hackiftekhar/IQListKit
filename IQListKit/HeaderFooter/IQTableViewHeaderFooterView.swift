@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: - A header footer view for UITableView
 
-public class IQTableViewHeaderFooterView: UITableViewHeaderFooterView {
+public final class IQTableViewHeaderFooterView: UITableViewHeaderFooterView {
 
     public let titleLabel = UILabel()
 
