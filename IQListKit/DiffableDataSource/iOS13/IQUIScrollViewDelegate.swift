@@ -22,7 +22,7 @@
 
 import Foundation
 
-// MARK: UICollectionView's UIScrollViewDelegate forwarder
+// MARK: - UICollectionView's UIScrollViewDelegate forwarder
 
 @available(iOS 13.0, *)
 extension IQCollectionViewDiffableDataSource: UIScrollViewDelegate {
@@ -86,7 +86,7 @@ extension IQCollectionViewDiffableDataSource: UIScrollViewDelegate {
     }
 }
 
-// MARK: UITableView's UIScrollViewDelegate forwarder
+// MARK: - UITableView's UIScrollViewDelegate forwarder
 
 @available(iOS 13.0, *)
 extension IQTableViewDiffableDataSource: UIScrollViewDelegate {

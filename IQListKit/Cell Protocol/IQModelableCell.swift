@@ -22,24 +22,24 @@
 
 import UIKit
 
-// MARK: Main Modelable Cell Protocol
+// MARK: - Main Modelable Cell Protocol
 
 public protocol IQModelableCell: IQModelModifiable, IQCellSizeProvider,
                                  IQSelectableCell, IQCellActionsProvider {
 
-    // Dynamic model which should be implemented in cells confirming the IQModelableCell
+    /// Dynamic model which should be implemented in cells confirming the IQModelableCell
     associatedtype Model: Hashable
 
-    // model variable which will be used to configure the cell contents
+    /// model variable which will be used to configure the cell contents
     var model: Model? { get set }
 }
 
-// MARK: Default implementations of confirmed protocols
+// MARK: - Default implementations of confirmed protocols
 
 public extension IQModelableCell {
 
-    func setModel(_ newValue: AnyHashable?) {
-        self.model = newValue as? Model
+    func setModel(_ model: AnyHashable?) {
+        self.model = model as? Model
     }
 }
 
@@ -54,6 +54,10 @@ public extension IQModelableCell {
             return CGSize(width: clv.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 0)
         }
         return CGSize(width: UITableView.automaticDimension, height: UITableView.automaticDimension)
+    }
+
+    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+        return 0
     }
 }
 

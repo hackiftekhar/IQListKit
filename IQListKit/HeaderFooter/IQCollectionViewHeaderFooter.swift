@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: - A header footer view for UICollectionView
 
-public class IQCollectionViewHeaderFooter: UICollectionReusableView {
+public final class IQCollectionViewHeaderFooter: UICollectionReusableView {
 
     public let textLabel = UILabel()
 

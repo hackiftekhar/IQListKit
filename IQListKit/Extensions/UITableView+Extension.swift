@@ -24,7 +24,7 @@ import UIKit
 
 internal extension UITableView {
 
-    // Dequeuing - Header/Footer
+    /// Dequeuing - Header/Footer
     func dequeue<T: UITableViewHeaderFooterView>(_: T.Type) -> T {
         guard let cell = dequeueReusableHeaderFooterView(withIdentifier: String(describing: T.self)) as? T else {
             fatalError("Could not dequeue header/footer with type \(T.self)")

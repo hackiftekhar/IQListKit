@@ -33,6 +33,11 @@ public extension IQList {
         case storyboard
     }
 
+    /// register a Cell manually
+    /// - Parameters:
+    ///   - type: Type of the cell
+    ///   - bundle: The bundle in which the cell is present.
+    ///   - registerType: The cell registration type
     func registerCell<T: IQModelableCell>(type: T.Type, bundle: Bundle? = .main,
                                           registerType: RegisterType = .default) {
 
@@ -83,6 +88,10 @@ public extension IQList {
         }
     }
 
+    /// register a HeaderFooter manually
+    /// - Parameters:
+    ///   - type: Type of the header
+    ///   - bundle: The bundle in which the header is present.
     func registerHeaderFooter<T: UIView>(type: T.Type, bundle: Bundle? = .main) {
 
         guard registeredHeaderFooterViews.contains(where: { $0 == type}) == false else {

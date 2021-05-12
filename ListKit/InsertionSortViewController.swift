@@ -162,6 +162,7 @@ final class InsertionSortViewController: UIViewController {
 
         let milliseconds = UIDevice.current.userInterfaceIdiom == .phone ? 50 : 300
         let deadline: DispatchTime = DispatchTime.now() + .milliseconds(isNextSortRequired ? milliseconds : 1000)
+
         DispatchQueue.main.asyncAfter(deadline: deadline) { [weak self] in
             guard let self = self else {
                 return

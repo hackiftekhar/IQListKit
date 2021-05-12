@@ -22,13 +22,13 @@
 
 import Foundation
 
-// MARK: Selection Provider
+// MARK: - Selection Provider
 
 public protocol IQSelectableCell where Self: IQListCell {
 
-    // Is cell highlightable
+    /// Is cell highlightable
     var isHighlightable: Bool { get }
 
-    // Is cell selectable
+    /// Is cell selectable
     var isSelectable: Bool { get }
 }

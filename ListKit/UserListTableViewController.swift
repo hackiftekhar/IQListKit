@@ -23,7 +23,7 @@ class UserListTableViewController: UITableViewController {
         list.noItemMessage = "No users to display here."
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
-        tableView.tableFooterView = UIView()
+//        tableView.tableFooterView = UIView()
         refreshUI(animated: false)
     }
 }
@@ -68,12 +68,12 @@ extension UserListTableViewController {
 
         list.performUpdates({
 
-            let section1 = IQSection(identifier: "firstSection", header: "First Section")
+            let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
             list.append(section1)
 
             list.append(UserCell.self, models: users, section: section1)
 
-            let section2 = IQSection(identifier: "secondSection", header: "Second Section")
+            let section2 = IQSection(identifier: "secondSection", header: users2.count > 0 ? "Second Section" : nil)
             list.append(section2)
 
             list.append(UserCell.self, models: users2, section: section2)

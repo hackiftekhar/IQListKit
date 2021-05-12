@@ -38,19 +38,26 @@ public struct IQSection: Hashable {
         hasher.combine(identifier)
     }
 
-    // Unique identifier of the section
+    /// Unique identifier of the section
     public var identifier: AnyHashable
 
-    // Header text and size
+    /// Header text and size
     public var header: String?
     public var headerView: UIView?
     public var headerSize: CGSize?
 
-    // Footer text and size
+    /// Footer text and size
     public var footer: String?
     public var footerView: UIView?
     public var footerSize: CGSize?
 
+    /// Initialization
+    /// - Parameters:
+    ///   - identifier: section identifier
+    ///   - header: header text to display
+    ///   - headerSize: header size
+    ///   - footer: footer text to display
+    ///   - footerSize: footer size
     public init(identifier: AnyHashable,
                 header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
                 footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {

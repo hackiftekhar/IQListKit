@@ -22,13 +22,14 @@
 
 import UIKit
 
-// MARK: Improved DiffableDataSource of UICollectionView
+// MARK: - Improved DiffableDataSource of UICollectionView
 
 @available(iOS 13.0, *)
-internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
+internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
+    var clearsSelectionOnDidSelect = true
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
@@ -89,6 +90,10 @@ internal class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataS
         } else {
             return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
         }
+    }
+
+    override func indexTitles(for collectionView: UICollectionView) -> [String]? {
+        dataSource?.sectionIndexTitles(collectionView)
     }
 }
 
@@ -169,10 +174,19 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+        if clearsSelectionOnDidSelect {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        }
 
         if let item = itemIdentifier(for: indexPath) {
             delegate?.listView(collectionView, didSelect: item, at: indexPath)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+
+        if let item = itemIdentifier(for: indexPath) {
+            delegate?.listView(collectionView, didDeselect: item, at: indexPath)
         }
     }
 

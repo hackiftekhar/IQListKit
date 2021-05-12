@@ -26,10 +26,11 @@ import DiffableDataSources
 // MARK: Improved DiffableDataSource of UITableView
 
 @available(iOS, deprecated: 13.0)
-internal class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSection, IQItem> {
+internal final class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
+    var clearsSelectionOnDidSelect = true
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
@@ -47,6 +48,10 @@ internal class DDSTableViewDiffableDataSource: TableViewDiffableDataSource<IQSec
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        dataSource?.sectionIndexTitles(tableView)
     }
 }
 
@@ -176,10 +181,19 @@ extension DDSTableViewDiffableDataSource: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+
+        if clearsSelectionOnDidSelect {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
 
         if let item = itemIdentifier(for: indexPath) {
             delegate?.listView(tableView, didSelect: item, at: indexPath)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if let item = itemIdentifier(for: indexPath) {
+            delegate?.listView(tableView, didDeselect: item, at: indexPath)
         }
     }
 
