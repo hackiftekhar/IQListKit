@@ -57,31 +57,56 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         let aSection = snapshot().sectionIdentifiers[section]
 
-        return aSection.headerSize?.height ?? 22
+        if let headerSize = aSection.headerSize {
+            return headerSize.height
+        } else if let headerView = aSection.headerView {
+            return headerView.frame.height
+        } else {
+            return 22
+        }
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         let aSection = snapshot().sectionIdentifiers[section]
 
-        return aSection.footerSize?.height ?? 22
+        if let footerSize = aSection.footerSize {
+            return footerSize.height
+        } else if let footerView = aSection.footerView {
+            return footerView.frame.height
+        } else {
+            return 22
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let aSection = snapshot().sectionIdentifiers[section]
 
-        return aSection.headerSize?.height ?? UITableView.automaticDimension
+        if let headerSize = aSection.headerSize {
+            return headerSize.height
+        } else if let headerView = aSection.headerView {
+            return headerView.frame.height
+        } else {
+            return UITableView.automaticDimension
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let aSection = snapshot().sectionIdentifiers[section]
 
-        return aSection.footerSize?.height ?? UITableView.automaticDimension
+        if let footerSize = aSection.footerSize {
+            return footerSize.height
+        } else if let footerView = aSection.footerView {
+            return footerView.frame.height
+        } else {
+            return UITableView.automaticDimension
+        }
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let aSection = snapshot().sectionIdentifiers[section]
 
-        if let headerView = dataSource?.listView(tableView, headerFor: aSection, at: section) {
+        if let headerView = dataSource?.listView(tableView, headerFor: aSection, at: section) ?? aSection.headerView {
+            delegate?.listView(tableView, modifyHeader: headerView, section: aSection, at: section)
             return headerView
         }
         return nil
@@ -90,8 +115,9 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let aSection = snapshot().sectionIdentifiers[section]
 
-        if let headerView = dataSource?.listView(tableView, footerFor: aSection, at: section) {
-            return headerView
+        if let footerView = dataSource?.listView(tableView, footerFor: aSection, at: section) ?? aSection.footerView {
+            delegate?.listView(tableView, modifyFooter: footerView, section: aSection, at: section)
+            return footerView
         }
         return nil
     }

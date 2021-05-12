@@ -1,19 +1,23 @@
 //
-//  UserCell.swift
+//  CollectionUserCell.swift
+//  ListKit
 //
-//  Created by Iftekhar on 11/12/20.
+//  Created by iftekhar on 12/05/21.
 //
 
 import UIKit
 import IQListKit
 
-protocol UserCellDelegate: AnyObject {
-    func userCell(_ cell: UserCell, didDelete item: User)
+protocol CollectionUserCellDelegate: AnyObject {
+    func userCell(_ cell: CollectionUserCell, didDelete item: User)
 }
 
-class UserCell: UITableViewCell, IQModelableCell {
+class CollectionUserCell: UICollectionViewCell, IQModelableCell {
 
-    weak var delegate: UserCellDelegate?
+    @IBOutlet private var textLabel: UILabel!
+    @IBOutlet private var detailTextLabel: UILabel!
+
+    weak var delegate: CollectionUserCellDelegate?
 
     // Or if we would like to use User as a model directly then
     // instead of implementing a struct, this can also be written as
@@ -30,32 +34,10 @@ class UserCell: UITableViewCell, IQModelableCell {
         }
     }
 
-    @available(iOS 11.0, *)
-    func leadingSwipeActions() -> [IQContextualAction]? {
-        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (_, completionHandler) in
-            completionHandler(true)
-        }
-
-        action.backgroundColor = UIColor.orange
-
-        return [action]
+    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+        return CGSize(width: 150, height: 62)
     }
 
-    func trailingSwipeActions() -> [IQContextualAction]? {
-
-        let action = IQContextualAction(style: .destructive, title: "Delete") { [weak self] (_, completionHandler) in
-            completionHandler(true)
-            guard let self = self, let model = self.model else {
-                return
-            }
-
-            self.delegate?.userCell(self, didDelete: model)
-            // Do your stuffs here
-        }
-
-        return [action]
-    }
-//
     @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? {
 
@@ -77,11 +59,6 @@ class UserCell: UITableViewCell, IQModelableCell {
 
         return contextMenuConfiguration
     }
-
-//    @available(iOS 13.0, *)
-//    func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
-//        return textLabel
-//    }
 
     @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,

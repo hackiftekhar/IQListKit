@@ -1,5 +1,5 @@
-// https://developer.apple.com/documentation/uikit/views_and_controls/collection_views/using_collection_view_compositional_layouts_and_diffable_data_sources
-
+// https://developer.apple.com/documentation/uikit/views_and_controls/
+// collection_views/using_collection_view_compositional_layouts_and_diffable_data_sources
 let mountainsRawData = """
 Mount Everest,8848
 K2,8611

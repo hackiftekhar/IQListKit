@@ -26,14 +26,19 @@ import UIKit
 
 public class IQCollectionViewHeaderFooter: UICollectionReusableView {
 
-    public var textLabel = UILabel()
+    public let textLabel = UILabel()
+
+    public static var defaultFont: UIFont = UIFont.systemFont(ofSize: 14, weight: .medium)
+    public static var defaultTextColor: UIColor?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.numberOfLines = 0
-        textLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        if #available(iOS 13.0, *) {
+        textLabel.font = Self.defaultFont
+        if let defaultTextColor = Self.defaultTextColor {
+            textLabel.textColor = defaultTextColor
+        } else if #available(iOS 13.0, *) {
             textLabel.textColor = UIColor.label
         } else {
             textLabel.textColor = UIColor.darkText
@@ -54,10 +59,16 @@ public class IQCollectionViewHeaderFooter: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        textLabel.text = nil
+        textLabel.setNeedsLayout()
+    }
+
     static func sizeThatFitText(text: String?, collectionView: UICollectionView) -> CGSize {
         if let text = text {
             let string = NSString(string: text)
-            let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 14, weight: .medium)]
+            let attributes: [NSAttributedString.Key: Any] = [.font: defaultFont]
 
             let boundingSize = CGSize(width: collectionView.frame.width - 20 - 20,
                                       height: CGFloat.greatestFiniteMagnitude)

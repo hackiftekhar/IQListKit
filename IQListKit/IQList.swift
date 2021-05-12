@@ -47,11 +47,9 @@ extension DDSCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource
 public class IQList: NSObject {
 
     // MARK: - Public Properties
-
     public private(set) var listView: IQListView
 
     // MARK: - Empty States
-
     public let emptyStateView = IQEmptyStateView(image: nil, title: nil, message: nil)
     public var noItemImage: UIImage? {
         get {   emptyStateView.image    }
@@ -70,7 +68,6 @@ public class IQList: NSObject {
     }
 
     // MARK: - Loading
-
     // Will display in the middle if isLoading is true
     public let loadingIndicator = UIActivityIndicatorView(style: .gray)
 
@@ -185,9 +182,7 @@ public class IQList: NSObject {
 
     @available(iOS, deprecated: 13.0)
     private var ddsBatchSnapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
-
     private var tableViewDataSource: _TableViewDiffableDataSource?
-
     private var collectionViewDataSource: _CollectionViewDiffableDataSource?
 
     // MARK: - Initialization

@@ -1,6 +1,6 @@
 project 'ListKit.xcodeproj'
 
-platform :ios, '13.0'
+platform :ios, '9.0'
 use_frameworks!
 
 target 'ListKit' do

@@ -1,19 +1,21 @@
 //
-//  UserListTableViewController.swift
+//  UserListCollectionViewController.swift
 //  ListKit
 //
-//  Created by Iftekhar on 28/12/20.
+//  Created by iftekhar on 12/05/21.
 //
 
 import UIKit
 import IQListKit
 
-class UserListTableViewController: UITableViewController {
+class UserListCollectionViewController: UICollectionViewController {
 
     private var users = [User]()
     private var users2 = [User]()
 
-    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
+    private typealias Cell = CollectionUserCell
+
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,26 +25,25 @@ class UserListTableViewController: UITableViewController {
         list.noItemMessage = "No users to display here."
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
-        tableView.tableFooterView = UIView()
         refreshUI(animated: false)
     }
 }
 
-extension UserListTableViewController {
+extension UserListCollectionViewController {
 
     @IBAction func refresh(_ sender: Any) {
 
         var allUsers = [User]()
-        allUsers.append(.init(id:1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
-        allUsers.append(.init(id:2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
-        allUsers.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-        allUsers.append(.init(id:4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
-        allUsers.append(.init(id:5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
-        allUsers.append(.init(id:6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
-        allUsers.append(.init(id:7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
-        allUsers.append(.init(id:8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
-        allUsers.append(.init(id:9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
-        allUsers.append(.init(id:10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
+        allUsers.append(.init(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+        allUsers.append(.init(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
+        allUsers.append(.init(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+        allUsers.append(.init(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
+        allUsers.append(.init(id: 5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
+        allUsers.append(.init(id: 6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
+        allUsers.append(.init(id: 7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
+        allUsers.append(.init(id: 8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
+        allUsers.append(.init(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
+        allUsers.append(.init(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
 
         users.removeAll()
         users2.removeAll()
@@ -68,30 +69,40 @@ extension UserListTableViewController {
 
         list.performUpdates({
 
+//            let firstView = UIView()
+//            firstView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//            firstView.backgroundColor = UIColor.red
+//
+//            let secondView = UIView()
+//            secondView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//            secondView.backgroundColor = UIColor.yellow
+
             let section1 = IQSection(identifier: "firstSection", header: "First Section")
+//            let section1 = IQSection(identifier: "firstSection", header: "First Section", headerView: firstView)
             list.append(section1)
 
-            list.append(UserCell.self, models: users, section: section1)
+            list.append(Cell.self, models: users, section: section1)
 
             let section2 = IQSection(identifier: "secondSection", header: "Second Section")
+//            let section2 = IQSection(identifier: "secondSection", header: "Second Section", headerView: secondView)
             list.append(section2)
 
-            list.append(UserCell.self, models: users2, section: section2)
+            list.append(Cell.self, models: users2, section: section2)
 
         }, animatingDifferences: animated, completion: nil)
     }
 }
 
-extension UserListTableViewController: IQListViewDelegateDataSource {
+extension UserListCollectionViewController: IQListViewDelegateDataSource {
 
     func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
-        if let cell = cell as? UserCell {
+        if let cell = cell as? Cell {
             cell.delegate = self
         }
     }
 
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {
-        if let model = item.model as? UserCell.Model {
+        if let model = item.model as? Cell.Model {
             if let controller = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "UserViewController") as? UserViewController {
                 controller.user = model
@@ -109,8 +120,8 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
     }
 }
 
-extension UserListTableViewController: UserCellDelegate {
-    func userCell(_ cell: UserCell, didDelete item: User) {
+extension UserListCollectionViewController: CollectionUserCellDelegate {
+    func userCell(_ cell: CollectionUserCell, didDelete item: User) {
         if let index = users.firstIndex(of: item) {
             users.remove(at: index)
             refreshUI()

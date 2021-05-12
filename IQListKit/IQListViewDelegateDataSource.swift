@@ -37,11 +37,17 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
 
     // An item is selected
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath)
+
+    // Will give a chance to modify the header view before appearance
+    func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int)
+
+    // Will give a chance to modify the footer view before appearance
+    func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int)
 }
 
 // MARK: IQListViewDataSource
 
-public protocol IQListViewDataSource: class {
+public protocol IQListViewDataSource: AnyObject {
 
     // Return the size of an Item, for tableView the size.height will only be effective
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
@@ -67,6 +73,10 @@ public extension IQListViewDelegate {
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {}
 
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {}
+
+    func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int) {}
+
+    func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int) {}
 }
 
 public extension IQListViewDataSource {

@@ -8,7 +8,7 @@
 import Foundation
 import IQListKit
 
-protocol BookCellDelegate: class {
+protocol BookCellDelegate: AnyObject {
     func bookCell(_ cell: BookCell, didDelete item: Book)
 }
 

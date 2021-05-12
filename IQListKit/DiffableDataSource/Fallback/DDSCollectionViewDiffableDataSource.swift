@@ -34,7 +34,6 @@ internal class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSo
     private var contextMenuPreviewIndexPath: IndexPath?
 
     // MARK: - Header Footer
-
     override func collectionView(_ collectionView: UICollectionView,
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath) -> UICollectionReusableView {
@@ -42,29 +41,54 @@ internal class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSo
         let aSection = snapshot().sectionIdentifiers[indexPath.section]
 
         if kind.elementsEqual(UICollectionView.elementKindSectionHeader) {
+            let reusableView: UICollectionReusableView
 
-            if let headerView = dataSource?.listView(collectionView, headerFor: aSection, at: indexPath.section)
-                as? UICollectionReusableView {
-                return headerView
+            let headerView = dataSource?.listView(collectionView, headerFor: aSection, at: indexPath.section) ?? aSection.headerView
+
+            if let headerView = headerView as? UICollectionReusableView {
+                reusableView = headerView
+            } else if let headerView = headerView {
+                let sHeader = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
+                sHeader.frame = headerView.bounds
+                sHeader.addSubview(headerView)
+                reusableView = sHeader
             } else if let header = aSection.header {
                 let sHeader = collectionView.dequeue(IQCollectionViewHeaderFooter.self, kind: kind, for: indexPath)
                 sHeader.textLabel.text = header
-                return sHeader
+                reusableView = sHeader
+            } else {
+                reusableView = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
             }
 
-        } else if kind.elementsEqual(UICollectionView.elementKindSectionFooter) {
+            delegate?.listView(collectionView, modifyHeader: reusableView, section: aSection, at: indexPath.section)
 
-            if let headerView = dataSource?.listView(collectionView, footerFor: aSection, at: indexPath.section)
-                as? UICollectionReusableView {
-                return headerView
+            return reusableView
+        } else if kind.elementsEqual(UICollectionView.elementKindSectionFooter) {
+            let reusableView: UICollectionReusableView
+
+            let footerView = dataSource?.listView(collectionView, footerFor: aSection, at: indexPath.section) ?? aSection.footerView
+
+            if let footerView = footerView as? UICollectionReusableView {
+                reusableView = footerView
+            } else if let footerView = footerView {
+                let sFooter = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
+                sFooter.frame = footerView.bounds
+                sFooter.addSubview(footerView)
+                reusableView = sFooter
             } else if let footer = aSection.footer {
                 let sFooter = collectionView.dequeue(IQCollectionViewHeaderFooter.self, kind: kind, for: indexPath)
                 sFooter.textLabel.text = footer
-                return sFooter
+                reusableView = sFooter
+            } else {
+                reusableView = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
             }
-        }
 
-        return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
+            delegate?.listView(collectionView, modifyHeader: reusableView, section: aSection, at: indexPath.section)
+
+            return reusableView
+        } else {
+            return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
+        }
     }
 }
 
@@ -80,6 +104,8 @@ extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayou
 
         if let size = aSection.headerSize {
             return size
+        } else if let headerView = aSection.headerView {
+            return headerView.frame.size
         } else {
             let size = IQCollectionViewHeaderFooter.sizeThatFitText(text: aSection.header,
                                                                     collectionView: collectionView)
@@ -93,6 +119,8 @@ extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayou
 
         if let size = aSection.footerSize {
             return size
+        } else if let headerView = aSection.footerView {
+            return headerView.frame.size
         } else {
             let size = IQCollectionViewHeaderFooter.sizeThatFitText(text: aSection.footer,
                                                                     collectionView: collectionView)

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Book: Hashable, Comparable {
-    static func < (lhs: Book, rhs: Book) -> Bool {
+    static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.name == rhs.name
     }
 

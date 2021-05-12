@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C08CDB2B264BAFC7006BD338 /* CollectionUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08CDB29264BAFC7006BD338 /* CollectionUserCell.swift */; };
+		C08CDB2C264BAFC7006BD338 /* CollectionUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C08CDB2A264BAFC7006BD338 /* CollectionUserCell.xib */; };
+		C08CDB2E264BB11A006BD338 /* UserListCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08CDB2D264BB11A006BD338 /* UserListCollectionViewController.swift */; };
 		C0A0D8FD259C9168008CD05F /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D8FC259C9168008CD05F /* BookCell.swift */; };
 		C0A0D900259C918F008CD05F /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D8FF259C918F008CD05F /* Book.swift */; };
 		C0A2AB71259A28CA00F06BFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A2AB70259A28CA00F06BFC /* AppDelegate.swift */; };
@@ -32,6 +35,9 @@
 /* Begin PBXFileReference section */
 		85F60F513481884CC8186C9B /* Pods_ListKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ListKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF09D68FC465E675FA2D3C6D /* Pods-ListKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListKit.release.xcconfig"; path = "Target Support Files/Pods-ListKit/Pods-ListKit.release.xcconfig"; sourceTree = "<group>"; };
+		C08CDB29264BAFC7006BD338 /* CollectionUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionUserCell.swift; sourceTree = "<group>"; };
+		C08CDB2A264BAFC7006BD338 /* CollectionUserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionUserCell.xib; sourceTree = "<group>"; };
+		C08CDB2D264BB11A006BD338 /* UserListCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListCollectionViewController.swift; sourceTree = "<group>"; };
 		C0A0D8FC259C9168008CD05F /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		C0A0D8FF259C918F008CD05F /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		C0A2AB6D259A28CA00F06BFC /* ListKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +74,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C08CDB28264BAF9E006BD338 /* CollectionCell */ = {
+			isa = PBXGroup;
+			children = (
+				C08CDB29264BAFC7006BD338 /* CollectionUserCell.swift */,
+				C08CDB2A264BAFC7006BD338 /* CollectionUserCell.xib */,
+			);
+			path = CollectionCell;
+			sourceTree = "<group>";
+		};
 		C0A2AB64259A28CA00F06BFC = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +105,7 @@
 		C0A2AB6F259A28CA00F06BFC /* ListKit */ = {
 			isa = PBXGroup;
 			children = (
+				C08CDB28264BAF9E006BD338 /* CollectionCell */,
 				C0D6D3AB259AFC8700F5B3C4 /* Cell */,
 				C0D6D3AA259AFC8000F5B3C4 /* Model */,
 				C0A2AB70259A28CA00F06BFC /* AppDelegate.swift */,
@@ -99,6 +115,7 @@
 				C0D6D3B5259AFD2800F5B3C4 /* UserViewController.swift */,
 				C0EF175125A343C50038C5E9 /* MountainsViewController.swift */,
 				C0EF175D25A348870038C5E9 /* InsertionSortViewController.swift */,
+				C08CDB2D264BB11A006BD338 /* UserListCollectionViewController.swift */,
 				C0A2AB76259A28CA00F06BFC /* Main.storyboard */,
 				C0A2AB79259A28CB00F06BFC /* Assets.xcassets */,
 				C0A2AB7B259A28CB00F06BFC /* LaunchScreen.storyboard */,
@@ -163,7 +180,7 @@
 			buildPhases = (
 				B42385CF614534C3F07D9387 /* [CP] Check Pods Manifest.lock */,
 				C0A2AB69259A28CA00F06BFC /* Sources */,
-				C0D6D3DB259B059100F5B3C4 /* ShellScript */,
+				C0D6D3DB259B059100F5B3C4 /* SwiftLint Run Script */,
 				C0A2AB6A259A28CA00F06BFC /* Frameworks */,
 				C0A2AB6B259A28CA00F06BFC /* Resources */,
 				9B6EBE447E36FCFE8EF51F34 /* [CP] Embed Pods Frameworks */,
@@ -184,7 +201,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					C0A2AB6C259A28CA00F06BFC = {
 						CreatedOnToolsVersion = 12.2;
@@ -214,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C08CDB2C264BAFC7006BD338 /* CollectionUserCell.xib in Resources */,
 				C0D6D3B2259AFCB600F5B3C4 /* UserCell.xib in Resources */,
 				C0A2AB7D259A28CB00F06BFC /* LaunchScreen.storyboard in Resources */,
 				C0A2AB7A259A28CB00F06BFC /* Assets.xcassets in Resources */,
@@ -264,7 +282,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C0D6D3DB259B059100F5B3C4 /* ShellScript */ = {
+		C0D6D3DB259B059100F5B3C4 /* SwiftLint Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -273,13 +291,14 @@
 			);
 			inputPaths = (
 			);
+			name = "SwiftLint Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "if [ $CONFIGURATION == 'Debug' ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\"\nelse\n  echo \"Not running SwiftLint/swiftlint because we are building for release\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -291,9 +310,11 @@
 				C0A0D900259C918F008CD05F /* Book.swift in Sources */,
 				C0D6D3AD259AFC9000F5B3C4 /* User.swift in Sources */,
 				C0D6D3B6259AFD2800F5B3C4 /* UserViewController.swift in Sources */,
+				C08CDB2B264BAFC7006BD338 /* CollectionUserCell.swift in Sources */,
 				C0EF176125A3492E0038C5E9 /* InsertionCell.swift in Sources */,
 				C0EF174825A33A5A0038C5E9 /* UserListTComplexTableViewController.swift in Sources */,
 				C0A0D8FD259C9168008CD05F /* BookCell.swift in Sources */,
+				C08CDB2E264BB11A006BD338 /* UserListCollectionViewController.swift in Sources */,
 				C0A2AB71259A28CA00F06BFC /* AppDelegate.swift in Sources */,
 				C0EF174725A33A5A0038C5E9 /* UserListTableViewController.swift in Sources */,
 				C0D6D3B1259AFCB600F5B3C4 /* UserCell.swift in Sources */,
@@ -452,12 +473,13 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ListKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -475,12 +497,13 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ListKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

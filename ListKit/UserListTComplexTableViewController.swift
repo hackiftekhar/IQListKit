@@ -42,7 +42,6 @@ extension UserListTComplexTableViewController {
             users.append(.init(id:1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
             users.append(.init(id:2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
             users.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-            users.append(.init(id:5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
 
             defaultCellItems.append(.init(text: "1st cell", detail: "Loaded using Class"))
             defaultCellItems.append(.init(text: "3rd cell", detail: "Loaded using Class"))
@@ -51,12 +50,10 @@ extension UserListTComplexTableViewController {
             books.append(.init(id: 1, name: "The Great Gatsby"))
             books.append(.init(id: 2, name: "One Hundred Years of Solitude"))
             books.append(.init(id: 3, name: "A Passage to India"))
-            books.append(.init(id: 5, name: "Things Fall Apart"))
 
         case 2:
             users.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
             users.append(.init(id:4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
-            users.append(.init(id:5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
 
             defaultCellItems.append(.init(text: "3rd cell", detail: "Loaded using Class"))
             defaultCellItems.append(.init(text: "4th cell", detail: "Loaded using Class"))
@@ -65,13 +62,11 @@ extension UserListTComplexTableViewController {
             books.append(.init(id: 1, name: "The Great Gatsby"))
             books.append(.init(id: 2, name: "One Hundred Years of Solitude"))
             books.append(.init(id: 3, name: "A Passage to India"))
-            books.append(.init(id: 5, name: "Things Fall Apart"))
 
         case 3:
             users.append(.init(id:1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
             users.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
             users.append(.init(id:4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
-            users.append(.init(id:5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
 
             defaultCellItems.append(.init(text: "1st cell", detail: "Loaded using Class"))
             defaultCellItems.append(.init(text: "2nd cell", detail: "Loaded using Class"))

@@ -43,18 +43,22 @@ public struct IQSection: Hashable {
 
     // Header text and size
     public var header: String?
+    public var headerView: UIView?
     public var headerSize: CGSize?
 
     // Footer text and size
     public var footer: String?
+    public var footerView: UIView?
     public var footerSize: CGSize?
 
     public init(identifier: AnyHashable,
-                header: String? = nil, headerSize: CGSize? = nil,
-                footer: String? = nil, footerSize: CGSize? = nil) {
+                header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
+                footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
         self.identifier = identifier
         self.header = header
         self.footer = footer
+        self.headerView = headerView
+        self.footerView = footerView
         self.headerSize = headerSize
         self.footerSize = footerSize
     }
