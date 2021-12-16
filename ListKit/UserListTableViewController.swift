@@ -10,14 +10,15 @@ import IQListKit
 
 class UserListTableViewController: UITableViewController {
 
-    private var users = [User]()
-    private var users2 = [User]()
+    private var users: [User] = []
+    private var users2: [User] = []
 
     private lazy var list = IQList(listView: tableView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        list.removeDuplicatesWhenReloading = true
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Users"
         list.noItemMessage = "No users to display here."
@@ -32,27 +33,34 @@ extension UserListTableViewController {
 
     @IBAction func refresh(_ sender: Any) {
 
-        var allUsers = [User]()
-        allUsers.append(.init(id:1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
-        allUsers.append(.init(id:2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
-        allUsers.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-        allUsers.append(.init(id:4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
-        allUsers.append(.init(id:5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
-        allUsers.append(.init(id:6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
-        allUsers.append(.init(id:7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
-        allUsers.append(.init(id:8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
-        allUsers.append(.init(id:9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
-        allUsers.append(.init(id:10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
+        var allUsers: [User] = []
+        allUsers.append(User(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+        allUsers.append(User(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
+        allUsers.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+        allUsers.append(User(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
+        allUsers.append(User(id: 5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
+        allUsers.append(User(id: 6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
+        allUsers.append(User(id: 7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
+        allUsers.append(User(id: 8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
+        allUsers.append(User(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
+        allUsers.append(User(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
 
         users.removeAll()
         users2.removeAll()
-        for user in allUsers {
+        while !allUsers.isEmpty {
 
             if Bool.random() {
-                users.append(user)
+                if let user = allUsers.randomElement(), let index = allUsers.firstIndex(of: user) {
+                    users.append(user)
+                    allUsers.remove(at: index)
+                }
             } else {
-                users2.append(user)
+                if let user = allUsers.randomElement(), let index = allUsers.firstIndex(of: user) {
+                    users2.append(user)
+                    allUsers.remove(at: index)
+                }
             }
+
         }
 
         refreshUI()

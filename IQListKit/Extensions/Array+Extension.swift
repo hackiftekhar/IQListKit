@@ -1,5 +1,5 @@
 //
-//  UICollectionView+Extension.swift
+//  Array+Extension.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,19 +20,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
+import Foundation
 
-public extension UICollectionView {
+internal extension Array where Element: Hashable {
 
-    /// Dequeuing - Header/Footer
-    func dequeue<T: UICollectionReusableView>(_: T.Type, kind: String, for indexPath: IndexPath) -> T {
-        let identifier: String = String(describing: T.self)
-        guard let cell = dequeueReusableSupplementaryView(ofKind: kind,
-                                                          withReuseIdentifier: identifier,
-                                                          for: indexPath) as? T else {
-            fatalError("Could not dequeue \(kind) with type \(T.self)")
+    /// Return unique and duplicate elements from array (and an option to pass existing elements)
+    @discardableResult
+    func removeDuplicate(existingElements: [Element] = []) -> (unique: [Element], duplicate: [Element]) {
+
+        var unique: [Element] = []
+        var duplicate: [Element] = []
+
+        self.forEach { element in
+
+            if !unique.contains(element), !existingElements.contains(element) {
+                unique.append(element)
+            } else {
+                duplicate.append(element)
+            }
         }
 
-        return cell
+        return (unique, duplicate)
     }
 }

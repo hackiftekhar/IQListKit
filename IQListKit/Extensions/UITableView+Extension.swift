@@ -22,7 +22,7 @@
 
 import UIKit
 
-internal extension UITableView {
+public extension UITableView {
 
     /// Dequeuing - Header/Footer
     func dequeue<T: UITableViewHeaderFooterView>(_: T.Type) -> T {

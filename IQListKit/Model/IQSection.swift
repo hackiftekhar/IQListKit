@@ -39,17 +39,20 @@ public struct IQSection: Hashable {
     }
 
     /// Unique identifier of the section
-    public var identifier: AnyHashable
+    public let identifier: AnyHashable
 
     /// Header text and size
-    public var header: String?
-    public var headerView: UIView?
-    public var headerSize: CGSize?
+    public let header: String?
+    public let headerView: UIView?
+    public let headerSize: CGSize?
 
     /// Footer text and size
-    public var footer: String?
-    public var footerView: UIView?
-    public var footerSize: CGSize?
+    public let footer: String?
+    public let footerView: UIView?
+    public let footerSize: CGSize?
+
+    /// Additional data for own purposes
+    public let model: Any?
 
     /// Initialization
     /// - Parameters:
@@ -60,7 +63,8 @@ public struct IQSection: Hashable {
     ///   - footerSize: footer size
     public init(identifier: AnyHashable,
                 header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
-                footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
+                footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil,
+                model: Any? = nil) {
         self.identifier = identifier
         self.header = header
         self.footer = footer
@@ -68,5 +72,6 @@ public struct IQSection: Hashable {
         self.footerView = footerView
         self.headerSize = headerSize
         self.footerSize = footerSize
+        self.model = model
     }
 }

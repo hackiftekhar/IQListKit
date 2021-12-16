@@ -28,7 +28,7 @@ class MountainsViewController: UIViewController {
 
     private lazy var list = IQList(listView: collectionView)
 
-    private let allMountains: [Mountain] = mountainsRawData.components(separatedBy: .newlines).map { line in
+    private let allMountains: [Mountain] = mountainsRawData.components(separatedBy: .newlines).map { line -> Mountain in
         let name = line.components(separatedBy: ",")[0]
         return Mountain(name: name)
     }

@@ -50,15 +50,17 @@ public final class IQList: NSObject {
 
     // MARK: - Public Properties
     public private(set) var listView: IQListView
-    public var clearsSelectionOnDidSelect = true {
+    public var clearsSelectionOnDidSelect: Bool = true {
         didSet {
             tableViewDataSource?.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
             collectionViewDataSource?.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
         }
     }
 
+    public var removeDuplicatesWhenReloading: Bool = false
+
     // MARK: - Empty States
-    public let emptyStateView = IQEmptyStateView(image: nil, title: nil, message: nil)
+    public let emptyStateView: IQEmptyStateView = IQEmptyStateView(image: nil, title: nil, message: nil)
     public var noItemImage: UIImage? {
         get {   emptyStateView.image    }
         set {   emptyStateView.image = newValue  }
@@ -77,9 +79,9 @@ public final class IQList: NSObject {
 
     // MARK: - Loading
     /// Will display in the middle if isLoading is true
-    public let loadingIndicator = UIActivityIndicatorView(style: .gray)
+    public let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
 
-    public var isLoading = false {
+    public var isLoading: Bool = false {
         didSet {
 
             var numberOfAllItems = 0
@@ -194,8 +196,8 @@ public final class IQList: NSObject {
 
     // MARK: - Private Properties
 
-    internal var registeredCells = [UIView.Type]()
-    internal var registeredHeaderFooterViews = [UIView.Type]()
+    internal var registeredCells: [UIView.Type] = [UIView.Type]()
+    internal var registeredHeaderFooterViews: [UIView.Type] = [UIView.Type]()
 
     /// This tweak is written due to old iOS version compatibility
     private var _privateBatchSnapshot: Any?
@@ -366,10 +368,32 @@ public extension IQList {
             registerCell(type: type)
         }
 
-        var items = [IQItem]()
+        var items: [IQItem] = []
         for model in models {
             let item = IQItem(type, model: model)
             items.append(item)
+        }
+
+        if removeDuplicatesWhenReloading {
+            if #available(iOS 13.0, *) {
+                if let existingItems = batchSnapshot?.itemIdentifiers {
+                    let result = items.removeDuplicate(existingElements: existingItems)
+                    items = result.unique
+                    if !result.duplicate.isEmpty {
+                        let duplicate = result.duplicate.compactMap { $0.model }
+                        print("IQListKit: Ignoring \(duplicate.count) duplicate elements.\n\(duplicate))")
+                    }
+                }
+            } else {
+                if let existingItems = ddsBatchSnapshot?.itemIdentifiers {
+                    let result = items.removeDuplicate(existingElements: existingItems)
+                    items = result.unique
+                    if !result.duplicate.isEmpty {
+                        let duplicate = result.duplicate.compactMap { $0.model }
+                        print("IQListKit: Ignoring \(duplicate.count) duplicate elements.\n\(duplicate))")
+                    }
+                }
+            }
         }
 
         if #available(iOS 13.0, *) {

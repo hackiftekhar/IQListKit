@@ -41,7 +41,7 @@ class CollectionUserCell: UICollectionViewCell, IQModelableCell {
     @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? {
 
-        let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil,
+        let contextMenuConfiguration: UIContextMenuConfiguration = UIContextMenuConfiguration(identifier: nil,
                                                                   previewProvider: { () -> UIViewController? in
             let controller = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(identifier: "UserViewController") as? UserViewController
@@ -49,8 +49,8 @@ class CollectionUserCell: UICollectionViewCell, IQModelableCell {
             return controller
         }, actionProvider: { (actions) -> UIMenu? in
 
-            var actions = [UIMenuElement]()
-            let action = UIAction(title: "Hello Action") { _ in
+            var actions: [UIMenuElement] = []
+            let action: UIAction = UIAction(title: "Hello Action") { _ in
             }
             actions.append(action)
 

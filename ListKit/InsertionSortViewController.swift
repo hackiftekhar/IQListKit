@@ -81,7 +81,7 @@ final class InsertionSortViewController: UIViewController {
     @IBOutlet private var collectionView: UICollectionView!
     private var isSorting = false
 
-    private var sections = [Section]()
+    private var sections: [Section] = []
     private lazy var list = IQList(listView: collectionView)
 
     override func viewDidLoad() {

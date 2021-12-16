@@ -28,72 +28,40 @@ import DiffableDataSources
 @available(iOS, deprecated: 13.0)
 internal final class DDSCollectionViewDiffableDataSource: CollectionViewDiffableDataSource<IQSection, IQItem> {
 
-    weak var delegate: IQListViewDelegate?
-    weak var dataSource: IQListViewDataSource?
-    var clearsSelectionOnDidSelect = true
-
     private var contextMenuPreviewIndexPath: IndexPath?
+    private let _collectionViewDiffableDataSource: IQCommonCollectionViewDiffableDataSource =
+        IQCommonCollectionViewDiffableDataSource()
+
+    weak var delegate: IQListViewDelegate? {
+        get {   _collectionViewDiffableDataSource.delegate   }
+        set {   _collectionViewDiffableDataSource.delegate = newValue    }
+    }
+
+    weak var dataSource: IQListViewDataSource? {
+        get {   _collectionViewDiffableDataSource.dataSource }
+        set {   _collectionViewDiffableDataSource.dataSource = newValue  }
+    }
+
+    var clearsSelectionOnDidSelect: Bool {
+        get {   _collectionViewDiffableDataSource.clearsSelectionOnDidSelect }
+        set {   _collectionViewDiffableDataSource.clearsSelectionOnDidSelect = newValue  }
+    }
 
     // MARK: - Header Footer
+
     override func collectionView(_ collectionView: UICollectionView,
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath) -> UICollectionReusableView {
 
         let aSection = snapshot().sectionIdentifiers[indexPath.section]
-
-        if kind.elementsEqual(UICollectionView.elementKindSectionHeader) {
-            let reusableView: UICollectionReusableView
-
-            let headerView = dataSource?.listView(collectionView, headerFor: aSection, at: indexPath.section) ?? aSection.headerView
-
-            if let headerView = headerView as? UICollectionReusableView {
-                reusableView = headerView
-            } else if let headerView = headerView {
-                let sHeader = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-                sHeader.frame = headerView.bounds
-                sHeader.addSubview(headerView)
-                reusableView = sHeader
-            } else if let header = aSection.header {
-                let sHeader = collectionView.dequeue(IQCollectionViewHeaderFooter.self, kind: kind, for: indexPath)
-                sHeader.textLabel.text = header
-                reusableView = sHeader
-            } else {
-                reusableView = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-            }
-
-            delegate?.listView(collectionView, modifyHeader: reusableView, section: aSection, at: indexPath.section)
-
-            return reusableView
-        } else if kind.elementsEqual(UICollectionView.elementKindSectionFooter) {
-            let reusableView: UICollectionReusableView
-
-            let footerView = dataSource?.listView(collectionView, footerFor: aSection, at: indexPath.section) ?? aSection.footerView
-
-            if let footerView = footerView as? UICollectionReusableView {
-                reusableView = footerView
-            } else if let footerView = footerView {
-                let sFooter = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-                sFooter.frame = footerView.bounds
-                sFooter.addSubview(footerView)
-                reusableView = sFooter
-            } else if let footer = aSection.footer {
-                let sFooter = collectionView.dequeue(IQCollectionViewHeaderFooter.self, kind: kind, for: indexPath)
-                sFooter.textLabel.text = footer
-                reusableView = sFooter
-            } else {
-                reusableView = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-            }
-
-            delegate?.listView(collectionView, modifyHeader: reusableView, section: aSection, at: indexPath.section)
-
-            return reusableView
-        } else {
-            return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-        }
+        return _collectionViewDiffableDataSource.collectionView(collectionView,
+                                                                viewForSupplementaryElementOfKind: kind,
+                                                                at: indexPath,
+                                                                section: aSection)
     }
 
     func indexTitles(for collectionView: UICollectionView) -> [String]? {
-        dataSource?.sectionIndexTitles(collectionView)
+        _collectionViewDiffableDataSource.indexTitles(for: collectionView)
     }
 }
 
@@ -106,31 +74,17 @@ extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayou
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
 
         let aSection = snapshot().sectionIdentifiers[section]
-
-        if let size = aSection.headerSize {
-            return size
-        } else if let headerView = aSection.headerView {
-            return headerView.frame.size
-        } else {
-            let size = IQCollectionViewHeaderFooter.sizeThatFitText(text: aSection.header,
-                                                                    collectionView: collectionView)
-            return size
-        }
+        return _collectionViewDiffableDataSource.collectionView(collectionView,
+                                                                layout: collectionViewLayout,
+                                                                referenceSizeForHeaderInSection: aSection)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         let aSection = snapshot().sectionIdentifiers[section]
-
-        if let size = aSection.footerSize {
-            return size
-        } else if let headerView = aSection.footerView {
-            return headerView.frame.size
-        } else {
-            let size = IQCollectionViewHeaderFooter.sizeThatFitText(text: aSection.footer,
-                                                                    collectionView: collectionView)
-            return size
-        }
+        return _collectionViewDiffableDataSource.collectionView(collectionView,
+                                                                layout: collectionViewLayout,
+                                                                referenceSizeForFooterInSection: aSection)
     }
 
     // MARK: - Cell
@@ -138,15 +92,11 @@ extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayou
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        if let item = itemIdentifier(for: indexPath) {
-            if let size = dataSource?.listView(collectionView, size: item, at: indexPath) {
-                return size
-            } else if let type = item.type as? IQCellSizeProvider.Type {
-                return type.size(for: item.model, listView: collectionView)
-            }
-        }
-
-        return CGSize(width: 0, height: 0)
+        let item: IQItem? = itemIdentifier(for: indexPath)
+        return _collectionViewDiffableDataSource.collectionView(collectionView,
+                                                                layout: collectionViewLayout,
+                                                                sizeForItemAt: indexPath,
+                                                                item: item)
     }
 }
 
@@ -156,49 +106,32 @@ extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegate {
     // MARK: - Selection
 
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-
-        if let cell = collectionView.cellForItem(at: indexPath) as? IQSelectableCell {
-            return cell.isHighlightable
-        }
-
-        return true
+        _collectionViewDiffableDataSource.collectionView(collectionView, shouldHighlightItemAt: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-
-        if let cell = collectionView.cellForItem(at: indexPath) as? IQSelectableCell {
-            return cell.isSelectable
-        }
-
-        return true
+        _collectionViewDiffableDataSource.collectionView(collectionView, shouldSelectItemAt: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if clearsSelectionOnDidSelect {
-            collectionView.deselectItem(at: indexPath, animated: true)
-        }
-
-        if let item = itemIdentifier(for: indexPath) {
-            delegate?.listView(collectionView, didSelect: item, at: indexPath)
-        }
+        let item: IQItem? = itemIdentifier(for: indexPath)
+        _collectionViewDiffableDataSource.collectionView(collectionView, didSelectItemAt: indexPath, item: item)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-
-        if let item = itemIdentifier(for: indexPath) {
-            delegate?.listView(collectionView, didDeselect: item, at: indexPath)
-        }
+        let item: IQItem? = itemIdentifier(for: indexPath)
+        _collectionViewDiffableDataSource.collectionView(collectionView, didDeselectItemAt: indexPath, item: item)
     }
 
     // MARK: - Cell
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        delegate?.listView(collectionView, willDisplay: cell, at: indexPath)
+        _collectionViewDiffableDataSource.collectionView(collectionView, willDisplay: cell, forItemAt: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        delegate?.listView(collectionView, didEndDisplaying: cell, at: indexPath)
+        _collectionViewDiffableDataSource.collectionView(collectionView, didEndDisplaying: cell, forItemAt: indexPath)
     }
 
     // MARK: - Context menu
@@ -207,48 +140,37 @@ extension DDSCollectionViewDiffableDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
-        if let cell = collectionView.cellForItem(at: indexPath) as? IQCellActionsProvider,
-           let configuration = cell.contextMenuConfiguration() {
-            contextMenuPreviewIndexPath = indexPath
-            return configuration
-        }
-
-        return nil
+        _collectionViewDiffableDataSource
+            .collectionView(collectionView,
+                            contextMenuConfigurationForItemAt: indexPath,
+                            point: point)
     }
 
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         previewForHighlightingContextMenuWithConfiguration
                             configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-
-        if let indexPath = contextMenuPreviewIndexPath,
-           let cell = collectionView.cellForItem(at: indexPath) as? IQCellActionsProvider,
-           let view = cell.contextMenuPreviewView(configuration: configuration) {
-            return UITargetedPreview(view: view)
-        }
-        return nil
+        _collectionViewDiffableDataSource
+            .collectionView(collectionView,
+                            previewForHighlightingContextMenuWithConfiguration: configuration)
     }
 
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
                         animator: UIContextMenuInteractionCommitAnimating) {
-        if let indexPath = contextMenuPreviewIndexPath,
-           let cell = collectionView.cellForItem(at: indexPath) as? IQCellActionsProvider {
-            cell.performPreviewAction(configuration: configuration, animator: animator)
-        }
+        _collectionViewDiffableDataSource
+            .collectionView(collectionView,
+                            willPerformPreviewActionForMenuWith: configuration,
+                            animator: animator)
     }
 
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         previewForDismissingContextMenuWithConfiguration
                             configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-
-        if let indexPath = contextMenuPreviewIndexPath,
-           let cell = collectionView.cellForItem(at: indexPath) as? IQCellActionsProvider,
-           let view = cell.contextMenuPreviewView(configuration: configuration) {
-            return UITargetedPreview(view: view)
-        }
-        return nil
+        _collectionViewDiffableDataSource
+            .collectionView(collectionView,
+                            previewForDismissingContextMenuWithConfiguration: configuration)
     }
 }

@@ -10,8 +10,8 @@ import IQListKit
 
 class UserListCollectionViewController: UICollectionViewController {
 
-    private var users = [User]()
-    private var users2 = [User]()
+    private var users: [User] = []
+    private var users2: [User] = []
 
     private typealias Cell = CollectionUserCell
 
@@ -25,6 +25,8 @@ class UserListCollectionViewController: UICollectionViewController {
         list.noItemMessage = "No users to display here."
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
+        list.registerHeaderFooter(type: SampleCollectionReusableView.self)
+
         refreshUI(animated: false)
     }
 }
@@ -33,17 +35,17 @@ extension UserListCollectionViewController {
 
     @IBAction func refresh(_ sender: Any) {
 
-        var allUsers = [User]()
-        allUsers.append(.init(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
-        allUsers.append(.init(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
-        allUsers.append(.init(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-        allUsers.append(.init(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
-        allUsers.append(.init(id: 5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
-        allUsers.append(.init(id: 6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
-        allUsers.append(.init(id: 7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
-        allUsers.append(.init(id: 8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
-        allUsers.append(.init(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
-        allUsers.append(.init(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
+        var allUsers: [User] = []
+        allUsers.append(User(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+        allUsers.append(User(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
+        allUsers.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+        allUsers.append(User(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
+        allUsers.append(User(id: 5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
+        allUsers.append(User(id: 6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
+        allUsers.append(User(id: 7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
+        allUsers.append(User(id: 8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
+        allUsers.append(User(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
+        allUsers.append(User(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
 
         users.removeAll()
         users2.removeAll()
@@ -113,7 +115,14 @@ extension UserListCollectionViewController: IQListViewDelegateDataSource {
     }
 
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {
+    }
 
+    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? {
+        let indexPath = IndexPath(item: 0, section: sectionIndex)
+        let headerView = collectionView.dequeue(SampleCollectionReusableView.self,
+                                                kind: UICollectionView.elementKindSectionHeader,
+                                                for: indexPath)
+        return headerView
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

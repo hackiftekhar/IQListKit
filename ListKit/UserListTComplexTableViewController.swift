@@ -10,7 +10,7 @@ import IQListKit
 
 class UserListTComplexTableViewController: UITableViewController {
 
-    private var defaultCellItems = [IQTableViewCell.Model]()
+    private var defaultCellItems: [IQTableViewCell.Model] = []
     private var users = [User]()
     private var books = [Book]()
 
@@ -39,43 +39,43 @@ extension UserListTComplexTableViewController {
 
         switch Int.random(in: 1...3) {
         case 1:
-            users.append(.init(id:1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
-            users.append(.init(id:2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
-            users.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+            users.append(User(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+            users.append(User(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
+            users.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
 
-            defaultCellItems.append(.init(text: "1st cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "3rd cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "5th cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "1st cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "3rd cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "5th cell", detail: "Loaded using Class"))
 
-            books.append(.init(id: 1, name: "The Great Gatsby"))
-            books.append(.init(id: 2, name: "One Hundred Years of Solitude"))
-            books.append(.init(id: 3, name: "A Passage to India"))
+            books.append(Book(id: 1, name: "The Great Gatsby"))
+            books.append(Book(id: 2, name: "One Hundred Years of Solitude"))
+            books.append(Book(id: 3, name: "A Passage to India"))
 
         case 2:
-            users.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-            users.append(.init(id:4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
+            users.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+            users.append(User(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
 
-            defaultCellItems.append(.init(text: "3rd cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "4th cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "5th cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "3rd cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "4th cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "5th cell", detail: "Loaded using Class"))
 
-            books.append(.init(id: 1, name: "The Great Gatsby"))
-            books.append(.init(id: 2, name: "One Hundred Years of Solitude"))
-            books.append(.init(id: 3, name: "A Passage to India"))
+            books.append(Book(id: 1, name: "The Great Gatsby"))
+            books.append(Book(id: 2, name: "One Hundred Years of Solitude"))
+            books.append(Book(id: 3, name: "A Passage to India"))
 
         case 3:
-            users.append(.init(id:1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
-            users.append(.init(id:3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-            users.append(.init(id:4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
+            users.append(User(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+            users.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+            users.append(User(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
 
-            defaultCellItems.append(.init(text: "1st cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "2nd cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "4th cell", detail: "Loaded using Class"))
-            defaultCellItems.append(.init(text: "5th cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "1st cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "2nd cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "4th cell", detail: "Loaded using Class"))
+            defaultCellItems.append(IQTableViewCell.Model(text: "5th cell", detail: "Loaded using Class"))
 
-            books.append(.init(id: 1, name: "The Great Gatsby"))
-            books.append(.init(id: 3, name: "A Passage to India"))
-            books.append(.init(id: 4, name: "Invisible Man"))
+            books.append(Book(id: 1, name: "The Great Gatsby"))
+            books.append(Book(id: 3, name: "A Passage to India"))
+            books.append(Book(id: 4, name: "Invisible Man"))
         default:
             break
         }

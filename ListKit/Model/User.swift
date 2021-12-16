@@ -13,6 +13,10 @@ struct User: Hashable {
         hasher.combine(id)
     }
 
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
+
     let id: Int
     let name: String
     let email: String

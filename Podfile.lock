@@ -5,7 +5,7 @@ PODS:
   - DifferenceKit/Core (1.1.5)
   - DifferenceKit/UIKitExtension (1.1.5):
     - DifferenceKit/Core
-  - IQListKit (1.1.1):
+  - IQListKit (1.2.1):
     - DiffableDataSources (~> 0.4.0)
   - SwiftLint (0.42.0)
 
@@ -26,9 +26,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   DiffableDataSources: 80396cec405c9b29e1e07b55c9be7d11b46c8741
   DifferenceKit: 516f12e336ed65a3a0665847b5c3cb5cad4bd4ea
-  IQListKit: 5328d89f29fb5c8a87ede1257f095d5ceeff6937
+  IQListKit: 256e7605af4f7bd611782e6571f206f0b40fe158
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
 
 PODFILE CHECKSUM: 7884a22172412717693c064bb119f746016b05ba
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.2
