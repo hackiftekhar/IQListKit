@@ -15,8 +15,8 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     weak var delegate: UserCellDelegate?
 
-    /// Or if we would like to use User as a model directly then
-    /// instead of implementing a struct, this can also be written as
+    // Or if we would like to use User as a model directly then
+    // instead of implementing a struct, this can also be written as
     // typealias Model = User
 
     var model: User? {

@@ -120,6 +120,12 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         _tableViewDiffableDataSource.tableView(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
 
+    func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
+
+        let item: IQItem? = itemIdentifier(for: indexPath)
+        return _tableViewDiffableDataSource.tableView(tableView, indentationLevelForRowAt: indexPath, item: item)
+    }
+
     // MARK: - Selection
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {

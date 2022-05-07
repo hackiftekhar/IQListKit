@@ -149,6 +149,17 @@ extension IQCommonTableViewDiffableDataSource {
         delegate?.listView(tableView, didEndDisplaying: cell, at: indexPath)
     }
 
+    func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath, item: IQItem?) -> Int {
+
+        guard let item = item else { return 0 }
+
+        if let type = item.type as? IQCellSizeProvider.Type {
+            return type.indentationLevel(for: item.model, listView: tableView)
+        }
+
+        return 0
+    }
+
     // MARK: - Selection
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
