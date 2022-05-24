@@ -16,7 +16,9 @@ struct Node: Hashable {
 
     init(sectionId: Int, value: Int, maxValue: Int) {
         self.sectionId = sectionId
-        let hue = CGFloat(value) / CGFloat(maxValue)
+        let maxFloat: CGFloat = CGFloat(maxValue)
+        let valueFloat: CGFloat = CGFloat(value)
+        let hue = valueFloat / maxFloat
         self.value = value
         color = UIColor(hue: hue, saturation: 1, brightness: 1, alpha: 1)
     }

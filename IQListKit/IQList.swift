@@ -354,6 +354,7 @@ public final class IQList: NSObject {
 /// Note that all these methods can also be used in a background threads since they all
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
+// swiftlint:disable file_length
 public extension IQList {
 
     /// Append the models to the given section
@@ -362,6 +363,7 @@ public extension IQList {
     ///   - type: Type of the IQModelableCell
     ///   - models: the models of type IQModelableCell.Model
     ///   - section: section in which we'll be adding the models
+    // swiftlint:disable cyclomatic_complexity
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model], section: IQSection? = nil) {
 
         if registeredCells.contains(where: { $0 == type}) == false {

@@ -291,12 +291,49 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="0Q8-fl-9w9">
-                            <size key="itemSize" width="128" height="128"/>
+                            <size key="itemSize" width="150" height="62"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
-                        <cells/>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionUserStoryboardCell" id="Vg4-hD-Gfs" customClass="CollectionUserStoryboardCell" customModule="ListKit" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="150" height="62"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="62"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlV-wv-6Cn">
+                                            <rect key="frame" x="8" y="8" width="41.5" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmY-67-aBR">
+                                            <rect key="frame" x="8" y="36.5" width="35.5" height="17.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <viewLayoutGuide key="safeArea" id="zNX-zS-ok8"/>
+                                <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                <constraints>
+                                    <constraint firstItem="JmY-67-aBR" firstAttribute="top" secondItem="TlV-wv-6Cn" secondAttribute="bottom" constant="8" id="Bkm-og-iar"/>
+                                    <constraint firstItem="TlV-wv-6Cn" firstAttribute="leading" secondItem="Vg4-hD-Gfs" secondAttribute="leading" constant="8" id="Fsd-GS-WUq"/>
+                                    <constraint firstAttribute="bottom" secondItem="JmY-67-aBR" secondAttribute="bottom" constant="8" id="Rp0-4P-g1s"/>
+                                    <constraint firstItem="JmY-67-aBR" firstAttribute="leading" secondItem="Vg4-hD-Gfs" secondAttribute="leading" constant="8" id="oB6-UG-ywu"/>
+                                    <constraint firstItem="TlV-wv-6Cn" firstAttribute="top" secondItem="Vg4-hD-Gfs" secondAttribute="top" constant="8" id="vzc-cl-kZF"/>
+                                </constraints>
+                                <size key="customSize" width="150" height="62"/>
+                                <connections>
+                                    <outlet property="detailTextLabel" destination="JmY-67-aBR" id="cy9-n4-x6N"/>
+                                    <outlet property="textLabel" destination="TlV-wv-6Cn" id="3EL-ng-M8W"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
                         <connections>
                             <outlet property="dataSource" destination="5HN-Gh-GUa" id="liB-4n-ksq"/>
                             <outlet property="delegate" destination="5HN-Gh-GUa" id="9cW-ax-3NG"/>
@@ -412,6 +449,9 @@
         <segue reference="r9u-VX-cAP"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -426,6 +466,9 @@
         </systemColor>
         <systemColor name="systemTealColor">
             <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

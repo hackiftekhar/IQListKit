@@ -13,6 +13,7 @@ class UserListCollectionViewController: UICollectionViewController {
     private var users: [User] = []
     private var users2: [User] = []
 
+    private typealias StoryboardCell = CollectionUserStoryboardCell
     private typealias Cell = CollectionUserCell
 
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
@@ -83,13 +84,25 @@ extension UserListCollectionViewController {
 //            let section1 = IQSection(identifier: "firstSection", header: "First Section", headerView: firstView)
             list.append(section1)
 
-            list.append(Cell.self, models: users, section: section1)
+            for user in users {
+                if Bool.random() {
+                    list.append(Cell.self, models: [user], section: section1)
+                } else {
+                    list.append(StoryboardCell.self, models: [user], section: section1)
+                }
+            }
 
             let section2 = IQSection(identifier: "secondSection", header: "Second Section")
 //            let section2 = IQSection(identifier: "secondSection", header: "Second Section", headerView: secondView)
             list.append(section2)
 
-            list.append(Cell.self, models: users2, section: section2)
+            for user in users2 {
+                if Bool.random() {
+                    list.append(Cell.self, models: [user], section: section2)
+                } else {
+                    list.append(StoryboardCell.self, models: [user], section: section2)
+                }
+            }
 
         }, animatingDifferences: animated, completion: nil)
     }
@@ -131,6 +144,18 @@ extension UserListCollectionViewController: IQListViewDelegateDataSource {
 
 extension UserListCollectionViewController: CollectionUserCellDelegate {
     func userCell(_ cell: CollectionUserCell, didDelete item: User) {
+        if let index = users.firstIndex(of: item) {
+            users.remove(at: index)
+            refreshUI()
+        } else if let index = users2.firstIndex(of: item) {
+            users2.remove(at: index)
+            refreshUI()
+        }
+    }
+}
+
+extension UserListCollectionViewController: CollectionUserStoryboardCellDelegate {
+    func userCell(_ cell: CollectionUserStoryboardCell, didDelete item: User) {
         if let index = users.firstIndex(of: item) {
             users.remove(at: index)
             refreshUI()

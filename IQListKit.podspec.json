@@ -29,6 +29,9 @@
   "dependencies": {
       "DiffableDataSources": [
           "~> 0.4.0"
+      ],
+      "SwiftTryCatch": [
+          "~> 0.0.1"
       ]
   },
   "requires_arc": true

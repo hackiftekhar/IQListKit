@@ -31,6 +31,7 @@ final class IQCommonCollectionViewDiffableDataSource {
     private var contextMenuPreviewIndexPath: IndexPath?
 
     // MARK: - Header Footer
+    // swiftlint:disable function_body_length
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath, section: IQSection) -> UICollectionReusableView {

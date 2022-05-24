@@ -24,8 +24,9 @@ final class LabelCell: UICollectionViewCell, IQModelableCell {
     }
 
     static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        let column = 2
-        let width = floor((listView.bounds.width - 10 * CGFloat(column + 1)) / CGFloat(column))
+        let column: CGFloat = 2
+        let columnPlusOne: CGFloat = column + 1
+        let width = floor((listView.bounds.width - 10 * columnPlusOne) / column)
         return CGSize(width: width, height: 32)
     }
 }
