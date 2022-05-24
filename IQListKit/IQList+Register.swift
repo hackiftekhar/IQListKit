@@ -40,35 +40,42 @@ public extension IQList {
     ///   - bundle: The bundle in which the cell is present.
     ///   - registerType: The cell registration type
     // swiftlint:disable function_body_length
-    func registerCell<T: IQModelableCell>(type: T.Type, bundle: Bundle = .main,
-                                          registerType: RegisterType = .default) {
+    func registerCell<T: IQModelableCell>(type: T.Type, registerType: RegisterType, bundle: Bundle = .main) {
 
         guard registeredCells.contains(where: { $0 == type}) == false else {
             return
         }
 
+        let identifier = String(describing: type)
+
+        func internalRegisterNib() {
+            let nib = UINib(nibName: identifier, bundle: bundle)
+            if let tableView = listView as? UITableView {
+                tableView.register(nib, forCellReuseIdentifier: identifier)
+            } else if let collectionView = listView as? UICollectionView {
+                collectionView.register(nib, forCellWithReuseIdentifier: identifier)
+            }
+        }
+
+        func internalRegisterClass() {
+            if let tableView = listView as? UITableView {
+                tableView.register(type.self, forCellReuseIdentifier: identifier)
+            } else if let collectionView = listView as? UICollectionView {
+                collectionView.register(type.self, forCellWithReuseIdentifier: identifier)
+            }
+        }
+
         // swiftlint:disable cyclomatic_complexity
         func internalRegisterCell() {
-            let identifier = String(describing: type)
-
             switch registerType {
             case .storyboard:
                 registeredCells.append(type)    // Just manually adding the entry
             case .nib:
-                registeredCells.append(type)    // Just manually adding the entry
-                let nib = UINib(nibName: identifier, bundle: bundle)
-                if let tableView = listView as? UITableView {
-                    tableView.register(nib, forCellReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    collectionView.register(nib, forCellWithReuseIdentifier: identifier)
-                }
+                registeredCells.append(type)
+                internalRegisterNib()
             case .class:
-                registeredCells.append(type)    // Just manually adding the entry
-                if let tableView = listView as? UITableView {
-                    tableView.register(type.self, forCellReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    collectionView.register(type.self, forCellWithReuseIdentifier: identifier)
-                }
+                registeredCells.append(type)
+                internalRegisterClass()
             case .default:
 
                 var hasRegistered = false
@@ -111,18 +118,9 @@ public extension IQList {
 
                 registeredCells.append(type)
                 if bundle.path(forResource: identifier, ofType: "nib") != nil {
-                    let nib = UINib(nibName: identifier, bundle: bundle)
-                    if let tableView = listView as? UITableView {
-                        tableView.register(nib, forCellReuseIdentifier: identifier)
-                    } else if let collectionView = listView as? UICollectionView {
-                        collectionView.register(nib, forCellWithReuseIdentifier: identifier)
-                    }
+                    internalRegisterNib()
                 } else {
-                    if let tableView = listView as? UITableView {
-                        tableView.register(type.self, forCellReuseIdentifier: identifier)
-                    } else if let collectionView = listView as? UICollectionView {
-                        collectionView.register(type.self, forCellWithReuseIdentifier: identifier)
-                    }
+                    internalRegisterClass()
                 }
             }
         }
@@ -140,40 +138,104 @@ public extension IQList {
     /// - Parameters:
     ///   - type: Type of the header
     ///   - bundle: The bundle in which the header is present.
-    func registerHeaderFooter<T: UIView>(type: T.Type, bundle: Bundle = .main) {
+    func registerHeaderFooter<T: UIView>(type: T.Type, registerType: RegisterType, bundle: Bundle = .main) {
 
         guard registeredHeaderFooterViews.contains(where: { $0 == type}) == false else {
             return
         }
 
+        let identifier = String(describing: type)
+
+        func internalRegisterNib() {
+            let nib = UINib(nibName: identifier, bundle: bundle)
+            if let tableView = listView as? UITableView {
+                registeredHeaderFooterViews.append(type)
+                tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
+
+            } else if let collectionView = listView as? UICollectionView {
+                registeredHeaderFooterViews.append(type)
+                collectionView.register(nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                        withReuseIdentifier: identifier)
+                collectionView.register(nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                        withReuseIdentifier: identifier)
+            }
+        }
+
+        func internalRegisterClass() {
+            if let tableView = listView as? UITableView {
+                registeredHeaderFooterViews.append(type)
+                tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)
+            } else if let collectionView = listView as? UICollectionView {
+                registeredHeaderFooterViews.append(type)
+                collectionView.register(type.self,
+                                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                        withReuseIdentifier: identifier)
+                collectionView.register(type.self,
+                                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                        withReuseIdentifier: identifier)
+            }
+        }
+
         func internalRegisterHeaderFooter() {
-            let identifier = String(describing: type)
 
-            if bundle.path(forResource: identifier, ofType: "nib") != nil {
-                let nib = UINib(nibName: identifier, bundle: bundle)
+            switch registerType {
+            case .storyboard:
+                registeredHeaderFooterViews.append(type)    // Just manually adding the entry
+            case .nib:
+                registeredHeaderFooterViews.append(type)
+                internalRegisterNib()
+            case .class:
+                registeredHeaderFooterViews.append(type)
+                internalRegisterClass()
+            case .default:
+
+                var hasRegistered = false
                 if let tableView = listView as? UITableView {
-                    registeredHeaderFooterViews.append(type)
-                    tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
-
+                    // Validate if the cell is configured in storyboard
+                    if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
+                        registeredHeaderFooterViews.append(type)
+                        hasRegistered = true
+                        return
+                    }
                 } else if let collectionView = listView as? UICollectionView {
-                    registeredHeaderFooterViews.append(type)
-                    collectionView.register(nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                            withReuseIdentifier: identifier)
-                    collectionView.register(nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                            withReuseIdentifier: identifier)
+                    // Validate if the cell is configured in storyboard
+                    SwiftTryCatch.try {
+                        let dummyIndexPath = IndexPath(item: 0, section: 0)
+                        _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                            withReuseIdentifier: identifier,
+                                                                            for: dummyIndexPath)
+                        _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
+                                                                            withReuseIdentifier: identifier,
+                                                                            for: dummyIndexPath)
+                        self.registeredHeaderFooterViews.append(type)
+                        hasRegistered = true
+                    } catch: { exception in
+                        if let exception = exception {
+                            if exception.name == NSExceptionName.internalInconsistencyException {
+
+                                let typeName: String = {
+                                    bundle.path(forResource: identifier, ofType: "nib") != nil ? "nib" : "class"
+                                }()
+
+                                print("""
+                                      IQListKit: To remove assertion failure log, please manually register cell using \
+                                      `list.registerHeaderFooter(type: \(identifier).self, registerType: .\(typeName))`
+                                      """)
+                            }
+                        }
+                    } finally: {
+                    }
                 }
-            } else {
-                if let tableView = listView as? UITableView {
-                    registeredHeaderFooterViews.append(type)
-                    tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)
-                } else if let collectionView = listView as? UICollectionView {
-                    registeredHeaderFooterViews.append(type)
-                    collectionView.register(type.self,
-                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                            withReuseIdentifier: identifier)
-                    collectionView.register(type.self,
-                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                            withReuseIdentifier: identifier)
+
+                guard !hasRegistered else {
+                    return
+                }
+
+                registeredHeaderFooterViews.append(type)
+                if bundle.path(forResource: identifier, ofType: "nib") != nil {
+                    internalRegisterNib()
+                } else {
+                    internalRegisterClass()
                 }
             }
         }

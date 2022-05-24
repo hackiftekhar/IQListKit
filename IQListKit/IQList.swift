@@ -299,7 +299,7 @@ public final class IQList: NSObject {
         tableViewDataSource?.delegate = delegate
         tableViewDataSource?.dataSource = dataSource
 
-        registerHeaderFooter(type: IQTableViewHeaderFooterView.self)
+        registerHeaderFooter(type: IQTableViewHeaderFooterView.self, registerType: .class)
     }
 
     /// Initialize the IQList with the UITableView
@@ -345,8 +345,8 @@ public final class IQList: NSObject {
         collectionView.dataSource = collectionViewDataSource
         collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
 
-        registerHeaderFooter(type: UICollectionReusableView.self)
-        registerHeaderFooter(type: IQCollectionViewHeaderFooter.self)
+        registerHeaderFooter(type: UICollectionReusableView.self, registerType: .class)
+        registerHeaderFooter(type: IQCollectionViewHeaderFooter.self, registerType: .class)
     }
 }
 
@@ -367,7 +367,7 @@ public extension IQList {
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model], section: IQSection? = nil) {
 
         if registeredCells.contains(where: { $0 == type}) == false {
-            registerCell(type: type)
+            registerCell(type: type, registerType: .default)
         }
 
         var items: [IQItem] = []

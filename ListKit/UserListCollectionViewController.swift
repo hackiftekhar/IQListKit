@@ -26,7 +26,8 @@ class UserListCollectionViewController: UICollectionViewController {
         list.noItemMessage = "No users to display here."
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
-        list.registerHeaderFooter(type: SampleCollectionReusableView.self)
+        list.registerCell(type: CollectionUserCell.self, registerType: .nib)
+        list.registerHeaderFooter(type: SampleCollectionReusableView.self, registerType: .nib)
 
         refreshUI(animated: false)
     }
