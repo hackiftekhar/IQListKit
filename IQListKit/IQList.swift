@@ -81,89 +81,98 @@ public final class IQList: NSObject {
     /// Will display in the middle if isLoading is true
     public let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
 
-    public var isLoading: Bool = false {
-        didSet {
+    private var _isLoading: Bool = false
+    public var isLoading: Bool {
+        get {   _isLoading  }
+        set {
+            setIsLoading(newValue)
+        }
+    }
 
-            var numberOfAllItems = 0
+    public func setIsLoading(_ isLoading: Bool,
+                             animated: Bool = false) {
+        _isLoading = isLoading
 
-            if #available(iOS 13.0, *) {
-                let snapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>?
-                if let tvDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-                    snapshot = tvDataSource.snapshot()
-                } else if let cvDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-                    snapshot = cvDataSource.snapshot()
-                } else {
-                    snapshot = nil
-                }
+        var numberOfAllItems = 0
 
-                if let snapshot = snapshot {
-                    numberOfAllItems = snapshot.numberOfItems
-                }
+        if #available(iOS 13.0, *) {
+            let snapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>?
+            if let tvDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
+                snapshot = tvDataSource.snapshot()
+            } else if let cvDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
+                snapshot = cvDataSource.snapshot()
             } else {
-                let snapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
-                if let tvDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
-                    snapshot = tvDataSource.snapshot()
-                } else if let cvDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
-                    snapshot = cvDataSource.snapshot()
-                } else {
-                    snapshot = nil
-                }
-
-                if let snapshot = snapshot {
-                    numberOfAllItems = snapshot.numberOfItems
-                }
+                snapshot = nil
             }
 
-            if numberOfAllItems == 0 {
-                isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
-                if isLoading {
-                    emptyStateView.removeFromSuperview()
-                    listView.insertSubview(loadingIndicator, at: 0)
-                    loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-                    loadingIndicator.centerXAnchor.constraint(equalTo: listView.centerXAnchor).isActive = true
-                    loadingIndicator.centerYAnchor.constraint(equalTo: listView.centerYAnchor).isActive = true
+            if let snapshot = snapshot {
+                numberOfAllItems = snapshot.numberOfItems
+            }
+        } else {
+            let snapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
+            if let tvDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
+                snapshot = tvDataSource.snapshot()
+            } else if let cvDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
+                snapshot = cvDataSource.snapshot()
+            } else {
+                snapshot = nil
+            }
 
-                    UIView.animate(withDuration: 0.3) { [weak self] in
-                        self?.emptyStateView.alpha = 0.0
-                    }
-                } else {
-                    loadingIndicator.removeFromSuperview()
-                    listView.insertSubview(emptyStateView, at: 0)
-                    emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+            if let snapshot = snapshot {
+                numberOfAllItems = snapshot.numberOfItems
+            }
+        }
 
-                    let inset: UIEdgeInsets
+        let animationDuration = animated ? 0.3 : 0
+        if numberOfAllItems == 0 {
+            isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+            if isLoading {
+                emptyStateView.removeFromSuperview()
+                listView.insertSubview(loadingIndicator, at: 0)
+                loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+                loadingIndicator.centerXAnchor.constraint(equalTo: listView.centerXAnchor).isActive = true
+                loadingIndicator.centerYAnchor.constraint(equalTo: listView.centerYAnchor).isActive = true
 
-                    if #available(iOS 11.0, *) {
-                        inset = listView.adjustedContentInset
-                        emptyStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
-                            .isActive = true
-                        emptyStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
-                            .isActive = true
-                    } else {
-                        inset = listView.contentInset
-                        emptyStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
-                        emptyStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
-                    }
-
-                    emptyStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
-                    let height = listView.frame.height - inset.top - inset.bottom
-                    emptyStateView.heightAnchor.constraint(equalToConstant: height).isActive = true
-
-                    UIView.animate(withDuration: 0.3) { [weak self] in
-                        self?.emptyStateView.alpha = 1.0
-                    }
+                UIView.animate(withDuration: animationDuration) { [weak self] in
+                    self?.emptyStateView.alpha = 0.0
                 }
             } else {
-                loadingIndicator.stopAnimating()
-                if emptyStateView.superview != nil {
-                    UIView.animate(withDuration: 0.3, animations: { [weak self] in
-                        self?.emptyStateView.alpha = 0.0
-                    }, completion: { [weak self] success in
-                        if success {
-                            self?.emptyStateView.removeFromSuperview()
-                        }
-                    })
+                loadingIndicator.removeFromSuperview()
+                listView.insertSubview(emptyStateView, at: 0)
+                emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+
+                let inset: UIEdgeInsets
+
+                if #available(iOS 11.0, *) {
+                    inset = listView.adjustedContentInset
+                    emptyStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
+                        .isActive = true
+                    emptyStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
+                        .isActive = true
+                } else {
+                    inset = listView.contentInset
+                    emptyStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
+                    emptyStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
                 }
+
+                emptyStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
+                let height = listView.frame.height - inset.top - inset.bottom
+                emptyStateView.heightAnchor.constraint(equalToConstant: height).isActive = true
+
+                UIView.animate(withDuration: animationDuration) { [weak self] in
+                    self?.emptyStateView.alpha = 1.0
+                }
+            }
+        } else {
+            loadingIndicator.stopAnimating()
+            if emptyStateView.superview != nil {
+                UIView.animate(withDuration: animationDuration, animations: { [weak self] in
+                    self?.emptyStateView.alpha = 0.0
+                }, completion: { [weak self] success in
+                    if success {
+                        self?.emptyStateView.removeFromSuperview()
+                    }
+                })
             }
         }
     }
@@ -452,10 +461,11 @@ public extension IQList {
                 let isLoading = self.isLoading
 
                 if Thread.isMainThread {
-                    self.isLoading = isLoading  /// Updating the backgroundView
+                    self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
                 } else {
                     OperationQueue.main.addOperation {
-                        self.isLoading = isLoading  /// Updating the backgroundView on main thread
+                        self.setIsLoading(isLoading,
+                                          animated: animatingDifferences)    /// Updating the backgroundView on main thread
                     }
                 }
             }
@@ -472,10 +482,11 @@ public extension IQList {
                 let isLoading = self.isLoading
 
                 if Thread.isMainThread {
-                    self.isLoading = isLoading  /// Updating the backgroundView
+                    self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
                 } else {
                     OperationQueue.main.addOperation {
-                        self.isLoading = isLoading  /// Updating the backgroundView on main thread
+                        self.setIsLoading(isLoading,
+                                          animated: animatingDifferences)    /// Updating the backgroundView on main thread
                     }
                 }
             }
