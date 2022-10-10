@@ -452,10 +452,18 @@ public extension IQList {
             if let snapshot = batchSnapshot {
                 batchSnapshot = nil
 
-                if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-                    dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-                } else if let dataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-                    dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+                if #available(iOS 15.0, *), !animatingDifferences {
+                    if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
+                        dataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+                    } else if let dataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
+                        dataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+                    }
+                } else {
+                    if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
+                        dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+                    } else if let dataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
+                        dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+                    }
                 }
 
                 let isLoading = self.isLoading
