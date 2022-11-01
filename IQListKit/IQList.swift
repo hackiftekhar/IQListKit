@@ -59,31 +59,33 @@ public final class IQList: NSObject {
 
     public var removeDuplicatesWhenReloading: Bool = false
 
-    // MARK: - Empty States
-    public let emptyStateView: IQEmptyStateView = IQEmptyStateView(image: nil, title: nil, message: nil)
+    // MARK: - noItem States
+    public let noItemStateView: IQNoItemStateView = IQNoItemStateView(noItemImage: nil,
+                                                                      noItemTitle: nil,
+                                                                      noItemMessage: nil,
+                                                                      loadingMessage: nil)
     public var noItemImage: UIImage? {
-        get {   emptyStateView.image    }
-        set {   emptyStateView.image = newValue  }
+        get {   noItemStateView.noItemImage    }
+        set {   noItemStateView.noItemImage = newValue  }
     }
     public var noItemTitle: String? {
-        get {   emptyStateView.title    }
-        set {   emptyStateView.title = newValue  }
+        get {   noItemStateView.noItemTitle    }
+        set {   noItemStateView.noItemTitle = newValue  }
     }
     public var noItemMessage: String? {
-        get {   emptyStateView.message    }
-        set {   emptyStateView.message = newValue  }
+        get {   noItemStateView.noItemMessage    }
+        set {   noItemStateView.noItemMessage = newValue  }
+    }
+    public var loadingMessage: String? {
+        get {   noItemStateView.loadingMessage    }
+        set {   noItemStateView.loadingMessage = newValue  }
     }
     public func noItemAction(title: String?, target: Any?, action: Selector) {
-        emptyStateView.action(title: title, target: target, action: action)
+        noItemStateView.action(title: title, target: target, action: action)
     }
 
-    // MARK: - Loading
-    /// Will display in the middle if isLoading is true
-    public let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
-
-    private var _isLoading: Bool = false
     public var isLoading: Bool {
-        get {   _isLoading  }
+        get {   noItemStateView.isLoading  }
         set {
             setIsLoading(newValue)
         }
@@ -91,7 +93,6 @@ public final class IQList: NSObject {
 
     public func setIsLoading(_ isLoading: Bool,
                              animated: Bool = false) {
-        _isLoading = isLoading
 
         var numberOfAllItems = 0
 
@@ -123,56 +124,32 @@ public final class IQList: NSObject {
             }
         }
 
-        let animationDuration = animated ? 0.3 : 0
         if numberOfAllItems == 0 {
-            isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
-            if isLoading {
-                emptyStateView.removeFromSuperview()
-                listView.insertSubview(loadingIndicator, at: 0)
-                loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-                loadingIndicator.centerXAnchor.constraint(equalTo: listView.centerXAnchor).isActive = true
-                loadingIndicator.centerYAnchor.constraint(equalTo: listView.centerYAnchor).isActive = true
+            listView.insertSubview(noItemStateView, at: 0)
+            noItemStateView.translatesAutoresizingMaskIntoConstraints = false
 
-                UIView.animate(withDuration: animationDuration) { [weak self] in
-                    self?.emptyStateView.alpha = 0.0
-                }
+            let inset: UIEdgeInsets
+
+            if #available(iOS 11.0, *) {
+                inset = listView.adjustedContentInset
+                noItemStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
+                    .isActive = true
+                noItemStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
+                    .isActive = true
             } else {
-                loadingIndicator.removeFromSuperview()
-                listView.insertSubview(emptyStateView, at: 0)
-                emptyStateView.translatesAutoresizingMaskIntoConstraints = false
-
-                let inset: UIEdgeInsets
-
-                if #available(iOS 11.0, *) {
-                    inset = listView.adjustedContentInset
-                    emptyStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
-                        .isActive = true
-                    emptyStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
-                        .isActive = true
-                } else {
-                    inset = listView.contentInset
-                    emptyStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
-                    emptyStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
-                }
-
-                emptyStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
-                let height = listView.frame.height - inset.top - inset.bottom
-                emptyStateView.heightAnchor.constraint(equalToConstant: height).isActive = true
-
-                UIView.animate(withDuration: animationDuration) { [weak self] in
-                    self?.emptyStateView.alpha = 1.0
-                }
+                inset = listView.contentInset
+                noItemStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
+                noItemStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
             }
+
+            noItemStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
+            let height = listView.frame.height - inset.top - inset.bottom
+            noItemStateView.heightAnchor.constraint(equalToConstant: height).isActive = true
+
+            self.noItemStateView.setIsLoading(isLoading, haveRecords: false, animated: animated)
         } else {
-            loadingIndicator.stopAnimating()
-            if emptyStateView.superview != nil {
-                UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-                    self?.emptyStateView.alpha = 0.0
-                }, completion: { [weak self] success in
-                    if success {
-                        self?.emptyStateView.removeFromSuperview()
-                    }
-                })
+            if noItemStateView.superview != nil {
+                self.noItemStateView.setIsLoading(isLoading, haveRecords: true, animated: animated)
             }
         }
     }
@@ -439,6 +416,7 @@ public extension IQList {
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
     func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
+                        endLoadingOnUpdate: Bool = true,
                         completion: (() -> Void)? = nil) {
         if #available(iOS 13.0, *) {
             batchSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>()
@@ -466,7 +444,12 @@ public extension IQList {
                     }
                 }
 
-                let isLoading = self.isLoading
+                let isLoading: Bool
+                if endLoadingOnUpdate {
+                    isLoading = false
+                } else {
+                    isLoading = self.isLoading
+                }
 
                 if Thread.isMainThread {
                     self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
@@ -487,7 +470,12 @@ public extension IQList {
                     dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
                 }
 
-                let isLoading = self.isLoading
+                let isLoading: Bool
+                if endLoadingOnUpdate {
+                    isLoading = false
+                } else {
+                    isLoading = self.isLoading
+                }
 
                 if Thread.isMainThread {
                     self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView

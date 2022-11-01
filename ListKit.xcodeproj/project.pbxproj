@@ -24,6 +24,7 @@
 		C0D6D3B1259AFCB600F5B3C4 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6D3AF259AFCB600F5B3C4 /* UserCell.swift */; };
 		C0D6D3B2259AFCB600F5B3C4 /* UserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0D6D3B0259AFCB600F5B3C4 /* UserCell.xib */; };
 		C0D6D3B6259AFD2800F5B3C4 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6D3B5259AFD2800F5B3C4 /* UserViewController.swift */; };
+		C0EABEC32910FA9800F4C6FB /* InsetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EABEC22910FA9800F4C6FB /* InsetViewController.swift */; };
 		C0EF174725A33A5A0038C5E9 /* UserListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF174525A33A5A0038C5E9 /* UserListTableViewController.swift */; };
 		C0EF174825A33A5A0038C5E9 /* UserListTComplexTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF174625A33A5A0038C5E9 /* UserListTComplexTableViewController.swift */; };
 		C0EF175225A343C50038C5E9 /* MountainsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF175125A343C50038C5E9 /* MountainsViewController.swift */; };
@@ -57,6 +58,7 @@
 		C0D6D3AF259AFCB600F5B3C4 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		C0D6D3B0259AFCB600F5B3C4 /* UserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCell.xib; sourceTree = "<group>"; };
 		C0D6D3B5259AFD2800F5B3C4 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		C0EABEC22910FA9800F4C6FB /* InsetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetViewController.swift; sourceTree = "<group>"; };
 		C0EF174525A33A5A0038C5E9 /* UserListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserListTableViewController.swift; sourceTree = "<group>"; };
 		C0EF174625A33A5A0038C5E9 /* UserListTComplexTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserListTComplexTableViewController.swift; sourceTree = "<group>"; };
 		C0EF175125A343C50038C5E9 /* MountainsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MountainsViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				C0EF175125A343C50038C5E9 /* MountainsViewController.swift */,
 				C0EF175D25A348870038C5E9 /* InsertionSortViewController.swift */,
 				C08CDB2D264BB11A006BD338 /* UserListCollectionViewController.swift */,
+				C0EABEC22910FA9800F4C6FB /* InsetViewController.swift */,
 				C0A2AB76259A28CA00F06BFC /* Main.storyboard */,
 				C0A2AB79259A28CB00F06BFC /* Assets.xcassets */,
 				C0A2AB7B259A28CB00F06BFC /* LaunchScreen.storyboard */,
@@ -333,6 +336,7 @@
 				C0C98794283CB656005275CD /* CollectionUserStoryboardCell.swift in Sources */,
 				C0A2AB73259A28CA00F06BFC /* SceneDelegate.swift in Sources */,
 				C0EF175225A343C50038C5E9 /* MountainsViewController.swift in Sources */,
+				C0EABEC32910FA9800F4C6FB /* InsetViewController.swift in Sources */,
 				C0EF175A25A344590038C5E9 /* LabelCell.swift in Sources */,
 				C0EF175625A343FF0038C5E9 /* MountainsRawData.swift in Sources */,
 			);
