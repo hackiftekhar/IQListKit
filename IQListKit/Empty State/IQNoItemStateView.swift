@@ -151,11 +151,7 @@ public final class IQNoItemStateView: UIView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        if #available(iOS 13.0, *) {
-            label.textColor = UIColor.label
-        } else {
-            label.textColor = UIColor.darkText
-        }
+        label.textColor = UIColor.label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -166,11 +162,7 @@ public final class IQNoItemStateView: UIView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
-        if #available(iOS 13.0, *) {
-            label.textColor = UIColor.secondaryLabel
-        } else {
-            label.textColor = UIColor.gray
-        }
+        label.textColor = UIColor.secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -179,11 +171,7 @@ public final class IQNoItemStateView: UIView {
         let button = UIButton(type: .system)
         button.isHidden = true
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.buttonFontSize)
-        if #available(iOS 13.0, *) {
-            button.setTitleColor(.link, for: .normal)
-        } else {
-            button.setTitleColor(UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1), for: .normal)
-        }
+        button.setTitleColor(.link, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -212,7 +200,7 @@ public final class IQNoItemStateView: UIView {
     }()
 
     public let loadingIndicator: UIActivityIndicatorView = {
-        let loadingIndicator = UIActivityIndicatorView(style: .gray)
+        let loadingIndicator = UIActivityIndicatorView(style: .medium)
         loadingIndicator.hidesWhenStopped = false
         return loadingIndicator
     }()
@@ -223,11 +211,7 @@ public final class IQNoItemStateView: UIView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
-        if #available(iOS 13.0, *) {
-            label.textColor = UIColor.secondaryLabel
-        } else {
-            label.textColor = UIColor.gray
-        }
+        label.textColor = UIColor.secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

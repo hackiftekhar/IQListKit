@@ -96,10 +96,10 @@ extension UserListTComplexTableViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.performUpdates({
+        list.performUpdates({ _ in
 
             let section1 = IQSection(identifier: "firstSection")
-            list.append(section1)
+            list.append([section1])
 
             for index in 0..<users.count {
                 if index < defaultCellItems.count {

@@ -49,23 +49,14 @@ public final class IQContextualAction: NSObject {
 
         case destructive = 1
 
-        @available(iOS 11.0, *)
         var contextualStyle: UIContextualAction.Style {
             switch self {
             case .normal:       return .normal
             case .destructive:   return .destructive
             }
         }
-
-        var rowStyle: UITableViewRowAction.Style {
-            switch self {
-            case .normal:       return .normal
-            case .destructive:  return .destructive
-            }
-        }
     }
 
-    @available(iOS 11.0, *)
     func contextualAction() -> UIContextualAction {
 
         let action = UIContextualAction(style: style.contextualStyle,
@@ -77,22 +68,6 @@ public final class IQContextualAction: NSObject {
             action.backgroundColor = backgroundColor
         }
         action.image = image
-
-        return action
-    }
-
-    func rowAction() -> UITableViewRowAction {
-        let action = UITableViewRowAction(style: style.rowStyle,
-                                          title: title) { (_, _) in
-            let fakeCompletion: ((Bool) -> Void) = { _ in
-            }
-
-            self.handler(self, fakeCompletion)
-        }
-
-        if let backgroundColor = backgroundColor {
-            action.backgroundColor = backgroundColor
-        }
 
         return action
     }

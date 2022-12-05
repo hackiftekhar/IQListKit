@@ -21,39 +21,25 @@
 //  THE SOFTWARE.
 
 import UIKit
-import DiffableDataSources
-
-private protocol _TableViewDiffableDataSource where Self: UITableViewDataSource, Self: UITableViewDelegate {
-    var delegate: IQListViewDelegate? { get set }
-    var dataSource: IQListViewDataSource? { get set }
-    var defaultRowAnimation: UITableView.RowAnimation { get set }
-    var clearsSelectionOnDidSelect: Bool { get set }
-}
-
-@available(iOS 13.0, *)
-extension IQTableViewDiffableDataSource: _TableViewDiffableDataSource {}
-@available(iOS, deprecated: 13.0)
-extension DDSTableViewDiffableDataSource: _TableViewDiffableDataSource {}
-
-private protocol _CollectionViewDiffableDataSource
-where Self: UICollectionViewDataSource, Self: UICollectionViewDelegate {
-    var delegate: IQListViewDelegate? { get set }
-    var dataSource: IQListViewDataSource? { get set }
-    var clearsSelectionOnDidSelect: Bool { get set }
-}
-@available(iOS 13.0, *)
-extension IQCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource {}
-@available(iOS, deprecated: 13.0)
-extension DDSCollectionViewDiffableDataSource: _CollectionViewDiffableDataSource {}
 
 public final class IQList: NSObject {
+
+    public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>
 
     // MARK: - Public Properties
     public private(set) var listView: IQListView
     public var clearsSelectionOnDidSelect: Bool = true {
         didSet {
-            tableViewDataSource?.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
-            collectionViewDataSource?.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
+            diffableDataSource.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
+        }
+    }
+
+    public var defaultRowAnimation: UITableView.RowAnimation {
+        get {
+            diffableDataSource.defaultRowAnimation
+        }
+        set {
+            diffableDataSource.defaultRowAnimation = newValue
         }
     }
 
@@ -94,53 +80,18 @@ public final class IQList: NSObject {
     public func setIsLoading(_ isLoading: Bool,
                              animated: Bool = false) {
 
-        var numberOfAllItems = 0
-
-        if #available(iOS 13.0, *) {
-            let snapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>?
-            if let tvDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-                snapshot = tvDataSource.snapshot()
-            } else if let cvDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-                snapshot = cvDataSource.snapshot()
-            } else {
-                snapshot = nil
-            }
-
-            if let snapshot = snapshot {
-                numberOfAllItems = snapshot.numberOfItems
-            }
-        } else {
-            let snapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
-            if let tvDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
-                snapshot = tvDataSource.snapshot()
-            } else if let cvDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
-                snapshot = cvDataSource.snapshot()
-            } else {
-                snapshot = nil
-            }
-
-            if let snapshot = snapshot {
-                numberOfAllItems = snapshot.numberOfItems
-            }
-        }
+        let snapshot: IQDiffableDataSourceSnapshot = self.snapshot()
+        let numberOfAllItems = snapshot.numberOfItems
 
         if numberOfAllItems == 0 {
             listView.insertSubview(noItemStateView, at: 0)
             noItemStateView.translatesAutoresizingMaskIntoConstraints = false
 
-            let inset: UIEdgeInsets
-
-            if #available(iOS 11.0, *) {
-                inset = listView.adjustedContentInset
-                noItemStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
-                    .isActive = true
-                noItemStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
-                    .isActive = true
-            } else {
-                inset = listView.contentInset
-                noItemStateView.leadingAnchor.constraint(equalTo: listView.leadingAnchor).isActive = true
-                noItemStateView.trailingAnchor.constraint(equalTo: listView.trailingAnchor).isActive = true
-            }
+            let inset: UIEdgeInsets = listView.adjustedContentInset
+            noItemStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
+                .isActive = true
+            noItemStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
+                .isActive = true
 
             noItemStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
             let height = listView.frame.height - inset.top - inset.bottom
@@ -154,30 +105,8 @@ public final class IQList: NSObject {
         }
     }
 
-    @available(iOS 13.0, *)
-    public func snapshot() -> NSDiffableDataSourceSnapshot<IQSection, IQItem> {
-        if let tableViewDataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-            return tableViewDataSource.snapshot()
-        } else if let collectionViewDataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-            return collectionViewDataSource.snapshot()
-        } else {
-            fatalError("No snapshot found")
-        }
-    }
-
-    @available(iOS, deprecated: 13.0)
-    public func ddsSnapshot() -> DiffableDataSourceSnapshot<IQSection, IQItem> {
-        if let tableViewDataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
-            return tableViewDataSource.snapshot()
-        } else if let collectionViewDataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
-            return collectionViewDataSource.snapshot()
-        } else {
-            if #available(iOS 13.0, *) {
-                fatalError("Please use snapshot() method for iOS 13.0 and above")
-            } else {
-                fatalError("No snapshot found")
-            }
-        }
+    public func snapshot() -> IQDiffableDataSourceSnapshot {
+        return diffableDataSource.snapshot()
     }
 
     // MARK: - Private Properties
@@ -185,22 +114,10 @@ public final class IQList: NSObject {
     internal var registeredCells: [UIView.Type] = [UIView.Type]()
     internal var registeredHeaderFooterViews: [UIView.Type] = [UIView.Type]()
 
-    /// This tweak is written due to old iOS version compatibility
-    private var _privateBatchSnapshot: Any?
-    @available(iOS 13.0, *)
-    private var batchSnapshot: NSDiffableDataSourceSnapshot<IQSection, IQItem>? {
-        get {
-            return _privateBatchSnapshot as? NSDiffableDataSourceSnapshot
-        }
-        set {
-            _privateBatchSnapshot = newValue
-        }
-    }
+    internal let reloadQueue: DispatchQueue?
+    internal var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
 
-    @available(iOS, deprecated: 13.0)
-    private var ddsBatchSnapshot: DiffableDataSourceSnapshot<IQSection, IQItem>?
-    private var tableViewDataSource: _TableViewDiffableDataSource?
-    private var collectionViewDataSource: _CollectionViewDiffableDataSource?
+    internal private(set) var diffableDataSource: IQDiffableDataSource!
 
     // MARK: - Initialization
 
@@ -209,12 +126,14 @@ public final class IQList: NSObject {
     ///   - listView: UITableView or UICollectionView
     ///   - delegateDataSource: the delegate and dataSource of the IQListView
     ///   - defaultRowAnimation: default animation when reloading table
+    ///   - reloadQueue: queue to reload the data
     public convenience init(listView: IQListView,
                             delegateDataSource: IQListViewDelegateDataSource? = nil,
-                            defaultRowAnimation: UITableView.RowAnimation = .fade) {
+                            defaultRowAnimation: UITableView.RowAnimation = .fade,
+                            reloadQueue: DispatchQueue? = nil) {
         self.init(listView: listView,
                   delegate: delegateDataSource, dataSource: delegateDataSource,
-                  defaultRowAnimation: defaultRowAnimation)
+                  defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
     }
 
     /// Initialization
@@ -223,20 +142,27 @@ public final class IQList: NSObject {
     ///   - delegate: the delegate of the IQListView
     ///   - dataSource: the dataSource of the IQListView
     ///   - defaultRowAnimation: default animation when reloading table
+    ///   - reloadQueue: queue to reload the data
     public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
-                dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade) {
+                dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade,
+                reloadQueue: DispatchQueue? = nil) {
 
         self.listView = listView
+        self.reloadQueue = reloadQueue
         super.init()
 
         if let tableView = listView as? UITableView {
 
-            initializeTableViewDataSource(tableView, delegate: delegate, dataSource: dataSource,
+            diffableDataSource = initializeTableViewDataSource(tableView,
+                                                               delegate: delegate, dataSource: dataSource,
                                           defaultRowAnimation: defaultRowAnimation)
 
         } else if let collectionView = listView as? UICollectionView {
 
-            initializeCollectionViewDataSource(collectionView, delegate: delegate, dataSource: dataSource)
+            diffableDataSource = initializeCollectionViewDataSource(collectionView,
+                                                                    delegate: delegate, dataSource: dataSource)
+        } else {
+            fatalError("Unable to initializa ListKit")
         }
     }
 
@@ -248,7 +174,7 @@ public final class IQList: NSObject {
     ///   - defaultRowAnimation: default animation when reloading table
     private func initializeTableViewDataSource(_ tableView: UITableView, delegate: IQListViewDelegate?,
                                                dataSource: IQListViewDataSource?,
-                                               defaultRowAnimation: UITableView.RowAnimation) {
+                                               defaultRowAnimation: UITableView.RowAnimation) -> IQDiffableDataSource {
 
         typealias CellProvider = (UITableView, IndexPath, IQItem) -> UITableViewCell?
 
@@ -265,27 +191,21 @@ public final class IQList: NSObject {
                     """)
             }
 
-            self?.tableViewDataSource?.delegate?.listView(tableView, modifyCell: cell, at: indexPath)
+            self?.diffableDataSource.delegate?.listView(tableView, modifyCell: cell, at: indexPath)
             return cell
         }
 
-        if #available(iOS 13.0, *) {
-            let tableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
-                                                                cellProvider: provider)
-            tableViewDataSource = tableDataSource
-        } else {
-            let tableDataSource = DDSTableViewDiffableDataSource(tableView: tableView,
-                                                                 cellProvider: provider)
-            tableViewDataSource = tableDataSource
-        }
+        let tableViewDiffableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
+                                                                        cellProvider: provider)
 
-        tableView.delegate = tableViewDataSource
-        tableView.dataSource = tableViewDataSource
-        tableViewDataSource?.defaultRowAnimation = defaultRowAnimation
-        tableViewDataSource?.delegate = delegate
-        tableViewDataSource?.dataSource = dataSource
+        tableView.delegate = tableViewDiffableDataSource
+        tableView.dataSource = tableViewDiffableDataSource
+        tableViewDiffableDataSource.defaultRowAnimation = defaultRowAnimation
+        tableViewDiffableDataSource.delegate = delegate
+        tableViewDiffableDataSource.dataSource = dataSource
 
         registerHeaderFooter(type: IQTableViewHeaderFooterView.self, registerType: .class)
+        return tableViewDiffableDataSource
     }
 
     /// Initialize the IQList with the UITableView
@@ -295,7 +215,7 @@ public final class IQList: NSObject {
     ///   - dataSource: the dataSource of the IQListView
     private func initializeCollectionViewDataSource(_ collectionView: UICollectionView,
                                                     delegate: IQListViewDelegate?,
-                                                    dataSource: IQListViewDataSource?) {
+                                                    dataSource: IQListViewDataSource?) -> IQDiffableDataSource {
 
         typealias CellProvider = (UICollectionView, IndexPath, IQItem) -> UICollectionViewCell?
 
@@ -311,181 +231,21 @@ public final class IQList: NSObject {
                     """)
             }
 
-            self?.collectionViewDataSource?.delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
+            self?.diffableDataSource.delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
             return cell
         }
 
-        if #available(iOS 13.0, *) {
-            let collectionDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
-                                                                          cellProvider: provider)
-            collectionViewDataSource = collectionDataSource
-        } else {
-            let collectionDataSource = DDSCollectionViewDiffableDataSource(collectionView: collectionView,
-                                                                           cellProvider: provider)
-            collectionViewDataSource = collectionDataSource
-        }
+        let collectionViewDiffableDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
+                                                                                  cellProvider: provider)
 
-        collectionViewDataSource?.delegate = delegate
-        collectionViewDataSource?.dataSource = dataSource
-        collectionView.delegate = collectionViewDataSource
-        collectionView.dataSource = collectionViewDataSource
+        collectionView.delegate = collectionViewDiffableDataSource
+        collectionView.dataSource = collectionViewDiffableDataSource
         collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
+        collectionViewDiffableDataSource.delegate = delegate
+        collectionViewDiffableDataSource.dataSource = dataSource
 
         registerHeaderFooter(type: UICollectionReusableView.self, registerType: .class)
         registerHeaderFooter(type: IQCollectionViewHeaderFooter.self, registerType: .class)
-    }
-}
-
-// MARK: - Update the list
-/// Note that all these methods can also be used in a background threads since they all
-/// methods deal with the models, not any UI elements.
-/// NSDiffableDataSourceSnapshot.apply is also background thread safe
-// swiftlint:disable file_length
-public extension IQList {
-
-    /// Append the models to the given section
-    /// This method can also be used in background thread
-    /// - Parameters:
-    ///   - type: Type of the IQModelableCell
-    ///   - models: the models of type IQModelableCell.Model
-    ///   - section: section in which we'll be adding the models
-    // swiftlint:disable cyclomatic_complexity
-    func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model], section: IQSection? = nil) {
-
-        if registeredCells.contains(where: { $0 == type}) == false {
-            registerCell(type: type, registerType: .default)
-        }
-
-        var items: [IQItem] = []
-        for model in models {
-            let item = IQItem(type, model: model)
-            items.append(item)
-        }
-
-        if removeDuplicatesWhenReloading {
-            if #available(iOS 13.0, *) {
-                if let existingItems = batchSnapshot?.itemIdentifiers {
-                    let result = items.removeDuplicate(existingElements: existingItems)
-                    items = result.unique
-                    if !result.duplicate.isEmpty {
-                        let duplicate = result.duplicate.compactMap { $0.model }
-                        print("IQListKit: Ignoring \(duplicate.count) duplicate elements.\n\(duplicate))")
-                    }
-                }
-            } else {
-                if let existingItems = ddsBatchSnapshot?.itemIdentifiers {
-                    let result = items.removeDuplicate(existingElements: existingItems)
-                    items = result.unique
-                    if !result.duplicate.isEmpty {
-                        let duplicate = result.duplicate.compactMap { $0.model }
-                        print("IQListKit: Ignoring \(duplicate.count) duplicate elements.\n\(duplicate))")
-                    }
-                }
-            }
-        }
-
-        if #available(iOS 13.0, *) {
-            if let section = section {
-                batchSnapshot?.appendItems(items, toSection: section)
-            } else {
-                batchSnapshot?.appendItems(items)
-            }
-        } else {
-            if let section = section {
-                ddsBatchSnapshot?.appendItems(items, toSection: section)
-            } else {
-                ddsBatchSnapshot?.appendItems(items)
-            }
-        }
-    }
-
-    /// Appends a section to the list
-    /// This method can also be used in background thread
-    /// - Parameter section: section which needs to be added to the list
-    func append(_ section: IQSection) {
-        if #available(iOS 13.0, *) {
-            batchSnapshot?.appendSections([section])
-        } else {
-            ddsBatchSnapshot?.appendSections([section])
-        }
-    }
-
-    /// Performs the list reload
-    /// - Parameters:
-    ///   - updates: update block which will be called to generate the snapshot
-    ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
-    ///   - completion: the completion block will be called after reloading the list
-    func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
-                        endLoadingOnUpdate: Bool = true,
-                        completion: (() -> Void)? = nil) {
-        if #available(iOS 13.0, *) {
-            batchSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>()
-        } else {
-            ddsBatchSnapshot = DiffableDataSourceSnapshot<IQSection, IQItem>()
-        }
-
-        updates()
-
-        if #available(iOS 13.0, *) {
-            if let snapshot = batchSnapshot {
-                batchSnapshot = nil
-
-                if #available(iOS 15.0, *), !animatingDifferences {
-                    if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-                        dataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
-                    } else if let dataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-                        dataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
-                    }
-                } else {
-                    if let dataSource = tableViewDataSource as? IQTableViewDiffableDataSource {
-                        dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-                    } else if let dataSource = collectionViewDataSource as? IQCollectionViewDiffableDataSource {
-                        dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-                    }
-                }
-
-                let isLoading: Bool
-                if endLoadingOnUpdate {
-                    isLoading = false
-                } else {
-                    isLoading = self.isLoading
-                }
-
-                if Thread.isMainThread {
-                    self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
-                } else {
-                    OperationQueue.main.addOperation {
-                        self.setIsLoading(isLoading,
-                                          animated: animatingDifferences)    /// Updating the backgroundView on main thread
-                    }
-                }
-            }
-        } else {
-            if let snapshot = ddsBatchSnapshot {
-                ddsBatchSnapshot = nil
-
-                if let dataSource = tableViewDataSource as? DDSTableViewDiffableDataSource {
-                    dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-                } else if let dataSource = collectionViewDataSource as? DDSCollectionViewDiffableDataSource {
-                    dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-                }
-
-                let isLoading: Bool
-                if endLoadingOnUpdate {
-                    isLoading = false
-                } else {
-                    isLoading = self.isLoading
-                }
-
-                if Thread.isMainThread {
-                    self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
-                } else {
-                    OperationQueue.main.addOperation {
-                        self.setIsLoading(isLoading,
-                                          animated: animatingDifferences)    /// Updating the backgroundView on main thread
-                    }
-                }
-            }
-        }
+        return collectionViewDiffableDataSource
     }
 }

@@ -1,5 +1,5 @@
 //
-//  IQCommonTableViewDiffableDataSource.swift
+//  IQTableViewDiffableDataSource.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,36 +22,44 @@
 
 import UIKit
 
-final class IQCommonTableViewDiffableDataSource {
+// MARK: - Improved DiffableDataSource of UITableView
+
+internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
     var clearsSelectionOnDidSelect = true
     private var contextMenuPreviewIndexPath: IndexPath?
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: IQSection) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let section: IQSection = snapshot().sectionIdentifiers[section]
         return section.header
     }
 
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: IQSection) -> String? {
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        let section: IQSection = snapshot().sectionIdentifiers[section]
         return section.footer
     }
 
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         dataSource?.sectionIndexTitles(tableView)
     }
 }
 
-extension IQCommonTableViewDiffableDataSource {
+extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: IQSection) -> CGFloat {
-        if let headerSize = section.headerSize {
+    // MARK: - Header Footer
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        let section: IQSection = snapshot().sectionIdentifiers[section]
+
+        if let headerSize: CGSize = section.headerSize {
             return headerSize.height
-        } else if let headerView = section.headerView {
+        } else if let headerView: UIView = section.headerView {
             return headerView.frame.height
         } else if section.header != nil {
             return tableView.sectionHeaderHeight
@@ -60,10 +68,12 @@ extension IQCommonTableViewDiffableDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: IQSection) -> CGFloat {
-        if let footerSize = section.footerSize {
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        let section: IQSection = snapshot().sectionIdentifiers[section]
+
+        if let footerSize: CGSize = section.footerSize {
             return footerSize.height
-        } else if let footerView = section.footerView {
+        } else if let footerView: UIView = section.footerView {
             return footerView.frame.height
         } else if section.footer != nil {
             return tableView.sectionFooterHeight
@@ -72,10 +82,12 @@ extension IQCommonTableViewDiffableDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: IQSection) -> CGFloat {
-        if let headerSize = section.headerSize {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let section: IQSection = snapshot().sectionIdentifiers[section]
+
+        if let headerSize: CGSize = section.headerSize {
             return headerSize.height
-        } else if let headerView = section.headerView {
+        } else if let headerView: UIView = section.headerView {
             return headerView.frame.height
         } else if section.header != nil {
             return tableView.sectionHeaderHeight
@@ -84,10 +96,12 @@ extension IQCommonTableViewDiffableDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: IQSection) -> CGFloat {
-        if let footerSize = section.footerSize {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        let section: IQSection = snapshot().sectionIdentifiers[section]
+
+        if let footerSize: CGSize = section.footerSize {
             return footerSize.height
-        } else if let footerView = section.footerView {
+        } else if let footerView: UIView = section.footerView {
             return footerView.frame.height
         } else if section.footer != nil {
             return tableView.sectionFooterHeight
@@ -96,21 +110,23 @@ extension IQCommonTableViewDiffableDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection sectionIndex: Int, section: IQSection) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let aSection: IQSection = snapshot().sectionIdentifiers[section]
 
-        let view = dataSource?.listView(tableView, headerFor: section, at: sectionIndex)
-        if let headerView = view ?? section.headerView {
-            delegate?.listView(tableView, modifyHeader: headerView, section: section, at: sectionIndex)
+        let view: UIView? = dataSource?.listView(tableView, headerFor: aSection, at: section)
+        if let headerView: UIView = view ?? aSection.headerView {
+            delegate?.listView(tableView, modifyHeader: headerView, section: aSection, at: section)
             return headerView
         }
         return nil
     }
 
-    func tableView(_ tableView: UITableView, viewForFooterInSection sectionIndex: Int, section: IQSection) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let aSection: IQSection = snapshot().sectionIdentifiers[section]
 
-        let view = dataSource?.listView(tableView, footerFor: section, at: sectionIndex)
-        if let footerView = view ?? section.footerView {
-            delegate?.listView(tableView, modifyFooter: footerView, section: section, at: sectionIndex)
+        let view: UIView? = dataSource?.listView(tableView, footerFor: aSection, at: section)
+        if let footerView: UIView = view ?? aSection.footerView {
+            delegate?.listView(tableView, modifyFooter: footerView, section: aSection, at: section)
             return footerView
         }
         return nil
@@ -118,23 +134,23 @@ extension IQCommonTableViewDiffableDataSource {
 
     // MARK: - Cell
 
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt item: IQItem?) -> CGFloat {
-
-        guard let item = item, let type = item.type as? IQCellSizeProvider.Type else {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+                let type: IQCellSizeProvider.Type = item.type as? IQCellSizeProvider.Type else {
             return UITableView.automaticDimension
         }
+
         return type.estimatedSize(for: item.model, listView: tableView).height
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath, item: IQItem?) -> CGFloat {
-
-        guard let item = item else {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
             return UITableView.automaticDimension
         }
 
-        if let size = dataSource?.listView(tableView, size: item, at: indexPath) {
+        if let size: CGSize = dataSource?.listView(tableView, size: item, at: indexPath) {
             return size.height
-        } else if let type = item.type as? IQCellSizeProvider.Type {
+        } else if let type: IQCellSizeProvider.Type = item.type as? IQCellSizeProvider.Type {
             return type.size(for: item.model, listView: tableView).height
         }
 
@@ -142,29 +158,28 @@ extension IQCommonTableViewDiffableDataSource {
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-       delegate?.listView(tableView, willDisplay: cell, at: indexPath)
+        delegate?.listView(tableView, willDisplay: cell, at: indexPath)
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         delegate?.listView(tableView, didEndDisplaying: cell, at: indexPath)
     }
 
-    func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath, item: IQItem?) -> Int {
+    func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
 
-        guard let item = item else { return 0 }
-
-        if let type = item.type as? IQCellSizeProvider.Type {
-            return type.indentationLevel(for: item.model, listView: tableView)
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let type: IQCellSizeProvider.Type = item.type as? IQCellSizeProvider.Type else {
+            return 0
         }
 
-        return 0
+        return type.indentationLevel(for: item.model, listView: tableView)
     }
 
     // MARK: - Selection
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
 
-        guard let cell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
             return true
         }
 
@@ -172,28 +187,30 @@ extension IQCommonTableViewDiffableDataSource {
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-
-        guard let cell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
             return indexPath
         }
 
         return cell.isSelectable ? indexPath : nil
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath, item: IQItem?) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         if clearsSelectionOnDidSelect {
             tableView.deselectRow(at: indexPath, animated: true)
         }
 
-        guard let item = item else { return }
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
 
         delegate?.listView(tableView, didSelect: item, at: indexPath)
     }
 
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath, item: IQItem?) {
-
-        guard let item = item else { return }
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
 
         delegate?.listView(tableView, didDeselect: item, at: indexPath)
     }
@@ -201,47 +218,18 @@ extension IQCommonTableViewDiffableDataSource {
     // MARK: - Swipe actions
     func tableView(_ tableView: UITableView,
                    editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        if #available(iOS 11.0, *) {
-            return .none
-        } else {
-
-            guard let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider else { return .none }
-
-            if cell.trailingSwipeActions() != nil {
-                // editActionsForRowAt does not getting called if we provide .none
-                // So adding it as a workaround, the delete button will not be shown btw
-                return .delete
-            } else {
-                return .none
-            }
-        }
+        return .none
     }
 
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-
-        guard let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions = cell.trailingSwipeActions() else {
-            return nil
-        }
-
-        var rowActions = [UITableViewRowAction]()
-
-        for action in swipeActions {
-            rowActions.append(action.rowAction())
-        }
-
-        return rowActions
-    }
-
-    @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions = cell.leadingSwipeActions() else {
+
+        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let swipeActions: [IQContextualAction] = cell.leadingSwipeActions() else {
             return nil
         }
 
-        var contextualSwipeActions = [UIContextualAction]()
+        var contextualSwipeActions: [UIContextualAction] = [UIContextualAction]()
 
         for action in swipeActions {
             contextualSwipeActions.append(action.contextualAction())
@@ -250,16 +238,15 @@ extension IQCommonTableViewDiffableDataSource {
         return UISwipeActionsConfiguration(actions: contextualSwipeActions)
     }
 
-    @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
-        guard let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions = cell.trailingSwipeActions() else {
+        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let swipeActions: [IQContextualAction] = cell.trailingSwipeActions() else {
             return nil
         }
 
-        var contextualSwipeActions = [UIContextualAction]()
+        var contextualSwipeActions: [UIContextualAction] = [UIContextualAction]()
 
         for action in swipeActions {
             contextualSwipeActions.append(action.contextualAction())
@@ -270,13 +257,12 @@ extension IQCommonTableViewDiffableDataSource {
 
     // MARK: - Context menu
 
-    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
 
-        guard let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let configuration = cell.contextMenuConfiguration() else {
+        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let configuration: UIContextMenuConfiguration = cell.contextMenuConfiguration() else {
             return nil
         }
 
@@ -284,41 +270,38 @@ extension IQCommonTableViewDiffableDataSource {
         return configuration
     }
 
-    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    previewForHighlightingContextMenuWithConfiguration
                     configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 
-        guard let indexPath = contextMenuPreviewIndexPath,
-              let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let view = cell.contextMenuPreviewView(configuration: configuration) else {
+        guard let indexPath: IndexPath = contextMenuPreviewIndexPath,
+              let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let view: UIView = cell.contextMenuPreviewView(configuration: configuration) else {
             return nil
         }
 
         return UITargetedPreview(view: view)
     }
 
-    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
                    animator: UIContextMenuInteractionCommitAnimating) {
 
-        guard let indexPath = contextMenuPreviewIndexPath,
-              let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider else {
+        guard let indexPath: IndexPath = contextMenuPreviewIndexPath,
+              let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider else {
             return
         }
 
         cell.performPreviewAction(configuration: configuration, animator: animator)
     }
 
-    @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView,
                    previewForDismissingContextMenuWithConfiguration
                     configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 
-        guard let indexPath = contextMenuPreviewIndexPath,
-              let cell = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let view = cell.contextMenuPreviewView(configuration: configuration) else {
+        guard let indexPath: IndexPath = contextMenuPreviewIndexPath,
+              let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let view: UIView = cell.contextMenuPreviewView(configuration: configuration) else {
             return nil
         }
 

@@ -107,10 +107,10 @@ extension InsetViewController {
         let dipatchTime: Double = (users.count == 0) ? 0 : 1
 
         DispatchQueue.main.asyncAfter(deadline: .now() + dipatchTime, execute: { [self] in
-            list.performUpdates({
+            list.performUpdates({ _ in
 
                 let section1 = IQSection(identifier: "firstSection")
-                list.append(section1)
+                list.append([section1])
 
                 for index in 0..<users.count {
                     if index < defaultCellItems.count {

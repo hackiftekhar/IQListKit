@@ -392,7 +392,6 @@ class UserCell: UITableViewCell, IQModelableCell {
 
 #### - `func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
 #### - `func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?`
-#### - `func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?`
 Well, this method also mostly return values based on the cell and it's model, we have moved these configurations to cell. This is part of the **IQCellActionsProvider** protocol and we can override the default behaviour.
      
 ```swift

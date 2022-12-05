@@ -34,13 +34,14 @@ public extension IQList {
         case storyboard
     }
 
+    // swiftlint:disable function_body_length
     /// register a Cell manually
     /// - Parameters:
     ///   - type: Type of the cell
     ///   - bundle: The bundle in which the cell is present.
     ///   - registerType: The cell registration type
-    // swiftlint:disable function_body_length
-    func registerCell<T: IQModelableCell>(type: T.Type, registerType: RegisterType, bundle: Bundle = .main) {
+    func registerCell<T: IQModelableCell>(type: T.Type,
+                                          registerType: RegisterType, bundle: Bundle = .main) {
 
         guard registeredCells.contains(where: { $0 == type}) == false else {
             return

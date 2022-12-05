@@ -71,7 +71,7 @@ extension UserListCollectionViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.performUpdates({
+        list.performUpdates({ _ in
 
 //            let firstView = UIView()
 //            firstView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -83,7 +83,7 @@ extension UserListCollectionViewController {
 
             let section1 = IQSection(identifier: "firstSection", header: "First Section")
 //            let section1 = IQSection(identifier: "firstSection", header: "First Section", headerView: firstView)
-            list.append(section1)
+            list.append([section1])
 
             for user in users {
                 if Bool.random() {
@@ -95,7 +95,7 @@ extension UserListCollectionViewController {
 
             let section2 = IQSection(identifier: "secondSection", header: "Second Section")
 //            let section2 = IQSection(identifier: "secondSection", header: "Second Section", headerView: secondView)
-            list.append(section2)
+            list.append([section2])
 
             for user in users2 {
                 if Bool.random() {

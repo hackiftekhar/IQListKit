@@ -74,15 +74,15 @@ extension UserListTableViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.performUpdates({
+        list.performUpdates({ _ in
 
             let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
-            list.append(section1)
+            list.append([section1])
 
             list.append(UserCell.self, models: users, section: section1)
 
             let section2 = IQSection(identifier: "secondSection", header: users2.count > 0 ? "Second Section" : nil)
-            list.append(section2)
+            list.append([section2])
 
             list.append(UserCell.self, models: users2, section: section2)
 

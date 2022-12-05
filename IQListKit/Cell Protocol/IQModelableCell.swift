@@ -70,18 +70,14 @@ public extension IQModelableCell {
 
 public extension IQCellActionsProvider {
 
-    @available(iOS 11.0, *)
     func leadingSwipeActions() -> [IQContextualAction]? { return nil }
 
     func trailingSwipeActions() -> [IQContextualAction]? { return nil }
 
-    @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? { return nil }
 
-    @available(iOS 13.0, *)
     func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? { return nil }
 
-    @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,
                               animator: UIContextMenuInteractionCommitAnimating) {}
 }

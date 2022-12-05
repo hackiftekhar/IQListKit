@@ -38,10 +38,8 @@ public final class IQCollectionViewHeaderFooter: UICollectionReusableView {
         textLabel.font = Self.defaultFont
         if let defaultTextColor = Self.defaultTextColor {
             textLabel.textColor = defaultTextColor
-        } else if #available(iOS 13.0, *) {
-            textLabel.textColor = UIColor.label
         } else {
-            textLabel.textColor = UIColor.darkText
+            textLabel.textColor = UIColor.label
         }
         self.addSubview(textLabel)
 

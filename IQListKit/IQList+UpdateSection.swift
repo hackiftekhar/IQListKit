@@ -1,5 +1,5 @@
 //
-//  IQItem.swift
+//  IQList+UpdateSection.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,38 +20,32 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
+import Foundation
 
-// MARK: - Item model of the table/collection
+// MARK: - Update the list
+/// Note that all these methods can also be used in a background threads since they all
+/// methods deal with the models, not any UI elements.
+/// NSDiffableDataSourceSnapshot.apply is also background thread safe
+public extension IQList {
 
-public final class IQItem: Hashable {
-
-    public static func == (lhs: IQItem, rhs: IQItem) -> Bool {
-        return lhs.model == rhs.model
+    /// Appends a section to the list
+    /// This method can also be used in background thread
+    /// - Parameter sections: sections which needs to be added to the list
+    func append(_ sections: [IQSection], beforeSection: IQSection? = nil, afterSection: IQSection? = nil) {
+        if let beforeSection = beforeSection {
+            batchSnapshot.insertSections(sections, beforeSection: beforeSection)
+        } else if let afterSection = afterSection {
+            batchSnapshot.insertSections(sections, afterSection: afterSection)
+        } else {
+            batchSnapshot.appendSections(sections)
+        }
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(model)
+    func reload(_ sections: [IQSection]) {
+        batchSnapshot.reloadSections(sections)
     }
 
-    /// Type of the cell
-    public private(set) var type: IQListCell.Type
-
-    /// Model of the cell
-    public private(set) var model: AnyHashable?
-
-    /// Updating the model
-    public func update<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
-        self.type = type
-        self.model = model
-    }
-
-    /// Initialize the item
-    /// - Parameters:
-    ///   - type: type of the Cell
-    ///   - model: Model of the cell
-    public init<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
-        self.type = type
-        self.model = model
+    func delete(_ sections: [IQSection]) {
+        batchSnapshot.deleteSections(sections)
     }
 }

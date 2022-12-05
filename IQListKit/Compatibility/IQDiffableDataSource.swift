@@ -1,5 +1,5 @@
 //
-//  IQItem.swift
+//  IQDiffableDataSource.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,36 +22,34 @@
 
 import UIKit
 
-// MARK: - Item model of the table/collection
+internal protocol IQDiffableDataSource
+where Self: UIScrollViewDelegate {
+    var delegate: IQListViewDelegate? { get set }
+    var dataSource: IQListViewDataSource? { get set }
+    var clearsSelectionOnDidSelect: Bool { get set }
+    var defaultRowAnimation: UITableView.RowAnimation { get set }
 
-public final class IQItem: Hashable {
+    func snapshot() -> IQList.IQDiffableDataSourceSnapshot
 
-    public static func == (lhs: IQItem, rhs: IQItem) -> Bool {
-        return lhs.model == rhs.model
-    }
+    @available(iOS 15.0, tvOS 15.0, *)
+    func applySnapshotUsingReloadData(_ snapshot: IQList.IQDiffableDataSourceSnapshot,
+                                      completion: (() -> Void)?)
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(model)
-    }
+    func apply(_ snapshot: IQList.IQDiffableDataSourceSnapshot,
+               animatingDifferences: Bool,
+               completion: (() -> Void)?)
+}
 
-    /// Type of the cell
-    public private(set) var type: IQListCell.Type
-
-    /// Model of the cell
-    public private(set) var model: AnyHashable?
-
-    /// Updating the model
-    public func update<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
-        self.type = type
-        self.model = model
-    }
-
-    /// Initialize the item
-    /// - Parameters:
-    ///   - type: type of the Cell
-    ///   - model: Model of the cell
-    public init<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
-        self.type = type
-        self.model = model
+extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
+    var defaultRowAnimation: UITableView.RowAnimation {
+        get {
+            return .automatic
+        }
+        set {
+            print("defaultRowAnimation \(newValue) is not supported in UICollectionView")
+            // Not supported
+        }
     }
 }
+
+extension IQTableViewDiffableDataSource: IQDiffableDataSource {}

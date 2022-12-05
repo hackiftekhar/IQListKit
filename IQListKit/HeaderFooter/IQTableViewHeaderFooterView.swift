@@ -54,10 +54,8 @@ public final class IQTableViewHeaderFooterView: UITableViewHeaderFooterView {
         titleLabel.font = Self.defaultFont
         if let defaultTextColor = Self.defaultTextColor {
             titleLabel.textColor = defaultTextColor
-        } else if #available(iOS 13.0, *) {
-            titleLabel.textColor = UIColor.label
         } else {
-            titleLabel.textColor = UIColor.darkText
+            titleLabel.textColor = UIColor.label
         }
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0

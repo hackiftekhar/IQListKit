@@ -1,5 +1,5 @@
 //
-//  DDSUIScrollViewDelegate.swift
+//  IQUIScrollViewDelegate.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,10 +22,9 @@
 
 import Foundation
 
-// MARK: UICollectionView's UIScrollViewDelegate forwarder
+// MARK: - UICollectionView's UIScrollViewDelegate forwarder
 
-@available(iOS, deprecated: 13.0)
-extension DDSCollectionViewDiffableDataSource: UIScrollViewDelegate {
+extension IQCollectionViewDiffableDataSource: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.scrollViewDidScroll?(scrollView)
@@ -81,16 +80,14 @@ extension DDSCollectionViewDiffableDataSource: UIScrollViewDelegate {
         delegate?.scrollViewDidScrollToTop?(scrollView)
     }
 
-    @available(iOS 11.0, *)
     func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
         delegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
     }
 }
 
-// MARK: UITableView's UIScrollViewDelegate forwarder
+// MARK: - UITableView's UIScrollViewDelegate forwarder
 
-@available(iOS, deprecated: 13.0)
-extension DDSTableViewDiffableDataSource: UIScrollViewDelegate {
+extension IQTableViewDiffableDataSource: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.scrollViewDidScroll?(scrollView)
@@ -146,7 +143,6 @@ extension DDSTableViewDiffableDataSource: UIScrollViewDelegate {
         delegate?.scrollViewDidScrollToTop?(scrollView)
     }
 
-    @available(iOS 11.0, *)
     func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
         delegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
     }
