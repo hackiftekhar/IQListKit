@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: - Item model of the table/collection
 
-public final class IQItem: Hashable {
+public struct IQItem: Hashable {
 
     public static func == (lhs: IQItem, rhs: IQItem) -> Bool {
         return lhs.model == rhs.model
@@ -41,7 +41,7 @@ public final class IQItem: Hashable {
     public private(set) var model: AnyHashable?
 
     /// Updating the model
-    public func update<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
+    public mutating func update<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
         self.type = type
         self.model = model
     }

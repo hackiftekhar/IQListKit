@@ -98,6 +98,8 @@ final class InsertionSortViewController: UIViewController {
             layout.sectionInset = .zero
         }
 
+        list.registerCell(type: InsertionCell.self, registerType: .class)
+
         updateSortButtonTitle()
     }
 
@@ -136,7 +138,7 @@ final class InsertionSortViewController: UIViewController {
     }
 
     func refreshUI(animated: Bool = true) {
-        list.performUpdates({ _ in
+        list.reloadData({
             for sectionIdentifier in sections {
                 let section = IQSection(identifier: sectionIdentifier, headerSize: .zero, footerSize: .zero)
                 list.append([section])

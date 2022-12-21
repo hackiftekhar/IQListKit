@@ -96,7 +96,7 @@ extension UserListTComplexTableViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.performUpdates({ _ in
+        list.reloadData({
 
             let section1 = IQSection(identifier: "firstSection")
             list.append([section1])

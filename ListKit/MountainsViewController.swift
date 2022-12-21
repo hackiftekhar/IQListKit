@@ -47,12 +47,12 @@ class MountainsViewController: UIViewController {
         let mountains = allMountains.lazy
             .filter { $0.contains(filter) }
             .sorted { $0.name < $1.name }
-        list.performUpdates { _ in
+        list.reloadData({
             let section = IQSection(identifier: "mountains")
             list.append([section])
 
             list.append(LabelCell.self, models: mountains, section: section)
-        }
+        })
     }
 }
 

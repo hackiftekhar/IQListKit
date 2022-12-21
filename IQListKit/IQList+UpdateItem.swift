@@ -61,7 +61,7 @@ public extension IQList {
         if let section = section {
             batchSnapshot.appendItems(items, toSection: section)
         } else {
-            if let beforeItem  = beforeItem {
+            if let beforeItem = beforeItem {
                 batchSnapshot.insertItems(items, beforeItem: beforeItem)
             } else if let afterItem  = afterItem {
                 batchSnapshot.insertItems(items, afterItem: afterItem)
@@ -71,28 +71,39 @@ public extension IQList {
         }
     }
 
-    func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model]) {
+    // We are deleting and adding new items because the batchSnapshot not able
+    // to find existing element if they aren't equal. So to update an element we
+    // remove the existing one and add the new one at same location.
+    func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model], comparator: (T.Model, T.Model) -> Bool) {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
-        var updatedItems: [IQItem] = []
         for model in models {
-
-            if let item = existingItems.first(where: {
+            if let index = existingItems.firstIndex(where: {
                 if let existingModel = $0.model as? T.Model {
-                    return existingModel == model
+                    return comparator(existingModel, model)
                 }
                 return false
             }) {
+                batchSnapshot.deleteItems([existingItems[index]])
+
+                var item = existingItems[index]
                 item.update(type, model: model)
-                updatedItems.append(item)
+
+                if index == 0 {
+                    if existingItems.count > 1 {
+                        batchSnapshot.insertItems([item], beforeItem: existingItems[index+1])
+                    } else {
+                        batchSnapshot.appendItems([item])
+                    }
+                } else {
+                    batchSnapshot.insertItems([item], afterItem: existingItems[index-1])
+                }
             }
         }
-
-        batchSnapshot.reloadItems(updatedItems)
     }
 
-    func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model]) {
+    func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model], comparator: (T.Model, T.Model) -> Bool) {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
@@ -101,7 +112,7 @@ public extension IQList {
 
             if let item = existingItems.first(where: {
                 if let existingModel = $0.model as? T.Model {
-                    return existingModel == model
+                    return comparator(existingModel, model)
                 }
                 return false
             }) {
@@ -109,7 +120,9 @@ public extension IQList {
             }
         }
 
-        batchSnapshot.deleteItems(deletedItems)
+        if !deletedItems.isEmpty {
+            batchSnapshot.deleteItems(deletedItems)
+        }
     }
 
     func deleteAllItems() {

@@ -71,7 +71,7 @@ extension UserListCollectionViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.performUpdates({ _ in
+        list.reloadData({
 
 //            let firstView = UIView()
 //            firstView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)

@@ -74,7 +74,7 @@ extension UserListTableViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.performUpdates({ _ in
+        list.reloadData({
 
             let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
             list.append([section1])

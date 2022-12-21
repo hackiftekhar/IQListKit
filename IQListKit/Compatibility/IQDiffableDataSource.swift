@@ -31,6 +31,9 @@ where Self: UIScrollViewDelegate {
 
     func snapshot() -> IQList.IQDiffableDataSourceSnapshot
 
+    func itemIdentifier(for indexPath: IndexPath) -> IQItem?
+    func indexPath(for itemIdentifier: IQItem) -> IndexPath?
+
     @available(iOS 15.0, tvOS 15.0, *)
     func applySnapshotUsingReloadData(_ snapshot: IQList.IQDiffableDataSourceSnapshot,
                                       completion: (() -> Void)?)

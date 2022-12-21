@@ -33,7 +33,7 @@ public extension IQList {
     ///   - updates: update block which will be called to generate the snapshot
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
-    func reloadData(_ updates: (_ snapshot: IQDiffableDataSourceSnapshot) -> Void,
+    func reloadData(_ updates: () -> Void,
                     updateExistingSnapshot: Bool = false,
                     animatingDifferences: Bool = true, animation: UITableView.RowAnimation? = nil,
                     endLoadingOnCompletion: Bool = true,
@@ -45,14 +45,15 @@ public extension IQList {
             batchSnapshot = IQDiffableDataSourceSnapshot()
         }
 
-        updates(batchSnapshot)
-        apply(batchSnapshot, animatingDifferences: animatingDifferences, animation: animation, endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
+        updates()
+        apply(batchSnapshot, animatingDifferences: animatingDifferences, animation: animation,
+              endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
     }
 
     func apply(_ snapshot: IQDiffableDataSourceSnapshot,
-                    animatingDifferences: Bool = true, animation: UITableView.RowAnimation? = nil,
-                    endLoadingOnCompletion: Bool = true,
-                    completion: (() -> Void)? = nil) {
+               animatingDifferences: Bool = true, animation: UITableView.RowAnimation? = nil,
+               endLoadingOnCompletion: Bool = true,
+               completion: (() -> Void)? = nil) {
 
         if let reloadQueue = reloadQueue {
             reloadQueue.async { [weak self] in
