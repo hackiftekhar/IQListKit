@@ -91,6 +91,10 @@ public extension IQList {
         diffableDataSource.snapshot().itemIdentifiers(inSection: identifier)
     }
 
+    func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
+        diffableDataSource.snapshot().sectionIdentifiers.first(where: predicate)
+    }
+
     func sectionIdentifier(containingItem identifier: IQItem) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifier(containingItem: identifier)
     }
@@ -103,12 +107,11 @@ public extension IQList {
         diffableDataSource.itemIdentifier(for: indexPath)
     }
 
-    func itemIdentifier<T: IQModelableCell>(_ type: T.Type, of model: T.Model,
-                                            comparator: (T.Model, T.Model) -> Bool) -> IQItem? {
+    func itemIdentifier<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IQItem? {
 
         if let item = diffableDataSource.snapshot().itemIdentifiers.first(where: {
             if let existingModel = $0.model as? T.Model {
-                return comparator(existingModel, model)
+                return predicate(existingModel)
             }
             return false
         }) {
