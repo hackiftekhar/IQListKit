@@ -19,8 +19,8 @@ For iOS12 and below: Thanks to Ryo Aoyama for [DiffableDataSources](https://gith
 
 | Library                | Language | Minimum iOS Target | Minimum Xcode Version |
 |------------------------|----------|--------------------|-----------------------|
-| IQListKit (1.0.0)      | Swift    | iOS 13.0           | Xcode 11              |
 | IQListKit (1.1.0)      | Swift    | iOS 9.0            | Xcode 11              |
+| IQListKit (4.0.0)      | Swift    | iOS 13.0           | Xcode 14              |
 
 #### Swift versions support
 5.0 and above
