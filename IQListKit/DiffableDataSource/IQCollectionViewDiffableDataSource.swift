@@ -267,3 +267,33 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
         return UITargetedPreview(view: view)
     }
 }
+
+extension IQCollectionViewDiffableDataSource: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        var items: [IQItem] = []
+        var itemIndexPaths: [IndexPath] = []
+
+        indexPaths.forEach { indexPath in
+            if let item: IQItem = itemIdentifier(for: indexPath) {
+                items.append(item)
+                itemIndexPaths.append(indexPath)
+            }
+        }
+
+        dataSource?.listView(collectionView, prefetch: items, at: itemIndexPaths)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        var items: [IQItem] = []
+        var itemIndexPaths: [IndexPath] = []
+
+        indexPaths.forEach { indexPath in
+            if let item: IQItem = itemIdentifier(for: indexPath) {
+                items.append(item)
+                itemIndexPaths.append(indexPath)
+            }
+        }
+
+        dataSource?.listView(collectionView, cancelPrefetch: items, at: itemIndexPaths)
+    }
+}

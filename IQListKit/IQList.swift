@@ -200,6 +200,7 @@ public final class IQList: NSObject {
 
         tableView.delegate = tableViewDiffableDataSource
         tableView.dataSource = tableViewDiffableDataSource
+        tableView.prefetchDataSource = tableViewDiffableDataSource
         tableViewDiffableDataSource.defaultRowAnimation = defaultRowAnimation
         tableViewDiffableDataSource.delegate = delegate
         tableViewDiffableDataSource.dataSource = dataSource
@@ -240,6 +241,7 @@ public final class IQList: NSObject {
 
         collectionView.delegate = collectionViewDiffableDataSource
         collectionView.dataSource = collectionViewDiffableDataSource
+        collectionView.prefetchDataSource = collectionViewDiffableDataSource
         collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
         collectionViewDiffableDataSource.delegate = delegate
         collectionViewDiffableDataSource.dataSource = dataSource

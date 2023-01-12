@@ -25,7 +25,7 @@ import UIKit
 // MARK: - Main Modelable Cell Protocol
 
 public protocol IQModelableCell: IQModelModifiable, IQCellSizeProvider,
-                                 IQSelectableCell, IQCellActionsProvider {
+                                 IQSelectableCell, IQCellActionsProvider where Self: UIView {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
     associatedtype Model: Hashable

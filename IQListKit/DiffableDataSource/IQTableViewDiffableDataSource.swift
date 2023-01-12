@@ -308,3 +308,33 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         return UITargetedPreview(view: view)
     }
 }
+
+extension IQTableViewDiffableDataSource: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        var items: [IQItem] = []
+        var itemIndexPaths: [IndexPath] = []
+
+        indexPaths.forEach { indexPath in
+            if let item: IQItem = itemIdentifier(for: indexPath) {
+                items.append(item)
+                itemIndexPaths.append(indexPath)
+            }
+        }
+
+        dataSource?.listView(tableView, prefetch: items, at: itemIndexPaths)
+    }
+
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        var items: [IQItem] = []
+        var itemIndexPaths: [IndexPath] = []
+
+        indexPaths.forEach { indexPath in
+            if let item: IQItem = itemIdentifier(for: indexPath) {
+                items.append(item)
+                itemIndexPaths.append(indexPath)
+            }
+        }
+
+        dataSource?.listView(tableView, cancelPrefetch: items, at: itemIndexPaths)
+    }
+}

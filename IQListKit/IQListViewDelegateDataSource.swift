@@ -106,6 +106,20 @@ public protocol IQListViewDataSource: AnyObject {
     /// Return the sectionIndexTitles for tableView
     /// - Parameter listView: The IQListView object
     func sectionIndexTitles(_ listView: IQListView) -> [String]?
+
+    /// Will give a chance to prefetch items before appearance
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - items: items to prefetch data asynchronously
+    ///   - indexPaths: indexPaths of the ListView
+    func listView(_ listView: IQListView, prefetch items: [IQItem], at indexPaths: [IndexPath])
+
+    /// Cancel prefetch items if not finished
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - items: items to cancel prefetch data
+    ///   - indexPaths: indexPaths of the ListView
+    func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath])
 }
 
 // MARK: - Combined delegate/datasource
@@ -139,4 +153,8 @@ public extension IQListViewDataSource {
     func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
 
     func sectionIndexTitles(_ listView: IQListView) -> [String]? { return nil }
+
+    func listView(_ listView: IQListView, prefetch items: [IQItem], at indexPaths: [IndexPath]) {}
+
+    func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath]) {}
 }
