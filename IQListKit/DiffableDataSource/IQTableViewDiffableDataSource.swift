@@ -26,6 +26,7 @@ import UIKit
 
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
+    weak var proxyDelegate: IQListViewProxyDelegate?
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
     var clearsSelectionOnDidSelect = true

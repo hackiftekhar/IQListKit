@@ -77,10 +77,51 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="customNoItemsView" destination="pue-Ja-805" id="Lb2-dk-OvR"/>
                         <segue destination="Vsd-OY-Nam" kind="show" identifier="UserController" id="ncG-iu-EjX"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1G5-hq-Gzd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="pue-Ja-805" customClass="CustomNoItemView" customModule="ListKit" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="bQF-tW-pEz">
+                            <rect key="frame" x="20" y="42" width="160" height="116"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is my custom empty view" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6l-Bw-sor">
+                                    <rect key="frame" x="0.0" y="0.0" width="160" height="41"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is my title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wkj-Bb-QiY">
+                                    <rect key="frame" x="0.0" y="51" width="160" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUl-4x-2p1">
+                                    <rect key="frame" x="0.0" y="81.5" width="160" height="34.5"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain" title="Reload"/>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="70E-hH-Ezd"/>
+                    <constraints>
+                        <constraint firstItem="bQF-tW-pEz" firstAttribute="leading" secondItem="70E-hH-Ezd" secondAttribute="leading" constant="20" id="Gtw-YY-LF0"/>
+                        <constraint firstItem="70E-hH-Ezd" firstAttribute="trailing" secondItem="bQF-tW-pEz" secondAttribute="trailing" constant="20" id="H6X-wx-nXx"/>
+                        <constraint firstItem="bQF-tW-pEz" firstAttribute="centerX" secondItem="pue-Ja-805" secondAttribute="centerX" id="WIb-T3-5OI"/>
+                        <constraint firstItem="bQF-tW-pEz" firstAttribute="centerY" secondItem="pue-Ja-805" secondAttribute="centerY" id="wng-2i-pkZ"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="button" destination="DUl-4x-2p1" id="1so-yt-GVd"/>
+                        <outlet property="subtitleLabel" destination="Wkj-Bb-QiY" id="KbG-TV-kjQ"/>
+                        <outlet property="titleLabel" destination="l6l-Bw-sor" id="fuH-XH-s52"/>
+                    </connections>
+                </view>
             </objects>
             <point key="canvasLocation" x="1766.6666666666667" y="127.90178571428571"/>
         </scene>

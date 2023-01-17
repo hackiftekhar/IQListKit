@@ -28,6 +28,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
+    weak var proxyDelegate: IQListViewProxyDelegate?
     weak var delegate: IQListViewDelegate?
     weak var dataSource: IQListViewDataSource?
     var clearsSelectionOnDidSelect: Bool = true

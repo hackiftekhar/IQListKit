@@ -23,7 +23,7 @@
 import UIKit
 
 /// InfoView to show in the middle of the list when the list is noItem
-public final class IQNoItemStateView: UIView {
+public final class IQNoItemStateView: UIView, IQNoItemStateRepresentable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -72,28 +72,24 @@ public final class IQNoItemStateView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal private(set) var isLoading: Bool = false
+    public func setIsLoading(_ isLoading: Bool,
+                             haveRecords: Bool,
+                             animated: Bool = false) {
+        if isLoading {
+            self.noItemStackView.alpha = 0.0
 
-    internal func setIsLoading(_ isLoading: Bool,
-                               haveRecords: Bool,
-                               animated: Bool = false) {
-        self.isLoading = isLoading
-
-        let animationDuration = animated ? 0.3 : 0
-        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            if isLoading {
-                self?.loadingIndicator.startAnimating()
+            if haveRecords {
+                self.loadingIndicator.stopAnimating()
+                self.loadingStackView.alpha = 0.0
             } else {
-                self?.loadingIndicator.stopAnimating()
+                self.loadingIndicator.startAnimating()
+                self.loadingStackView.alpha = 1.0
             }
-
-            self?.loadingStackView.alpha = isLoading ? 1.0 : 0.0
-            self?.noItemStackView.alpha = (!isLoading && !haveRecords) ? 1.0 : 0.0
-        }, completion: {  [weak self] success in
-            if success, !isLoading, haveRecords {
-                self?.removeFromSuperview()
-            }
-        })
+        } else {
+            self.loadingIndicator.stopAnimating()
+            self.loadingStackView.alpha = 0.0
+            self.noItemStackView.alpha = haveRecords ? 0.0 : 1.0
+        }
     }
 
     public var noItemImage: UIImage? {

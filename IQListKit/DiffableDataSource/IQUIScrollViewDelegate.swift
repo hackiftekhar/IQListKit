@@ -81,7 +81,7 @@ extension IQCollectionViewDiffableDataSource: UIScrollViewDelegate {
     }
 
     func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
-        delegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
+        proxyDelegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
     }
 }
 
@@ -144,6 +144,6 @@ extension IQTableViewDiffableDataSource: UIScrollViewDelegate {
     }
 
     func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
-        delegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
+        proxyDelegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
     }
 }

@@ -46,33 +46,62 @@ public final class IQList: NSObject {
     public var removeDuplicatesWhenReloading: Bool = false
 
     // MARK: - noItem States
-    public let noItemStateView: IQNoItemStateView = IQNoItemStateView(noItemImage: nil,
-                                                                      noItemTitle: nil,
-                                                                      noItemMessage: nil,
-                                                                      loadingMessage: nil)
+    private let noItemContainerView: UIView = UIView()
+    public var noItemStateView: IQNoItemStateRepresentable? {
+        didSet {
+            oldValue?.removeFromSuperview()
+
+            if let noItemStateView = noItemStateView {
+                noItemContainerView.addSubview(noItemStateView)
+                if noItemStateView.translatesAutoresizingMaskIntoConstraints {
+                    noItemStateView.center = CGPoint(x: noItemContainerView.bounds.midX,
+                                                     y: noItemContainerView.bounds.midY)
+                    noItemStateView.autoresizingMask = [.flexibleTopMargin,
+                                                        .flexibleBottomMargin,
+                                                        .flexibleLeftMargin,
+                                                        .flexibleRightMargin]
+                } else {
+                    noItemStateView.leadingAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.leadingAnchor,
+                                                             constant: 20)
+                    .isActive = true
+                    noItemStateView.trailingAnchor.constraint(lessThanOrEqualTo: noItemContainerView.trailingAnchor,
+                                                              constant: 20)
+                    .isActive = true
+                    noItemStateView.topAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.topAnchor,
+                                                         constant: 20)
+                    .isActive = true
+                    noItemStateView.bottomAnchor.constraint(lessThanOrEqualTo: noItemContainerView.bottomAnchor,
+                                                            constant: 20)
+                    .isActive = true
+                }
+            }
+        }
+    }
     public var noItemImage: UIImage? {
-        get {   noItemStateView.noItemImage    }
-        set {   noItemStateView.noItemImage = newValue  }
+        get {   noItemStateView?.noItemImage    }
+        set {   noItemStateView?.noItemImage = newValue  }
     }
     public var noItemTitle: String? {
-        get {   noItemStateView.noItemTitle    }
-        set {   noItemStateView.noItemTitle = newValue  }
+        get {   noItemStateView?.noItemTitle    }
+        set {   noItemStateView?.noItemTitle = newValue  }
     }
     public var noItemMessage: String? {
-        get {   noItemStateView.noItemMessage    }
-        set {   noItemStateView.noItemMessage = newValue  }
+        get {   noItemStateView?.noItemMessage    }
+        set {   noItemStateView?.noItemMessage = newValue  }
     }
     public var loadingMessage: String? {
-        get {   noItemStateView.loadingMessage    }
-        set {   noItemStateView.loadingMessage = newValue  }
+        get {   noItemStateView?.loadingMessage    }
+        set {   noItemStateView?.loadingMessage = newValue  }
     }
     public func noItemAction(title: String?, target: Any?, action: Selector) {
-        noItemStateView.action(title: title, target: target, action: action)
+        noItemStateView?.action(title: title, target: target, action: action)
     }
 
+    private var privateIsLoading: Bool = false
     public var isLoading: Bool {
-        get {   noItemStateView.isLoading  }
+        get {  privateIsLoading  }
         set {
+            privateIsLoading = newValue
             setIsLoading(newValue)
         }
     }
@@ -80,29 +109,16 @@ public final class IQList: NSObject {
     public func setIsLoading(_ isLoading: Bool,
                              animated: Bool = false) {
 
+        privateIsLoading = isLoading
+
         let snapshot: IQDiffableDataSourceSnapshot = self.snapshot()
-        let numberOfAllItems = snapshot.numberOfItems
+        let haveRecords: Bool = snapshot.numberOfItems > 0
+        let animationDuration = animated ? 0.3 : 0
 
-        if numberOfAllItems == 0 {
-            listView.insertSubview(noItemStateView, at: 0)
-            noItemStateView.translatesAutoresizingMaskIntoConstraints = false
-
-            let inset: UIEdgeInsets = listView.adjustedContentInset
-            noItemStateView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
-                .isActive = true
-            noItemStateView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
-                .isActive = true
-
-            noItemStateView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
-            let height = listView.frame.height - inset.top - inset.bottom
-            noItemStateView.heightAnchor.constraint(equalToConstant: height).isActive = true
-
-            self.noItemStateView.setIsLoading(isLoading, haveRecords: false, animated: animated)
-        } else {
-            if noItemStateView.superview != nil {
-                self.noItemStateView.setIsLoading(isLoading, haveRecords: true, animated: animated)
-            }
-        }
+        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
+            self?.noItemContainerView.alpha = (isLoading || snapshot.numberOfItems == 0) ? 1.0 : 0.0
+            self?.noItemStateView?.setIsLoading(isLoading, haveRecords: haveRecords, animated: animated)
+        })
     }
 
     public func snapshot() -> IQDiffableDataSourceSnapshot {
@@ -146,6 +162,14 @@ public final class IQList: NSObject {
     public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
                 dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade,
                 reloadQueue: DispatchQueue? = nil) {
+
+        defer { // This is to call the didSet of noItemStateView
+            noItemStateView = IQNoItemStateView(noItemImage: nil,
+                                                noItemTitle: nil,
+                                                noItemMessage: nil,
+                                                loadingMessage: nil)
+            updateNoItemStateViewPosition()
+        }
 
         self.listView = listView
         self.reloadQueue = reloadQueue
@@ -202,6 +226,7 @@ public final class IQList: NSObject {
         tableView.dataSource = tableViewDiffableDataSource
         tableView.prefetchDataSource = tableViewDiffableDataSource
         tableViewDiffableDataSource.defaultRowAnimation = defaultRowAnimation
+        tableViewDiffableDataSource.proxyDelegate = self
         tableViewDiffableDataSource.delegate = delegate
         tableViewDiffableDataSource.dataSource = dataSource
 
@@ -243,11 +268,34 @@ public final class IQList: NSObject {
         collectionView.dataSource = collectionViewDiffableDataSource
         collectionView.prefetchDataSource = collectionViewDiffableDataSource
         collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
+        collectionViewDiffableDataSource.proxyDelegate = self
         collectionViewDiffableDataSource.delegate = delegate
         collectionViewDiffableDataSource.dataSource = dataSource
 
         registerHeaderFooter(type: UICollectionReusableView.self, registerType: .class)
         registerHeaderFooter(type: IQCollectionViewHeaderFooter.self, registerType: .class)
         return collectionViewDiffableDataSource
+    }
+
+    private func updateNoItemStateViewPosition() {
+        listView.insertSubview(noItemContainerView, at: 0)
+        noItemContainerView.translatesAutoresizingMaskIntoConstraints = false
+
+        let inset: UIEdgeInsets = listView.adjustedContentInset
+        noItemContainerView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
+            .isActive = true
+        noItemContainerView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
+            .isActive = true
+
+        noItemContainerView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
+        let height = listView.frame.height - inset.top - inset.bottom
+        noItemContainerView.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+}
+
+extension IQList: IQListViewProxyDelegate {
+    public func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
+        updateNoItemStateViewPosition()
+        diffableDataSource.delegate?.scrollViewDidChangeAdjustedContentInset?(scrollView)
     }
 }

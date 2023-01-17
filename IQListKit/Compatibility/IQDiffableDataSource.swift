@@ -24,6 +24,7 @@ import UIKit
 
 internal protocol IQDiffableDataSource
 where Self: UIScrollViewDelegate {
+    var proxyDelegate: IQListViewProxyDelegate? { get set }
     var delegate: IQListViewDelegate? { get set }
     var dataSource: IQListViewDataSource? { get set }
     var clearsSelectionOnDidSelect: Bool { get set }

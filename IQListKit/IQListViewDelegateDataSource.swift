@@ -24,6 +24,10 @@ import UIKit
 
 // MARK: - IQListViewDelegate
 
+@objc public protocol IQListViewProxyDelegate: AnyObject {
+    @objc optional func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView)
+}
+
 public protocol IQListViewDelegate: UIScrollViewDelegate {
 
     /// Will give a chance to modify or other configuration of cell if necessary

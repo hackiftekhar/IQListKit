@@ -33,6 +33,7 @@
 		C0EF175B25A344590038C5E9 /* LabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0EF175925A344590038C5E9 /* LabelCell.xib */; };
 		C0EF175E25A348870038C5E9 /* InsertionSortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF175D25A348870038C5E9 /* InsertionSortViewController.swift */; };
 		C0EF176125A3492E0038C5E9 /* InsertionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF176025A3492E0038C5E9 /* InsertionCell.swift */; };
+		C0EF4D1C2976E647002A8C45 /* CustomNoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF4D1B2976E647002A8C45 /* CustomNoItemView.swift */; };
 		EDE400458434DA5B7B2AFB14 /* Pods_ListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85F60F513481884CC8186C9B /* Pods_ListKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		C0EF175925A344590038C5E9 /* LabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LabelCell.xib; sourceTree = "<group>"; };
 		C0EF175D25A348870038C5E9 /* InsertionSortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertionSortViewController.swift; sourceTree = "<group>"; };
 		C0EF176025A3492E0038C5E9 /* InsertionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertionCell.swift; sourceTree = "<group>"; };
+		C0EF4D1B2976E647002A8C45 /* CustomNoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNoItemView.swift; sourceTree = "<group>"; };
 		D563E2C3209E4C9AC7948C3B /* Pods-ListKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListKit.debug.xcconfig"; path = "Target Support Files/Pods-ListKit/Pods-ListKit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +118,7 @@
 		C0A2AB6F259A28CA00F06BFC /* ListKit */ = {
 			isa = PBXGroup;
 			children = (
+				C0EF4D1A2976E635002A8C45 /* Views */,
 				C08CDB28264BAF9E006BD338 /* CollectionCell */,
 				C0D6D3AB259AFC8700F5B3C4 /* Cell */,
 				C0D6D3AA259AFC8000F5B3C4 /* Model */,
@@ -164,6 +167,14 @@
 				C0EF175525A343FF0038C5E9 /* MountainsRawData.swift */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		C0EF4D1A2976E635002A8C45 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C0EF4D1B2976E647002A8C45 /* CustomNoItemView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		FEBEB64F669C7A7AEBBDCEF1 /* Frameworks */ = {
@@ -327,6 +338,7 @@
 				C0A3CAE127513319004BE529 /* SampleCollectionReusableView.swift in Sources */,
 				C0EF176125A3492E0038C5E9 /* InsertionCell.swift in Sources */,
 				C0EF174825A33A5A0038C5E9 /* UserListTComplexTableViewController.swift in Sources */,
+				C0EF4D1C2976E647002A8C45 /* CustomNoItemView.swift in Sources */,
 				C0A0D8FD259C9168008CD05F /* BookCell.swift in Sources */,
 				C08CDB2E264BB11A006BD338 /* UserListCollectionViewController.swift in Sources */,
 				C0A2AB71259A28CA00F06BFC /* AppDelegate.swift in Sources */,
@@ -495,7 +507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 4.1.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -520,7 +532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 4.1.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";

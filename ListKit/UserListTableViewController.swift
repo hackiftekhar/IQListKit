@@ -10,6 +10,8 @@ import IQListKit
 
 class UserListTableViewController: UITableViewController {
 
+    @IBOutlet private var customNoItemsView: CustomNoItemView!
+
     private var users: [User] = []
     private var users2: [User] = []
 
@@ -19,6 +21,7 @@ class UserListTableViewController: UITableViewController {
         super.viewDidLoad()
 
         list.removeDuplicatesWhenReloading = true
+//        list.noItemStateView = customNoItemsView
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Users"
         list.noItemMessage = "No users to display here."
