@@ -20,7 +20,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
+import UIKit
 
 // MARK: - Update the list
 /// Note that all these methods can also be used in a background threads since they all

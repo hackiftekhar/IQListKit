@@ -21,7 +21,10 @@
 //  THE SOFTWARE.
 
 import UIKit
+
+#if canImport(SwiftTryCatch)
 import SwiftTryCatch
+#endif
 
 // MARK: - Manual cell and header/footer registration
 
@@ -89,6 +92,8 @@ public extension IQList {
                     }
                 } else if let collectionView = listView as? UICollectionView {
                     // Validate if the cell is configured in storyboard
+
+#if canImport(SwiftTryCatch)
                     SwiftTryCatch.try {
                         let dummyIndexPath = IndexPath(item: 0, section: 0)
                         _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
@@ -111,6 +116,12 @@ public extension IQList {
                         }
                     } finally: {
                     }
+#else
+                    let dummyIndexPath = IndexPath(item: 0, section: 0)
+                    _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
+                    self.registeredCells.append(type)
+                    hasRegistered = true
+#endif
                 }
 
                 guard !hasRegistered else {
@@ -200,6 +211,7 @@ public extension IQList {
                     }
                 } else if let collectionView = listView as? UICollectionView {
                     // Validate if the cell is configured in storyboard
+#if canImport(SwiftTryCatch)
                     SwiftTryCatch.try {
                         let dummyIndexPath = IndexPath(item: 0, section: 0)
                         _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
@@ -226,6 +238,18 @@ public extension IQList {
                         }
                     } finally: {
                     }
+#else
+                    let dummyIndexPath = IndexPath(item: 0, section: 0)
+                    _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                        withReuseIdentifier: identifier,
+                                                                        for: dummyIndexPath)
+                    _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
+                                                                        withReuseIdentifier: identifier,
+                                                                        for: dummyIndexPath)
+                    self.registeredHeaderFooterViews.append(type)
+                    hasRegistered = true
+#endif
+
                 }
 
                 guard !hasRegistered else {
