@@ -31,4 +31,10 @@ public protocol IQSelectableCell where Self: IQListCell {
 
     /// Is cell selectable
     var isSelectable: Bool { get }
+
+    /// Is cell deselectable
+    var isDeselectable: Bool { get }
+
+    /// Is cell canPerformPrimaryAction
+    var canPerformPrimaryAction: Bool { get }
 }

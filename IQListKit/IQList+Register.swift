@@ -107,7 +107,6 @@ public extension IQList {
                                     bundle.path(forResource: identifier, ofType: "nib") != nil ? "nib" : "class"
                                 }()
 
-                                // swiftlint:disable line_length
                                 print("""
                                       IQListKit: To remove assertion failure log, please manually register cell using \
                                       `list.registerCell(type: \(identifier).self, registerType: .\(typeName))`
@@ -136,6 +135,7 @@ public extension IQList {
                 }
             }
         }
+        // swiftlint:enable cyclomatic_complexity
 
         if Thread.isMainThread {
             internalRegisterCell()
@@ -145,7 +145,9 @@ public extension IQList {
             }
         }
     }
+    // swiftlint:enable function_body_length
 
+    // swiftlint:disable function_body_length
     /// register a HeaderFooter manually
     /// - Parameters:
     ///   - type: Type of the header
@@ -188,6 +190,7 @@ public extension IQList {
             }
         }
 
+        // swiftlint:disable cyclomatic_complexity
         func internalRegisterHeaderFooter() {
 
             switch registerType {
@@ -214,12 +217,14 @@ public extension IQList {
 #if canImport(SwiftTryCatch)
                     SwiftTryCatch.try {
                         let dummyIndexPath = IndexPath(item: 0, section: 0)
+                        // swiftlint:disable line_length
                         _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                             withReuseIdentifier: identifier,
                                                                             for: dummyIndexPath)
                         _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
                                                                             withReuseIdentifier: identifier,
                                                                             for: dummyIndexPath)
+                        // swiftlint:enable line_length
                         self.registeredHeaderFooterViews.append(type)
                         hasRegistered = true
                     } catch: { exception in
@@ -240,12 +245,14 @@ public extension IQList {
                     }
 #else
                     let dummyIndexPath = IndexPath(item: 0, section: 0)
+                    // swiftlint:disable line_length
                     _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                         withReuseIdentifier: identifier,
                                                                         for: dummyIndexPath)
                     _ = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
                                                                         withReuseIdentifier: identifier,
                                                                         for: dummyIndexPath)
+                    // swiftlint:enable line_length
                     self.registeredHeaderFooterViews.append(type)
                     hasRegistered = true
 #endif
@@ -264,6 +271,7 @@ public extension IQList {
                 }
             }
         }
+        // swiftlint:enable cyclomatic_complexity
 
         if Thread.isMainThread {
             internalRegisterHeaderFooter()
@@ -273,4 +281,5 @@ public extension IQList {
             }
         }
     }
+    // swiftlint:enable function_body_length
 }

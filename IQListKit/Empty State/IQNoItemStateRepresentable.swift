@@ -77,3 +77,4 @@ public extension IQNoItemStateRepresentable {
     func action(title: String?, target: Any?, action: Selector) {
     }
 }
+// swiftlint:enable unused_setter_value

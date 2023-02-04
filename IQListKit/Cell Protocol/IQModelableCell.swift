@@ -66,6 +66,11 @@ public extension IQModelableCell {
     var isHighlightable: Bool { true }
 
     var isSelectable: Bool { true }
+
+    var isDeselectable: Bool { true }
+
+    var canPerformPrimaryAction: Bool { true }
+
 }
 
 public extension IQCellActionsProvider {

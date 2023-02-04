@@ -65,6 +65,27 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
     ///   - indexPath: indexPath which is deselected
     func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath)
 
+    /// An item is highlighted
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is highlightel
+    ///   - indexPath: indexPath which is selected
+    func listView(_ listView: IQListView, didHighlight item: IQItem, at indexPath: IndexPath)
+
+    /// An item is unhighlighted
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is unhighlighted.
+    ///   - indexPath: indexPath which is deselected
+    func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath)
+
+    /// An item is selected
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is selected. item.type will be the cell type. item.model will be the Model
+    ///   - indexPath: indexPath which is selected
+    func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath)
+
     /// Will give a chance to modify the header view before appearance
     /// - Parameters:
     ///   - listView: The IQListView object
@@ -80,6 +101,57 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
     ///   - section: section of the ListView
     ///   - sectionIndex: section of the ListView
     func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int)
+
+    /// Cell will about to display
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - view: header View
+    ///   - indexPath: indexPath in which the cell is about to display
+    func listView(_ listView: IQListView, willDisplayHeaderView view: UIView, section: IQSection, at sectionIndex: Int)
+
+    /// Cell did end displaying
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - view: header View
+    ///   - indexPath: indexPath in which the cell is displaying
+    func listView(_ listView: IQListView, didEndDisplayingHeaderView view: UIView,
+                  section: IQSection, at sectionIndex: Int)
+
+    /// Cell will about to display
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - view: footer View
+    ///   - indexPath: indexPath in which the cell is about to display
+    func listView(_ listView: IQListView, willDisplayFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int)
+
+    /// Cell did end displaying
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - view: footer View
+    ///   - indexPath: indexPath in which the cell is displaying
+    func listView(_ listView: IQListView, didEndDisplayingFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int)
+
+    /// Cell will display context menu
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - configuration: UIContextMenuConfiguration
+    ///   - animator: UIContextMenuInteractionAnimating
+    ///   - item: IQItem
+    ///   - indexPath: indexPath in which the cell is displaying
+    func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
+                  animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
+
+    /// Cell will end display context menu
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - configuration: UIContextMenuConfiguration
+    ///   - animator: UIContextMenuInteractionAnimating
+    ///   - item: IQItem
+    ///   - indexPath: indexPath in which the cell is displaying
+    func listView(_ listView: IQListView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration,
+                  animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
 }
 
 // MARK: - IQListViewDataSource
@@ -139,13 +211,37 @@ public extension IQListViewDelegate {
 
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {}
 
+    func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath) {}
+
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {}
 
     func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath) {}
 
+    func listView(_ listView: IQListView, didHighlight item: IQItem, at indexPath: IndexPath) {}
+
+    func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath) {}
+
     func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int) {}
 
     func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int) {}
+
+    func listView(_ listView: IQListView, willDisplayHeaderView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+
+   func listView(_ listView: IQListView, didEndDisplayingHeaderView view: UIView,
+                 section: IQSection, at sectionIndex: Int) {}
+
+    func listView(_ listView: IQListView, willDisplayFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+
+    func listView(_ listView: IQListView, didEndDisplayingFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+
+    func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
+                  animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath) {}
+
+    func listView(_ listView: IQListView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration,
+                  animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath) {}
 }
 
 public extension IQListViewDataSource {
