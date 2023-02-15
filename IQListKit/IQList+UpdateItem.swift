@@ -38,7 +38,7 @@ public extension IQList {
                                     section: IQSection? = nil,
                                     beforeItem: IQItem? = nil, afterItem: IQItem? = nil) {
 
-        if registeredCells.contains(where: { $0 == type}) == false {
+        if diffableDataSource.registeredCells.contains(where: { $0 == type}) == false {
             registerCell(type: type, registerType: .default)
         }
 
@@ -48,6 +48,34 @@ public extension IQList {
             items.append(item)
         }
 
+        append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
+    }
+
+    func append<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, models: [T.Model],
+                                                                     supplementaryType: S.Type,
+                                                                     supplementaryModels: [S.Model],
+                                                                     section: IQSection? = nil,
+                                                                     beforeItem: IQItem? = nil,
+                                                                     afterItem: IQItem? = nil) {
+
+        if diffableDataSource.registeredCells.contains(where: { $0 == type}) == false {
+            registerCell(type: type, registerType: .default)
+        }
+
+        var items: [IQItem] = []
+        for (index, model) in models.enumerated() {
+            let item = IQItem(type, model: model, supplementaryType: supplementaryType,
+                              supplementaryModel: supplementaryModels[index])
+            items.append(item)
+        }
+
+        append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
+    }
+
+    func append(_ items: [IQItem],
+                section: IQSection? = nil,
+                beforeItem: IQItem? = nil, afterItem: IQItem? = nil) {
+        var items: [IQItem] = items
         if removeDuplicatesWhenReloading {
             let existingItems = batchSnapshot.itemIdentifiers
             let result = items.removeDuplicate(existingElements: existingItems)

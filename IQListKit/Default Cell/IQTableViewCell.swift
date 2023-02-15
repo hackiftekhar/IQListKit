@@ -52,7 +52,7 @@ public final class IQTableViewCell: UITableViewCell, IQModelableCell {
             hasher.combine(accessoryType)
         }
 
-        public static func == (lhs: Model, rhs: Model) -> Bool {
+        public static func == (lhs: Self, rhs: Self) -> Bool {
             return lhs.text == rhs.text && lhs.detail == rhs.detail && rhs.accessoryType == lhs.accessoryType
         }
 

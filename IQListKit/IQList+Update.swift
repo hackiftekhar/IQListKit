@@ -28,6 +28,18 @@ import UIKit
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
 
+    @available(iOS 14.0, *)
+    var reorderingHandlers: UICollectionViewDiffableDataSource<IQSection, IQItem>.ReorderingHandlers? {
+        get {
+            (diffableDataSource as? IQCollectionViewDiffableDataSource)?.reorderingHandlers
+        }
+        set {
+            if let newValue = newValue {
+                (diffableDataSource as? IQCollectionViewDiffableDataSource)?.reorderingHandlers = newValue
+            }
+        }
+    }
+
     /// Performs the list reload
     /// - Parameters:
     ///   - updates: update block which will be called to generate the snapshot
@@ -88,6 +100,43 @@ public extension IQList {
         if let previousDefaultRowAnimation = previousDefaultRowAnimation {
             diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
         }
+
+        let isLoading: Bool
+        if endLoadingOnCompletion {
+            isLoading = false
+        } else {
+            isLoading = self.isLoading
+        }
+
+        if Thread.isMainThread {
+            self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
+        } else {
+            OperationQueue.main.addOperation {
+                self.setIsLoading(isLoading,
+                                  animated: animatingDifferences)    /// Updating the backgroundView on main thread
+            }
+        }
+    }
+
+    @available(iOS 14.0, *)
+    func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+               to section: IQSection,
+               animatingDifferences: Bool = true,
+               endLoadingOnCompletion: Bool = true,
+               completion: (() -> Void)? = nil) {
+        privateApply(snapshot, to: section, animatingDifferences: animatingDifferences,
+                     endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
+    }
+
+    @available(iOS 14.0, *)
+    private func privateApply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+                              to section: IQSection,
+                              animatingDifferences: Bool = true,
+                              endLoadingOnCompletion: Bool = true,
+                              completion: (() -> Void)? = nil) {
+
+        diffableDataSource.apply(snapshot, to: section,
+                                 animatingDifferences: animatingDifferences, completion: completion)
 
         let isLoading: Bool
         if endLoadingOnCompletion {

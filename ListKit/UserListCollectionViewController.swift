@@ -21,13 +21,15 @@ class UserListCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        list.noItemStateView?.tintColor = UIColor.darkGray
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Users"
         list.noItemMessage = "No users to display here."
         list.noItemAction(title: "Reload", target: self, action: #selector(refresh(_:)))
 
         list.registerCell(type: CollectionUserCell.self, registerType: .nib)
-        list.registerHeaderFooter(type: SampleCollectionReusableView.self, registerType: .nib)
+        list.registerSupplementaryView(type: SampleCollectionReusableView.self,
+                                       kind: UICollectionView.elementKindSectionHeader, registerType: .nib)
 
         refreshUI(animated: false)
     }

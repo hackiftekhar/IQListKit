@@ -26,6 +26,9 @@ public final class IQList: NSObject {
 
     public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>
 
+    @available(iOS 14.0, *)
+    public typealias IQDiffableDataSourceSectionSnapshot = NSDiffableDataSourceSectionSnapshot<IQItem>
+
     // MARK: - Public Properties
     public private(set) var listView: IQListView
     public var clearsSelectionOnDidSelect: Bool = true {
@@ -121,14 +124,7 @@ public final class IQList: NSObject {
         })
     }
 
-    public func snapshot() -> IQDiffableDataSourceSnapshot {
-        return diffableDataSource.snapshot()
-    }
-
     // MARK: - Private Properties
-
-    internal var registeredCells: [UIView.Type] = [UIView.Type]()
-    internal var registeredHeaderFooterViews: [UIView.Type] = [UIView.Type]()
 
     internal let reloadQueue: DispatchQueue?
     internal var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
@@ -181,10 +177,22 @@ public final class IQList: NSObject {
                                                                delegate: delegate, dataSource: dataSource,
                                           defaultRowAnimation: defaultRowAnimation)
 
+            registerSupplementaryView(type: IQDefaultTableSupplementaryView.self, kind: "", registerType: .class)
+
         } else if let collectionView = listView as? UICollectionView {
 
             diffableDataSource = initializeCollectionViewDataSource(collectionView,
                                                                     delegate: delegate, dataSource: dataSource)
+
+            registerSupplementaryView(type: UICollectionReusableView.self,
+                                      kind: UICollectionView.elementKindSectionHeader, registerType: .class)
+            registerSupplementaryView(type: UICollectionReusableView.self,
+                                      kind: UICollectionView.elementKindSectionFooter, registerType: .class)
+            registerSupplementaryView(type: IQCollectionSupplementaryView.self,
+                                      kind: UICollectionView.elementKindSectionHeader, registerType: .class)
+            registerSupplementaryView(type: IQCollectionSupplementaryView.self,
+                                      kind: UICollectionView.elementKindSectionFooter, registerType: .class)
+
         } else {
             fatalError("Unable to initializa ListKit")
         }
@@ -230,7 +238,6 @@ public final class IQList: NSObject {
         tableViewDiffableDataSource.delegate = delegate
         tableViewDiffableDataSource.dataSource = dataSource
 
-        registerHeaderFooter(type: IQTableViewHeaderFooterView.self, registerType: .class)
         return tableViewDiffableDataSource
     }
 
@@ -272,8 +279,6 @@ public final class IQList: NSObject {
         collectionViewDiffableDataSource.delegate = delegate
         collectionViewDiffableDataSource.dataSource = dataSource
 
-        registerHeaderFooter(type: UICollectionReusableView.self, registerType: .class)
-        registerHeaderFooter(type: IQCollectionViewHeaderFooter.self, registerType: .class)
         return collectionViewDiffableDataSource
     }
 

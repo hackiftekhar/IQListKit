@@ -86,52 +86,35 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
     ///   - indexPath: indexPath which is selected
     func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath)
 
-    /// Will give a chance to modify the header view before appearance
+    /// Will give a chance to modify the supplementary view before appearance
     /// - Parameters:
     ///   - listView: The IQListView object
-    ///   - headerView: header view which will be shown
+    ///   - view: supplementary  view which will be shown
     ///   - section: section of the ListView
-    ///   - sectionIndex: section of the ListView
-    func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int)
+    ///   - kind: Kind of section. Either header or footer or customized
+    ///   - indexPath: contains section of the ListView
+    func listView(_ listView: IQListView, modifySupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath)
 
-    /// Will give a chance to modify the footer view before appearance
+    /// Supplementary view will about to display
     /// - Parameters:
     ///   - listView: The IQListView object
-    ///   - footerView: footer view which will be shown
+    ///   - view: supplementary View
     ///   - section: section of the ListView
-    ///   - sectionIndex: section of the ListView
-    func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int)
+    ///   - kind: Kind of section. Either header or footer or customized
+    ///   - indexPath: section of the ListView
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath)
 
-    /// Cell will about to display
+    /// Supplementary view did end displaying
     /// - Parameters:
     ///   - listView: The IQListView object
-    ///   - view: header View
-    ///   - indexPath: indexPath in which the cell is about to display
-    func listView(_ listView: IQListView, willDisplayHeaderView view: UIView, section: IQSection, at sectionIndex: Int)
-
-    /// Cell did end displaying
-    /// - Parameters:
-    ///   - listView: The IQListView object
-    ///   - view: header View
-    ///   - indexPath: indexPath in which the cell is displaying
-    func listView(_ listView: IQListView, didEndDisplayingHeaderView view: UIView,
-                  section: IQSection, at sectionIndex: Int)
-
-    /// Cell will about to display
-    /// - Parameters:
-    ///   - listView: The IQListView object
-    ///   - view: footer View
-    ///   - indexPath: indexPath in which the cell is about to display
-    func listView(_ listView: IQListView, willDisplayFooterView view: UIView,
-                  section: IQSection, at sectionIndex: Int)
-
-    /// Cell did end displaying
-    /// - Parameters:
-    ///   - listView: The IQListView object
-    ///   - view: footer View
-    ///   - indexPath: indexPath in which the cell is displaying
-    func listView(_ listView: IQListView, didEndDisplayingFooterView view: UIView,
-                  section: IQSection, at sectionIndex: Int)
+    ///   - view: supplementary View
+    ///   - section: section of the ListView
+    ///   - kind: Kind of section. Either header or footer or customized
+    ///   - indexPath: section of the ListView
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath)
 
     /// Cell will display context menu
     /// - Parameters:
@@ -165,19 +148,15 @@ public protocol IQListViewDataSource: AnyObject {
     ///   - indexPath: indexPath of the item
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
-    /// Return the headerView of section
+    /// Return the supplementary view  of section
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - section: section of the ListView
-    ///   - sectionIndex: section of the ListView
-    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
-
-    /// Return the footerView of section
-    /// - Parameters:
-    ///   - listView: The IQListView object
-    ///   - section: section of the ListView
-    ///   - sectionIndex: section of the ListView
-    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    ///   - kind: section of the ListView. UICollectionView.elementKindSectionHeader
+    ///             or UICollectionView.elementKindSectionFooter or something custom type
+    ///   - indexPath: section of the ListView
+    func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
+                  kind: String, at indexPath: IndexPath) -> IQListSupplementaryView?
 
     /// Return the sectionIndexTitles for tableView
     /// - Parameter listView: The IQListView object
@@ -196,6 +175,36 @@ public protocol IQListViewDataSource: AnyObject {
     ///   - items: items to cancel prefetch data
     ///   - indexPaths: indexPaths of the ListView
     func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath])
+
+    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is asked for it can move.
+    ///   - indexPath: indexPath of the item
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool
+
+    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is asked for it can move.
+    ///   - indexPath: indexPath of the item
+    func listView(_ listView: IQListView, move sourceItem: IQItem,
+                  at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+
+    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is asked for it can move.
+    ///   - indexPath: indexPath of the item
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool
+
+    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// - Parameters:
+    ///   - listView: The IQListView object
+    ///   - item: the item which is asked for it can move.
+    ///   - indexPath: indexPath of the item
+    func listView(_ listView: IQListView, commit item: IQItem,
+                  style: UITableViewCell.EditingStyle, at indexPath: IndexPath)
 }
 
 // MARK: - Combined delegate/datasource
@@ -221,21 +230,14 @@ public extension IQListViewDelegate {
 
     func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, modifySupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, willDisplayHeaderView view: UIView,
-                  section: IQSection, at sectionIndex: Int) {}
-
-   func listView(_ listView: IQListView, didEndDisplayingHeaderView view: UIView,
-                 section: IQSection, at sectionIndex: Int) {}
-
-    func listView(_ listView: IQListView, willDisplayFooterView view: UIView,
-                  section: IQSection, at sectionIndex: Int) {}
-
-    func listView(_ listView: IQListView, didEndDisplayingFooterView view: UIView,
-                  section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath) {}
 
     func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
                   animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath) {}
@@ -248,13 +250,22 @@ public extension IQListViewDataSource {
 
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize? { return nil }
 
-    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
-
-    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
+    func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
+                  kind: String, at indexPath: IndexPath) -> IQListSupplementaryView? { return nil }
 
     func sectionIndexTitles(_ listView: IQListView) -> [String]? { return nil }
 
     func listView(_ listView: IQListView, prefetch items: [IQItem], at indexPaths: [IndexPath]) {}
 
     func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath]) {}
+
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool { return false }
+
+    func listView(_ listView: IQListView, commit item: IQItem,
+                  style: UITableViewCell.EditingStyle, at indexPath: IndexPath) {}
+
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool { return false }
+
+    func listView(_ listView: IQListView, move sourceItem: IQItem,
+                  at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
 }

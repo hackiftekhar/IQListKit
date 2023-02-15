@@ -24,6 +24,10 @@ import UIKit
 
 internal protocol IQDiffableDataSource
 where Self: UIScrollViewDelegate {
+
+    var registeredCells: [IQListCell.Type] { get set }
+    var registeredSupplementaryViews: [String: IQListSupplementaryView.Type] { get set }
+
     var proxyDelegate: IQListViewProxyDelegate? { get set }
     var delegate: IQListViewDelegate? { get set }
     var dataSource: IQListViewDataSource? { get set }
@@ -42,6 +46,15 @@ where Self: UIScrollViewDelegate {
     func apply(_ snapshot: IQList.IQDiffableDataSourceSnapshot,
                animatingDifferences: Bool,
                completion: (() -> Void)?)
+
+    // For UICollectionView only
+    @available(iOS 14.0, *)
+    func apply(_ snapshot: IQList.IQDiffableDataSourceSectionSnapshot, to section: IQSection,
+               animatingDifferences: Bool,
+               completion: (() -> Void)?)
+
+    @available(iOS 14.0, *)
+    func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot
 }
 
 extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
@@ -56,4 +69,17 @@ extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
     }
 }
 
-extension IQTableViewDiffableDataSource: IQDiffableDataSource {}
+extension IQTableViewDiffableDataSource: IQDiffableDataSource {
+    @available(iOS 14.0, *)
+    func apply(_ snapshot: IQList.IQDiffableDataSourceSectionSnapshot, to section: IQSection,
+               animatingDifferences: Bool, completion: (() -> Void)?) {
+        // doesn't have any effect
+        fatalError("Section snapshot isn't supported for UITableView")
+    }
+
+    @available(iOS 14.0, *)
+    func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot {
+        // doesn't have any effect
+        fatalError("Section snapshot isn't supported for UITableView")
+    }
+}

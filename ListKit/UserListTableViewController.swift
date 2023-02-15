@@ -10,6 +10,8 @@ import IQListKit
 
 class UserListTableViewController: UITableViewController {
 
+    @IBOutlet private var headerView: UIView!
+    @IBOutlet private var footerView: UIView!
     @IBOutlet private var customNoItemsView: CustomNoItemView!
 
     private var users: [User] = []
@@ -22,6 +24,7 @@ class UserListTableViewController: UITableViewController {
 
         list.removeDuplicatesWhenReloading = true
 //        list.noItemStateView = customNoItemsView
+        list.noItemStateView?.tintColor = UIColor.darkGray
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Users"
         list.noItemMessage = "No users to display here."
@@ -76,6 +79,14 @@ extension UserListTableViewController {
     }
 
     func refreshUI(animated: Bool = true) {
+
+        if users.isEmpty && users2.isEmpty {
+            tableView.tableHeaderView = nil
+            tableView.tableFooterView = nil
+        } else {
+            tableView.tableHeaderView = headerView
+            tableView.tableFooterView = footerView
+        }
 
         list.reloadData({
 

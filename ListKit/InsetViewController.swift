@@ -24,6 +24,7 @@ class InsetViewController: UIViewController {
         let searchController = UISearchController()
         navigationItem.searchController = searchController
 
+        list.noItemStateView?.tintColor = UIColor.darkGray
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Users"
         list.noItemMessage = "No users to display here."

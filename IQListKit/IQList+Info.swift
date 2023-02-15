@@ -67,6 +67,15 @@ public extension IQList {
         }
     }
 
+    func snapshot() -> IQDiffableDataSourceSnapshot {
+        return diffableDataSource.snapshot()
+    }
+
+    @available(iOS 14.0, *)
+    func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot {
+        return diffableDataSource.snapshot(for: section)
+    }
+
     var numberOfItems: Int {
         diffableDataSource.snapshot().numberOfItems
     }
@@ -101,6 +110,24 @@ public extension IQList {
 
     func indexPath(for identifier: IQItem) -> IndexPath? {
         diffableDataSource.indexPath(for: identifier)
+    }
+
+    func indexPath(where predicate: (IQItem) -> Bool) -> IndexPath? {
+
+        if let item = itemIdentifier(where: predicate) {
+            return indexPath(for: item)
+        }
+
+        return nil
+    }
+
+    func indexPath<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IndexPath? {
+
+        if let item = itemIdentifier(of: type, where: predicate) {
+            return indexPath(for: item)
+        }
+
+        return nil
     }
 
     func itemIdentifier(for indexPath: IndexPath) -> IQItem? {

@@ -24,7 +24,7 @@ import UIKit
 
 public extension UICollectionView {
 
-    /// Dequeuing - Header/Footer
+    /// Dequeuing - Supplementary view
     func dequeue<T: UICollectionReusableView>(_: T.Type, kind: String, for indexPath: IndexPath) -> T {
         let identifier: String = String(describing: T.self)
         guard let cell = dequeueReusableSupplementaryView(ofKind: kind,

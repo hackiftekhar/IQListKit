@@ -26,7 +26,7 @@ import UIKit
 
 public struct IQItem: Hashable {
 
-    public static func == (lhs: IQItem, rhs: IQItem) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.model == rhs.model
     }
 
@@ -35,10 +35,12 @@ public struct IQItem: Hashable {
     }
 
     /// Type of the cell
-    public private(set) var type: IQListCell.Type
+    public private(set) var type: any IQListCell.Type
+    public private(set) var supplementaryType: any IQListSupplementaryView.Type
 
     /// Model of the cell
-    public private(set) var model: AnyHashable?
+    public private(set) var model: AnyHashable
+    public private(set) var supplementaryModel: AnyHashable?
 
     /// Updating the model
     public mutating func update<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
@@ -50,8 +52,21 @@ public struct IQItem: Hashable {
     /// - Parameters:
     ///   - type: type of the Cell
     ///   - model: Model of the cell
-    public init<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
+    public init<T: IQModelableCell>(_ type: T.Type, model: T.Model) {
         self.type = type
         self.model = model
+        self.supplementaryType = IQSupplementaryViewPlaceholder.self
+        self.supplementaryModel = nil
     }
+
+    // swiftlint:disable line_length
+    public init<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, model: T.Model?,
+                                                                     supplementaryType: S.Type = IQSupplementaryViewPlaceholder.self,
+                                                                     supplementaryModel: S.Model) {
+        self.type = type
+        self.model = model
+        self.supplementaryType = supplementaryType
+        self.supplementaryModel = supplementaryModel
+    }
+    // swiftlint:enable line_length
 }

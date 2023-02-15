@@ -24,8 +24,8 @@ import UIKit
 
 // MARK: - Main Modelable Cell Protocol
 
-public protocol IQModelableCell: IQModelModifiable, IQCellSizeProvider,
-                                 IQSelectableCell, IQCellActionsProvider where Self: UIView {
+public protocol IQModelableCell: IQModelModifiable, IQViewSizeProvider,
+                                 IQSelectableCell, IQCellActionsProvider, IQReorderableCell where Self: IQListCell {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
     associatedtype Model: Hashable
@@ -71,6 +71,15 @@ public extension IQModelableCell {
 
     var canPerformPrimaryAction: Bool { true }
 
+}
+
+public extension IQReorderableCell {
+
+    var canMove: Bool { false }
+
+    var canEdit: Bool { false }
+
+    var editingStyle: UITableViewCell.EditingStyle { .none }
 }
 
 public extension IQCellActionsProvider {

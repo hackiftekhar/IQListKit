@@ -28,10 +28,10 @@ public struct IQSection: Hashable {
 
     public static func == (lhs: IQSection, rhs: IQSection) -> Bool {
         return lhs.identifier == rhs.identifier &&
-        lhs.header == rhs.header &&
-        lhs.headerSize == rhs.headerSize &&
-        lhs.footer == rhs.footer &&
-        lhs.footerSize == rhs.footerSize
+        lhs.headerType == rhs.headerType &&
+        lhs.footerType == rhs.footerType &&
+        lhs.headerModel == rhs.headerModel &&
+        lhs.footerModel == rhs.footerModel
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -41,18 +41,13 @@ public struct IQSection: Hashable {
     /// Unique identifier of the section
     public let identifier: AnyHashable
 
-    /// Header text and size
-    public let header: String?
-    public let headerView: UIView?
-    public let headerSize: CGSize?
+    /// Type of the cell
+    public private(set) var headerType: IQListSupplementaryView.Type?
+    public private(set) var footerType: IQListSupplementaryView.Type?
 
-    /// Footer text and size
-    public let footer: String?
-    public let footerView: UIView?
-    public let footerSize: CGSize?
-
-    /// Additional data for own purposes
-    public let model: Any?
+    /// Model of the cell
+    public private(set) var headerModel: AnyHashable?
+    public private(set) var footerModel: AnyHashable?
 
     /// Initialization
     /// - Parameters:
@@ -62,16 +57,49 @@ public struct IQSection: Hashable {
     ///   - footer: footer text to display
     ///   - footerSize: footer size
     public init(identifier: AnyHashable,
-                header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
-                footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil,
-                model: Any? = nil) {
+                header: String? = nil,
+                footer: String? = nil) {
         self.identifier = identifier
-        self.header = header
-        self.footer = footer
-        self.headerView = headerView
-        self.footerView = footerView
-        self.headerSize = headerSize
-        self.footerSize = footerSize
-        self.model = model
+        if let header = header {
+            self.headerType = IQSupplementaryViewPlaceholder.self
+            self.headerModel = header
+        }
+
+        if let footer = footer {
+            self.footerType = IQSupplementaryViewPlaceholder.self
+            self.footerModel = footer
+        }
+    }
+
+    public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 headerType: H.Type, headerModel: H.Model) {
+        // swiftlint:enable line_length
+        self.identifier = identifier
+        self.headerType = headerType
+        self.headerModel = headerModel
+        self.footerType = IQSupplementaryViewPlaceholder.self
+        self.footerModel = nil
+    }
+
+    public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 footerType: F.Type, footerModel: F.Model) {
+        // swiftlint:enable line_length
+        self.identifier = identifier
+        self.headerType = IQSupplementaryViewPlaceholder.self
+        self.headerModel = nil
+        self.footerType = footerType
+        self.footerModel = footerModel
+    }
+
+    public init<H: IQModelableSupplementaryView,
+                F: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 headerType: H.Type, headerModel: H.Model,
+                                                 footerType: F.Type, footerModel: F.Model) {
+        // swiftlint:enable line_length
+        self.identifier = identifier
+        self.headerType = headerType
+        self.headerModel = headerModel
+        self.footerType = footerType
+        self.footerModel = footerModel
     }
 }

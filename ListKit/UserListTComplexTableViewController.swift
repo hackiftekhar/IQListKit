@@ -19,6 +19,7 @@ class UserListTComplexTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        list.noItemStateView?.tintColor = UIColor.darkGray
         list.noItemImage = UIImage(named: "empty")
         list.noItemTitle = "No Users"
         list.noItemMessage = "No users to display here."

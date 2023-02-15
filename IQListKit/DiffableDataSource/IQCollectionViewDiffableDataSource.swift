@@ -27,6 +27,9 @@ import UIKit
 // swiftlint:disable file_length
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
+    internal var registeredCells: [IQListCell.Type] = []
+    internal var registeredSupplementaryViews: [String: IQListSupplementaryView.Type] = [:]
+
     private var contextMenuPreviewIndexPath: IndexPath?
 
     weak var proxyDelegate: IQListViewProxyDelegate?
@@ -34,91 +37,108 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
     weak var dataSource: IQListViewDataSource?
     var clearsSelectionOnDidSelect: Bool = true
 
-    // MARK: - Header Footer
+    override init(collectionView: UICollectionView,
+                  cellProvider: @escaping IQCollectionViewDiffableDataSource.CellProvider) {
+        super.init(collectionView: collectionView, cellProvider: cellProvider)
+    }
 
+    // MARK: - Supplementary view
+
+    // swiftlint:disable function_body_length
     override func collectionView(_ collectionView: UICollectionView,
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath) -> UICollectionReusableView {
 
-        let section: IQSection = snapshot().sectionIdentifiers[indexPath.section]
-
-        if kind.elementsEqual(UICollectionView.elementKindSectionHeader) {
-            let reusableView: UICollectionReusableView
-
-            let headerView: UIView? = dataSource?.listView(collectionView,
-                                                           headerFor: section,
-                                                           at: indexPath.section) ?? section.headerView
-
-            if let headerView: UICollectionReusableView = headerView as? UICollectionReusableView {
-                reusableView = headerView
-            } else if let headerView = headerView {
-                let sHeader = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-                sHeader.frame = headerView.bounds
-                sHeader.addSubview(headerView)
-                reusableView = sHeader
-            } else if let header: String = section.header {
-                let sHeader = collectionView.dequeue(IQCollectionViewHeaderFooter.self, kind: kind, for: indexPath)
-                sHeader.textLabel.text = header
-                reusableView = sHeader
-            } else {
-                reusableView = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-            }
-
-            delegate?.listView(collectionView, modifyHeader: reusableView, section: section, at: indexPath.section)
-
-            return reusableView
-        } else if kind.elementsEqual(UICollectionView.elementKindSectionFooter) {
-            let reusableView: UICollectionReusableView
-
-            let footerView: UIView? = dataSource?.listView(collectionView,
-                                                           footerFor: section,
-                                                           at: indexPath.section) ?? section.footerView
-
-            if let footerView: UICollectionReusableView = footerView as? UICollectionReusableView {
-                reusableView = footerView
-            } else if let footerView: UIView = footerView {
-                let sFooter = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-                sFooter.frame = footerView.bounds
-                sFooter.addSubview(footerView)
-                reusableView = sFooter
-            } else if let footer: String = section.footer {
-                let sFooter = collectionView.dequeue(IQCollectionViewHeaderFooter.self, kind: kind, for: indexPath)
-                sFooter.textLabel.text = footer
-                reusableView = sFooter
-            } else {
-                reusableView = collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
-            }
-
-            delegate?.listView(collectionView, modifyFooter: reusableView, section: section, at: indexPath.section)
-
-            return reusableView
-        } else {
-            return collectionView.dequeue(UICollectionReusableView.self, kind: kind, for: indexPath)
+        guard let supplementaryType: IQListSupplementaryView.Type = registeredSupplementaryViews[kind] else {
+            fatalError("Please register a supplementary view first for '\(kind)' kind")
         }
+        let identifier: String = String(describing: supplementaryType)
+
+        let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
+
+        let model: AnyHashable?
+       // It might be header or footer or may be for the 1st row
+        if indexPath.row == 0 {
+
+            // If both types are same then it create a confusing condition, so ignoring if both are of same type
+            if let headerType = aSection.headerType,
+               let footerType = aSection.footerType,
+               String(describing: headerType) == String(describing: footerType),
+               identifier == String(describing: headerType) {
+                model = nil
+                print("""
+                    Header and Footer both are of same type \(headerType.self).
+                    Please try registering different types for header and footer
+                    """)
+            } else if let headerType = aSection.headerType,
+               identifier == String(describing: headerType) {
+                model = aSection.headerModel
+            } else if let footerType = aSection.footerType,
+                identifier == String(describing: footerType) {
+                 model = aSection.footerModel
+            } else if let item: IQItem = self.itemIdentifier(for: indexPath),
+                      !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
+                model = item.supplementaryModel
+            } else {
+                model = nil
+            }
+        } else if let item: IQItem = self.itemIdentifier(for: indexPath),
+                  !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
+            model = item.supplementaryModel
+        } else {
+            model = nil
+        }
+
+        let supplementaryView: UICollectionReusableView
+        if let model = model {
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                       withReuseIdentifier: identifier,
+                                                                       for: indexPath)
+            if let view = view as? IQModelModifiable {
+                view.setModel(model)
+            } else {
+                print("""
+                    \(kind) with identifier \(identifier) \
+                    does not confirm to the \(IQModelModifiable.self) protocol
+                    """)
+            }
+            supplementaryView = view
+        } else if let view = dataSource?.listView(collectionView,
+                                                  supplementaryElementFor: aSection,
+                                                  kind: kind, at: indexPath) {
+            if let view = view as? UICollectionReusableView {
+                supplementaryView = view
+            } else {
+                supplementaryView = collectionView.dequeue(UICollectionReusableView.self,
+                                                           kind: kind, for: indexPath)
+            }
+        } else {
+            supplementaryView = collectionView.dequeue(UICollectionReusableView.self,
+                                                       kind: kind, for: indexPath)
+        }
+
+        delegate?.listView(collectionView, modifySupplementaryElement: supplementaryView,
+                           section: aSection, kind: kind, at: indexPath)
+
+        return supplementaryView
     }
+    // swiftlint:enable function_body_length
 
     func collectionView(_ collectionView: UICollectionView,
                         willDisplaySupplementaryView view: UICollectionReusableView,
                         forElementKind elementKind: String, at indexPath: IndexPath) {
         let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
-        if elementKind.elementsEqual(UICollectionView.elementKindSectionHeader) {
-            delegate?.listView(collectionView, willDisplayHeaderView: view, section: aSection, at: indexPath.section)
-        } else if elementKind.elementsEqual(UICollectionView.elementKindSectionFooter) {
-            delegate?.listView(collectionView, willDisplayFooterView: view, section: aSection, at: indexPath.section)
-        }
+        delegate?.listView(collectionView, willDisplaySupplementaryElement: view,
+                           section: aSection, kind: elementKind, at: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplayingSupplementaryView view: UICollectionReusableView,
                         forElementOfKind elementKind: String, at indexPath: IndexPath) {
         let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
-        if elementKind.elementsEqual(UICollectionView.elementKindSectionHeader) {
-            delegate?.listView(collectionView, didEndDisplayingHeaderView: view,
-                               section: aSection, at: indexPath.section)
-        } else if elementKind.elementsEqual(UICollectionView.elementKindSectionFooter) {
-            delegate?.listView(collectionView, didEndDisplayingFooterView: view,
-                               section: aSection, at: indexPath.section)
-        }
+
+        delegate?.listView(collectionView, didEndDisplayingSupplementaryElement: view,
+                           section: aSection, kind: elementKind, at: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -144,24 +164,18 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
 
 extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout {
 
-    // MARK: - Header Footer
+    // MARK: - Supplementary view
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
 
         let section: IQSection = snapshot().sectionIdentifiers[section]
 
-        if let size: CGSize = section.headerSize {
-            return size
-        } else if let headerView: UIView = section.headerView {
-            return headerView.frame.size
-        } else if let header: String = section.header {
-            let size: CGSize = IQCollectionViewHeaderFooter.sizeThatFitText(text: header,
-                                                                            collectionView: collectionView)
-            return size
-        } else {
-            return CGSize.zero
+        guard let type: IQViewSizeProvider.Type = section.headerType as? IQViewSizeProvider.Type else {
+            return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.headerReferenceSize ?? .zero
         }
+
+        return type.size(for: section.headerModel, listView: collectionView)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -213,17 +227,11 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         let section = snapshot().sectionIdentifiers[section]
 
-        if let size: CGSize = section.footerSize {
-            return size
-        } else if let headerView: UIView = section.footerView {
-            return headerView.frame.size
-        } else if let footer: String = section.footer {
-            let size: CGSize = IQCollectionViewHeaderFooter.sizeThatFitText(text: footer,
-                                                                            collectionView: collectionView)
-            return size
-        } else {
-            return CGSize.zero
+        guard let type: IQViewSizeProvider.Type = section.footerType as? IQViewSizeProvider.Type else {
+            return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.footerReferenceSize ?? .zero
         }
+
+        return type.size(for: section.footerModel, listView: collectionView)
     }
 
     // MARK: - Cell
@@ -237,7 +245,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
 
         if let size: CGSize = dataSource?.listView(collectionView, size: item, at: indexPath) {
             return size
-        } else if let type: IQCellSizeProvider.Type = item.type as? IQCellSizeProvider.Type {
+        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type {
             return type.size(for: item.model, listView: collectionView)
         }
 
