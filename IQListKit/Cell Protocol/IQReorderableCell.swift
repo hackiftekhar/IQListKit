@@ -32,6 +32,6 @@ public protocol IQReorderableCell where Self: IQListCell {
     /// Is cell editable
     var canEdit: Bool { get }
 
-    /// Is cell canPerformPrimaryAction
+    /// cell editing style
     var editingStyle: UITableViewCell.EditingStyle { get }
 }

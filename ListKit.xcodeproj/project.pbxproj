@@ -254,8 +254,8 @@
 				C0A2AB72259A28CA00F06BFC /* SceneDelegate.swift */,
 				C0EF174525A33A5A0038C5E9 /* UserListTableViewController.swift */,
 				C0EF174625A33A5A0038C5E9 /* UserListTComplexTableViewController.swift */,
-				C0D6D3B5259AFD2800F5B3C4 /* UserViewController.swift */,
 				C08CDB2D264BB11A006BD338 /* UserListCollectionViewController.swift */,
+				C0D6D3B5259AFD2800F5B3C4 /* UserViewController.swift */,
 				C0EABEC22910FA9800F4C6FB /* InsetViewController.swift */,
 				C0A2AB76259A28CA00F06BFC /* Main.storyboard */,
 				C0A2AB79259A28CB00F06BFC /* Assets.xcassets */,
@@ -907,7 +907,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1.2;
+				MARKETING_VERSION = 5.0.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -932,7 +932,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1.2;
+				MARKETING_VERSION = 5.0.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";

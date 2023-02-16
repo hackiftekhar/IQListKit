@@ -2,17 +2,17 @@ IQListKit
 ==========================
 Model driven UITableView/UICollectionView
 
-[![User List](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/user_list.gif)]
 [![Insertion Sort](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/insertion_sort.gif)]
+[![Conference Video Feed](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/conference_video_feed.gif)]
+[![Orthogonal Section](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/orthogonal_section.gif)]
 [![Mountains](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/mountains.gif)]
+[![User List](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/user_list.gif)]
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
 IQListKit allows us to use UITableView/UICollectionView without implementing the dataSource. Just provide the section and their models with cell type and it will take care of rest including the animations of all changes.
 
 For iOS13: Thanks to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot)
-
-For iOS12 and below: Thanks to Ryo Aoyama for [DiffableDataSources](https://github.com/ra1028/DiffableDataSources)
 
 ## Requirements
 [![Platform iOS](https://img.shields.io/badge/Platform-iOS-blue.svg?style=fla)]()
@@ -21,6 +21,7 @@ For iOS12 and below: Thanks to Ryo Aoyama for [DiffableDataSources](https://gith
 |------------------------|----------|--------------------|-----------------------|
 | IQListKit (1.1.0)      | Swift    | iOS 9.0            | Xcode 11              |
 | IQListKit (4.0.0)      | Swift    | iOS 13.0           | Xcode 14              |
+| IQListKit (5.0.0)      | Swift    | iOS 13.0           | Xcode 14              |
 
 #### Swift versions support
 5.0 and above
@@ -79,6 +80,8 @@ How to use IQListKit?
 ==========================
 
 If you wish to learn using a presentation then download the presentation PDF here: [Presentation PDF](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/IQListKitPresentation.pdf)
+
+If you wish to learn about how to use it with Modern Collection View layout then you can download the presentation PDF here: [IQListKit with Modern Collection View](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/IQListKitWithModernCollectionView.pdf)
 
 We'll be learning IQListKit using a simple example.
 
@@ -261,7 +264,7 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 }
 ```
 
-### Step 4) Provide the models with cell types to the IQList in the performUpdates method
+### Step 4) Provide the models with cell types to the IQList in the reloadData method
 Let's do this in a separate function called refreshUI
 
 ```swift
@@ -274,7 +277,7 @@ class UsersTableViewController: UITableViewController {
         //This is the actual method that reloads the data.
         //We could think it like a tableView.reloadData()
         //It does all the needed thing
-        list.performUpdates({
+        list.reloadData({
 
             //If we use multiple sections, then each section should be unique.
             //This should also confirm to hashable, so we can also provide a Int
@@ -497,6 +500,29 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 
     //Cell did end displaying
     func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
+    
+    func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath)
+    
+    func listView(_ listView: IQListView, didHighlight item: IQItem, at indexPath: IndexPath)
+    
+    func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath)
+    
+    func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath)
+    
+    func listView(_ listView: IQListView, modifySupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath)
+                  
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath)
+                 
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: IQListSupplementaryView,
+                  section: IQSection, kind: String, at indexPath: IndexPath)
+               
+    func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
+                  animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
+                  
+    func listView(_ listView: IQListView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration,
+                  animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
 }
 ```
 
@@ -511,11 +537,25 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
      //Return the size of an Item, for tableView the size.height will only be effective
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
-    //Return the headerView of section
-    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    //Return the header or footer View of section (or item in collection view)
+    func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
+                  kind: String, at indexPath: IndexPath) -> IQListSupplementaryView?
 
-    //Return the footerView of section
-    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
+    func sectionIndexTitles(_ listView: IQListView) -> [String]?
+    
+    func listView(_ listView: IQListView, prefetch items: [IQItem], at indexPaths: [IndexPath])
+    
+    func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath])
+    
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool
+    
+    func listView(_ listView: IQListView, move sourceItem: IQItem,
+                  at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+                  
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool
+    
+    func listView(_ listView: IQListView, commit item: IQItem,
+                  style: UITableViewCell.EditingStyle, at indexPath: IndexPath)
 }
 ```
 
@@ -534,6 +574,26 @@ class UserCell: UITableViewCell, IQModelableCell {
     var isSelectable: Bool {    //IQSelectableCell protocol
         return false
     }
+    
+    var isDeselectable: Bool {   //IQSelectableCell protocol
+        return false
+    }
+    
+    var canPerformPrimaryAction: Bool { //IQSelectableCell protocol
+        return false
+    }
+    
+    var canMove: Bool {         //IQReorderableCell protocol
+        return false
+    }
+
+    var canEdit: Bool {         //IQReorderableCell protocol
+        return false
+    }
+    
+    var editingStyle: UITableViewCell.EditingStyle {    //IQReorderableCell protocol
+        return .none
+    }
 }
 ```
 
@@ -544,7 +604,12 @@ Other useful IQModelableCell methods
 class UserCell: UITableViewCell, IQModelableCell {
 
     //...
-
+    
+    // IQViewSizeProvider protocol
+    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+        return 1
+    }
+    
     //IQCellActionsProvider protocol
     func contextMenuPreviewView(configuration: UIContextMenuConfiguration) -> UIView? {
         return viewToBePreview
@@ -557,8 +622,8 @@ Workarounds
 #### IQListKit! 😠 Why are you not loading my cell created in storyboard?
 Well. If we are creating cell in storyboard, then to work with the IQListKit we must have to put the cell identifier exactly same as it's class name. If we are using The UICollectionView then we also have to manually register our cell using **list.registerCell(type: UserCell.self, registerType: .storyboard)** method because with the UICollectionView, there is no way to detect if a cell is created in storyboard.
 
-#### I have a large data set and `list.performUpdates` method takes time to animate the changes 😟. What can I do?
-You would not believe the **performUpdtes** method is **Background Thread Safe** 😍. We can call it in background and can show a loading indicator. In the completion handler we can hide the loading indicator. Under the hood, the change calculations will be done in background. Thanks again to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot) and Ryo Aoyama for [DiffableDataSources](https://github.com/ra1028/DiffableDataSources). The UITableView/UICollectionView will be reloaded in main thread. Please refer the below code:-
+#### I have a large data set and `list.reloadData` method takes time to animate the changes 😟. What can I do?
+You would not believe the **performUpdtes** method is **Background Thread Safe** 😍. We can call it in background and can show a loading indicator. In the completion handler we can hide the loading indicator. Under the hood, the change calculations will be done in background. Thanks again to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot). The UITableView/UICollectionView will be reloaded in main thread. Please refer the below code:-
 
 ```swift
 class UsersTableViewController: UITableViewController {
@@ -570,10 +635,10 @@ class UsersTableViewController: UITableViewController {
         //Show loading indicator
         loadingIndicator.startAnimating()
 
-        //Perform updates in background
+        //Reload data in background
         DispatchQueue.global().async {
 
-            self.list.performUpdates({
+            self.list.reloadData({
 
                 let section = IQSection(identifier: "first")
                 self.list.append(section)

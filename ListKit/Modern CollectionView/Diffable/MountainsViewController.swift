@@ -14,30 +14,26 @@ class MountainsViewController: UIViewController {
     let searchBar = UISearchBar(frame: .zero)
     var mountainsCollectionView: UICollectionView!
 
-    private lazy var list = IQList(listView: mountainsCollectionView, delegateDataSource: self)
+    private lazy var listWrapper = IQListWrapper(listView: mountainsCollectionView,
+                                                 type: LabelCollectionCell.self,
+                                                 registerType: .nib, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureHierarchy()
 
-        list.noItemStateView?.tintColor = UIColor.darkGray
-        list.noItemImage = UIImage(named: "empty")
-        list.noItemTitle = "No Results"
-        list.noItemMessage = "No mountains found with given name"
+        listWrapper.list.noItemStateView?.tintColor = UIColor.darkGray
+        listWrapper.list.noItemImage = UIImage(named: "empty")
+        listWrapper.list.noItemTitle = "No Results"
+        listWrapper.list.noItemMessage = "No mountains found with given name"
 
         performQuery(with: nil)
     }
 
     func performQuery(with filter: String?) {
         let mountains = mountainsController.filteredMountains(with: filter).sorted { $0.name < $1.name }
-
-        list.reloadData({
-            let section = IQSection(identifier: "mountains")
-            list.append([section])
-
-            list.append(LabelCollectionCell.self, models: mountains, section: section)
-        })
+        listWrapper.setModels(mountains, animated: true)
     }
 }
 
