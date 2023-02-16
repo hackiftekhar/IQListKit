@@ -6,7 +6,7 @@ Model driven UITableView/UICollectionView
 [![Conference Video Feed](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/conference_video_feed.gif)]
 [![Orthogonal Section](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/orthogonal_section.gif)]
 [![Mountains](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/mountains.gif)]
-[![User List](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/user_list.gif)]
+[![User List](https://raw.githubusercontent.com/hackiftekhar/IQListKit/master/Documents/users_list.gif)]
 
 [![Build Status](https://travis-ci.org/hackiftekhar/IQListKit.svg)](https://travis-ci.org/hackiftekhar/IQListKit)
 
