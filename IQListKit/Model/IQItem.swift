@@ -35,8 +35,8 @@ public struct IQItem: Hashable {
     }
 
     /// Type of the cell
-    public private(set) var type: any IQListCell.Type
-    public private(set) var supplementaryType: any IQListSupplementaryView.Type
+    public private(set) var type: IQListCell.Type
+    public private(set) var supplementaryType: IQListSupplementaryView.Type
 
     /// Model of the cell
     public private(set) var model: AnyHashable
@@ -59,14 +59,12 @@ public struct IQItem: Hashable {
         self.supplementaryModel = nil
     }
 
-    // swiftlint:disable line_length
-    public init<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, model: T.Model?,
-                                                                     supplementaryType: S.Type = IQSupplementaryViewPlaceholder.self,
+    public init<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, model: T.Model,
+                                                                     supplementaryType: S.Type,
                                                                      supplementaryModel: S.Model) {
         self.type = type
         self.model = model
         self.supplementaryType = supplementaryType
         self.supplementaryModel = supplementaryModel
     }
-    // swiftlint:enable line_length
 }

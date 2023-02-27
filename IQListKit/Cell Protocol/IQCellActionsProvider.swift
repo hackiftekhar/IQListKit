@@ -27,10 +27,10 @@ import UIKit
 public protocol IQCellActionsProvider where Self: IQListCell {
 
     /// leading swipe actions of cell
-    func leadingSwipeActions() -> [IQContextualAction]?
+    func leadingSwipeActions() -> [UIContextualAction]?
 
     /// trailing swipe actions of cell
-    func trailingSwipeActions() -> [IQContextualAction]?
+    func trailingSwipeActions() -> [UIContextualAction]?
 
     /// contextMenu configuration of the cell
     func contextMenuConfiguration() -> UIContextMenuConfiguration?

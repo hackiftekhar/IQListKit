@@ -32,7 +32,7 @@ final public class IQCollectionViewSectionLayout {
                                     gridCount: Int? = nil,
                                     interItemSpacing: NSCollectionLayoutSpacing? = nil) -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: itemSize, supplementaryItems: supplementaryItems)
-        if let itemContentInsets {
+        if let itemContentInsets = itemContentInsets {
             item.contentInsets = itemContentInsets
         }
 

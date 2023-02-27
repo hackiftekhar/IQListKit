@@ -25,9 +25,9 @@ class BookCell: UITableViewCell, IQModelableCell {
         }
     }
 
-    func trailingSwipeActions() -> [IQContextualAction]? {
+    func trailingSwipeActions() -> [UIContextualAction]? {
 
-        let action = IQContextualAction(style: .destructive, title: "Delete") { [weak self] (_, completionHandler) in
+        let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, completionHandler) in
             completionHandler(true)
             guard let self = self, let model = self.model else {
                 return

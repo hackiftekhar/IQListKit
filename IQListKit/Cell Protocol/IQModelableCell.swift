@@ -84,9 +84,9 @@ public extension IQReorderableCell {
 
 public extension IQCellActionsProvider {
 
-    func leadingSwipeActions() -> [IQContextualAction]? { return nil }
+    func leadingSwipeActions() -> [UIContextualAction]? { return nil }
 
-    func trailingSwipeActions() -> [IQContextualAction]? { return nil }
+    func trailingSwipeActions() -> [UIContextualAction]? { return nil }
 
     func contextMenuConfiguration() -> UIContextMenuConfiguration? { return nil }
 

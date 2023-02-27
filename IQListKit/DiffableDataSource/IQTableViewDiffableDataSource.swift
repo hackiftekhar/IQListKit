@@ -399,34 +399,22 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
         guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions: [IQContextualAction] = cell.leadingSwipeActions() else {
+              let swipeActions: [UIContextualAction] = cell.leadingSwipeActions() else {
             return nil
         }
 
-        var contextualSwipeActions: [UIContextualAction] = [UIContextualAction]()
-
-        for action in swipeActions {
-            contextualSwipeActions.append(action.contextualAction())
-        }
-
-        return UISwipeActionsConfiguration(actions: contextualSwipeActions)
+        return UISwipeActionsConfiguration(actions: swipeActions)
     }
 
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
         guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions: [IQContextualAction] = cell.trailingSwipeActions() else {
+              let swipeActions: [UIContextualAction] = cell.trailingSwipeActions() else {
             return nil
         }
 
-        var contextualSwipeActions: [UIContextualAction] = [UIContextualAction]()
-
-        for action in swipeActions {
-            contextualSwipeActions.append(action.contextualAction())
-        }
-
-        return UISwipeActionsConfiguration(actions: contextualSwipeActions)
+        return UISwipeActionsConfiguration(actions: swipeActions)
     }
 
     // MARK: - Context menu

@@ -35,8 +35,8 @@ class UserCell: UITableViewCell, IQModelableCell {
     }
 
     @available(iOS 11.0, *)
-    func leadingSwipeActions() -> [IQContextualAction]? {
-        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (_, completionHandler) in
+    func leadingSwipeActions() -> [UIContextualAction]? {
+        let action = UIContextualAction(style: .normal, title: "Hello Leading") { (_, _, completionHandler) in
             completionHandler(true)
         }
 
@@ -45,9 +45,9 @@ class UserCell: UITableViewCell, IQModelableCell {
         return [action]
     }
 
-    func trailingSwipeActions() -> [IQContextualAction]? {
+    func trailingSwipeActions() -> [UIContextualAction]? {
 
-        let action = IQContextualAction(style: .destructive, title: "Delete") { [weak self] (_, completionHandler) in
+        let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, completionHandler) in
             completionHandler(true)
             guard let self = self, let model = self.model else {
                 return
