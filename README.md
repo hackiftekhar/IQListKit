@@ -95,6 +95,15 @@ struct User {
 }
 ```
 
+## 5 Easy Steps
+1) Confirm ```Model``` (```User``` in our case) to ```Hashable``` protocol.
+2) Confirm ```Cell``` (```UserCell``` in our case) to ```IQModelableCell``` protocol, which force to have a ```var model: Model?``` property.
+3) Connect the ```Model``` with ```Cell``` UI like setting label texts, load images etc.
+4) Create ```IQList``` variable in your ```ViewController``` and optionally configure with optional settings if necessary.
+5) Provide ```Models``` (```User``` models in our case) with Cell type (```UserCell``` in our case) to the IQList and see the magic 🥳🎉🎉🎉.
+
+### Step 1) Confirm ```Model``` (```User``` in our case) to ```Hashable``` protocol.
+
 Before going deep into the implementation, we have to learn about the [Hashable](https://developer.apple.com/documentation/swift/hashable) protocol.
 
 #### Now what is [Hashable](https://developer.apple.com/documentation/swift/hashable)? I never used it before.
@@ -133,7 +142,7 @@ struct User: Hashable {
 
 Now let's come back to the implementation part. To use the IQListKit, we have to follow a couple of steps:
 
-### Step 1) Confirm our "UserCell" to "IQModelableCell" protocol
+### Step 2) Confirm ```Cell``` (```UserCell``` in our case) to ```IQModelableCell``` protocol, which force to have a ```var model: Model?``` property.
 
 #### What is IQModelableCell protocol? and how we should confirm it?
 The **IQModelableCell** protocol says that, whoever adopts me, have to expose a variable named **model** and it can be any type confirming to the [Hashable](https://developer.apple.com/documentation/swift/hashable).
@@ -189,7 +198,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 }
 ```
 
-### Step 2) Connect the model with the cell
+### Step 3) Connect the ```Model``` with ```Cell``` UI like setting label texts, load images etc.
 To do this, we could easily do it by implementing the didSet of our model variable
 ```swift
 class UserCell: UITableViewCell, IQModelableCell {
@@ -208,7 +217,7 @@ class UserCell: UITableViewCell, IQModelableCell {
 }
 ```
 
-### Step 3) Creating and configuring the IQList variable
+### Step 4) Create ```IQList``` variable in your ```ViewController``` and optionally configure with optional settings if necessary.
 Let's say we have a **UsersTableViewController** like this:-
 
 ```swift
@@ -264,7 +273,7 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 }
 ```
 
-### Step 4) Provide the models with cell types to the IQList in the reloadData method
+### Step 5) Provide ```Models``` (```User``` models in our case) with Cell type (```UserCell``` in our case) to the IQList and see the magic 🥳🎉🎉🎉.
 Let's do this in a separate function called refreshUI
 
 ```swift
