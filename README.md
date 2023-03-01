@@ -324,7 +324,31 @@ class UsersTableViewController: UITableViewController {
 Now whenever our users array changes, we will be calling the **refreshUI()** method to reload tableView and that's it.
 
 🥳
+
+
+Default Wrapper Class (IQListWrapper)
 ==========================
+Most of the time, we have same requirements where we show single section list of models in table view or collection view. If this is your case then you can use IQListWrapper class to display single section list of objects very easily. This class handles all the boilerplate code of ViewController.
+
+You just need to initialize the listWrapper and provide table view and cell type, and then you just need to pass models to it and it will refresh your list in your tableView and collectionView.
+
+```swift
+class MountainsViewController: UIViewController {
+
+    //...
+
+    private lazy var listWrapper = IQListWrapper(listView: userTableView,
+                                                 type: UserCell.self,
+                                                 registerType: .nib, delegateDataSource: self)
+    
+    //...
+    
+    func refreshUI(models: [User]) {
+        listWrapper.setModels(models, animated: true)
+    }
+    //...
+}
+```
 
 UITableView/UICollectionView delegate and datasource replacements
 ==========================
