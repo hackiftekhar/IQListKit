@@ -293,10 +293,22 @@ class UsersTableViewController: UITableViewController {
             //like this `let section = IQSection(identifier: 1)`
             let section = IQSection(identifier: "first")
             
-            //We could also provide the header/footer title and it's size also, they are optional
+            //We can also provide the header/footer title, they are optional
             //let section = IQSection(identifier: "first",
-            //                        header: "I'm header", headerSize: CGSize(width: UITableView.automaticDimension, height: 30),
-            //                        footer: "I'm footer", footerSize: CGSize(width: UITableView.automaticDimension, height: 50))
+            //                        header: "I'm header",
+            //                        footer: "I'm footer")
+            
+            /*Or we an also provide custom header footer view and it's model, just like the cell,
+              We just have to adopt IQModelableSupplementaryView protocol to SampleCollectionReusableView 
+              And it's also havie exactly same requirement as cell (have a model property)
+              However, you also need to register this using
+              list.registerSupplementaryView(type: SampleCollectionReusableView.self,
+                                         kind: UICollectionView.elementKindSectionHeader, registerType: .nib)
+              and use it like below
+            */
+            //let section = IQSection(identifier: "first",
+            //                        headerType: SampleCollectionReusableView.self,
+            //                        headerModel: "This is my header text for Sample Collection model")
             
             list.append(section)
 
@@ -570,7 +582,7 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
      //Return the size of an Item, for tableView the size.height will only be effective
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize?
 
-    //Return the header or footer View of section (or item in collection view)
+    //Return the custom header or footer View of section (or item in collection view)
     func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
                   kind: String, at indexPath: IndexPath) -> IQListSupplementaryView?
 
