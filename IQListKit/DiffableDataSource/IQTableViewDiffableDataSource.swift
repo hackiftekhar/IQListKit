@@ -28,7 +28,7 @@ import UIKit
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
     internal var registeredCells: [IQListCell.Type] = []
-    internal var registeredSupplementaryViews: [String: IQListSupplementaryView.Type] = [:]
+    internal var registeredSupplementaryViews: [String: [IQListSupplementaryView.Type]] = [:]
 
     weak var proxyDelegate: IQListViewProxyDelegate?
     weak var delegate: IQListViewDelegate?
@@ -179,7 +179,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
             let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier)
             if let view = view as? IQModelModifiable {
                 view.setModel(aSection.headerModel)
-            } else {
+            } else if view != nil {
                 print("""
                     \(type(of: supplementaryType)) with identifier \(identifier) \
                     does not confirm to the \(IQModelModifiable.self) protocol
@@ -209,7 +209,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
             let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier)
             if let view = view as? IQModelModifiable {
                 view.setModel(aSection.headerModel)
-            } else {
+            } else if view != nil {
                 print("""
                     \(type(of: supplementaryType)) with identifier \(identifier) \
                     does not confirm to the \(IQModelModifiable.self) protocol

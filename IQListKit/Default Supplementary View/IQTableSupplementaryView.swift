@@ -1,5 +1,5 @@
 //
-//  IQTableViewHeaderFooterView.swift
+//  IQTableSupplementaryView.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: - A supplementary view for UITableView
 
-public final class IQDefaultTableSupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
+public final class IQTableSupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
     public typealias Model = String
 
     public var model: Model? {

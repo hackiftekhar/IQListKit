@@ -158,18 +158,21 @@ public extension IQList {
 
         let identifier = String(describing: type)
 
-        guard diffableDataSource.registeredSupplementaryViews[kind] == nil else {
+        var existingTypes: [IQListSupplementaryView.Type] = diffableDataSource.registeredSupplementaryViews[kind] ?? []
+        guard existingTypes.contains(where: {$0 == type}) == false else {
             return
         }
 
         func internalRegisterNib() {
             let nib = UINib(nibName: identifier, bundle: bundle)
             if let tableView = listView as? UITableView {
-                diffableDataSource.registeredSupplementaryViews[kind] = type
+                existingTypes.append(type)
+                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
                 tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
 
             } else if let collectionView = listView as? UICollectionView {
-                diffableDataSource.registeredSupplementaryViews[kind] = type
+                existingTypes.append(type)
+                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
                 collectionView.register(nib, forSupplementaryViewOfKind: kind,
                                         withReuseIdentifier: identifier)
             }
@@ -177,10 +180,12 @@ public extension IQList {
 
         func internalRegisterClass() {
             if let tableView = listView as? UITableView {
-                diffableDataSource.registeredSupplementaryViews[kind] = type
+                existingTypes.append(type)
+                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
                 tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)
             } else if let collectionView = listView as? UICollectionView {
-                diffableDataSource.registeredSupplementaryViews[kind] = type
+                existingTypes.append(type)
+                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
                 collectionView.register(type.self,
                                         forSupplementaryViewOfKind: kind,
                                         withReuseIdentifier: identifier)
@@ -192,12 +197,11 @@ public extension IQList {
 
             switch registerType {
             case .storyboard:
-                diffableDataSource.registeredSupplementaryViews[kind] = type  // Just manually adding the entry
+                existingTypes.append(type)  // Just manually adding the entry
+                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
             case .nib:
-                diffableDataSource.registeredSupplementaryViews[kind] = type  // Just manually adding the entry
                 internalRegisterNib()
             case .class:
-                diffableDataSource.registeredSupplementaryViews[kind] = type  // Just manually adding the entry
                 internalRegisterClass()
             case .default:
 
@@ -205,9 +209,7 @@ public extension IQList {
                 if let tableView = listView as? UITableView {
                     // Validate if the cell is configured in storyboard
                     if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
-                        diffableDataSource.registeredSupplementaryViews[kind] = type
                         hasRegistered = true
-                        return
                     }
                 } else if let collectionView = listView as? UICollectionView {
                     // Validate if the cell is configured in storyboard
@@ -217,7 +219,6 @@ public extension IQList {
                         _ = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                             withReuseIdentifier: identifier,
                                                                             for: dummyIndexPath)
-                        self.diffableDataSource.registeredSupplementaryViews[kind] = type
                         hasRegistered = true
                     } catch: { exception in
                         if let exception = exception {
@@ -242,17 +243,16 @@ public extension IQList {
                     _ = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                         withReuseIdentifier: identifier,
                                                                         for: dummyIndexPath)
-                    self.registeredHeaderFooterViews.append(type)
                     hasRegistered = true
 #endif
-
                 }
 
                 guard !hasRegistered else {
+                    existingTypes.append(type)
+                    diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
                     return
                 }
 
-                diffableDataSource.registeredSupplementaryViews[kind] = type
                 if bundle.path(forResource: identifier, ofType: "nib") != nil {
                     internalRegisterNib()
                 } else {

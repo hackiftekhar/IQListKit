@@ -22,7 +22,7 @@
 
 import UIKit
 
-public extension UICollectionView {
+internal extension UICollectionView {
 
     /// Dequeuing - Supplementary view
     func dequeue<T: UICollectionReusableView>(_: T.Type, kind: String, for indexPath: IndexPath) -> T {

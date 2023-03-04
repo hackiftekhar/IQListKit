@@ -122,13 +122,6 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
             }
         }
     }
-
-    func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {
-
-    }
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    }
 }
 
 extension UserListTableViewController: UserCellDelegate {

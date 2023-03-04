@@ -75,16 +75,13 @@ extension UserListCollectionViewController {
 
         list.reloadData({
 
-//            let firstView = UIView()
-//            firstView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-//            firstView.backgroundColor = UIColor.red
-//
-//            let secondView = UIView()
-//            secondView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-//            secondView.backgroundColor = UIColor.yellow
-
-            let section1 = IQSection(identifier: "firstSection", header: "First Section")
-//            let section1 = IQSection(identifier: "firstSection", header: "First Section", headerView: firstView)
+            let section1: IQSection
+            if Bool.random() {
+                section1 = IQSection(identifier: "firstSection",
+                                     headerType: SampleCollectionReusableView.self, headerModel: .init(color: UIColor.red))
+            } else {
+                section1 = IQSection(identifier: "firstSection", header: "First Section")
+            }
             list.append([section1])
 
             for user in users {
@@ -95,8 +92,14 @@ extension UserListCollectionViewController {
                 }
             }
 
-            let section2 = IQSection(identifier: "secondSection", header: "Second Section")
-//            let section2 = IQSection(identifier: "secondSection", header: "Second Section", headerView: secondView)
+            let section2: IQSection
+            if Bool.random() {
+                section2 = IQSection(identifier: "secondSection",
+                                     headerType: SampleCollectionReusableView.self, headerModel: .init(color: UIColor.green))
+            } else {
+                section2 = IQSection(identifier: "secondSection", header: "Second Section")
+            }
+
             list.append([section2])
 
             for user in users2 {
@@ -128,20 +131,6 @@ extension UserListCollectionViewController: IQListViewDelegateDataSource {
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
-    }
-
-    func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath) {
-    }
-
-    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? {
-        let indexPath = IndexPath(item: 0, section: sectionIndex)
-        let headerView = collectionView.dequeue(SampleCollectionReusableView.self,
-                                                kind: UICollectionView.elementKindSectionHeader,
-                                                for: indexPath)
-        return headerView
-    }
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
     }
 }
 

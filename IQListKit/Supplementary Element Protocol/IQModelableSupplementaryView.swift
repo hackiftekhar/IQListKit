@@ -48,7 +48,7 @@ public extension IQModelableSupplementaryView {
     static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
         if let listView = listView as? UICollectionView {
             if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
-                return CGSize(width: listView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 0)
+                return CGSize(width: listView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 22)
             }
         } else if let listView = listView as? UITableView {
             return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)

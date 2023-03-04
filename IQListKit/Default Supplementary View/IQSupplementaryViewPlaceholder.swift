@@ -30,7 +30,15 @@ public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplement
     public var model: Model?
 
     public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        guard let listView = listView as? UITableView else { return .zero }
-        return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
+
+        if let listView = listView as? UICollectionView {
+            if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
+                let model: Model = model as? Model ?? ""
+                return CGSize(width: listView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: model.isEmpty ? 0 : 22)
+            }
+        } else if let listView = listView as? UITableView {
+            return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
+        }
+        return .zero
     }
 }

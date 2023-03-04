@@ -72,21 +72,23 @@ public struct IQSection: Hashable {
     }
 
     public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
-                                                 headerType: H.Type, headerModel: H.Model) {
+                                                 headerType: H.Type, headerModel: H.Model,
+                                                 footer: String? = nil) {
         // swiftlint:enable line_length
         self.identifier = identifier
         self.headerType = headerType
         self.headerModel = headerModel
         self.footerType = IQSupplementaryViewPlaceholder.self
-        self.footerModel = nil
+        self.footerModel = footer
     }
 
     public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 header: String? = nil,
                                                  footerType: F.Type, footerModel: F.Model) {
         // swiftlint:enable line_length
         self.identifier = identifier
         self.headerType = IQSupplementaryViewPlaceholder.self
-        self.headerModel = nil
+        self.headerModel = header
         self.footerType = footerType
         self.footerModel = footerModel
     }

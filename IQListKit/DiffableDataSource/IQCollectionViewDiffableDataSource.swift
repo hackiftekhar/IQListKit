@@ -28,7 +28,7 @@ import UIKit
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
     internal var registeredCells: [IQListCell.Type] = []
-    internal var registeredSupplementaryViews: [String: IQListSupplementaryView.Type] = [:]
+    internal var registeredSupplementaryViews: [String: [IQListSupplementaryView.Type]] = [:]
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
@@ -49,10 +49,10 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath) -> UICollectionReusableView {
 
-        guard let supplementaryType: IQListSupplementaryView.Type = registeredSupplementaryViews[kind] else {
+        guard let supplementaryTypes: [IQListSupplementaryView.Type] = registeredSupplementaryViews[kind] else {
             fatalError("Please register a supplementary view first for '\(kind)' kind")
         }
-        let identifier: String = String(describing: supplementaryType)
+        let identifier: String
 
         let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
 
@@ -60,32 +60,71 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
        // It might be header or footer or may be for the 1st row
         if indexPath.row == 0 {
 
-            // If both types are same then it create a confusing condition, so ignoring if both are of same type
-            if let headerType = aSection.headerType,
+            if kind == UICollectionView.elementKindSectionHeader,
+               let headerType = aSection.headerType {
+
+                if headerType == IQSupplementaryViewPlaceholder.self,
+                    let headerModel = aSection.headerModel as? IQCollectionSupplementaryView.Model {
+                    identifier = String(describing: IQCollectionSupplementaryView.self)
+                    model = headerModel
+                } else {
+                    identifier = String(describing: headerType)
+                    model = aSection.headerModel
+                }
+            } else if kind == UICollectionView.elementKindSectionFooter,
+                      let footerType = aSection.footerType {
+
+                if footerType == IQSupplementaryViewPlaceholder.self,
+                    let footerModel = aSection.footerModel as? IQCollectionSupplementaryView.Model {
+                    identifier = String(describing: IQCollectionSupplementaryView.self)
+                    model = footerModel
+                } else {
+                    identifier = String(describing: footerType)
+                    model = aSection.footerModel
+                }
+            } else if let headerType = aSection.headerType, // If both types are same then it create a confusing condition, so ignoring if both are of same type
                let footerType = aSection.footerType,
-               String(describing: headerType) == String(describing: footerType),
-               identifier == String(describing: headerType) {
-                model = nil
-                print("""
-                    Header and Footer both are of same type \(headerType.self).
-                    Please try registering different types for header and footer
-                    """)
+               headerType == footerType,
+               supplementaryTypes.contains(where: { $0 == headerType}) {
+                if kind == UICollectionView.elementKindSectionHeader {
+                    model = aSection.headerModel
+                    identifier = String(describing: headerType)
+                } else if kind == UICollectionView.elementKindSectionFooter {
+                    model = aSection.footerModel
+                    identifier = String(describing: footerType)
+                } else {
+                    identifier = ""
+                    model = nil
+                    print("""
+                        Header and Footer both are of same type \(headerType.self).
+                        Please try registering different types for header and footer
+                        """)
+                }
             } else if let headerType = aSection.headerType,
-               identifier == String(describing: headerType) {
+                      supplementaryTypes.contains(where: { $0 == headerType}) {
+                identifier = String(describing: headerType)
                 model = aSection.headerModel
             } else if let footerType = aSection.footerType,
-                identifier == String(describing: footerType) {
-                 model = aSection.footerModel
+                      supplementaryTypes.contains(where: { $0 == footerType}) {
+                identifier = String(describing: footerType)
+                model = aSection.footerModel
             } else if let item: IQItem = self.itemIdentifier(for: indexPath),
                       !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
+                identifier = String(describing: item.supplementaryType)
                 model = item.supplementaryModel
+            } else if let firstType = supplementaryTypes.first {
+                identifier = String(describing: firstType)
+                model = nil
             } else {
+                identifier = ""
                 model = nil
             }
         } else if let item: IQItem = self.itemIdentifier(for: indexPath),
                   !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
+            identifier = String(describing: item.supplementaryType)
             model = item.supplementaryModel
         } else {
+            identifier = ""
             model = nil
         }
 
@@ -175,7 +214,11 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
             return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.headerReferenceSize ?? .zero
         }
 
-        return type.size(for: section.headerModel, listView: collectionView)
+        if type == IQSupplementaryViewPlaceholder.self {
+            return IQCollectionSupplementaryView.size(for: section.headerModel, listView: collectionView)
+        } else {
+            return type.size(for: section.headerModel, listView: collectionView)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -231,7 +274,11 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
             return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.footerReferenceSize ?? .zero
         }
 
-        return type.size(for: section.footerModel, listView: collectionView)
+        if type == IQSupplementaryViewPlaceholder.self {
+            return IQCollectionSupplementaryView.size(for: section.footerModel, listView: collectionView)
+        } else {
+            return type.size(for: section.footerModel, listView: collectionView)
+        }
     }
 
     // MARK: - Cell

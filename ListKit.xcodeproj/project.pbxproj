@@ -665,7 +665,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if [ $CONFIGURATION == 'Debug' ]; then\n#  \"${PODS_ROOT}/SwiftLint/swiftlint\"\n#else\n#  echo \"Not running SwiftLint/swiftlint because we are building for release\"\n#fi\n";
+			shellScript = "if [ $CONFIGURATION == 'Debug' ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\"\nelse\n  echo \"Not running SwiftLint/swiftlint because we are building for release\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -907,7 +907,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.0.0;
+				MARKETING_VERSION = 5.0.2;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -932,7 +932,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.0.0;
+				MARKETING_VERSION = 5.0.2;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=50 -Xfrontend -warn-long-expression-type-checking=20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.ListKit.ListKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";

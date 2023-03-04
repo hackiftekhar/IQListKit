@@ -37,6 +37,7 @@ extension PinnedSectionHeaderFooterViewController {
 
         sectionHeader.pinToVisibleBounds = true
         sectionHeader.zIndex = 2
+        sectionHeader.extendsBoundary = false
 
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -57,7 +58,7 @@ extension PinnedSectionHeaderFooterViewController {
 
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
         section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
-        section.interGroupSpacing = 5
+//        section.interGroupSpacing = 5
 
         let layout = IQCollectionViewLayout.layout(scrollDirection: .vertical,
                                                        section: section)

@@ -177,7 +177,7 @@ public final class IQList: NSObject {
                                                                delegate: delegate, dataSource: dataSource,
                                           defaultRowAnimation: defaultRowAnimation)
 
-            registerSupplementaryView(type: IQDefaultTableSupplementaryView.self, kind: "", registerType: .class)
+            registerSupplementaryView(type: IQTableSupplementaryView.self, kind: "", registerType: .class)
 
         } else if let collectionView = listView as? UICollectionView {
 
