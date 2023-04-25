@@ -65,7 +65,7 @@ final public class IQCollectionViewSectionLayout {
         }
 
         let section: NSCollectionLayoutSection = NSCollectionLayoutSection(group: group)
-
+        
         return section
     }
 

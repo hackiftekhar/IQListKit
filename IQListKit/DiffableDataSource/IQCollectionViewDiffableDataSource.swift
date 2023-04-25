@@ -54,7 +54,14 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
         }
         let identifier: String
 
-        let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
+        let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
+        guard indexPath.section < sectionIdentifiers.count else {
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                       withReuseIdentifier: "UICollectionReusableView",
+                                                                       for: indexPath)
+            return view
+        }
+        let aSection: IQSection = sectionIdentifiers[indexPath.section]
 
         let model: AnyHashable?
        // It might be header or footer or may be for the 1st row
@@ -166,7 +173,13 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
     func collectionView(_ collectionView: UICollectionView,
                         willDisplaySupplementaryView view: UICollectionReusableView,
                         forElementKind elementKind: String, at indexPath: IndexPath) {
-        let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
+
+        let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
+        guard indexPath.section < sectionIdentifiers.count else {
+            return
+        }
+        let aSection: IQSection = sectionIdentifiers[indexPath.section]
+
         delegate?.listView(collectionView, willDisplaySupplementaryElement: view,
                            section: aSection, kind: elementKind, at: indexPath)
     }
@@ -174,7 +187,12 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplayingSupplementaryView view: UICollectionReusableView,
                         forElementOfKind elementKind: String, at indexPath: IndexPath) {
-        let aSection: IQSection = snapshot().sectionIdentifiers[indexPath.section]
+
+        let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
+        guard indexPath.section < sectionIdentifiers.count else {
+            return
+        }
+        let aSection: IQSection = sectionIdentifiers[indexPath.section]
 
         delegate?.listView(collectionView, didEndDisplayingSupplementaryElement: view,
                            section: aSection, kind: elementKind, at: indexPath)
@@ -208,16 +226,20 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
 
-        let section: IQSection = snapshot().sectionIdentifiers[section]
+        let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
+        guard section < sectionIdentifiers.count else {
+            return .zero
+        }
+        let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = section.headerType as? IQViewSizeProvider.Type else {
+        guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
             return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.headerReferenceSize ?? .zero
         }
 
         if type == IQSupplementaryViewPlaceholder.self {
-            return IQCollectionSupplementaryView.size(for: section.headerModel, listView: collectionView)
+            return IQCollectionSupplementaryView.size(for: aSection.headerModel, listView: collectionView)
         } else {
-            return type.size(for: section.headerModel, listView: collectionView)
+            return type.size(for: aSection.headerModel, listView: collectionView)
         }
     }
 
@@ -268,16 +290,20 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        let section = snapshot().sectionIdentifiers[section]
+        let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
+        guard section < sectionIdentifiers.count else {
+            return .zero
+        }
+        let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = section.footerType as? IQViewSizeProvider.Type else {
+        guard let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type else {
             return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.footerReferenceSize ?? .zero
         }
 
         if type == IQSupplementaryViewPlaceholder.self {
-            return IQCollectionSupplementaryView.size(for: section.footerModel, listView: collectionView)
+            return IQCollectionSupplementaryView.size(for: aSection.footerModel, listView: collectionView)
         } else {
-            return type.size(for: section.footerModel, listView: collectionView)
+            return type.size(for: aSection.footerModel, listView: collectionView)
         }
     }
 

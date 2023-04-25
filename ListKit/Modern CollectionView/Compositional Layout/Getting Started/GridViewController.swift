@@ -27,29 +27,6 @@ class GridViewController: UIViewController {
 }
 
 extension GridViewController {
-    private func abcd() {
-        var subitems: [NSCollectionLayoutItem] = []
-        do {
-            var itemLayoutSize: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
-            let item = NSCollectionLayoutItem(layoutSize: itemLayoutSize)
-            subitems.append(item)
-        }
-        do {
-            var itemLayoutSize: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
-            let item = NSCollectionLayoutItem(layoutSize: itemLayoutSize)
-            subitems.append(item)
-        }
-        
-        var groupLayoutSize: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.2))
-        let group: NSCollectionLayoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: groupLayoutSize,
-                                                                                subitems: subitems)
-
-        let section = NSCollectionLayoutSection(group: group)
-
-        let configuration: UICollectionViewCompositionalLayoutConfiguration = .init()
-        let layout = UICollectionViewCompositionalLayout(section: section, configuration: configuration)
-
-    }
 
     /// - Tag: Grid
     private func createLayout() -> UICollectionViewLayout {
