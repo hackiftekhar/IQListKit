@@ -5,7 +5,7 @@
 //  Created by Iftekhar on 30/12/20.
 //
 
-import Foundation
+import UIKit
 import IQListKit
 
 protocol BookCellDelegate: AnyObject {

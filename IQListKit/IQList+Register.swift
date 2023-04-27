@@ -118,7 +118,7 @@ public extension IQList {
 #else
                     let dummyIndexPath = IndexPath(item: 0, section: 0)
                     _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
-                    self.registeredCells.append(type)
+                    self.diffableDataSource.registeredCells.append(type)
                     hasRegistered = true
 #endif
                 }

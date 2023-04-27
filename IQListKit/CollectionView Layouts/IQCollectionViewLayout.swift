@@ -20,8 +20,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
-
 /*
  Here are some links where you can find more collection view layouts made by other developers and open source projects
 
@@ -73,6 +71,8 @@ import Foundation
  https://github.com/AhmedRagab99/musico
 
  */
+
+import UIKit
 
 final public class IQCollectionViewLayout {
 
