@@ -43,7 +43,7 @@ public struct IQItem: Hashable {
     public private(set) var supplementaryModel: AnyHashable?
 
     /// Updating the model
-    public mutating func update<T: IQModelableCell>(_ type: T.Type, model: T.Model?) {
+    public mutating func update<T: IQModelableCell>(_ type: T.Type, model: T.Model) {
         self.type = type
         self.model = model
     }

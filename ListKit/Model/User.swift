@@ -11,8 +11,8 @@ struct User: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-        hasher.combine(name)
-        hasher.combine(email)
+//        hasher.combine(name)
+//        hasher.combine(email)
     }
 
     static func == (lhs: Self, rhs: Self) -> Bool {

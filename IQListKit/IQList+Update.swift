@@ -47,7 +47,8 @@ public extension IQList {
     ///   - completion: the completion block will be called after reloading the list
     func reloadData(_ updates: () -> Void,
                     updateExistingSnapshot: Bool = false,
-                    animatingDifferences: Bool = true, animation: UITableView.RowAnimation? = nil,
+                    animatingDifferences: Bool = true, diffing: Bool? = nil,
+                    animation: UITableView.RowAnimation? = nil,
                     endLoadingOnCompletion: Bool = true,
                     completion: (() -> Void)? = nil) {
 
@@ -58,30 +59,32 @@ public extension IQList {
         }
 
         updates()
-        apply(batchSnapshot, animatingDifferences: animatingDifferences, animation: animation,
+        apply(batchSnapshot, animatingDifferences: animatingDifferences, diffing: diffing, animation: animation,
               endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
     }
 
     func apply(_ snapshot: IQDiffableDataSourceSnapshot,
-               animatingDifferences: Bool = true, animation: UITableView.RowAnimation? = nil,
+               animatingDifferences: Bool = true, diffing: Bool? = nil,
+               animation: UITableView.RowAnimation? = nil,
                endLoadingOnCompletion: Bool = true,
                completion: (() -> Void)? = nil) {
 
         if let reloadQueue = reloadQueue {
             reloadQueue.async { [weak self] in
-                self?.privateApply(snapshot, animatingDifferences: animatingDifferences,
+                self?.privateApply(snapshot, animatingDifferences: animatingDifferences, diffing: diffing,
                                    animation: animation, endLoadingOnCompletion: endLoadingOnCompletion,
                                    completion: completion)
             }
         } else {
-            self.privateApply(snapshot, animatingDifferences: animatingDifferences,
+            self.privateApply(snapshot, animatingDifferences: animatingDifferences, diffing: diffing,
                               animation: animation, endLoadingOnCompletion: endLoadingOnCompletion,
                               completion: completion)
         }
     }
 
     private func privateApply(_ snapshot: IQDiffableDataSourceSnapshot,
-                              animatingDifferences: Bool = true, animation: UITableView.RowAnimation? = nil,
+                              animatingDifferences: Bool = true, diffing: Bool? = nil,
+                              animation: UITableView.RowAnimation? = nil,
                               endLoadingOnCompletion: Bool = true,
                               completion: (() -> Void)? = nil) {
 
@@ -91,10 +94,18 @@ public extension IQList {
             diffableDataSource.defaultRowAnimation = animation
         }
 
-        if #available(iOS 15.0, *), !animatingDifferences {
-            diffableDataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+        if let diffing = diffing {
+            if #available(iOS 15.0, *), !animatingDifferences, !diffing {
+                diffableDataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+            } else {
+                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+            }
         } else {
-            diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+            if #available(iOS 15.0, *), !animatingDifferences {
+                diffableDataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+            } else {
+                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+            }
         }
 
         if let previousDefaultRowAnimation = previousDefaultRowAnimation {

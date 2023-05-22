@@ -1,9 +1,9 @@
 {
   "name": "IQListKit",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "source": {
     "git": "https://github.com/hackiftekhar/IQListKit.git",
-    "tag": "5.0.3"
+    "tag": "5.0.4"
   },
   "summary": "ListKit for handling the dynamic UITableView/UICollectionView cell loading.",
   "homepage": "https://github.com/hackiftekhar/IQListKit",

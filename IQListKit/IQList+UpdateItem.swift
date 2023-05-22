@@ -102,7 +102,8 @@ public extension IQList {
     // We are deleting and adding new items because the batchSnapshot not able
     // to find existing element if they aren't equal. So to update an element we
     // remove the existing one and add the new one at same location.
-    func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model], comparator: (T.Model, T.Model) -> Bool) {
+    func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
+                                    comparator: (T.Model, T.Model) -> Bool) {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
@@ -131,7 +132,31 @@ public extension IQList {
         }
     }
 
-    func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model], comparator: (T.Model, T.Model) -> Bool) {
+    @available(iOS 15.0, *)
+    func reconfigure<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
+                                         comparator: (T.Model, T.Model) -> Bool) {
+
+        let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
+
+        var reconfiguredItems: [IQItem] = []
+        for model in models {
+            if let index = existingItems.firstIndex(where: {
+                if let existingModel = $0.model as? T.Model {
+                    return comparator(existingModel, model)
+                }
+                return false
+            }) {
+                var item = existingItems[index]
+                item.update(type, model: model)
+                reconfiguredItems.append(item)
+            }
+        }
+
+        batchSnapshot.reconfigureItems(reconfiguredItems)
+    }
+
+    func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
+                                    comparator: (T.Model, T.Model) -> Bool) {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
