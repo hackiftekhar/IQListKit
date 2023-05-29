@@ -53,7 +53,7 @@ public extension IQList {
                     completion: (() -> Void)? = nil) {
 
         if updateExistingSnapshot {
-            batchSnapshot = self.snapshot()
+            batchSnapshot = snapshot()
         } else {
             batchSnapshot = IQDiffableDataSourceSnapshot()
         }
@@ -76,9 +76,9 @@ public extension IQList {
                                    completion: completion)
             }
         } else {
-            self.privateApply(snapshot, animatingDifferences: animatingDifferences, diffing: diffing,
-                              animation: animation, endLoadingOnCompletion: endLoadingOnCompletion,
-                              completion: completion)
+            privateApply(snapshot, animatingDifferences: animatingDifferences, diffing: diffing,
+                         animation: animation, endLoadingOnCompletion: endLoadingOnCompletion,
+                         completion: completion)
         }
     }
 
@@ -120,11 +120,11 @@ public extension IQList {
         }
 
         if Thread.isMainThread {
-            self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
+            setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
         } else {
-            OperationQueue.main.addOperation {
-                self.setIsLoading(isLoading,
-                                  animated: animatingDifferences)    /// Updating the backgroundView on main thread
+            OperationQueue.main.addOperation { [weak self] in
+                self?.setIsLoading(isLoading,
+                                   animated: animatingDifferences)    /// Updating the backgroundView on main thread
             }
         }
     }
@@ -157,11 +157,11 @@ public extension IQList {
         }
 
         if Thread.isMainThread {
-            self.setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
+            setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
         } else {
-            OperationQueue.main.addOperation {
-                self.setIsLoading(isLoading,
-                                  animated: animatingDifferences)    /// Updating the backgroundView on main thread
+            OperationQueue.main.addOperation { [weak self] in
+                self?.setIsLoading(isLoading,
+                                   animated: animatingDifferences)    /// Updating the backgroundView on main thread
             }
         }
     }

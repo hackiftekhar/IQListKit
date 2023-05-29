@@ -94,10 +94,10 @@ public extension IQList {
                     // Validate if the cell is configured in storyboard
 
 #if canImport(SwiftTryCatch)
-                    SwiftTryCatch.try {
+                    SwiftTryCatch.try { [weak self] in
                         let dummyIndexPath = IndexPath(item: 0, section: 0)
                         _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
-                        self.diffableDataSource.registeredCells.append(type)
+                        self?.diffableDataSource.registeredCells.append(type)
                         hasRegistered = true
                     } catch: { exception in
                         if let exception = exception {
@@ -118,7 +118,7 @@ public extension IQList {
 #else
                     let dummyIndexPath = IndexPath(item: 0, section: 0)
                     _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
-                    self.diffableDataSource.registeredCells.append(type)
+                    diffableDataSource.registeredCells.append(type)
                     hasRegistered = true
 #endif
                 }

@@ -114,13 +114,22 @@ public final class IQList: NSObject {
 
         privateIsLoading = isLoading
 
-        let snapshot: IQDiffableDataSourceSnapshot = self.snapshot()
+        let snapshot: IQDiffableDataSourceSnapshot = snapshot()
         let haveRecords: Bool = snapshot.numberOfItems > 0
         let animationDuration = animated ? 0.3 : 0
 
+        let showNoItems = (isLoading || !haveRecords)
+        if showNoItems {
+            self.noItemContainerView.isHidden = false
+        }
+
         UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            self?.noItemContainerView.alpha = (isLoading || snapshot.numberOfItems == 0) ? 1.0 : 0.0
+            self?.noItemContainerView.alpha = showNoItems ? 1.0 : 0.0
             self?.noItemStateView?.setIsLoading(isLoading, haveRecords: haveRecords, animated: animated)
+        }, completion: { _ in
+            if !showNoItems {
+                self.noItemContainerView.isHidden = true
+            }
         })
     }
 
@@ -177,7 +186,8 @@ public final class IQList: NSObject {
                                                                delegate: delegate, dataSource: dataSource,
                                           defaultRowAnimation: defaultRowAnimation)
 
-            registerSupplementaryView(type: IQTableSupplementaryView.self, kind: "", registerType: .class)
+            registerSupplementaryView(type: IQTableTitleSupplementaryView.self, kind: "", registerType: .class)
+            registerSupplementaryView(type: IQTableEmptySupplementaryView.self, kind: "", registerType: .class)
 
         } else if let collectionView = listView as? UICollectionView {
 
@@ -188,9 +198,13 @@ public final class IQList: NSObject {
                                       kind: UICollectionView.elementKindSectionHeader, registerType: .class)
             registerSupplementaryView(type: UICollectionReusableView.self,
                                       kind: UICollectionView.elementKindSectionFooter, registerType: .class)
-            registerSupplementaryView(type: IQCollectionSupplementaryView.self,
+            registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
                                       kind: UICollectionView.elementKindSectionHeader, registerType: .class)
-            registerSupplementaryView(type: IQCollectionSupplementaryView.self,
+            registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
+                                      kind: UICollectionView.elementKindSectionFooter, registerType: .class)
+            registerSupplementaryView(type: IQCollectionEmptySupplementaryView.self,
+                                      kind: UICollectionView.elementKindSectionHeader, registerType: .class)
+            registerSupplementaryView(type: IQCollectionEmptySupplementaryView.self,
                                       kind: UICollectionView.elementKindSectionFooter, registerType: .class)
 
         } else {

@@ -94,7 +94,7 @@ extension SectionHeadersFootersViewController: IQListViewDelegateDataSource {
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
 
                 var items: [ListCell.Model] = []
-                for (rowIndex, _) in numbers.enumerated() {
+                for rowIndex in numbers.indices {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)"))
                 }
 

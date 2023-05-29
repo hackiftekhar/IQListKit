@@ -1,5 +1,5 @@
 //
-//  IQTableSupplementaryView.swift
+//  IQTableEmptySupplementaryView.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,18 +22,14 @@
 
 import UIKit
 
-// MARK: - A supplementary view for UITableView
+// MARK: - An empty supplementary view for UITableView
 
-public final class IQTableSupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
-    public typealias Model = String
+public final class IQTableEmptySupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
+    public typealias Model = AnyHashable
 
-    public var model: Model? {
-        didSet {
-            textLabel?.text = model
-        }
-    }
+    public var model: Model?
 
     public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        return CGSize(width: listView.frame.width, height: 22)
+        return CGSize(width: listView.frame.width, height: 0)
     }
 }

@@ -76,7 +76,8 @@ extension ReorderableListViewController {
         navigationItem.largeTitleDisplayMode = .always
 
         func createMenu() -> UIMenu {
-            let refreshAction = UIAction(title: "Reload backingStore", image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
+            let refreshAction = UIAction(title: "Reload backingStore",
+                                         image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
                 guard let self = self else { return }
                 // update from our source of truth: our backing store.
                 // This shows us that the backing store was properly updated from any
@@ -84,7 +85,8 @@ extension ReorderableListViewController {
                 self.applySnapshotsFromBackingStore(animated: true)
             }
 
-            let restoreAction = UIAction(title: "Reload initialStore", image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
+            let restoreAction = UIAction(title: "Reload initialStore",
+                                         image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
                 guard let self = self else { return }
                 self.applyInitialBackingStore(animated: true)
             }
@@ -115,7 +117,8 @@ extension ReorderableListViewController {
                 finalSnapshotAction.state = .on
             }
 
-            let reorderingMethodMenu = UIMenu(title: "", options: .displayInline, children: [finalSnapshotAction, collectionDifferenceAction])
+            let reorderingMethodMenu = UIMenu(title: "", options: .displayInline,
+                                              children: [finalSnapshotAction, collectionDifferenceAction])
             let menu = UIMenu(title: "", children: [refreshAction, restoreAction, reorderingMethodMenu])
             return menu
         }

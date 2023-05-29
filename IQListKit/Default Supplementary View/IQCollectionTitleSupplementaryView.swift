@@ -1,5 +1,5 @@
 //
-//  IQCollectionSupplementaryView.swift
+//  IQCollectionTitleSupplementaryView.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: - A supplementary view for UICollectionView
 
-public final class IQCollectionSupplementaryView: UICollectionReusableView, IQModelableSupplementaryView {
+public final class IQCollectionTitleSupplementaryView: UICollectionReusableView, IQModelableSupplementaryView {
 
     public let textLabel = UILabel()
 
@@ -41,7 +41,7 @@ public final class IQCollectionSupplementaryView: UICollectionReusableView, IQMo
         } else {
             textLabel.textColor = UIColor.label
         }
-        self.addSubview(textLabel)
+        addSubview(textLabel)
 
         let views: [String: UIView] = ["textLabel": textLabel]
 
@@ -49,8 +49,8 @@ public final class IQCollectionSupplementaryView: UICollectionReusableView, IQMo
                                                           options: [], metrics: [:], views: views)
         let centerY = NSLayoutConstraint(item: textLabel, attribute: .centerY, relatedBy: .equal,
                                          toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
-        self.addConstraints(hConstraints)
-        self.addConstraint(centerY)
+        addConstraints(hConstraints)
+        addConstraint(centerY)
     }
 
     required init?(coder: NSCoder) {

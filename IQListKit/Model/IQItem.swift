@@ -55,8 +55,8 @@ public struct IQItem: Hashable {
     public init<T: IQModelableCell>(_ type: T.Type, model: T.Model) {
         self.type = type
         self.model = model
-        self.supplementaryType = IQSupplementaryViewPlaceholder.self
-        self.supplementaryModel = nil
+        supplementaryType = IQSupplementaryViewPlaceholder.self
+        supplementaryModel = nil
     }
 
     public init<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, model: T.Model,

@@ -26,7 +26,7 @@ final public class IQListWrapper<T: IQModelableCell> {
 
     var section: IQSection = IQSection(identifier: "main") {
         didSet {
-            self.reloadData(animated: false)
+            reloadData(animated: false)
         }
     }
 
@@ -49,13 +49,13 @@ final public class IQListWrapper<T: IQModelableCell> {
         }
         set {
             _models = newValue
-            self.reloadData(animated: false)
+            reloadData(animated: false)
         }
     }
 
     public func setModels(_ models: [T.Model], animated: Bool) {
         _models = models
-        self.reloadData(animated: animated)
+        reloadData(animated: animated)
     }
 
     private func reloadData(animated: Bool) {

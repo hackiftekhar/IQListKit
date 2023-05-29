@@ -1,5 +1,5 @@
 //
-//  Array+Extension.swift
+//  IQCollectionEmptySupplementaryView.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,26 +20,16 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
+import UIKit
 
-internal extension Array where Element: Hashable {
+// MARK: - An empty supplementary view for UICollectionView
 
-    /// Return unique and duplicate elements from array (and an option to pass existing elements)
-    @discardableResult
-    func removeDuplicate(existingElements: [Element] = []) -> (unique: [Element], duplicate: [Element]) {
+public final class IQCollectionEmptySupplementaryView: UICollectionReusableView, IQModelableSupplementaryView {
 
-        var unique: [Element] = []
-        var duplicate: [Element] = []
+    public typealias Model = AnyHashable
 
-        forEach { element in
-
-            if !unique.contains(element), !existingElements.contains(element) {
-                unique.append(element)
-            } else {
-                duplicate.append(element)
-            }
-        }
-
-        return (unique, duplicate)
+    public var model: Model?
+    public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+        return CGSize(width: 0, height: 0)
     }
 }

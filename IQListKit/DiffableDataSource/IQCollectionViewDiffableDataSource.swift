@@ -71,8 +71,8 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                let headerType = aSection.headerType {
 
                 if headerType == IQSupplementaryViewPlaceholder.self,
-                    let headerModel = aSection.headerModel as? IQCollectionSupplementaryView.Model {
-                    identifier = String(describing: IQCollectionSupplementaryView.self)
+                    let headerModel = aSection.headerModel as? IQCollectionTitleSupplementaryView.Model {
+                    identifier = String(describing: IQCollectionTitleSupplementaryView.self)
                     model = headerModel
                 } else {
                     identifier = String(describing: headerType)
@@ -82,8 +82,8 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                       let footerType = aSection.footerType {
 
                 if footerType == IQSupplementaryViewPlaceholder.self,
-                    let footerModel = aSection.footerModel as? IQCollectionSupplementaryView.Model {
-                    identifier = String(describing: IQCollectionSupplementaryView.self)
+                    let footerModel = aSection.footerModel as? IQCollectionTitleSupplementaryView.Model {
+                    identifier = String(describing: IQCollectionTitleSupplementaryView.self)
                     model = footerModel
                 } else {
                     identifier = String(describing: footerType)
@@ -115,7 +115,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                       supplementaryTypes.contains(where: { $0 == footerType}) {
                 identifier = String(describing: footerType)
                 model = aSection.footerModel
-            } else if let item: IQItem = self.itemIdentifier(for: indexPath),
+            } else if let item: IQItem = itemIdentifier(for: indexPath),
                       !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
                 identifier = String(describing: item.supplementaryType)
                 model = item.supplementaryModel
@@ -126,7 +126,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                 identifier = ""
                 model = nil
             }
-        } else if let item: IQItem = self.itemIdentifier(for: indexPath),
+        } else if let item: IQItem = itemIdentifier(for: indexPath),
                   !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
             identifier = String(describing: item.supplementaryType)
             model = item.supplementaryModel
@@ -217,6 +217,11 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
     override func indexTitles(for collectionView: UICollectionView) -> [String]? {
         dataSource?.sectionIndexTitles(collectionView)
     }
+
+//    override func collectionView(_ collectionView: UICollectionView,
+//                                 indexPathForIndexTitle title: String, at index: Int) -> IndexPath {
+//
+//    }
 }
 
 extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout {
@@ -237,7 +242,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
         }
 
         if type == IQSupplementaryViewPlaceholder.self {
-            return IQCollectionSupplementaryView.size(for: aSection.headerModel, listView: collectionView)
+            return IQCollectionTitleSupplementaryView.size(for: aSection.headerModel, listView: collectionView)
         } else {
             return type.size(for: aSection.headerModel, listView: collectionView)
         }
@@ -301,7 +306,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
         }
 
         if type == IQSupplementaryViewPlaceholder.self {
-            return IQCollectionSupplementaryView.size(for: aSection.footerModel, listView: collectionView)
+            return IQCollectionTitleSupplementaryView.size(for: aSection.footerModel, listView: collectionView)
         } else {
             return type.size(for: aSection.footerModel, listView: collectionView)
         }
@@ -424,12 +429,20 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
         delegate?.listView(collectionView, didEndDisplaying: cell, at: indexPath)
     }
 
-//    // MARK: - Context menu
-//    func collectionView(_ collectionView: UICollectionView,
-//                        contextMenuConfigurationForItemsAt indexPaths: [IndexPath],
-//                        point: CGPoint) -> UIContextMenuConfiguration? {
-//
-//    }
+    // MARK: - Context menu
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemsAt indexPaths: [IndexPath],
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+
+        guard let indexPath = indexPaths.first,
+              let cell: IQCellActionsProvider = collectionView.cellForItem(at: indexPath) as? IQCellActionsProvider,
+              let configuration: UIContextMenuConfiguration = cell.contextMenuConfiguration() else {
+            return nil
+        }
+
+        contextMenuPreviewIndexPath = indexPath
+        return configuration
+    }
 
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,

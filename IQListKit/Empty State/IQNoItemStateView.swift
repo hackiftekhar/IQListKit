@@ -29,7 +29,7 @@ public final class IQNoItemStateView: UIView, IQNoItemStateRepresentable {
         super.init(frame: frame)
 
         do {
-            self.addSubview(loadingStackView)
+            addSubview(loadingStackView)
             loadingStackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
             loadingStackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
             loadingStackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -40,7 +40,7 @@ public final class IQNoItemStateView: UIView, IQNoItemStateRepresentable {
         }
 
         do {
-            self.addSubview(noItemStackView)
+            addSubview(noItemStackView)
             noItemStackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
             noItemStackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
             noItemStackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -76,19 +76,19 @@ public final class IQNoItemStateView: UIView, IQNoItemStateRepresentable {
                              haveRecords: Bool,
                              animated: Bool = false) {
         if isLoading {
-            self.noItemStackView.alpha = 0.0
+            noItemStackView.alpha = 0.0
 
             if haveRecords {
-                self.loadingIndicator.stopAnimating()
-                self.loadingStackView.alpha = 0.0
+                loadingIndicator.stopAnimating()
+                loadingStackView.alpha = 0.0
             } else {
-                self.loadingIndicator.startAnimating()
-                self.loadingStackView.alpha = 1.0
+                loadingIndicator.startAnimating()
+                loadingStackView.alpha = 1.0
             }
         } else {
-            self.loadingIndicator.stopAnimating()
-            self.loadingStackView.alpha = 0.0
-            self.noItemStackView.alpha = haveRecords ? 0.0 : 1.0
+            loadingIndicator.stopAnimating()
+            loadingStackView.alpha = 0.0
+            noItemStackView.alpha = haveRecords ? 0.0 : 1.0
         }
     }
 
