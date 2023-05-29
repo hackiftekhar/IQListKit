@@ -1,5 +1,5 @@
 PODS:
-  - IQListKit (4.1.1):
+  - IQListKit (6.0.0):
     - SwiftTryCatch (~> 0.0.1)
   - SwiftLint (0.50.1)
   - SwiftTryCatch (0.0.1)
@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  IQListKit: 5be3415d864a046d4b9a2941c23827e947026171
+  IQListKit: 432fab39c1070829087531cf8643b1e763243104
   SwiftLint: 6b0cf1f4d619808dbc16e4fab064ce6fc79f090b
   SwiftTryCatch: fb6d2b34abe48efd69578dac919293a44f95b481
 
