@@ -24,8 +24,10 @@ import UIKit
 
 final public class IQListWrapper<T: IQModelableCell> {
 
-    public enum Section: Hashable {
-        case main
+    var section: IQSection = IQSection(identifier: "main") {
+        didSet {
+            self.reloadData(animated: false)
+        }
     }
 
     public let list: IQList
@@ -59,7 +61,6 @@ final public class IQListWrapper<T: IQModelableCell> {
     private func reloadData(animated: Bool) {
 
         list.reloadData({
-            let section = IQSection(identifier: Section.main)
             list.append([section])
             list.append(T.self, models: models)
         }, animatingDifferences: animated)

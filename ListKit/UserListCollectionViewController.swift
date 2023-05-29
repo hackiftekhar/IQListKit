@@ -78,7 +78,8 @@ extension UserListCollectionViewController {
             let section1: IQSection
             if Bool.random() {
                 section1 = IQSection(identifier: "firstSection",
-                                     headerType: SampleCollectionReusableView.self, headerModel: .init(color: UIColor.red))
+                                     headerType: SampleCollectionReusableView.self,
+                                     headerModel: .init(color: UIColor.red))
             } else {
                 section1 = IQSection(identifier: "firstSection", header: "First Section")
             }
@@ -95,7 +96,8 @@ extension UserListCollectionViewController {
             let section2: IQSection
             if Bool.random() {
                 section2 = IQSection(identifier: "secondSection",
-                                     headerType: SampleCollectionReusableView.self, headerModel: .init(color: UIColor.green))
+                                     headerType: SampleCollectionReusableView.self,
+                                     headerModel: .init(color: UIColor.green))
             } else {
                 section2 = IQSection(identifier: "secondSection", header: "Second Section")
             }

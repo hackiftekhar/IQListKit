@@ -10,9 +10,9 @@ import IQListKit
 
 @available(iOS 14.0, *)
 class EmojiExplorerListViewController: UIViewController {
-    
+
     typealias Section = Emoji.Category
-    
+
     struct Item: Hashable {
         let title: String
         let emoji: Emoji
@@ -22,24 +22,24 @@ class EmojiExplorerListViewController: UIViewController {
         }
         private let identifier = UUID()
     }
-    
+
     var collectionView: UICollectionView!
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+
         configureNavItem()
         configureHierarchy()
         configureDataSource()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if let indexPath = self.collectionView.indexPathsForSelectedItems?.first {
             if let coordinator = self.transitionCoordinator {
-                coordinator.animate(alongsideTransition: { context in
+                coordinator.animate(alongsideTransition: { _ in
                     self.collectionView.deselectItem(at: indexPath, animated: true)
                 }) { (context) in
                     if context.isCancelled {

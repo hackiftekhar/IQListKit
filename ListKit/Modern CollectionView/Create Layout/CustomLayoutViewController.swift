@@ -41,7 +41,8 @@ extension CustomLayoutViewController {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(collectionView)
 
-        let editBarButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(editLayout(_:)))
+        let editBarButton = UIBarButtonItem(barButtonSystemItem: .compose,
+                                            target: self, action: #selector(editLayout(_:)))
         self.navigationItem.rightBarButtonItem = editBarButton
 
         do {
@@ -84,7 +85,8 @@ extension CustomLayoutViewController: CreateLayoutViewControllerDelegate, UIPopo
         self.present(createLayoutNavigationController, animated: true)
     }
 
-    func createLayoutController(_ controller: CreateLayoutViewController, didUpdate layout: CreateLayoutViewController.Layout) {
+    func createLayoutController(_ controller: CreateLayoutViewController,
+                                didUpdate layout: CreateLayoutViewController.Layout) {
         self.layout = layout
         collectionView.collectionViewLayout = layout.create()
     }

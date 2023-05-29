@@ -38,7 +38,7 @@ extension SectionDecorationViewController {
                                                                   groupSize: groupSize)
         section.interGroupSpacing = 5
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        
+
         let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
             elementKind: SectionDecorationViewController.sectionBackgroundDecorationElementKind)
         sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
@@ -50,7 +50,7 @@ extension SectionDecorationViewController {
             forDecorationViewOfKind: SectionDecorationViewController.sectionBackgroundDecorationElementKind)
         return layout
     }
-    
+
     func configureHierarchy() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -77,7 +77,7 @@ extension SectionDecorationViewController {
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
 
                 var items: [ListCell.Model] = []
-                for (rowIndex, number) in numbers.enumerated() {
+                for (rowIndex, _) in numbers.enumerated() {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)"))
                 }
 

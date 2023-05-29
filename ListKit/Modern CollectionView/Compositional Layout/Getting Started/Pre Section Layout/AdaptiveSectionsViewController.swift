@@ -42,7 +42,9 @@ class AdaptiveSectionsViewController: UIViewController {
 extension AdaptiveSectionsViewController {
     /// - Tag: Adaptive
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int,
+                                                            layoutEnvironment: NSCollectionLayoutEnvironment)
+            -> NSCollectionLayoutSection? in
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let layoutKind = sectionIdentifier.identifier as? SectionLayoutKind else { return nil }

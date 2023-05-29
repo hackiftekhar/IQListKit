@@ -12,7 +12,7 @@ struct Emoji: Hashable {
     enum Category: CaseIterable, CustomStringConvertible {
         case recents, smileys, nature, food, activities, travel, objects, symbols
     }
-    
+
     let text: String
     let title: String
     let category: Category
@@ -20,7 +20,7 @@ struct Emoji: Hashable {
 }
 
 extension Emoji.Category {
-    
+
     var description: String {
         switch self {
         case .recents: return "Recents"
@@ -33,7 +33,7 @@ extension Emoji.Category {
         case .symbols: return "Symbols"
         }
     }
-    
+
     var emojis: [Emoji] {
         switch self {
         case .recents:
@@ -54,14 +54,14 @@ extension Emoji.Category {
                 Emoji(text: "😂", title: "Laughing", category: self),
                 Emoji(text: "🤣", title: "Rolling on the floor laughing", category: self)
             ]
-            
+
         case .nature:
             return [
                 Emoji(text: "🦊", title: "Fox", category: self),
                 Emoji(text: "🐝", title: "Bee", category: self),
                 Emoji(text: "🐢", title: "Turtle", category: self)
             ]
-            
+
         case .food:
             return [
                 Emoji(text: "🥃", title: "Whiskey", category: self),

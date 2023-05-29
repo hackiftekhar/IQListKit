@@ -92,8 +92,17 @@ class CustomLayoutCell: UICollectionViewListCell, IQModelableCell {
                 }
             case let value as UICollectionLayoutSectionOrthogonalScrollingBehavior:
 
-                let supportedValues: [UICollectionLayoutSectionOrthogonalScrollingBehavior] = [.none, .continuous,.continuousGroupLeadingBoundary,.paging,.groupPaging,.groupPagingCentered]
-                let supportedValuesDisplay: [String] =  ["None","Continuous","Continuous Group Leading Boundary","Paging","Group Paging","Group Paging Centered"]
+                let supportedValues: [UICollectionLayoutSectionOrthogonalScrollingBehavior] = [.none,
+                                                                                               .continuous,
+                                                                                               .continuousGroupLeadingBoundary,
+                                                                                               .paging,
+                                                                                               .groupPaging,
+                                                                                               .groupPagingCentered]
+                let supportedValuesDisplay: [String] =  ["None", "Continuous",
+                                                         "Continuous Group Leading Boundary",
+                                                         "Paging",
+                                                         "Group Paging",
+                                                         "Group Paging Centered"]
 
                 if let index = supportedValues.firstIndex(of: value) {
                     contentConfiguration.secondaryText = supportedValuesDisplay[index]
@@ -145,7 +154,7 @@ class CustomLayoutCell: UICollectionViewListCell, IQModelableCell {
                 }
 
             default:
-                contentConfiguration.secondaryText = String(describing:model.value)
+                contentConfiguration.secondaryText = String(describing: model.value)
             }
 
             if !model.haveSubitems {
@@ -228,7 +237,7 @@ extension CustomLayoutCell {
                 allActions[option] = actions
             case .floatValue:
 
-                let supportedValues: [CGFloat] = [0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0,150.0, 200.0, 300.0]
+                let supportedValues: [CGFloat] = [0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 150.0, 200.0, 300.0]
                 var actions: [UIAction] = []
                 for value in supportedValues {
                     let identifier = option.rawValue + String(describing: value)
@@ -257,10 +266,19 @@ extension CustomLayoutCell {
                 allActions[option] = actions
             case .orthogonalScrollingBehavior:
 
-                let supportedValues: [UICollectionLayoutSectionOrthogonalScrollingBehavior] = [.none, .continuous,.continuousGroupLeadingBoundary,.paging,.groupPaging,.groupPagingCentered]
-                let supportedValuesDisplay: [String] =  ["None","Continuous","Continuous Group Leading Boundary","Paging","Group Paging","Group Paging Centered"]
+                let supportedValues: [UICollectionLayoutSectionOrthogonalScrollingBehavior] = [.none,
+                                                                                               .continuous,
+                                                                                               .continuousGroupLeadingBoundary,
+                                                                                               .paging,
+                                                                                               .groupPaging,
+                                                                                               .groupPagingCentered]
+                let supportedValuesDisplay: [String] =  ["None", "Continuous",
+                                                         "Continuous Group Leading Boundary",
+                                                         "Paging",
+                                                         "Group Paging",
+                                                         "Group Paging Centered"]
                 var actions: [UIAction] = []
-                for (index,value) in supportedValues.enumerated() {
+                for (index, value) in supportedValues.enumerated() {
                     let identifier = option.rawValue + String(describing: value)
                     let title = supportedValuesDisplay[index]
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
@@ -339,7 +357,7 @@ extension CustomLayoutCell {
                     let mainMenu: UIMenu = UIMenu(title: direction.rawValue, identifier: .init(option.rawValue + direction.rawValue), children: children)
                     actions.append(mainMenu)
                 }
-                
+
                 allActions[option] = actions
             case .edgeSpacing:
                 var actions: [UIMenu] = []
@@ -483,7 +501,7 @@ extension CustomLayoutCell {
             }
         }
 
-        let childrens: [UIMenuElement] = allActions.flatMap({ (key: EditingAction, actions: [UIMenuElement]) in
+        let childrens: [UIMenuElement] = allActions.flatMap({ (_: EditingAction, actions: [UIMenuElement]) in
             return actions
         })
 
@@ -497,16 +515,15 @@ extension CustomLayoutCell {
 extension CustomLayoutCell {
 
     enum EditingAction: String, CaseIterable, Hashable {
-        case scrollDirection = "scrollDirection"
-        case floatValue = "floatValue"
-        case directionalEdgeInsets = "directionalEdgeInsets"
-        case orthogonalScrollingBehavior = "orthogonalScrollingBehavior"
-        case layoutSize = "layoutSize"
-        case edgeSpacing = "edgeSpacing"
-        case layoutSpacing = "layoutSpacing"
-        case count = "count"
-        case addNewItem = "addNewItem"
-        case removeItem = "removeItem"
+        case scrollDirection
+        case floatValue
+        case directionalEdgeInsets
+        case orthogonalScrollingBehavior
+        case layoutSize
+        case edgeSpacing
+        case layoutSpacing
+        case count
+        case addNewItem
+        case removeItem
     }
 }
-

@@ -44,7 +44,7 @@ extension SimpleListViewController {
     private func configureDataSource() {
 
         list.registerCell(type: SimpleListCell.self, registerType: .class)
-        
+
         list.reloadData {
             let sectionIdentifier = UUID()
             let section = IQSection(identifier: Section.main)
@@ -52,7 +52,7 @@ extension SimpleListViewController {
 
             let numbers = Array(0..<94)
 
-            var items: [SimpleListCell.Model] = numbers.map { .init(section: sectionIdentifier, text: "\($0)") }
+            let items: [SimpleListCell.Model] = numbers.map { .init(section: sectionIdentifier, text: "\($0)") }
 
             list.append(SimpleListCell.self, models: items)
         }

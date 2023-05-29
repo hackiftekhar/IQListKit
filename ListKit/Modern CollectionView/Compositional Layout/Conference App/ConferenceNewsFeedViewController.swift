@@ -69,7 +69,9 @@ extension ConferenceNewsFeedViewController {
             let section = IQSection(identifier: Section.main)
             list.append([section])
 
-            var items: [ConferenceNewsFeedCell.Model] = newsController.items.map { .init(section: sectionIdentifier, item: $0, isLastCell: false) }
+            let items: [ConferenceNewsFeedCell.Model] = newsController.items.map {
+                .init(section: sectionIdentifier, item: $0, isLastCell: false)
+            }
             list.append(ConferenceNewsFeedCell.self, models: items)
         }
     }

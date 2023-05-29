@@ -30,7 +30,7 @@ class CustomConfigurationViewController: UIViewController {
 
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
     private var collectionView: UICollectionView! = nil
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Custom Configurations"

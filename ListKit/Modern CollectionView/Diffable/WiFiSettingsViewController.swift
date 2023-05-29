@@ -73,7 +73,7 @@ extension WiFiSettingsViewController {
 
         list.registerCell(type: WiFiSettingsCell.self, registerType: .class)
 
-        wifiController = WiFiController { [weak self] (controller: WiFiController) in
+        wifiController = WiFiController { [weak self] (_: WiFiController) in
             guard let self = self else { return }
             self.updateUI()
         }

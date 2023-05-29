@@ -40,7 +40,6 @@ class OutlineViewController: UIViewController {
 
     private lazy var list = IQList(listView: outlineCollectionView, delegateDataSource: self)
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Modern Collection Views"
@@ -166,7 +165,7 @@ extension OutlineViewController {
 @available(iOS 14.0, *)
 extension OutlineViewController: IQListViewDelegateDataSource {
     func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath) {
-        
+
         if let menuItem = item.model as? OutlineItem, let viewController = menuItem.outlineViewController {
             navigationController?.pushViewController(viewController.init(), animated: true)
         }

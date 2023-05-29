@@ -10,10 +10,10 @@ import IQListKit
 
 @available(iOS 14.0, *)
 class EmojiExplorerViewController: UIViewController {
-    
+
     enum Section: Int, Hashable, CaseIterable, CustomStringConvertible {
         case recents, outline, list
-        
+
         var description: String {
             switch self {
             case .recents: return "Recents"
@@ -22,7 +22,7 @@ class EmojiExplorerViewController: UIViewController {
             }
         }
     }
-    
+
     struct Item: Hashable {
         let title: String?
         let emoji: Emoji?
@@ -34,9 +34,9 @@ class EmojiExplorerViewController: UIViewController {
         }
         private let identifier = UUID()
     }
-    
+
     var starredEmojis = Set<Item>()
-    
+
     var collectionView: UICollectionView!
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
@@ -53,7 +53,7 @@ class EmojiExplorerViewController: UIViewController {
 
         if let indexPath = self.collectionView.indexPathsForSelectedItems?.first {
             if let coordinator = self.transitionCoordinator {
-                coordinator.animate(alongsideTransition: { context in
+                coordinator.animate(alongsideTransition: { _ in
                     self.collectionView.deselectItem(at: indexPath, animated: true)
                 }) { (context) in
                     if context.isCancelled {
@@ -69,12 +69,12 @@ class EmojiExplorerViewController: UIViewController {
 
 @available(iOS 14.0, *)
 extension EmojiExplorerViewController {
-    
+
     func configureNavItem() {
         navigationItem.title = "Emoji Explorer"
         navigationItem.largeTitleDisplayMode = .always
     }
-    
+
     func configureHierarchy() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -133,7 +133,7 @@ extension EmojiExplorerViewController {
                 completion(false)
                 return
             }
-            
+
             // Don't check again for the starred state. We promised in the UI what this action will do.
             // If the starred state has changed by now, we do nothing, as the set will not change.
             if isStarred {
@@ -141,7 +141,7 @@ extension EmojiExplorerViewController {
             } else {
                 self.starredEmojis.insert(item)
             }
-            
+
             // Reconfigure the cell of this item
             // Make sure we get the current index path of the item.
             if let currentIndexPath = self.list.indexPath(of: ListCell.self, where: { $0.item == item}) {
@@ -157,14 +157,14 @@ extension EmojiExplorerViewController {
                     }
                 }
             }
-            
+
             completion(true)
         }
         starAction.image = UIImage(systemName: isStarred ? "star.slash" : "star.fill")
         starAction.backgroundColor = .systemBlue
         return UISwipeActionsConfiguration(actions: [starAction])
     }
-    
+
     class RecentCell: UICollectionViewListCell, IQModelableCell {
         var model: Emoji? {
             didSet {
@@ -243,7 +243,7 @@ extension EmojiExplorerViewController {
 
         // create registrations up front, then choose the appropriate one to use in the cell provider
 
-        list.reloadData ({
+        list.reloadData({
             let sections: [IQSection] = Section.allCases.map { IQSection(identifier: $0) }
             list.append(sections)
         }, completion: {

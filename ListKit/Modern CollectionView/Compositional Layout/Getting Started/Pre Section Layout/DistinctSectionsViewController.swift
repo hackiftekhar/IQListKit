@@ -43,7 +43,7 @@ extension DistinctSectionsViewController {
     func createLayout() -> UICollectionViewLayout {
 
         let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int,
-            layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let sectionLayoutKind = sectionIdentifier.identifier as? SectionLayoutKind else { return nil }

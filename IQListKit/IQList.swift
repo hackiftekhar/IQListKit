@@ -127,7 +127,7 @@ public final class IQList: NSObject {
     // MARK: - Private Properties
 
     internal let reloadQueue: DispatchQueue?
-    internal var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
+    public internal(set) var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
 
     internal private(set) var diffableDataSource: IQDiffableDataSource!
 

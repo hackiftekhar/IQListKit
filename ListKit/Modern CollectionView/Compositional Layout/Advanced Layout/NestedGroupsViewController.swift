@@ -48,12 +48,12 @@ extension NestedGroupsViewController {
 
     /// - Tag: Nested
     func createLayout() -> UICollectionViewLayout {
-        
+
         let leadingItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.7),
                                                heightDimension: .fractionalHeight(1.0)))
         leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        
+
         let trailingItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .fractionalHeight(0.3)))
@@ -62,13 +62,13 @@ extension NestedGroupsViewController {
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3),
                                                heightDimension: .fractionalHeight(1.0)),
             subitem: trailingItem, count: 2)
-        
+
         let nestedGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .fractionalHeight(0.4)),
             subitems: [leadingItem, trailingGroup])
         let section = NSCollectionLayoutSection(group: nestedGroup)
-        
+
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }

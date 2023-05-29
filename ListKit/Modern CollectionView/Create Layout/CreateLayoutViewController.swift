@@ -8,7 +8,7 @@
 import UIKit
 import IQListKit
 
-extension NSDirectionalEdgeInsets : Hashable {
+extension NSDirectionalEdgeInsets: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine( self.top)
         hasher.combine( self.bottom)
@@ -30,7 +30,10 @@ class CreateLayoutViewController: UIViewController {
                                                                         heightDimension: .fractionalHeight(1.0))
 
         var contentInsets: NSDirectionalEdgeInsets = .zero
-        var edgeSpacing: NSCollectionLayoutEdgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(0), top: .fixed(0), trailing: .fixed(0), bottom: .fixed(0))
+        var edgeSpacing: NSCollectionLayoutEdgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(0),
+                                                                                       top: .fixed(0),
+                                                                                       trailing: .fixed(0),
+                                                                                       bottom: .fixed(0))
 
         func create() -> NSCollectionLayoutItem {
             let item = NSCollectionLayoutItem(layoutSize: layoutSize)
@@ -134,7 +137,7 @@ class CreateLayoutViewController: UIViewController {
             }
 
             code += """
-            
+
             var groupLayoutSize: NSCollectionLayoutSize = \(layoutSize.toString())
 
             """

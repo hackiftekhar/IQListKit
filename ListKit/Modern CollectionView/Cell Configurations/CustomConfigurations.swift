@@ -15,7 +15,7 @@ struct CustomBackgroundConfiguration {
         if state.isHighlighted || state.isSelected {
             // Set nil to use the inherited tint color of the cell when highlighted or selected
             background.backgroundColor = nil
-            
+
             if state.isHighlighted {
                 // Reduce the alpha of the tint color to 30% when highlighted
                 background.backgroundColorTransformer = .init { $0.withAlphaComponent(0.3) }
@@ -27,13 +27,13 @@ struct CustomBackgroundConfiguration {
 
 @available(iOS 14.0, *)
 struct CustomContentConfiguration: UIContentConfiguration, Hashable {
-    var image: UIImage? = nil
-    var tintColor: UIColor? = nil
-    
+    var image: UIImage?
+    var tintColor: UIColor?
+
     func makeContentView() -> UIView & UIContentView {
         return CustomContentView(configuration: self)
     }
-    
+
     func updated(for state: UIConfigurationState) -> Self {
         guard let state = state as? UICellConfigurationState else { return self }
         var updatedConfig = self
@@ -51,11 +51,11 @@ class CustomContentView: UIView, UIContentView {
         setupInternalViews()
         apply(configuration: configuration)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     var configuration: UIContentConfiguration {
         get { appliedConfiguration }
         set {
@@ -63,9 +63,9 @@ class CustomContentView: UIView, UIContentView {
             apply(configuration: newConfig)
         }
     }
-    
+
     private let imageView = UIImageView()
-    
+
     private func setupInternalViews() {
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,13 +78,13 @@ class CustomContentView: UIView, UIContentView {
         imageView.preferredSymbolConfiguration = .init(font: .preferredFont(forTextStyle: .body), scale: .large)
         imageView.isHidden = true
     }
-    
+
     private var appliedConfiguration: CustomContentConfiguration!
-    
+
     private func apply(configuration: CustomContentConfiguration) {
         guard appliedConfiguration != configuration else { return }
         appliedConfiguration = configuration
-        
+
         imageView.isHidden = configuration.image == nil
         imageView.image = configuration.image
         imageView.tintColor = configuration.tintColor

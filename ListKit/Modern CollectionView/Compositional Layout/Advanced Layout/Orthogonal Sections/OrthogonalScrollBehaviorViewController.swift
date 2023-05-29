@@ -70,7 +70,7 @@ extension OrthogonalScrollBehaviorViewController {
         config.interSectionSpacing = 20
 
         let layout = UICollectionViewCompositionalLayout(sectionProvider: {
-            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let sectionKind = sectionIdentifier.identifier as? SectionKind else { return nil }

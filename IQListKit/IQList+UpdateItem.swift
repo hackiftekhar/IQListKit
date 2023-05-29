@@ -34,9 +34,10 @@ public extension IQList {
     ///   - type: Type of the IQModelableCell
     ///   - models: the models of type IQModelableCell.Model
     ///   - section: section in which we'll be adding the models
+    @discardableResult
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     section: IQSection? = nil,
-                                    beforeItem: IQItem? = nil, afterItem: IQItem? = nil) {
+                                    beforeItem: IQItem? = nil, afterItem: IQItem? = nil) -> [IQItem] {
 
         if diffableDataSource.registeredCells.contains(where: { $0 == type}) == false {
             registerCell(type: type, registerType: .default)
@@ -48,15 +49,16 @@ public extension IQList {
             items.append(item)
         }
 
-        append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
+        return append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
     }
 
+    @discardableResult
     func append<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, models: [T.Model],
                                                                      supplementaryType: S.Type,
                                                                      supplementaryModels: [S.Model],
                                                                      section: IQSection? = nil,
                                                                      beforeItem: IQItem? = nil,
-                                                                     afterItem: IQItem? = nil) {
+                                                                     afterItem: IQItem? = nil) -> [IQItem] {
 
         if diffableDataSource.registeredCells.contains(where: { $0 == type}) == false {
             registerCell(type: type, registerType: .default)
@@ -69,12 +71,13 @@ public extension IQList {
             items.append(item)
         }
 
-        append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
+        return append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
     }
 
+    @discardableResult
     func append(_ items: [IQItem],
                 section: IQSection? = nil,
-                beforeItem: IQItem? = nil, afterItem: IQItem? = nil) {
+                beforeItem: IQItem? = nil, afterItem: IQItem? = nil) -> [IQItem] {
         var items: [IQItem] = items
         if removeDuplicatesWhenReloading {
             let existingItems = batchSnapshot.itemIdentifiers
@@ -97,16 +100,19 @@ public extension IQList {
                 batchSnapshot.appendItems(items)
             }
         }
+        return items
     }
 
     // We are deleting and adding new items because the batchSnapshot not able
     // to find existing element if they aren't equal. So to update an element we
     // remove the existing one and add the new one at same location.
+    @discardableResult
     func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
-                                    comparator: (T.Model, T.Model) -> Bool) {
+                                    comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
+        var reloadedItems: [IQItem] = []
         for model in models {
             if let index = existingItems.firstIndex(where: {
                 if let existingModel = $0.model as? T.Model {
@@ -128,13 +134,16 @@ public extension IQList {
                 } else {
                     batchSnapshot.insertItems([item], afterItem: existingItems[index-1])
                 }
+                reloadedItems.append(item)
             }
         }
+        return reloadedItems
     }
 
     @available(iOS 15.0, *)
+    @discardableResult
     func reconfigure<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
-                                         comparator: (T.Model, T.Model) -> Bool) {
+                                         comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
@@ -153,10 +162,12 @@ public extension IQList {
         }
 
         batchSnapshot.reconfigureItems(reconfiguredItems)
+        return reconfiguredItems
     }
 
+    @discardableResult
     func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
-                                    comparator: (T.Model, T.Model) -> Bool) {
+                                    comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
@@ -176,6 +187,7 @@ public extension IQList {
         if !deletedItems.isEmpty {
             batchSnapshot.deleteItems(deletedItems)
         }
+        return deletedItems
     }
 
     func deleteAllItems() {

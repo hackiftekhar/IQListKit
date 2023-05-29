@@ -29,7 +29,7 @@ class TableViewEditingViewController: UIViewController {
             }
         }
     }
-    
+
     typealias SectionType = Section
     typealias ItemType = MountainsController.Mountain
     let mountainsController = MountainsController()
@@ -38,7 +38,8 @@ class TableViewEditingViewController: UIViewController {
     var visited: [MountainsController.Mountain] = []
 
 //        // MARK: editing support
-//        override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        override func tableView(_ tableView: UITableView,
+    // commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 //            if editingStyle == .delete {
 //                if let identifierToDelete = itemIdentifier(for: indexPath) {
 //                    var snapshot = self.snapshot()
@@ -48,7 +49,7 @@ class TableViewEditingViewController: UIViewController {
 //            }
 //        }
 //    }
-    
+
     var tableView: UITableView!
     private lazy var list = IQList(listView: tableView, delegateDataSource: self)
 
@@ -66,7 +67,7 @@ class TableViewEditingViewController: UIViewController {
 }
 
 extension TableViewEditingViewController {
-    
+
     func configureHierarchy() {
 
         tableView = UITableView(frame: view.bounds, style: .insetGrouped)
@@ -84,7 +85,8 @@ extension TableViewEditingViewController {
         list.reloadData {
 
             let visitedSection = IQSection(identifier: SectionType.visited, header: SectionType.visited.description())
-            let bucketListSection = IQSection(identifier: SectionType.bucketList, header: SectionType.bucketList.description())
+            let bucketListSection = IQSection(identifier: SectionType.bucketList,
+                                              header: SectionType.bucketList.description())
 
             list.append([visitedSection, bucketListSection])
 
@@ -98,7 +100,7 @@ extension TableViewEditingViewController {
         let editingItem = UIBarButtonItem(title: tableView.isEditing ? "Done" : "Edit", style: .plain, target: self, action: #selector(toggleEditing))
         navigationItem.rightBarButtonItems = [editingItem]
     }
-    
+
     @objc
     func toggleEditing() {
         tableView.setEditing(!tableView.isEditing, animated: true)

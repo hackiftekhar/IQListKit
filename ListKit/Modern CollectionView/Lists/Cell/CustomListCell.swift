@@ -84,7 +84,8 @@ class CustomListCell: ItemListCell {
         // styling and metrics to copy to our custom views.
         let valueConfiguration = UIListContentConfiguration.valueCell().updated(for: state)
 
-        // Configure custom image view for the category icon, copying some of the styling from the value cell configuration.
+        // Configure custom image view for the category icon,
+        // copying some of the styling from the value cell configuration.
         categoryIconView.image = state.model?.category.icon
         categoryIconView.tintColor = valueConfiguration.imageProperties.resolvedTintColor(for: tintColor)
         categoryIconView.preferredSymbolConfiguration = .init(font: valueConfiguration.secondaryTextProperties.font, scale: .small)

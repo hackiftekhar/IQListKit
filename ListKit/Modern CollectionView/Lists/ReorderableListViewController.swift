@@ -10,9 +10,9 @@ import IQListKit
 
 @available(iOS 14.0, *)
 class ReorderableListViewController: UIViewController {
-    
+
     typealias Section = Emoji.Category
-    
+
     struct Item: Hashable {
         let title: String
         let emoji: Emoji
@@ -22,7 +22,7 @@ class ReorderableListViewController: UIViewController {
         }
         private let identifier = UUID()
     }
-    
+
     enum ReorderingMethod: CustomStringConvertible {
         case finalSnapshot, collectionDifference
 
@@ -33,28 +33,28 @@ class ReorderableListViewController: UIViewController {
             }
         }
     }
-    
+
     var collectionView: UICollectionView!
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self, defaultRowAnimation: .automatic)
     lazy var backingStore: [Section: [Item]] = { initialBackingStore() }()
 
     var reorderingMethod: ReorderingMethod = .collectionDifference
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         configureNavItem()
         configureHierarchy()
         configureDataSource()
         applySnapshotsFromBackingStore()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if let indexPath = self.collectionView.indexPathsForSelectedItems?.first {
             if let coordinator = self.transitionCoordinator {
-                coordinator.animate(alongsideTransition: { context in
+                coordinator.animate(alongsideTransition: { _ in
                     self.collectionView.deselectItem(at: indexPath, animated: true)
                 }) { (context) in
                     if context.isCancelled {
@@ -141,7 +141,7 @@ extension ReorderableListViewController {
 
         list.registerCell(type: ReorderingListCell.self, registerType: .class)
 
-        list.reorderingHandlers?.canReorderItem = { item in return true }
+        list.reorderingHandlers?.canReorderItem = { _ in return true }
         list.reorderingHandlers?.didReorder = { [weak self] transaction in
             guard let self = self else { return }
 
@@ -174,7 +174,7 @@ extension ReorderableListViewController {
             }
         }
     }
-    
+
     func initialBackingStore() -> [Section: [Item]] {
         var allItems = [Section: [Item]]()
         for category in Emoji.Category.allCases.reversed() {
@@ -183,9 +183,9 @@ extension ReorderableListViewController {
         }
         return allItems
     }
-    
+
     func applyInitialBackingStore(animated: Bool = false) {
-        
+
         for (section, items) in initialBackingStore() {
 
             var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
@@ -198,9 +198,9 @@ extension ReorderableListViewController {
             list.apply(sectionSnapshot, to: section, animatingDifferences: animated)
         }
     }
-    
+
     func applySnapshotsFromBackingStore(animated: Bool = false) {
-        
+
         for (section, items) in backingStore {
 
             var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
@@ -209,7 +209,7 @@ extension ReorderableListViewController {
             sectionSnapshot.append(items)
 
             let section = IQSection(identifier: section)
-            
+
             list.apply(sectionSnapshot, to: section, animatingDifferences: animated)
         }
     }
@@ -217,5 +217,5 @@ extension ReorderableListViewController {
 
 @available(iOS 14.0, *)
 extension ReorderableListViewController: IQListViewDelegateDataSource {
-    
+
 }

@@ -26,7 +26,6 @@ extension NSDirectionalEdgeInsets {
     }
 }
 
-
 extension UICollectionLayoutSectionOrthogonalScrollingBehavior {
     func toString() -> String {
         switch self {

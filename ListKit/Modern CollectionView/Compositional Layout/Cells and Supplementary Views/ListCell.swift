@@ -23,7 +23,7 @@ class ListCell: UICollectionViewCell, IQModelableCell {
 
     struct Model: Hashable {
         let text: String
-        var isLastCell: Bool? = nil
+        var isLastCell: Bool?
     }
 
     var model: Model? {
