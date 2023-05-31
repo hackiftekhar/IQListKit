@@ -665,7 +665,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $CONFIGURATION == 'Debug' ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\"\nelse\n  echo \"Not running SwiftLint/swiftlint because we are building for release\"\nfi\n";
+			shellScript = "#if [ $CONFIGURATION == 'Debug' ]; then\n#  \"${PODS_ROOT}/SwiftLint/swiftlint\"\n#else\n#  echo \"Not running SwiftLint/swiftlint because we are building for release\"\n#fi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

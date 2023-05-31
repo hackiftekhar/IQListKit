@@ -288,7 +288,6 @@ public final class IQList: NSObject {
         collectionView.delegate = collectionViewDiffableDataSource
         collectionView.dataSource = collectionViewDiffableDataSource
         collectionView.prefetchDataSource = collectionViewDiffableDataSource
-        collectionView.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 22, right: 0)
         collectionViewDiffableDataSource.proxyDelegate = self
         collectionViewDiffableDataSource.delegate = delegate
         collectionViewDiffableDataSource.dataSource = dataSource
