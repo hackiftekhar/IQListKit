@@ -152,13 +152,13 @@ public extension IQList {
     /// - Parameters:
     ///   - type: Type of the header
     ///   - bundle: The bundle in which the header is present.
-    func registerSupplementaryView<T: IQListSupplementaryView>(type: T.Type, kind: String,
-                                                               registerType: RegisterType,
-                                                               bundle: Bundle = .main) {
+    func registerSupplementaryView<T: UIView>(type: T.Type, kind: String,
+                                              registerType: RegisterType,
+                                              bundle: Bundle = .main) {
 
         let identifier = String(describing: type)
 
-        var existingTypes: [IQListSupplementaryView.Type] = diffableDataSource.registeredSupplementaryViews[kind] ?? []
+        var existingTypes: [UIView.Type] = diffableDataSource.registeredSupplementaryViews[kind] ?? []
         guard existingTypes.contains(where: {$0 == type}) == false else {
             return
         }

@@ -23,7 +23,7 @@
 import UIKit
 
 public protocol IQModelableSupplementaryView: IQModelModifiable, IQViewSizeProvider
-where Self: IQListSupplementaryView {
+where Self: UIView {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
     associatedtype Model: Hashable

@@ -28,7 +28,7 @@ import UIKit
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
     internal var registeredCells: [IQListCell.Type] = []
-    internal var registeredSupplementaryViews: [String: [IQListSupplementaryView.Type]] = [:]
+    internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
 
     weak var proxyDelegate: IQListViewProxyDelegate?
     weak var delegate: IQListViewDelegate?
@@ -145,13 +145,20 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         guard section < sectionIdentifiers.count else {
             return tableView.estimatedSectionHeaderHeight
         }
+
         let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
-            return tableView.estimatedSectionHeaderHeight
-        }
+        if let headerSize: CGSize = aSection.headerSize {
+            return headerSize.height
+        } else if let headerView: UIView = aSection.headerView {
+            return headerView.frame.height
+        } else {
+            guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
+                return tableView.estimatedSectionHeaderHeight
+            }
 
-        return type.estimatedSize(for: aSection.headerModel, listView: tableView).height
+            return type.estimatedSize(for: aSection.headerModel, listView: tableView).height
+        }
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
@@ -161,11 +168,17 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type else {
-            return tableView.estimatedSectionFooterHeight
-        }
+        if let footerSize: CGSize = aSection.footerSize {
+            return footerSize.height
+        } else if let footerView: UIView = aSection.footerView {
+            return footerView.frame.height
+        } else {
+            guard let type: IQViewSizeProvider.Type = aSection.footerModel as? IQViewSizeProvider.Type else {
+                return tableView.estimatedSectionFooterHeight
+            }
 
-        return type.estimatedSize(for: aSection.footerModel, listView: tableView).height
+            return type.estimatedSize(for: aSection.footerModel, listView: tableView).height
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -175,11 +188,17 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
-            return tableView.estimatedSectionHeaderHeight
-        }
+        if let headerSize: CGSize = aSection.headerSize {
+            return headerSize.height
+        } else if let headerView: UIView = aSection.headerView {
+            return headerView.frame.height
+        } else {
+            guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
+                return tableView.sectionHeaderHeight
+            }
 
-        return type.size(for: aSection.headerModel, listView: tableView).height
+            return type.size(for: aSection.headerModel, listView: tableView).height
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -189,11 +208,17 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type else {
-            return tableView.estimatedSectionFooterHeight
-        }
+        if let footerSize: CGSize = aSection.footerSize {
+            return footerSize.height
+        } else if let footerView: UIView = aSection.footerView {
+            return footerView.frame.height
+        } else {
+            guard let type: IQViewSizeProvider.Type = aSection.footerModel as? IQViewSizeProvider.Type else {
+                return tableView.sectionFooterHeight
+            }
 
-        return type.size(for: aSection.footerModel, listView: tableView).height
+            return type.size(for: aSection.footerModel, listView: tableView).height
+        }
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -205,20 +230,29 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
 
-        let supplementaryView: IQListSupplementaryView?
-        if let supplementaryType = aSection.headerType {
+        let supplementaryView: UIView?
+        if let supplementaryType = aSection.headerType, !(supplementaryType is IQSupplementaryViewPlaceholder.Type) {
             let identifier = String(describing: supplementaryType)
 
-            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier)
-            if let view = view as? IQModelModifiable {
-                view.setModel(aSection.headerModel)
-            } else if view != nil {
+            if supplementaryType is UITableViewHeaderFooterView.Type {
+                supplementaryView = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier)
+            } else if Bundle.main.path(forResource: identifier, ofType: "nib") != nil,
+                      let view = Bundle.main.loadNibNamed(identifier, owner: nil)?.first as? UIView, type(of: view) == supplementaryType {
+                supplementaryView = view
+            } else {
+                supplementaryView = supplementaryType.init()
+            }
+
+            if let supplementaryView = supplementaryView as? IQModelModifiable {
+                supplementaryView.setModel(aSection.headerModel)
+            } else if supplementaryView != nil {
                 print("""
                     \(type(of: supplementaryType)) with identifier \(identifier) \
                     does not confirm to the \(IQModelModifiable.self) protocol
                     """)
             }
-            supplementaryView = view
+        } else if let headerView = aSection.headerView {
+            supplementaryView = headerView
         } else {
             supplementaryView = dataSource?.listView(tableView, supplementaryElementFor: aSection,
                                                      kind: UICollectionView.elementKindSectionHeader,
@@ -226,6 +260,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         }
 
         guard let supplementaryView = supplementaryView else { return nil }
+
         delegate?.listView(tableView, modifySupplementaryElement: supplementaryView, section: aSection,
                            kind: UICollectionView.elementKindSectionHeader, at: indexPath)
         return supplementaryView
@@ -240,20 +275,29 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
 
-        let supplementaryView: IQListSupplementaryView?
-        if let supplementaryType = aSection.footerType {
+        let supplementaryView: UIView?
+        if let supplementaryType = aSection.footerType, !(supplementaryType is IQSupplementaryViewPlaceholder.Type) {
             let identifier = String(describing: supplementaryType)
 
-            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier)
-            if let view = view as? IQModelModifiable {
-                view.setModel(aSection.headerModel)
-            } else if view != nil {
+            if supplementaryType is UITableViewHeaderFooterView.Type {
+                supplementaryView = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier)
+            } else if Bundle.main.path(forResource: identifier, ofType: "nib") != nil,
+                      let view = Bundle.main.loadNibNamed(identifier, owner: nil)?.first as? UIView, type(of: view) == supplementaryType {
+                supplementaryView = view
+            } else {
+                supplementaryView = supplementaryType.init()
+            }
+
+            if let supplementaryView = supplementaryView as? IQModelModifiable {
+                supplementaryView.setModel(aSection.footerModel)
+            } else if supplementaryView != nil {
                 print("""
                     \(type(of: supplementaryType)) with identifier \(identifier) \
                     does not confirm to the \(IQModelModifiable.self) protocol
                     """)
             }
-            supplementaryView = view
+        } else if let footerView = aSection.footerView {
+            supplementaryView = footerView
         } else {
             supplementaryView = dataSource?.listView(tableView, supplementaryElementFor: aSection,
                                                      kind: UICollectionView.elementKindSectionFooter,
@@ -274,7 +318,6 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        guard let view = view as? IQListSupplementaryView else { return }
         delegate?.listView(tableView, willDisplaySupplementaryElement: view, section: aSection,
                            kind: UICollectionView.elementKindSectionHeader, at: indexPath)
     }
@@ -287,7 +330,6 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        guard let view = view as? IQListSupplementaryView else { return }
         delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
                            kind: UICollectionView.elementKindSectionHeader, at: indexPath)
     }
@@ -300,7 +342,6 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        guard let view = view as? IQListSupplementaryView else { return }
         delegate?.listView(tableView, willDisplaySupplementaryElement: view, section: aSection,
                            kind: UICollectionView.elementKindSectionFooter, at: indexPath)
     }
@@ -313,7 +354,6 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        guard let view = view as? IQListSupplementaryView else { return }
         delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
                            kind: UICollectionView.elementKindSectionFooter, at: indexPath)
     }

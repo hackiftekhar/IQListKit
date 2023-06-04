@@ -28,7 +28,7 @@ import UIKit
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
     internal var registeredCells: [IQListCell.Type] = []
-    internal var registeredSupplementaryViews: [String: [IQListSupplementaryView.Type]] = [:]
+    internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
 
     private var contextMenuPreviewIndexPath: IndexPath?
 
@@ -49,7 +49,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath) -> UICollectionReusableView {
 
-        guard let supplementaryTypes: [IQListSupplementaryView.Type] = registeredSupplementaryViews[kind] else {
+        guard let supplementaryTypes: [UIView.Type] = registeredSupplementaryViews[kind] else {
             fatalError("Please register a supplementary view first for '\(kind)' kind")
         }
         let identifier: String

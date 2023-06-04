@@ -93,7 +93,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
     ///   - section: section of the ListView
     ///   - kind: Kind of section. Either header or footer or customized
     ///   - indexPath: contains section of the ListView
-    func listView(_ listView: IQListView, modifySupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, modifySupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
 
     /// Supplementary view will about to display
@@ -103,7 +103,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
     ///   - section: section of the ListView
     ///   - kind: Kind of section. Either header or footer or customized
     ///   - indexPath: section of the ListView
-    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
 
     /// Supplementary view did end displaying
@@ -113,7 +113,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
     ///   - section: section of the ListView
     ///   - kind: Kind of section. Either header or footer or customized
     ///   - indexPath: section of the ListView
-    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
 
     /// Cell will display context menu
@@ -156,7 +156,7 @@ public protocol IQListViewDataSource: AnyObject {
     ///             or UICollectionView.elementKindSectionFooter or something custom type
     ///   - indexPath: section of the ListView
     func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
-                  kind: String, at indexPath: IndexPath) -> IQListSupplementaryView?
+                  kind: String, at indexPath: IndexPath) -> UIView?
 
     /// Return the sectionIndexTitles for tableView
     /// - Parameter listView: The IQListView object
@@ -230,13 +230,13 @@ public extension IQListViewDelegate {
 
     func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, modifySupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, modifySupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath) {}
 
     func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
@@ -251,7 +251,7 @@ public extension IQListViewDataSource {
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize? { return nil }
 
     func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
-                  kind: String, at indexPath: IndexPath) -> IQListSupplementaryView? { return nil }
+                  kind: String, at indexPath: IndexPath) -> UIView? { return nil }
 
     func sectionIndexTitles(_ listView: IQListView) -> [String]? { return nil }
 

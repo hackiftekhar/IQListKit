@@ -36,7 +36,7 @@ public struct IQItem: Hashable {
 
     /// Type of the cell
     public private(set) var type: IQListCell.Type
-    public private(set) var supplementaryType: IQListSupplementaryView.Type
+    public private(set) var supplementaryType: UIView.Type
 
     /// Model of the cell
     public private(set) var model: AnyHashable

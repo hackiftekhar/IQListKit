@@ -90,6 +90,7 @@ extension UserListTableViewController {
 
         list.reloadData({
 
+//            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
             let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
             list.append([section1])
 
