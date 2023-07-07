@@ -92,35 +92,11 @@ public extension IQList {
                     }
                 } else if let collectionView = listView as? UICollectionView {
                     // Validate if the cell is configured in storyboard
-
-#if canImport(SwiftTryCatch)
-                    SwiftTryCatch.try { [weak self] in
-                        let dummyIndexPath = IndexPath(item: 0, section: 0)
-                        _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
-                        self?.diffableDataSource.registeredCells.append(type)
-                        hasRegistered = true
-                    } catch: { exception in
-                        if let exception = exception {
-                            if exception.name == NSExceptionName.internalInconsistencyException {
-
-                                let typeName: String = {
-                                    bundle.path(forResource: identifier, ofType: "nib") != nil ? "nib" : "class"
-                                }()
-
-                                print("""
-                                      IQListKit: To remove assertion failure log, please manually register cell using \
-                                      `list.registerCell(type: \(identifier).self, registerType: .\(typeName))`
-                                      """)
-                            }
-                        }
-                    } finally: {
-                    }
-#else
+                    
                     let dummyIndexPath = IndexPath(item: 0, section: 0)
                     _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
                     diffableDataSource.registeredCells.append(type)
                     hasRegistered = true
-#endif
                 }
 
                 guard !hasRegistered else {

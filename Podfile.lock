@@ -1,8 +1,6 @@
 PODS:
-  - IQListKit (6.1.0):
-    - SwiftTryCatch (~> 0.0.1)
+  - IQListKit (6.1.0)
   - SwiftLint (0.50.1)
-  - SwiftTryCatch (0.0.1)
 
 DEPENDENCIES:
   - IQListKit (from `.`)
@@ -11,17 +9,15 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - SwiftLint
-    - SwiftTryCatch
 
 EXTERNAL SOURCES:
   IQListKit:
     :path: "."
 
 SPEC CHECKSUMS:
-  IQListKit: c1936c22e36df5acec33671a2ca070d20a9f03a8
+  IQListKit: f85f291ea6bd0ca5d004b8a5cc5d5f82a681d79b
   SwiftLint: 6b0cf1f4d619808dbc16e4fab064ce6fc79f090b
-  SwiftTryCatch: fb6d2b34abe48efd69578dac919293a44f95b481
 
-PODFILE CHECKSUM: 1214372ba79ca0e01db86cad495a9b2a27c9ae0f
+PODFILE CHECKSUM: 2cbfa96b77f48e122b914f4358c8224f3260defa
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

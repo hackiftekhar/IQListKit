@@ -580,130 +580,124 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDataSourcePrefetch
     }
 }
 
-//    // Focus
-//    @available(iOS 9.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool
-//
-//    @available(iOS 9.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      shouldUpdateFocusIn context: UICollectionViewFocusUpdateContext) -> Bool
-//
-//    @available(iOS 9.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      didUpdateFocusIn context: UICollectionViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator)
-//
-//    @available(iOS 9.0, *)
-//    optional func indexPathForPreferredFocusedView(in collectionView: UICollectionView) -> IndexPath?
-//
-//
-//    /// Determines if the item at the specified index path should also become selected when focus moves to it.
-//    /// If the collection view's global selectionFollowsFocus is enabled, this method will allow
-//      you to override that behavior on a per-index path basis.
-//      This method is not called if selectionFollowsFocus is disabled.
-//    @available(iOS 15.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      selectionFollowsFocusForItemAt indexPath: IndexPath) -> Bool
-//
-//
-//    @available(iOS 15.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath,
-//      atCurrentIndexPath currentIndexPath: IndexPath,
-//      toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath
-//
-//    @available(iOS, introduced: 9.0, deprecated: 15.0)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      targetIndexPathForMoveFromItemAt currentIndexPath: IndexPath,
-//      toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath
-//
-//      // customize the content offset to be applied during transition or update animations
-//    @available(iOS 9.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      targetContentOffsetForProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint
-//
-//
-//    // Editing
-//    /* Asks the delegate to verify that the given item is editable.
-//     *
-//     * @param collectionView The collection view object requesting this information.
-//     * @param indexPath An index path locating an item in `collectionView`.
-//     *
-//     * @return `YES` if the item is editable; otherwise, `NO`. Defaults to `YES`.
-//     */
-//    @available(iOS 14.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool
-//
-//
-//    // Spring Loading
-//
-//    /* Allows opting-out of spring loading for an particular item.
-//     *
-//     * If you want the interaction effect on a different subview of
-//      the spring loaded cell, modify the context.targetView property.
-//     * The default is the cell.
-//     *
-//     * If this method is not implemented, the default is YES.
-//     */
-//    @available(iOS 11.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      shouldSpringLoadItemAt indexPath: IndexPath, with context: UISpringLoadedInteractionContext) -> Bool
-//
-//
-//    // Multiple Selection
-//
-//    /* Allows a two-finger pan gesture to automatically enable allowsMultipleSelection and
-//      start selecting multiple cells.
-//     *
-//     * After a multi-select gesture is recognized, this method will be called
-//      before allowsMultipleSelection is automatically
-//     * set to YES to allow the user to select multiple contiguous items using
-//      a two-finger pan gesture across the constrained
-//     * scroll direction.
-//     *
-//     * If the collection view has no constrained scroll direction
-//      (i.e., the collection view scrolls both horizontally and vertically),
-//     * then this method will not be called and the multi-select gesture will be disabled.
-//     *
-//     * If this method is not implemented, the default is NO.
-//     */
-//    @available(iOS 13.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool
-//
-//
-//    /* Called right after allowsMultipleSelection is set to YES if
-//      -collectionView:shouldBeginMultipleSelectionInteractionAtIndexPath:
-//     * returned YES.
-//     *
-//     * In your app, this would be a good opportunity to update the state of
-//      your UI to reflect the fact that the user is now selecting
-//     * multiple items at once; such as updating buttons to say "Done" instead of "Select"/"Edit", for instance.
-//     */
-//    @available(iOS 13.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      didBeginMultipleSelectionInteractionAt indexPath: IndexPath)
-//
-//
-//    /* Called when the multi-select interaction ends.
-//     *
-//     * At this point, the collection view will remain in multi-select mode,
-//      but this delegate method is called to indicate that the
-//     * multiple selection gesture or hardware keyboard interaction has ended.
-//     */
-//    @available(iOS 13.0, *)
-//    optional func collectionViewDidEndMultipleSelectionInteraction(_ collectionView: UICollectionView)
-//
-//    /**
-//     * @abstract Return a valid @c UIWindowSceneActivationConfiguration to
-//      allow for the cell to be expanded into a new scene.
-//      Return nil to prevent the interaction from starting.
-//     *
-//     * @param collectionView The collection view
-//     * @param indexPath The index path of the cell being interacted with
-//     * @param point The centroid of the interaction in the collection view's coordinate space.
-//     */
-//    @available(iOS 15.0, *)
-//    optional func collectionView(_ collectionView: UICollectionView,
-//      sceneActivationConfigurationForItemAt indexPath: IndexPath,
-//      point: CGPoint) -> UIWindowScene.ActivationConfiguration?
-// }
+// MARK: - Focus
+
+extension IQCollectionViewDiffableDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        canFocusItemAt indexPath: IndexPath) -> Bool {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView, canFocusItemAt: indexPath) ?? true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        shouldUpdateFocusIn context: UICollectionViewFocusUpdateContext) -> Bool {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView, shouldUpdateFocusIn: context) ?? true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didUpdateFocusIn context: UICollectionViewFocusUpdateContext,
+                        with coordinator: UIFocusAnimationCoordinator) {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        delegate?.collectionView?(collectionView, didUpdateFocusIn: context, with: coordinator)
+    }
+    
+    func indexPathForPreferredFocusedView(in collectionView: UICollectionView) -> IndexPath? {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.indexPathForPreferredFocusedView?(in: collectionView)
+    }
+    
+    @available(iOS 15.0, *)
+    func collectionView(_ collectionView: UICollectionView,
+                        selectionFollowsFocusForItemAt indexPath: IndexPath) -> Bool {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         selectionFollowsFocusForItemAt: indexPath) ?? false
+    }
+}
+
+// MARK: - Reordering
+extension IQCollectionViewDiffableDataSource {
+    
+    @available(iOS 15.0, *)
+    func collectionView(_ collectionView: UICollectionView,
+                        targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath,
+                        atCurrentIndexPath currentIndexPath: IndexPath,
+                        toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         targetIndexPathForMoveOfItemFromOriginalIndexPath: originalIndexPath,
+                                         atCurrentIndexPath: currentIndexPath,
+                                         toProposedIndexPath: proposedIndexPath) ?? proposedIndexPath
+    }
+    
+    @available(iOS, introduced: 9.0, deprecated: 15.0)
+    func collectionView(_ collectionView: UICollectionView,
+                        targetIndexPathForMoveFromItemAt currentIndexPath: IndexPath,
+                        toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         targetIndexPathForMoveFromItemAt: currentIndexPath,
+                                         toProposedIndexPath: proposedIndexPath) ?? proposedIndexPath
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        targetContentOffsetForProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         targetContentOffsetForProposedContentOffset: proposedContentOffset) ?? proposedContentOffset
+    }
+}
+
+// MARK: - Editing
+extension IQCollectionViewDiffableDataSource {
+    
+    @available(iOS 14.0, *)
+    func collectionView(_ collectionView: UICollectionView,
+                        canEditItemAt indexPath: IndexPath) -> Bool {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView, canEditItemAt: indexPath) ?? false
+    }
+    func collectionView(_ collectionView: UICollectionView,
+                        shouldSpringLoadItemAt indexPath: IndexPath,
+                        with context: UISpringLoadedInteractionContext) -> Bool {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         shouldSpringLoadItemAt: indexPath,
+                                         with: context) ?? true
+    }
+}
+
+// MARK: - Selection
+extension IQCollectionViewDiffableDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         shouldBeginMultipleSelectionInteractionAt: indexPath) ?? false
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        delegate?.collectionView?(collectionView,
+                                  didBeginMultipleSelectionInteractionAt: indexPath)
+    }
+    
+    func collectionViewDidEndMultipleSelectionInteraction(_ collectionView: UICollectionView) {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        delegate?.collectionViewDidEndMultipleSelectionInteraction?(collectionView)
+    }
+    
+    @available(iOS 15.0, *)
+    func collectionView(_ collectionView: UICollectionView,
+                        sceneActivationConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIWindowScene.ActivationConfiguration? {
+        let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
+        return delegate?.collectionView?(collectionView,
+                                         sceneActivationConfigurationForItemAt: indexPath,
+                                         point: point)
+    }
+}

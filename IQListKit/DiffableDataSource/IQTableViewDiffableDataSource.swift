@@ -132,13 +132,142 @@ internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSourc
 //      sectionForSectionIndexTitle title: String, at index: Int) -> Int {
 //
 //    }
-
-    // MARK: - Moving/reordering
 }
 
 extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
-    // MARK: - Supplementary view
+
+    // MARK: - Height
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+                let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
+            return UITableView.automaticDimension
+        }
+
+        return type.estimatedSize(for: item.model, listView: tableView).height
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return UITableView.automaticDimension
+        }
+
+        if let size: CGSize = dataSource?.listView(tableView, size: item, at: indexPath) {
+            return size.height
+        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type {
+            return type.size(for: item.model, listView: tableView).height
+        }
+
+        return UITableView.automaticDimension
+    }
+}
+
+// MARK: - Configuring
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
+
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
+            return 0
+        }
+
+        return type.indentationLevel(for: item.model, listView: tableView)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   shouldSpringLoadRowAt indexPath: IndexPath,
+                   with context: UISpringLoadedInteractionContext) -> Bool {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView,
+                                    shouldSpringLoadRowAt: indexPath,
+                                    with: context) ?? true
+    }
+}
+
+// MARK: - Display
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        delegate?.listView(tableView, willDisplay: cell, at: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        delegate?.listView(tableView, didEndDisplaying: cell, at: indexPath)
+    }
+
+}
+
+// MARK: - Selection
+
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+            return indexPath
+        }
+
+        return cell.isSelectable ? indexPath : nil
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        if clearsSelectionOnDidSelect {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
+
+        delegate?.listView(tableView, didSelect: item, at: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+            return indexPath
+        }
+
+        return cell.isDeselectable ? indexPath : nil
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
+
+        delegate?.listView(tableView, didDeselect: item, at: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        delegate?.tableView?(tableView,
+                             accessoryButtonTappedForRowWith: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView,
+                                    shouldBeginMultipleSelectionInteractionAt: indexPath) ?? false
+    }
+
+    func tableView(_ tableView: UITableView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        delegate?.tableView?(tableView, didBeginMultipleSelectionInteractionAt: indexPath)
+    }
+
+    func tableViewDidEndMultipleSelectionInteraction(_ tableView: UITableView) {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        delegate?.tableViewDidEndMultipleSelectionInteraction?(tableView)
+    }
+}
+
+// MARK: - Header Footer / Supplementary view
+
+extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
@@ -357,165 +486,10 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
         delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
                            kind: UICollectionView.elementKindSectionFooter, at: indexPath)
     }
+}
 
-    // MARK: - Cell
-
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let item: IQItem = itemIdentifier(for: indexPath),
-                let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
-            return UITableView.automaticDimension
-        }
-
-        return type.estimatedSize(for: item.model, listView: tableView).height
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
-            return UITableView.automaticDimension
-        }
-
-        if let size: CGSize = dataSource?.listView(tableView, size: item, at: indexPath) {
-            return size.height
-        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type {
-            return type.size(for: item.model, listView: tableView).height
-        }
-
-        return UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        delegate?.listView(tableView, willDisplay: cell, at: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        delegate?.listView(tableView, didEndDisplaying: cell, at: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
-
-        guard let item: IQItem = itemIdentifier(for: indexPath),
-              let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
-            return 0
-        }
-
-        return type.indentationLevel(for: item.model, listView: tableView)
-    }
-
-    // MARK: - Selection
-
-    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
-            return true
-        }
-
-        return cell.isHighlightable
-    }
-
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
-            return indexPath
-        }
-
-        return cell.isSelectable ? indexPath : nil
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        if clearsSelectionOnDidSelect {
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
-
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
-            return
-        }
-
-        delegate?.listView(tableView, didSelect: item, at: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
-            return indexPath
-        }
-
-        return cell.isDeselectable ? indexPath : nil
-    }
-
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
-            return
-        }
-
-        delegate?.listView(tableView, didDeselect: item, at: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
-            return
-        }
-
-        delegate?.listView(tableView, didHighlight: item, at: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
-            return
-        }
-
-        delegate?.listView(tableView, didUnhighlight: item, at: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, canPerformPrimaryActionForRowAt indexPath: IndexPath) -> Bool {
-
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
-            return true
-        }
-
-        return cell.canPerformPrimaryAction
-    }
-
-    func tableView(_ tableView: UITableView, performPrimaryActionForRowAt indexPath: IndexPath) {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
-            return
-        }
-
-        delegate?.listView(tableView, performPrimaryAction: item, at: indexPath)
-    }
-
-    // MARK: - Swipe actions
-    func tableView(_ tableView: UITableView,
-                   editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-
-        guard let cell: IQReorderableCell = tableView.cellForRow(at: indexPath) as? IQReorderableCell else {
-            return .none
-        }
-
-        return cell.editingStyle
-    }
-
-    func tableView(_ tableView: UITableView,
-                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
-        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions: [UIContextualAction] = cell.leadingSwipeActions() else {
-            return nil
-        }
-
-        return UISwipeActionsConfiguration(actions: swipeActions)
-    }
-
-    func tableView(_ tableView: UITableView,
-                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
-        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
-              let swipeActions: [UIContextualAction] = cell.trailingSwipeActions() else {
-            return nil
-        }
-
-        return UISwipeActionsConfiguration(actions: swipeActions)
-    }
-
-    // MARK: - Context menu
+// MARK: - Context menu
+extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
@@ -593,6 +567,167 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
     }
 }
 
+// MARK: - Swipe actions
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView,
+                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let swipeActions: [UIContextualAction] = cell.leadingSwipeActions() else {
+            return nil
+        }
+
+        return UISwipeActionsConfiguration(actions: swipeActions)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+        guard let cell: IQCellActionsProvider = tableView.cellForRow(at: indexPath) as? IQCellActionsProvider,
+              let swipeActions: [UIContextualAction] = cell.trailingSwipeActions() else {
+            return nil
+        }
+
+        return UISwipeActionsConfiguration(actions: swipeActions)
+    }
+
+    func tableView(_ tableView: UITableView, canPerformPrimaryActionForRowAt indexPath: IndexPath) -> Bool {
+
+        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+            return true
+        }
+
+        return cell.canPerformPrimaryAction
+    }
+
+    func tableView(_ tableView: UITableView, performPrimaryActionForRowAt indexPath: IndexPath) {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
+
+        delegate?.listView(tableView, performPrimaryAction: item, at: indexPath)
+    }
+}
+
+// MARK: - Highlights
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+
+        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+            return true
+        }
+
+        return cell.isHighlightable
+    }
+
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
+
+        delegate?.listView(tableView, didHighlight: item, at: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+            return
+        }
+
+        delegate?.listView(tableView, didUnhighlight: item, at: indexPath)
+    }
+}
+
+// MARK: - Editing
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView,
+                   willBeginEditingRowAt indexPath: IndexPath) {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        delegate?.tableView?(tableView, willBeginEditingRowAt: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        delegate?.tableView?(tableView, didEndEditingRowAt: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+
+        guard let cell: IQReorderableCell = tableView.cellForRow(at: indexPath) as? IQReorderableCell else {
+            return .none
+        }
+
+        return cell.editingStyle
+    }
+
+    func tableView(_ tableView: UITableView,
+                   titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView,
+                                    titleForDeleteConfirmationButtonForRowAt: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView,
+                                    shouldIndentWhileEditingRowAt: indexPath) ?? false
+    }
+}
+
+// MARK: - Reordering
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView,
+                   targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+                   toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView,
+                                    targetIndexPathForMoveFromRowAt: sourceIndexPath,
+                                    toProposedIndexPath: proposedDestinationIndexPath) ?? proposedDestinationIndexPath
+    }
+
+}
+
+// MARK: - Focus
+extension IQTableViewDiffableDataSource {
+
+    func tableView(_ tableView: UITableView,
+                   canFocusRowAt indexPath: IndexPath) -> Bool {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView, canFocusRowAt: indexPath) ?? true
+    }
+
+    func tableView(_ tableView: UITableView,
+                   shouldUpdateFocusIn context: UITableViewFocusUpdateContext) -> Bool {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView, shouldUpdateFocusIn: context) ?? true
+    }
+
+    func tableView(_ tableView: UITableView,
+                   didUpdateFocusIn context: UITableViewFocusUpdateContext,
+                   with coordinator: UIFocusAnimationCoordinator) {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        delegate?.tableView?(tableView, didUpdateFocusIn: context, with: coordinator)
+    }
+
+    func indexPathForPreferredFocusedView(in tableView: UITableView) -> IndexPath? {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.indexPathForPreferredFocusedView?(in: tableView)
+    }
+
+    @available(iOS 15.0, *)
+    func tableView(_ tableView: UITableView,
+                   selectionFollowsFocusForRowAt indexPath: IndexPath) -> Bool {
+        let delegate: UITableViewDelegate? = delegate as? UITableViewDelegate
+        return delegate?.tableView?(tableView,
+                                    selectionFollowsFocusForRowAt: indexPath) ?? false
+    }
+}
+
 extension IQTableViewDiffableDataSource: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         var items: [IQItem] = []
@@ -622,138 +757,3 @@ extension IQTableViewDiffableDataSource: UITableViewDataSourcePrefetching {
         dataSource?.listView(tableView, cancelPrefetch: items, at: itemIndexPaths)
     }
 }
-
-// {
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath)
-//
-//    @available(iOS 3.0, *)
-//    optional func tableView(_ tableView: UITableView,
-//    titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?
-//
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool
-//
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath)
-//
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?)
-//
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
-//    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath
-//
-//    @available(iOS 9.0, *)
-//    optional func tableView(_ tableView: UITableView, canFocusRowAt indexPath: IndexPath) -> Bool
-//
-//    @available(iOS 9.0, *)
-//    optional func tableView(_ tableView: UITableView,
-//    shouldUpdateFocusIn context: UITableViewFocusUpdateContext) -> Bool
-//
-//    @available(iOS 9.0, *)
-//    optional func tableView(_ tableView: UITableView, didUpdateFocusIn context: UITableViewFocusUpdateContext,
-//    with coordinator: UIFocusAnimationCoordinator)
-//
-//    @available(iOS 9.0, *)
-//    optional func indexPathForPreferredFocusedView(in tableView: UITableView) -> IndexPath?
-//
-//    /// Determines if the row at the specified index path should also become selected when focus moves to it.
-//    /// If the table view's global selectionFollowsFocus is enabled, this method will allow you to override that
-//    /// behavior on a per-index path basis. This method is not called if selectionFollowsFocus is disabled.
-//    @available(iOS 15.0, *)
-//    optional func tableView(_ tableView: UITableView, selectionFollowsFocusForRowAt indexPath: IndexPath) -> Bool
-//
-//    @available(iOS 11.0, *)
-//    optional func tableView(_ tableView: UITableView, shouldSpringLoadRowAt indexPath: IndexPath,
-//    with context: UISpringLoadedInteractionContext) -> Bool
-//
-//    @available(iOS 13.0, *)
-//    optional func tableView(_ tableView: UITableView,
-//    shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool
-//
-//    @available(iOS 13.0, *)
-//    optional func tableView(_ tableView: UITableView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath)
-//
-//    @available(iOS 13.0, *)
-//    optional func tableViewDidEndMultipleSelectionInteraction(_ tableView: UITableView)
-//
-//
-//    /**
-//     * @abstract Called when the table view is about to display a menu.
-//     *
-//     * @param tableView       This UITableView.
-//     * @param configuration   The configuration of the menu about to be displayed.
-//     * @param animator        Appearance animator. Add animations to run them alongside the appearance transition.
-//     */
-//    @available(iOS 14.0, *)
-//
-// }
-
-// {
-//    @available(iOS 2.0, *)
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-//
-//
-//    // Row display. Implementers should *always* try to reuse cells by setting each cell's
-//    // reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-//    // Cell gets various attributes set automatically based on table (separators)
-//    and data source (accessory views, editing controls)
-//
-//    @available(iOS 2.0, *)
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
-//
-//
-//    @available(iOS 2.0, *)
-//    optional func numberOfSections(in tableView: UITableView) -> Int // Default is 1 if not implemented
-//
-//
-//    fixed font style. use custom view (UILabel) if you want something different
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-//
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String?
-//
-//
-//    // Editing
-//
-//    // Individual rows can opt out of having the -editing property set for them. If not implemented,
-//    all rows are assumed to be editable.
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
-//
-//
-//    // Moving/reordering
-//
-//    // Allows the reorder accessory view to optionally be shown for a particular row. By default,
-//    the reorder control will be shown only if the datasource implements -tableView:moveRowAtIndexPath:toIndexPath:
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
-//
-//
-//    // Index
-//    // return list of section titles to display in section index view (e.g. "ABCD...Z#")
-//    @available(iOS 2.0, *)
-//    optional func sectionIndexTitles(for tableView: UITableView) -> [String]?
-//
-//     // tell table which section corresponds to section title/index (e.g. "B",1))
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int
-//
-//
-//    // Data manipulation - insert and delete support
-//
-//    // After a row has the minus or plus button invoked (based on the UITableViewCellEditingStyle for the cell),
-//    // the dataSource must commit the change
-//    // Not called for edit actions using UITableViewRowAction - the action's handler will be invoked instead
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
-//    forRowAt indexPath: IndexPath)
-//
-//
-//    // Data manipulation - reorder / moving support
-//
-//    @available(iOS 2.0, *)
-//    optional func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
-//    to destinationIndexPath: IndexPath)

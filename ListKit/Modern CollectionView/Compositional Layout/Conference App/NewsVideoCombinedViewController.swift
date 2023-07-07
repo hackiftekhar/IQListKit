@@ -146,7 +146,7 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
                     let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
                     itemOffset += itemsPerSection
 
-                    var items: [SimpleListCell.Model] = numbers.map { .init(section: sectionIdentifier, text: "\($0)") }
+                    let items: [SimpleListCell.Model] = numbers.map { .init(section: sectionIdentifier, text: "\($0)") }
                     list.append(SimpleListCell.self, models: items)
                 }
 
@@ -156,7 +156,7 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
                     let section = IQSection(identifier: Section.news(identifier: sectionIdentifier))
                     list.append([section])
 
-                    var items: [ConferenceNewsFeedCell.Model] = newsController.items.map {
+                    let items: [ConferenceNewsFeedCell.Model] = newsController.items.map {
                         .init(section: sectionIdentifier, item: $0, isLastCell: false)
                     }
                     list.append(ConferenceNewsFeedCell.self, models: items)

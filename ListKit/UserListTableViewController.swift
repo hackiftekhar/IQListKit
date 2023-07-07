@@ -123,6 +123,10 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
             }
         }
     }
+
+    override func tableView(_ tableView: UITableView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        return true
+    }
 }
 
 extension UserListTableViewController: UserCellDelegate {
