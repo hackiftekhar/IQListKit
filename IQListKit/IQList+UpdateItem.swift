@@ -85,7 +85,7 @@ public extension IQList {
             items = result.unique
             if !result.duplicate.isEmpty {
                 let duplicate = result.duplicate.compactMap { $0.model }
-                print("IQListKit: Ignoring \(duplicate.count) duplicate elements.\n\(duplicate))")
+                print("IQListKit: Ignoring \(duplicate.count) duplicate elements.")//\n\(duplicate))")
             }
         }
 

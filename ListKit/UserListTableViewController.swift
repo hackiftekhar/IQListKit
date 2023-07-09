@@ -14,8 +14,10 @@ class UserListTableViewController: UITableViewController {
     @IBOutlet private var footerView: UIView!
     @IBOutlet private var customNoItemsView: CustomNoItemView!
 
-    private var users: [User] = []
-    private var users2: [User] = []
+    private var models: [IQTableViewCell.Model] = []
+
+//    private var users: [User] = []
+//    private var users2: [User] = []
 
     private lazy var list = IQList(listView: tableView, delegateDataSource: self)
 
@@ -51,57 +53,104 @@ extension UserListTableViewController {
         allUsers.append(User(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
         allUsers.append(User(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
 
-        users.removeAll()
-        users2.removeAll()
-        while !allUsers.isEmpty {
+//        users.removeAll()
+//        users2.removeAll()
+//        while !allUsers.isEmpty {
+//
+//            if Bool.random() {
+//                if let user = allUsers.randomElement(), let index = allUsers.firstIndex(of: user) {
+//                    users.append(user)
+//                    allUsers.remove(at: index)
+//                }
+//            } else {
+//                if let user = allUsers.randomElement(), let index = allUsers.firstIndex(of: user) {
+//                    users2.append(user)
+//                    allUsers.remove(at: index)
+//                }
+//            }
+//        }
 
-            if Bool.random() {
-                if let user = allUsers.randomElement(), let index = allUsers.firstIndex(of: user) {
-                    users.append(user)
-                    allUsers.remove(at: index)
-                }
-            } else {
-                if let user = allUsers.randomElement(), let index = allUsers.firstIndex(of: user) {
-                    users2.append(user)
-                    allUsers.remove(at: index)
+        if Bool.random() {
+
+            let count = Int.random(in: 0..<100000)
+//            print("Adding \(count) records")
+            for index in 0..<count {
+
+                if Bool.random() {
+                    models.append(IQTableViewCell.Model(text: UUID().uuidString))
+                } else if let element = models.randomElement() {
+                    models.append(element)
                 }
             }
+        } else if !models.isEmpty {
+            let count = Int.random(in: models.indices)
+//            print("Removing \(count) records")
+            for index in 0..<count {
+                if !models.isEmpty {
+                    let index = Int.random(in: models.indices)
 
+                    if Bool.random() {
+                        models.remove(at: index)
+                    } else {
+                        models.append(models[index])
+                    }
+                }
+            }
         }
 
         refreshUI()
     }
 
     @IBAction func empty(_ sender: UIBarButtonItem) {
-        self.users.removeAll()
-        self.users2.removeAll()
+//        self.users.removeAll()
+//        self.users2.removeAll()
+        models.removeAll()
         refreshUI()
     }
 
     func refreshUI(animated: Bool = true) {
 
-        if users.isEmpty && users2.isEmpty {
-            tableView.tableHeaderView = nil
-            tableView.tableFooterView = nil
-        } else {
-            tableView.tableHeaderView = headerView
-            tableView.tableFooterView = footerView
-        }
+//        if users.isEmpty && users2.isEmpty {
+//            tableView.tableHeaderView = nil
+//            tableView.tableFooterView = nil
+//        } else {
+//            tableView.tableHeaderView = headerView
+//            tableView.tableFooterView = footerView
+//        }
 
+//        list.reloadData({
+//
+////            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
+//            let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
+//            list.append([section1])
+//
+//            list.append(UserCell.self, models: users, section: section1)
+//
+//            let section2 = IQSection(identifier: "secondSection", header: users2.count > 0 ? "Second Section" : nil)
+//            list.append([section2])
+//
+//            list.append(UserCell.self, models: users2, section: section2)
+//
+//        }, animatingDifferences: animated, completion: nil)
+
+        let startDate = Date()
         list.reloadData({
 
 //            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
-            let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
+            let section1 = IQSection(identifier: "firstSection", header: models.count > 0 ? "\(models.count) records" : nil)
             list.append([section1])
 
-            list.append(UserCell.self, models: users, section: section1)
+            list.append(IQTableViewCell.self, models: models, section: section1)
 
-            let section2 = IQSection(identifier: "secondSection", header: users2.count > 0 ? "Second Section" : nil)
-            list.append([section2])
+//            let section2 = IQSection(identifier: "secondSection", header: users2.count > 0 ? "Second Section" : nil)
+//            list.append([section2])
+//
+//            list.append(UserCell.self, models: users2, section: section2)
 
-            list.append(UserCell.self, models: users2, section: section2)
-
-        }, animatingDifferences: animated, completion: nil)
+        }, animatingDifferences: animated, completion: {
+            let endDate = Date()
+            print("Reload: Took \(endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) seconds")
+        })
     }
 }
 
@@ -131,12 +180,12 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
 
 extension UserListTableViewController: UserCellDelegate {
     func userCell(_ cell: UserCell, didDelete item: User) {
-        if let index = users.firstIndex(of: item) {
-            users.remove(at: index)
-            refreshUI()
-        } else if let index = users2.firstIndex(of: item) {
-            users2.remove(at: index)
-            refreshUI()
-        }
+//        if let index = users.firstIndex(of: item) {
+//            users.remove(at: index)
+//            refreshUI()
+//        } else if let index = users2.firstIndex(of: item) {
+//            users2.remove(at: index)
+//            refreshUI()
+//        }
     }
 }
