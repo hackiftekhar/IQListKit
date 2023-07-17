@@ -110,11 +110,11 @@ extension TableViewEditingViewController {
 
 extension TableViewEditingViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool {
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool? {
         return true
     }
 
-    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool {
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool? {
         return true
     }
 
