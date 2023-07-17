@@ -26,7 +26,7 @@ internal protocol IQDiffableDataSource
 where Self: UIScrollViewDelegate {
 
     var registeredCells: [IQListCell.Type] { get set }
-    var registeredSupplementaryViews: [String: [IQListSupplementaryView.Type]] { get set }
+    var registeredSupplementaryViews: [String: [UIView.Type]] { get set }
 
     var proxyDelegate: IQListViewProxyDelegate? { get set }
     var delegate: IQListViewDelegate? { get set }

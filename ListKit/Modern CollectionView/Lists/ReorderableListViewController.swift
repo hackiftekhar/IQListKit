@@ -193,7 +193,7 @@ extension ReorderableListViewController {
 
             var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
 
-            var items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
+            let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
             sectionSnapshot.append(items)
 
             let section = IQSection(identifier: section)
@@ -208,7 +208,7 @@ extension ReorderableListViewController {
 
             var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
 
-            var items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
+            let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
             sectionSnapshot.append(items)
 
             let section = IQSection(identifier: section)

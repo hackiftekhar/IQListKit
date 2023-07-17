@@ -99,7 +99,7 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
 
                 var items: [ListCell.Model] = []
-                for (rowIndex, number) in numbers.enumerated() {
+                for (rowIndex, _) in numbers.enumerated() {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)"))
                 }
 

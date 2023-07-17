@@ -554,13 +554,13 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
     
     func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath)
     
-    func listView(_ listView: IQListView, modifySupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, modifySupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
                   
-    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
                  
-    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: IQListSupplementaryView,
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: UIView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
                
     func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
@@ -584,7 +584,7 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 
     //Return the custom header or footer View of section (or item in collection view)
     func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
-                  kind: String, at indexPath: IndexPath) -> IQListSupplementaryView?
+                  kind: String, at indexPath: IndexPath) -> UIView?
 
     func sectionIndexTitles(_ listView: IQListView) -> [String]?
     

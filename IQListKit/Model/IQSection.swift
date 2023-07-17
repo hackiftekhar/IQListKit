@@ -42,8 +42,14 @@ public struct IQSection: Hashable {
     public let identifier: AnyHashable
 
     /// Type of the cell
-    public private(set) var headerType: IQListSupplementaryView.Type?
-    public private(set) var footerType: IQListSupplementaryView.Type?
+    public private(set) var headerType: UIView.Type?
+    public private(set) var footerType: UIView.Type?
+
+    /// Header/Footer
+    public private(set) var headerView: UIView?
+    public private(set) var headerSize: CGSize?
+    public private(set) var footerView: UIView?
+    public private(set) var footerSize: CGSize?
 
     /// Model of the cell
     public private(set) var headerModel: AnyHashable?
@@ -57,38 +63,55 @@ public struct IQSection: Hashable {
     ///   - footer: footer text to display
     ///   - footerSize: footer size
     public init(identifier: AnyHashable,
-                header: String? = nil,
-                footer: String? = nil) {
+                header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
+                footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
         self.identifier = identifier
-        if let header = header {
+        if let headerView = headerView {
+            self.headerView = headerView
+        } else if let header = header {
             headerType = IQSupplementaryViewPlaceholder.self
             headerModel = header
         }
+        self.headerSize = headerSize
 
-        if let footer = footer {
+        if let footerView = footerView {
+            self.footerView = footerView
+        } else if let footer = footer {
             footerType = IQSupplementaryViewPlaceholder.self
             footerModel = footer
         }
+        self.footerSize = footerSize
     }
 
     public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  headerType: H.Type, headerModel: H.Model,
-                                                 footer: String? = nil) {
+                                                 footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
         // swiftlint:enable line_length
         self.identifier = identifier
         self.headerType = headerType
         self.headerModel = headerModel
-        footerType = IQSupplementaryViewPlaceholder.self
-        footerModel = footer
+        if let footerView = footerView {
+            self.footerView = footerView
+        } else if let footer = footer {
+            footerType = IQSupplementaryViewPlaceholder.self
+            footerModel = footer
+        }
+        self.footerSize = footerSize
     }
 
     public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
-                                                 header: String? = nil,
+                                                 header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
                                                  footerType: F.Type, footerModel: F.Model) {
         // swiftlint:enable line_length
         self.identifier = identifier
-        headerType = IQSupplementaryViewPlaceholder.self
-        headerModel = header
+        if let headerView = headerView {
+            self.headerView = headerView
+        } else if let header = header {
+            headerType = IQSupplementaryViewPlaceholder.self
+            headerModel = header
+        }
+        self.headerSize = headerSize
+
         self.footerType = footerType
         self.footerModel = footerModel
     }

@@ -28,15 +28,22 @@ internal extension Array where Element: Hashable {
     @discardableResult
     func removeDuplicate(existingElements: [Element] = []) -> (unique: [Element], duplicate: [Element]) {
 
-        var unique: [Element] = []
         var duplicate: [Element] = []
-
-        forEach { element in
-
-            if !unique.contains(element), !existingElements.contains(element) {
-                unique.append(element)
+        // Storing indexes of each element
+        var hashTable: [Element: Int] = self.enumerated().reduce(into: [Element: Int]()) { result, object in
+            if result[object.element] == nil {
+                result[object.element] = object.offset
             } else {
-                duplicate.append(element)
+                // If this object already exist then it's a duplicate
+                duplicate.append(object.element)
+            }
+        }
+
+        var unique: [Element] = []
+        self.forEach { element in
+            if hashTable[element] != nil {
+                hashTable[element] = nil
+                unique.append(element)
             }
         }
 

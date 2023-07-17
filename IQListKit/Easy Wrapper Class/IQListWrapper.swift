@@ -53,16 +53,16 @@ final public class IQListWrapper<T: IQModelableCell> {
         }
     }
 
-    public func setModels(_ models: [T.Model], animated: Bool) {
+    public func setModels(_ models: [T.Model], animated: Bool, completion: (() -> Void)? = nil) {
         _models = models
-        reloadData(animated: animated)
+        reloadData(animated: animated, completion: completion)
     }
 
-    private func reloadData(animated: Bool) {
+    private func reloadData(animated: Bool, completion: (() -> Void)? = nil) {
 
         list.reloadData({
             list.append([section])
             list.append(T.self, models: models)
-        }, animatingDifferences: animated)
+        }, animatingDifferences: animated, completion: completion)
     }
 }
