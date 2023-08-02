@@ -1,0 +1,584 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C0A673172A7AFF47004EB133 /* IQDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672E72A7AFF47004EB133 /* IQDiffableDataSource.swift */; };
+		C0A673182A7AFF47004EB133 /* IQList+UpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672E82A7AFF47004EB133 /* IQList+UpdateItem.swift */; };
+		C0A673192A7AFF47004EB133 /* IQTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EA2A7AFF47004EB133 /* IQTableViewCell.swift */; };
+		C0A6731A2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EC2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift */; };
+		C0A6731B2A7AFF47004EB133 /* IQListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672ED2A7AFF47004EB133 /* IQListView.swift */; };
+		C0A6731C2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EE2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift */; };
+		C0A6731D2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EF2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift */; };
+		C0A6731E2A7AFF47004EB133 /* IQReorderableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F12A7AFF47004EB133 /* IQReorderableCell.swift */; };
+		C0A6731F2A7AFF47004EB133 /* IQCellActionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F22A7AFF47004EB133 /* IQCellActionsProvider.swift */; };
+		C0A673202A7AFF47004EB133 /* IQCellModelModifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F32A7AFF47004EB133 /* IQCellModelModifiable.swift */; };
+		C0A673212A7AFF47004EB133 /* IQCellSizeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F42A7AFF47004EB133 /* IQCellSizeProvider.swift */; };
+		C0A673222A7AFF47004EB133 /* IQListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F52A7AFF47004EB133 /* IQListCell.swift */; };
+		C0A673232A7AFF47004EB133 /* IQModelableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F62A7AFF47004EB133 /* IQModelableCell.swift */; };
+		C0A673242A7AFF47004EB133 /* IQSelectableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F72A7AFF47004EB133 /* IQSelectableCell.swift */; };
+		C0A673252A7AFF47004EB133 /* IQList+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F82A7AFF47004EB133 /* IQList+Update.swift */; };
+		C0A673262A7AFF47004EB133 /* IQNoItemStateRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FA2A7AFF47004EB133 /* IQNoItemStateRepresentable.swift */; };
+		C0A673272A7AFF47004EB133 /* IQNoItemStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FB2A7AFF47004EB133 /* IQNoItemStateView.swift */; };
+		C0A673282A7AFF47004EB133 /* IQList+UpdateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FC2A7AFF47004EB133 /* IQList+UpdateSection.swift */; };
+		C0A673292A7AFF47004EB133 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FE2A7AFF47004EB133 /* UICollectionView+Extension.swift */; };
+		C0A6732A2A7AFF47004EB133 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FF2A7AFF47004EB133 /* Array+Extension.swift */; };
+		C0A6732B2A7AFF47004EB133 /* IQList+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673002A7AFF47004EB133 /* IQList+Register.swift */; };
+		C0A6732C2A7AFF47004EB133 /* IQModelableSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673022A7AFF47004EB133 /* IQModelableSupplementaryView.swift */; };
+		C0A6732D2A7AFF47004EB133 /* IQCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673042A7AFF47004EB133 /* IQCollectionViewLayout.swift */; };
+		C0A6732E2A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673052A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift */; };
+		C0A6732F2A7AFF47004EB133 /* IQListKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C0A673062A7AFF47004EB133 /* IQListKit.h */; };
+		C0A673302A7AFF47004EB133 /* IQList+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673072A7AFF47004EB133 /* IQList+Info.swift */; };
+		C0A673312A7AFF47004EB133 /* IQSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673092A7AFF47004EB133 /* IQSection.swift */; };
+		C0A673322A7AFF47004EB133 /* IQItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730A2A7AFF47004EB133 /* IQItem.swift */; };
+		C0A673332A7AFF47004EB133 /* IQContextualAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730C2A7AFF47004EB133 /* IQContextualAction.swift */; };
+		C0A673342A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730E2A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift */; };
+		C0A673352A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730F2A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift */; };
+		C0A673362A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673102A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift */; };
+		C0A673372A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673112A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift */; };
+		C0A673382A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673122A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift */; };
+		C0A673392A7AFF47004EB133 /* IQList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673132A7AFF47004EB133 /* IQList.swift */; };
+		C0A6733A2A7AFF47004EB133 /* IQListWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673152A7AFF47004EB133 /* IQListWrapper.swift */; };
+		C0A6733B2A7AFF47004EB133 /* IQListViewDelegateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673162A7AFF47004EB133 /* IQListViewDelegateDataSource.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C0A672DB2A7AFEF4004EB133 /* IQListKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IQListKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0A672E72A7AFF47004EB133 /* IQDiffableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDiffableDataSource.swift; sourceTree = "<group>"; };
+		C0A672E82A7AFF47004EB133 /* IQList+UpdateItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+UpdateItem.swift"; sourceTree = "<group>"; };
+		C0A672EA2A7AFF47004EB133 /* IQTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableViewCell.swift; sourceTree = "<group>"; };
+		C0A672EC2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionViewDiffableDataSource.swift; sourceTree = "<group>"; };
+		C0A672ED2A7AFF47004EB133 /* IQListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListView.swift; sourceTree = "<group>"; };
+		C0A672EE2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQUIScrollViewDelegate.swift; sourceTree = "<group>"; };
+		C0A672EF2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableViewDiffableDataSource.swift; sourceTree = "<group>"; };
+		C0A672F12A7AFF47004EB133 /* IQReorderableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQReorderableCell.swift; sourceTree = "<group>"; };
+		C0A672F22A7AFF47004EB133 /* IQCellActionsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCellActionsProvider.swift; sourceTree = "<group>"; };
+		C0A672F32A7AFF47004EB133 /* IQCellModelModifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCellModelModifiable.swift; sourceTree = "<group>"; };
+		C0A672F42A7AFF47004EB133 /* IQCellSizeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCellSizeProvider.swift; sourceTree = "<group>"; };
+		C0A672F52A7AFF47004EB133 /* IQListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListCell.swift; sourceTree = "<group>"; };
+		C0A672F62A7AFF47004EB133 /* IQModelableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModelableCell.swift; sourceTree = "<group>"; };
+		C0A672F72A7AFF47004EB133 /* IQSelectableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSelectableCell.swift; sourceTree = "<group>"; };
+		C0A672F82A7AFF47004EB133 /* IQList+Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+Update.swift"; sourceTree = "<group>"; };
+		C0A672FA2A7AFF47004EB133 /* IQNoItemStateRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQNoItemStateRepresentable.swift; sourceTree = "<group>"; };
+		C0A672FB2A7AFF47004EB133 /* IQNoItemStateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQNoItemStateView.swift; sourceTree = "<group>"; };
+		C0A672FC2A7AFF47004EB133 /* IQList+UpdateSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+UpdateSection.swift"; sourceTree = "<group>"; };
+		C0A672FE2A7AFF47004EB133 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
+		C0A672FF2A7AFF47004EB133 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		C0A673002A7AFF47004EB133 /* IQList+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+Register.swift"; sourceTree = "<group>"; };
+		C0A673022A7AFF47004EB133 /* IQModelableSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModelableSupplementaryView.swift; sourceTree = "<group>"; };
+		C0A673042A7AFF47004EB133 /* IQCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionViewLayout.swift; sourceTree = "<group>"; };
+		C0A673052A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionViewSectionLayout.swift; sourceTree = "<group>"; };
+		C0A673062A7AFF47004EB133 /* IQListKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQListKit.h; sourceTree = "<group>"; };
+		C0A673072A7AFF47004EB133 /* IQList+Info.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+Info.swift"; sourceTree = "<group>"; };
+		C0A673092A7AFF47004EB133 /* IQSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSection.swift; sourceTree = "<group>"; };
+		C0A6730A2A7AFF47004EB133 /* IQItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQItem.swift; sourceTree = "<group>"; };
+		C0A6730C2A7AFF47004EB133 /* IQContextualAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContextualAction.swift; sourceTree = "<group>"; };
+		C0A6730E2A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableEmptySupplementaryView.swift; sourceTree = "<group>"; };
+		C0A6730F2A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionTitleSupplementaryView.swift; sourceTree = "<group>"; };
+		C0A673102A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSupplementaryViewPlaceholder.swift; sourceTree = "<group>"; };
+		C0A673112A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableTitleSupplementaryView.swift; sourceTree = "<group>"; };
+		C0A673122A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionEmptySupplementaryView.swift; sourceTree = "<group>"; };
+		C0A673132A7AFF47004EB133 /* IQList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQList.swift; sourceTree = "<group>"; };
+		C0A673152A7AFF47004EB133 /* IQListWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListWrapper.swift; sourceTree = "<group>"; };
+		C0A673162A7AFF47004EB133 /* IQListViewDelegateDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListViewDelegateDataSource.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0A672D82A7AFEF4004EB133 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C0A672D12A7AFEF4004EB133 = {
+			isa = PBXGroup;
+			children = (
+				C0A672E52A7AFF47004EB133 /* IQListKit */,
+				C0A672DC2A7AFEF4004EB133 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C0A672DC2A7AFEF4004EB133 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672DB2A7AFEF4004EB133 /* IQListKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C0A672E52A7AFF47004EB133 /* IQListKit */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672E62A7AFF47004EB133 /* Compatibility */,
+				C0A672E82A7AFF47004EB133 /* IQList+UpdateItem.swift */,
+				C0A672E92A7AFF47004EB133 /* Default Cell */,
+				C0A672EB2A7AFF47004EB133 /* DiffableDataSource */,
+				C0A672F02A7AFF47004EB133 /* Cell Protocol */,
+				C0A672F82A7AFF47004EB133 /* IQList+Update.swift */,
+				C0A672F92A7AFF47004EB133 /* Empty State */,
+				C0A672FC2A7AFF47004EB133 /* IQList+UpdateSection.swift */,
+				C0A672FD2A7AFF47004EB133 /* Extensions */,
+				C0A673002A7AFF47004EB133 /* IQList+Register.swift */,
+				C0A673012A7AFF47004EB133 /* Supplementary Element Protocol */,
+				C0A673032A7AFF47004EB133 /* CollectionView Layouts */,
+				C0A673062A7AFF47004EB133 /* IQListKit.h */,
+				C0A673072A7AFF47004EB133 /* IQList+Info.swift */,
+				C0A673082A7AFF47004EB133 /* Model */,
+				C0A6730B2A7AFF47004EB133 /* Actions */,
+				C0A6730D2A7AFF47004EB133 /* Default Supplementary View */,
+				C0A673132A7AFF47004EB133 /* IQList.swift */,
+				C0A673142A7AFF47004EB133 /* Easy Wrapper Class */,
+				C0A673162A7AFF47004EB133 /* IQListViewDelegateDataSource.swift */,
+			);
+			path = IQListKit;
+			sourceTree = "<group>";
+		};
+		C0A672E62A7AFF47004EB133 /* Compatibility */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672E72A7AFF47004EB133 /* IQDiffableDataSource.swift */,
+			);
+			path = Compatibility;
+			sourceTree = "<group>";
+		};
+		C0A672E92A7AFF47004EB133 /* Default Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672EA2A7AFF47004EB133 /* IQTableViewCell.swift */,
+			);
+			path = "Default Cell";
+			sourceTree = "<group>";
+		};
+		C0A672EB2A7AFF47004EB133 /* DiffableDataSource */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672EC2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift */,
+				C0A672ED2A7AFF47004EB133 /* IQListView.swift */,
+				C0A672EE2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift */,
+				C0A672EF2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift */,
+			);
+			path = DiffableDataSource;
+			sourceTree = "<group>";
+		};
+		C0A672F02A7AFF47004EB133 /* Cell Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672F12A7AFF47004EB133 /* IQReorderableCell.swift */,
+				C0A672F22A7AFF47004EB133 /* IQCellActionsProvider.swift */,
+				C0A672F32A7AFF47004EB133 /* IQCellModelModifiable.swift */,
+				C0A672F42A7AFF47004EB133 /* IQCellSizeProvider.swift */,
+				C0A672F52A7AFF47004EB133 /* IQListCell.swift */,
+				C0A672F62A7AFF47004EB133 /* IQModelableCell.swift */,
+				C0A672F72A7AFF47004EB133 /* IQSelectableCell.swift */,
+			);
+			path = "Cell Protocol";
+			sourceTree = "<group>";
+		};
+		C0A672F92A7AFF47004EB133 /* Empty State */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672FA2A7AFF47004EB133 /* IQNoItemStateRepresentable.swift */,
+				C0A672FB2A7AFF47004EB133 /* IQNoItemStateView.swift */,
+			);
+			path = "Empty State";
+			sourceTree = "<group>";
+		};
+		C0A672FD2A7AFF47004EB133 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672FE2A7AFF47004EB133 /* UICollectionView+Extension.swift */,
+				C0A672FF2A7AFF47004EB133 /* Array+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C0A673012A7AFF47004EB133 /* Supplementary Element Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C0A673022A7AFF47004EB133 /* IQModelableSupplementaryView.swift */,
+			);
+			path = "Supplementary Element Protocol";
+			sourceTree = "<group>";
+		};
+		C0A673032A7AFF47004EB133 /* CollectionView Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				C0A673042A7AFF47004EB133 /* IQCollectionViewLayout.swift */,
+				C0A673052A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift */,
+			);
+			path = "CollectionView Layouts";
+			sourceTree = "<group>";
+		};
+		C0A673082A7AFF47004EB133 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C0A673092A7AFF47004EB133 /* IQSection.swift */,
+				C0A6730A2A7AFF47004EB133 /* IQItem.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C0A6730B2A7AFF47004EB133 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				C0A6730C2A7AFF47004EB133 /* IQContextualAction.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		C0A6730D2A7AFF47004EB133 /* Default Supplementary View */ = {
+			isa = PBXGroup;
+			children = (
+				C0A6730E2A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift */,
+				C0A6730F2A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift */,
+				C0A673102A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift */,
+				C0A673112A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift */,
+				C0A673122A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift */,
+			);
+			path = "Default Supplementary View";
+			sourceTree = "<group>";
+		};
+		C0A673142A7AFF47004EB133 /* Easy Wrapper Class */ = {
+			isa = PBXGroup;
+			children = (
+				C0A673152A7AFF47004EB133 /* IQListWrapper.swift */,
+			);
+			path = "Easy Wrapper Class";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C0A672D62A7AFEF4004EB133 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0A6732F2A7AFF47004EB133 /* IQListKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C0A672DA2A7AFEF4004EB133 /* IQListKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0A672E22A7AFEF4004EB133 /* Build configuration list for PBXNativeTarget "IQListKit" */;
+			buildPhases = (
+				C0A672D62A7AFEF4004EB133 /* Headers */,
+				C0A672D72A7AFEF4004EB133 /* Sources */,
+				C0A672D82A7AFEF4004EB133 /* Frameworks */,
+				C0A672D92A7AFEF4004EB133 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = IQListKit;
+			productName = IQListKit;
+			productReference = C0A672DB2A7AFEF4004EB133 /* IQListKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C0A672D22A7AFEF4004EB133 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					C0A672DA2A7AFEF4004EB133 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+				};
+			};
+			buildConfigurationList = C0A672D52A7AFEF4004EB133 /* Build configuration list for PBXProject "IQListKit" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C0A672D12A7AFEF4004EB133;
+			productRefGroup = C0A672DC2A7AFEF4004EB133 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C0A672DA2A7AFEF4004EB133 /* IQListKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C0A672D92A7AFEF4004EB133 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C0A672D72A7AFEF4004EB133 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0A6731C2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift in Sources */,
+				C0A673242A7AFF47004EB133 /* IQSelectableCell.swift in Sources */,
+				C0A673322A7AFF47004EB133 /* IQItem.swift in Sources */,
+				C0A6733A2A7AFF47004EB133 /* IQListWrapper.swift in Sources */,
+				C0A6732C2A7AFF47004EB133 /* IQModelableSupplementaryView.swift in Sources */,
+				C0A673222A7AFF47004EB133 /* IQListCell.swift in Sources */,
+				C0A673212A7AFF47004EB133 /* IQCellSizeProvider.swift in Sources */,
+				C0A673372A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift in Sources */,
+				C0A673342A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift in Sources */,
+				C0A673202A7AFF47004EB133 /* IQCellModelModifiable.swift in Sources */,
+				C0A673392A7AFF47004EB133 /* IQList.swift in Sources */,
+				C0A673362A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift in Sources */,
+				C0A6731F2A7AFF47004EB133 /* IQCellActionsProvider.swift in Sources */,
+				C0A6731B2A7AFF47004EB133 /* IQListView.swift in Sources */,
+				C0A673232A7AFF47004EB133 /* IQModelableCell.swift in Sources */,
+				C0A6732D2A7AFF47004EB133 /* IQCollectionViewLayout.swift in Sources */,
+				C0A6731D2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift in Sources */,
+				C0A6731E2A7AFF47004EB133 /* IQReorderableCell.swift in Sources */,
+				C0A6731A2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift in Sources */,
+				C0A6732A2A7AFF47004EB133 /* Array+Extension.swift in Sources */,
+				C0A6733B2A7AFF47004EB133 /* IQListViewDelegateDataSource.swift in Sources */,
+				C0A673252A7AFF47004EB133 /* IQList+Update.swift in Sources */,
+				C0A673262A7AFF47004EB133 /* IQNoItemStateRepresentable.swift in Sources */,
+				C0A673172A7AFF47004EB133 /* IQDiffableDataSource.swift in Sources */,
+				C0A673282A7AFF47004EB133 /* IQList+UpdateSection.swift in Sources */,
+				C0A6732E2A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift in Sources */,
+				C0A673182A7AFF47004EB133 /* IQList+UpdateItem.swift in Sources */,
+				C0A673292A7AFF47004EB133 /* UICollectionView+Extension.swift in Sources */,
+				C0A673382A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift in Sources */,
+				C0A673302A7AFF47004EB133 /* IQList+Info.swift in Sources */,
+				C0A673272A7AFF47004EB133 /* IQNoItemStateView.swift in Sources */,
+				C0A673192A7AFF47004EB133 /* IQTableViewCell.swift in Sources */,
+				C0A6732B2A7AFF47004EB133 /* IQList+Register.swift in Sources */,
+				C0A673352A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift in Sources */,
+				C0A673332A7AFF47004EB133 /* IQContextualAction.swift in Sources */,
+				C0A673312A7AFF47004EB133 /* IQSection.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C0A672E02A7AFEF4004EB133 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C0A672E12A7AFEF4004EB133 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C0A672E32A7AFEF4004EB133 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_MODULES_AUTOLINK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.IQListKit.IQListKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C0A672E42A7AFEF4004EB133 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_MODULES_AUTOLINK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.iftekhar.IQListKit.IQListKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C0A672D52A7AFEF4004EB133 /* Build configuration list for PBXProject "IQListKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0A672E02A7AFEF4004EB133 /* Debug */,
+				C0A672E12A7AFEF4004EB133 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0A672E22A7AFEF4004EB133 /* Build configuration list for PBXNativeTarget "IQListKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0A672E32A7AFEF4004EB133 /* Debug */,
+				C0A672E42A7AFEF4004EB133 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C0A672D22A7AFEF4004EB133 /* Project object */;
+}

@@ -119,6 +119,9 @@
 		C0A2AB7E259A28CB00F06BFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C0A3CADF27513319004BE529 /* SampleCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleCollectionReusableView.swift; sourceTree = "<group>"; };
 		C0A3CAE027513319004BE529 /* SampleCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SampleCollectionReusableView.xib; sourceTree = "<group>"; };
+		C0A672982A7AFE29004EB133 /* IQSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSection.swift; sourceTree = "<group>"; };
+		C0A672992A7AFE29004EB133 /* IQItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQItem.swift; sourceTree = "<group>"; };
+		C0A672BE2A7AFE2A004EB133 /* IQModelableSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQModelableSupplementaryView.swift; sourceTree = "<group>"; };
 		C0BA5B98298E7ACB00230100 /* CustomConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomConfigurations.swift; sourceTree = "<group>"; };
 		C0BA5B99298E7ACB00230100 /* CustomConfigurationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomConfigurationViewController.swift; sourceTree = "<group>"; };
 		C0BA5B9C298E7ACB00230100 /* AdaptiveSectionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdaptiveSectionsViewController.swift; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 		C0A2AB64259A28CA00F06BFC = {
 			isa = PBXGroup;
 			children = (
+				C0A672972A7AFE29004EB133 /* Model */,
+				C0A672BD2A7AFE2A004EB133 /* Supplementary Element Protocol */,
 				C0A2AB6F259A28CA00F06BFC /* ListKit */,
 				C0EF175425A343EF0038C5E9 /* Resources */,
 				C0A2AB6E259A28CA00F06BFC /* Products */,
@@ -263,6 +268,25 @@
 				C0A2AB7E259A28CB00F06BFC /* Info.plist */,
 			);
 			path = ListKit;
+			sourceTree = "<group>";
+		};
+		C0A672972A7AFE29004EB133 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672982A7AFE29004EB133 /* IQSection.swift */,
+				C0A672992A7AFE29004EB133 /* IQItem.swift */,
+			);
+			name = Model;
+			path = IQListKit/Model;
+			sourceTree = "<group>";
+		};
+		C0A672BD2A7AFE2A004EB133 /* Supplementary Element Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C0A672BE2A7AFE2A004EB133 /* IQModelableSupplementaryView.swift */,
+			);
+			name = "Supplementary Element Protocol";
+			path = "IQListKit/Supplementary Element Protocol";
 			sourceTree = "<group>";
 		};
 		C0BA5B96298E7AA900230100 /* Modern CollectionView */ = {
@@ -902,6 +926,8 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7UUTF6T5P9;
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = ListKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
