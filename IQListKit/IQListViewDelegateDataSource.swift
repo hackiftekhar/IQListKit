@@ -181,7 +181,7 @@ public protocol IQListViewDataSource: AnyObject {
     ///   - listView: The IQListView object
     ///   - item: the item which is asked for it can move.
     ///   - indexPath: indexPath of the item
-    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool?
 
     /// Return the size of an Item, for tableView the size.height will only be effective
     /// - Parameters:
@@ -196,7 +196,7 @@ public protocol IQListViewDataSource: AnyObject {
     ///   - listView: The IQListView object
     ///   - item: the item which is asked for it can move.
     ///   - indexPath: indexPath of the item
-    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool?
 
     /// Return the size of an Item, for tableView the size.height will only be effective
     /// - Parameters:
@@ -259,12 +259,12 @@ public extension IQListViewDataSource {
 
     func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath]) {}
 
-    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool { return false }
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool? { return nil }
 
     func listView(_ listView: IQListView, commit item: IQItem,
                   style: UITableViewCell.EditingStyle, at indexPath: IndexPath) {}
 
-    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool { return false }
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool? { return nil }
 
     func listView(_ listView: IQListView, move sourceItem: IQItem,
                   at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
