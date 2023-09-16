@@ -33,7 +33,7 @@ public final class IQTableTitleSupplementaryView: UITableViewHeaderFooterView, I
         }
     }
 
-    public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+    public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
         return CGSize(width: listView.frame.width, height: 22)
     }
 }

@@ -416,11 +416,11 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
-    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize {
+    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
         return CGSize(width: listView.frame.width, height: 100)
     }
 
-    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+    static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
 
         if let model = model as? Model {
             var height: CGFloat = 100
@@ -448,8 +448,8 @@ class UserCell: UITableViewCell, IQModelableCell {
     //...
 
     @available(iOS 11.0, *)
-    func leadingSwipeActions() -> [IQContextualAction]? {
-        let action = IQContextualAction(style: .normal, title: "Hello Leading") { (action, completionHandler) in
+    func leadingSwipeActions() -> [UIContextualAction]? {
+        let action = UIContextualAction(style: .normal, title: "Hello Leading") { (_, _, completionHandler) in
             completionHandler(true)
             //Do your stuffs here
         }
@@ -458,9 +458,9 @@ class UserCell: UITableViewCell, IQModelableCell {
         return [action]
     }
 
-    func trailingSwipeActions() -> [IQContextualAction]? {
+    func trailingSwipeActions() -> [UIContextualAction]? {
 
-        let action1 = IQContextualAction(style: .normal, title: "Hello Trailing") { [weak self] (action, completionHandler) in
+        let action1 = UIContextualAction(style: .normal, title: "Hello Trailing") { [weak self] (_, _, completionHandler) in
             completionHandler(true)
             guard let self = self, let user = self.model else {
                 return
@@ -592,12 +592,12 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
     
     func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath])
     
-    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool
+    func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool?
     
     func listView(_ listView: IQListView, move sourceItem: IQItem,
                   at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
                   
-    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool
+    func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool?
     
     func listView(_ listView: IQListView, commit item: IQItem,
                   style: UITableViewCell.EditingStyle, at indexPath: IndexPath)

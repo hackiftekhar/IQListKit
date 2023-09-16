@@ -34,29 +34,22 @@ where Self: UIView {
 
 public extension IQModelableSupplementaryView {
 
-    func setModel(_ model: AnyHashable?) {
+    func setModel(_ model: AnyHashable) {
         self.model = model as? Model
     }
 }
 
 public extension IQModelableSupplementaryView {
 
-    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        return size(for: model, listView: listView)
+    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        return nil
     }
 
-    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        if let listView = listView as? UICollectionView {
-            if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
-                return CGSize(width: listView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 22)
-            }
-        } else if let listView = listView as? UITableView {
-            return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
-        }
-        return .zero
+    static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        return nil
     }
 
-    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+    static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int {
         return 0
     }
 }

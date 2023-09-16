@@ -237,15 +237,24 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
+        guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type,
+              let headerModel = aSection.headerModel else {
             return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.headerReferenceSize ?? .zero
         }
 
-        if type == IQSupplementaryViewPlaceholder.self {
-            return IQCollectionTitleSupplementaryView.size(for: aSection.headerModel, listView: collectionView)
+        let sectionSize: CGSize
+        if type == IQSupplementaryViewPlaceholder.self,
+        let size = IQCollectionTitleSupplementaryView.size(for: headerModel, listView: collectionView) {
+            sectionSize = size
+        } else if let size = type.size(for: headerModel, listView: collectionView) {
+            sectionSize = size
+        } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            sectionSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 22)
         } else {
-            return type.size(for: aSection.headerModel, listView: collectionView)
+            sectionSize = .zero
         }
+
+        return sectionSize
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -301,15 +310,24 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
-        guard let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type else {
+        guard let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type,
+              let footerModel = aSection.footerModel else {
             return (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.footerReferenceSize ?? .zero
         }
 
-        if type == IQSupplementaryViewPlaceholder.self {
-            return IQCollectionTitleSupplementaryView.size(for: aSection.footerModel, listView: collectionView)
+        let sectionSize: CGSize
+        if type == IQSupplementaryViewPlaceholder.self,
+        let size = IQCollectionTitleSupplementaryView.size(for: footerModel, listView: collectionView) {
+            sectionSize = size
+        } else if let size = type.size(for: footerModel, listView: collectionView) {
+            sectionSize = size
+        } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            sectionSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 22)
         } else {
-            return type.size(for: aSection.footerModel, listView: collectionView)
+            sectionSize = .zero
         }
+
+        return sectionSize
     }
 
     // MARK: - Cell
@@ -321,13 +339,19 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
             return .zero
         }
 
+        let itemSize: CGSize
         if let size: CGSize = dataSource?.listView(collectionView, size: item, at: indexPath) {
-            return size
-        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type {
-            return type.size(for: item.model, listView: collectionView)
+            itemSize = size
+        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type,
+                  let size = type.size(for: item.model, listView: collectionView) {
+            itemSize = size
+        } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            itemSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 0)
+        } else {
+            itemSize = .zero
         }
 
-        return CGSize.zero
+        return itemSize
     }
 }
 

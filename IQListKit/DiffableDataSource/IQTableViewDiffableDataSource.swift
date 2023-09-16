@@ -145,7 +145,14 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
             return UITableView.automaticDimension
         }
 
-        return type.estimatedSize(for: item.model, listView: tableView).height
+        let itemSize: CGSize
+        if let size: CGSize = type.estimatedSize(for: item.model, listView: tableView) {
+            itemSize = size
+        } else {
+            itemSize = CGSize(width: tableView.frame.width, height: UITableView.automaticDimension)
+        }
+
+        return itemSize.height
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -153,13 +160,18 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
             return UITableView.automaticDimension
         }
 
+        let itemSize: CGSize
+
         if let size: CGSize = dataSource?.listView(tableView, size: item, at: indexPath) {
-            return size.height
-        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type {
-            return type.size(for: item.model, listView: tableView).height
+            itemSize = size
+        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type,
+        let size = type.size(for: item.model, listView: tableView) {
+            itemSize = size
+        } else {
+            itemSize = CGSize(width: tableView.frame.width, height: UITableView.automaticDimension)
         }
 
-        return UITableView.automaticDimension
+        return itemSize.height
     }
 }
 
@@ -277,17 +289,20 @@ extension IQTableViewDiffableDataSource {
 
         let aSection: IQSection = sectionIdentifiers[section]
 
+        let sectionSize: CGSize
         if let headerSize: CGSize = aSection.headerSize {
-            return headerSize.height
+            sectionSize = headerSize
         } else if let headerView: UIView = aSection.headerView {
-            return headerView.frame.height
+            sectionSize = headerView.frame.size
+        } else if let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type,
+                  let headerModel = aSection.headerModel,
+                  let size = type.estimatedSize(for: headerModel, listView: tableView) {
+            sectionSize = size
         } else {
-            guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
-                return tableView.estimatedSectionHeaderHeight
-            }
-
-            return type.estimatedSize(for: aSection.headerModel, listView: tableView).height
+            sectionSize = CGSize(width: tableView.frame.width, height: tableView.estimatedSectionHeaderHeight)
         }
+
+        return sectionSize.height
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
@@ -297,57 +312,66 @@ extension IQTableViewDiffableDataSource {
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
+        let sectionSize: CGSize
         if let footerSize: CGSize = aSection.footerSize {
-            return footerSize.height
+            sectionSize = footerSize
         } else if let footerView: UIView = aSection.footerView {
-            return footerView.frame.height
+            sectionSize = footerView.frame.size
+        } else if let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type,
+                  let footerModel = aSection.footerModel,
+                  let size = type.estimatedSize(for: footerModel, listView: tableView) {
+            sectionSize = size
         } else {
-            guard let type: IQViewSizeProvider.Type = aSection.footerModel as? IQViewSizeProvider.Type else {
-                return tableView.estimatedSectionFooterHeight
-            }
-
-            return type.estimatedSize(for: aSection.footerModel, listView: tableView).height
+            sectionSize = CGSize(width: tableView.frame.width, height: tableView.estimatedSectionFooterHeight)
         }
+
+        return sectionSize.height
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
         guard section < sectionIdentifiers.count else {
-            return tableView.estimatedSectionHeaderHeight
+            return tableView.sectionHeaderHeight
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
+        let sectionSize: CGSize
         if let headerSize: CGSize = aSection.headerSize {
-            return headerSize.height
+            sectionSize = headerSize
         } else if let headerView: UIView = aSection.headerView {
-            return headerView.frame.height
+            sectionSize = headerView.frame.size
+        } else if let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type,
+                  let headerModel = aSection.headerModel,
+                  let size = type.size(for: headerModel, listView: tableView) {
+            sectionSize = size
         } else {
-            guard let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type else {
-                return tableView.sectionHeaderHeight
-            }
-
-            return type.size(for: aSection.headerModel, listView: tableView).height
+            sectionSize = CGSize(width: tableView.frame.width, height: tableView.sectionHeaderHeight)
         }
+
+        return sectionSize.height
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
         guard section < sectionIdentifiers.count else {
-            return tableView.estimatedSectionFooterHeight
+            return tableView.sectionFooterHeight
         }
         let aSection: IQSection = sectionIdentifiers[section]
 
+        let sectionSize: CGSize
         if let footerSize: CGSize = aSection.footerSize {
-            return footerSize.height
+            sectionSize = footerSize
         } else if let footerView: UIView = aSection.footerView {
-            return footerView.frame.height
+            sectionSize = footerView.frame.size
+        } else if let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type,
+                  let footerModel = aSection.footerModel,
+                  let size = type.size(for: footerModel, listView: tableView) {
+            sectionSize = size
         } else {
-            guard let type: IQViewSizeProvider.Type = aSection.footerModel as? IQViewSizeProvider.Type else {
-                return tableView.sectionFooterHeight
-            }
-
-            return type.size(for: aSection.footerModel, listView: tableView).height
+            sectionSize = CGSize(width: tableView.frame.width, height: tableView.sectionFooterHeight)
         }
+
+        return sectionSize.height
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -373,7 +397,9 @@ extension IQTableViewDiffableDataSource {
             }
 
             if let supplementaryView = supplementaryView as? IQModelModifiable {
-                supplementaryView.setModel(aSection.headerModel)
+                if let headerModel = aSection.headerModel {
+                    supplementaryView.setModel(headerModel)
+                }
             } else if supplementaryView != nil {
                 print("""
                     \(type(of: supplementaryType)) with identifier \(identifier) \
@@ -418,7 +444,9 @@ extension IQTableViewDiffableDataSource {
             }
 
             if let supplementaryView = supplementaryView as? IQModelModifiable {
-                supplementaryView.setModel(aSection.footerModel)
+                if let footerModel = aSection.footerModel {
+                    supplementaryView.setModel(footerModel)
+                }
             } else if supplementaryView != nil {
                 print("""
                     \(type(of: supplementaryType)) with identifier \(identifier) \

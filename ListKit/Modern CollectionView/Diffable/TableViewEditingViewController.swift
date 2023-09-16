@@ -170,6 +170,8 @@ extension TableViewEditingViewController: IQListViewDelegateDataSource {
 
         case .insert:
             break
+        @unknown default:
+            break
         }
     }
 }

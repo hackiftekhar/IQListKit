@@ -169,6 +169,8 @@ class CreateLayoutViewController: UIViewController {
                                                                                           subitems: \(itemVariableName))
                             """
                 }
+            @unknown default:
+                break
             }
 
             if !(interItemSpacing.isFixed && interItemSpacing.spacing == 0) {

@@ -38,25 +38,22 @@ public protocol IQModelableCell: IQModelModifiable, IQViewSizeProvider,
 
 public extension IQModelableCell {
 
-    func setModel(_ model: AnyHashable?) {
+    func setModel(_ model: AnyHashable) {
         self.model = model as? Model
     }
 }
 
 public extension IQModelableCell {
 
-    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        return size(for: model, listView: listView)
+    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        return nil
     }
 
-    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-        if let clv = listView as? UICollectionView, let cvfl = clv.collectionViewLayout as? UICollectionViewFlowLayout {
-            return CGSize(width: clv.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 0)
-        }
-        return CGSize(width: UITableView.automaticDimension, height: UITableView.automaticDimension)
+    static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        return nil
     }
 
-    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+    static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int {
         return 0
     }
 }

@@ -26,5 +26,5 @@ public protocol IQModelModifiable where Self: UIView {
 
     /// This is used to set the model in cellForRowAtIndexPath method
     /// - Parameter model: The model to set
-    func setModel(_ model: AnyHashable?)
+    func setModel(_ model: AnyHashable)
 }

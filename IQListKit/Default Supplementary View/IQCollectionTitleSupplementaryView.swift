@@ -71,7 +71,7 @@ public final class IQCollectionTitleSupplementaryView: UICollectionReusableView,
         textLabel.setNeedsLayout()
     }
 
-    public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+    public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
         if let model = model as? Model {
             let string = NSString(string: model)
             let attributes: [NSAttributedString.Key: Any] = [.font: defaultFont]

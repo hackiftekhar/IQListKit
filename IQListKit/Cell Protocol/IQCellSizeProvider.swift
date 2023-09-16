@@ -30,17 +30,17 @@ public protocol IQViewSizeProvider where Self: UIView /* IQListCell || UIView (F
     /// - Parameters:
     ///   - model: Cell model
     ///   - listView: The IQListView object
-    static func estimatedSize(for model: AnyHashable?, listView: IQListView) -> CGSize
+    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize?
 
     /// Size of the cell
     /// - Parameters:
     ///   - model: Cell model
     ///   - listView: The IQListView object
-    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize
+    static func size(for model: AnyHashable, listView: IQListView) -> CGSize?
 
     /// indentationLevel of cell
     /// - Parameters:
     ///   - model: Cell model
     ///   - listView: The IQListView object
-    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int
+    static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int
 }

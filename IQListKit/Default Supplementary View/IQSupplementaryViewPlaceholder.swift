@@ -22,15 +22,15 @@
 
 import UIKit
 
-// MARK: - A supplementary view for UITableView
+// MARK: - A supplementary view for UITableView/UICollectionView
 
 public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplementaryView {
     public typealias Model = String
 
     public var model: Model?
 
-    public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
-
+    public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        
         if let listView = listView as? UICollectionView {
             if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
                 let model: Model = model as? Model ?? ""

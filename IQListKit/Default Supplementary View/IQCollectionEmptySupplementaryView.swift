@@ -29,7 +29,7 @@ public final class IQCollectionEmptySupplementaryView: UICollectionReusableView,
     public typealias Model = AnyHashable
 
     public var model: Model?
-    public static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+    public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
         return CGSize(width: 0, height: 0)
     }
 }
