@@ -92,6 +92,8 @@ extension UserListTableViewController {
 
 //            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
             let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
+//            let section1 = IQSection(identifier: "firstSection", headerType: EmptyHeaderView.self, headerModel: .init(identifier: "firstSection", height: 10))
+
             list.append([section1])
 
             list.append(UserCell.self, models: users, section: section1)

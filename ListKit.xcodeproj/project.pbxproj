@@ -71,6 +71,7 @@
 		C0BA5BFB298E859A00230100 /* WiFiSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA5BFA298E859A00230100 /* WiFiSettingsCell.swift */; };
 		C0BA5C00298E9AB900230100 /* LabelTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA5BFE298E9AB900230100 /* LabelTableCell.swift */; };
 		C0BA5C01298E9AB900230100 /* LabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0BA5BFF298E9AB900230100 /* LabelTableCell.xib */; };
+		C0C04E942ADE67B000CF477F /* EmptyHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C04E932ADE67B000CF477F /* EmptyHeaderView.swift */; };
 		C0C98794283CB656005275CD /* CollectionUserStoryboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C98793283CB656005275CD /* CollectionUserStoryboardCell.swift */; };
 		C0D545492993BEE0009E4A74 /* NewsVideoCombinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D545482993BEE0009E4A74 /* NewsVideoCombinedViewController.swift */; };
 		C0D6D3AD259AFC9000F5B3C4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6D3AC259AFC9000F5B3C4 /* User.swift */; };
@@ -119,9 +120,6 @@
 		C0A2AB7E259A28CB00F06BFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C0A3CADF27513319004BE529 /* SampleCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleCollectionReusableView.swift; sourceTree = "<group>"; };
 		C0A3CAE027513319004BE529 /* SampleCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SampleCollectionReusableView.xib; sourceTree = "<group>"; };
-		C0A672982A7AFE29004EB133 /* IQSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSection.swift; sourceTree = "<group>"; };
-		C0A672992A7AFE29004EB133 /* IQItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQItem.swift; sourceTree = "<group>"; };
-		C0A672BE2A7AFE2A004EB133 /* IQModelableSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQModelableSupplementaryView.swift; sourceTree = "<group>"; };
 		C0BA5B98298E7ACB00230100 /* CustomConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomConfigurations.swift; sourceTree = "<group>"; };
 		C0BA5B99298E7ACB00230100 /* CustomConfigurationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomConfigurationViewController.swift; sourceTree = "<group>"; };
 		C0BA5B9C298E7ACB00230100 /* AdaptiveSectionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdaptiveSectionsViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +165,7 @@
 		C0BA5BFA298E859A00230100 /* WiFiSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiSettingsCell.swift; sourceTree = "<group>"; };
 		C0BA5BFE298E9AB900230100 /* LabelTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableCell.swift; sourceTree = "<group>"; };
 		C0BA5BFF298E9AB900230100 /* LabelTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabelTableCell.xib; sourceTree = "<group>"; };
+		C0C04E932ADE67B000CF477F /* EmptyHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyHeaderView.swift; sourceTree = "<group>"; };
 		C0C98793283CB656005275CD /* CollectionUserStoryboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionUserStoryboardCell.swift; sourceTree = "<group>"; };
 		C0D545482993BEE0009E4A74 /* NewsVideoCombinedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVideoCombinedViewController.swift; sourceTree = "<group>"; };
 		C0D6D3AC259AFC9000F5B3C4 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -229,8 +228,6 @@
 		C0A2AB64259A28CA00F06BFC = {
 			isa = PBXGroup;
 			children = (
-				C0A672972A7AFE29004EB133 /* Model */,
-				C0A672BD2A7AFE2A004EB133 /* Supplementary Element Protocol */,
 				C0A2AB6F259A28CA00F06BFC /* ListKit */,
 				C0EF175425A343EF0038C5E9 /* Resources */,
 				C0A2AB6E259A28CA00F06BFC /* Products */,
@@ -255,6 +252,7 @@
 				C08CDB28264BAF9E006BD338 /* CollectionCell */,
 				C0D6D3AB259AFC8700F5B3C4 /* Cell */,
 				C0D6D3AA259AFC8000F5B3C4 /* Model */,
+				C0C04E922ADE66E100CF477F /* Headers */,
 				C0A2AB70259A28CA00F06BFC /* AppDelegate.swift */,
 				C0A2AB72259A28CA00F06BFC /* SceneDelegate.swift */,
 				C0EF174525A33A5A0038C5E9 /* UserListTableViewController.swift */,
@@ -268,25 +266,6 @@
 				C0A2AB7E259A28CB00F06BFC /* Info.plist */,
 			);
 			path = ListKit;
-			sourceTree = "<group>";
-		};
-		C0A672972A7AFE29004EB133 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672982A7AFE29004EB133 /* IQSection.swift */,
-				C0A672992A7AFE29004EB133 /* IQItem.swift */,
-			);
-			name = Model;
-			path = IQListKit/Model;
-			sourceTree = "<group>";
-		};
-		C0A672BD2A7AFE2A004EB133 /* Supplementary Element Protocol */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672BE2A7AFE2A004EB133 /* IQModelableSupplementaryView.swift */,
-			);
-			name = "Supplementary Element Protocol";
-			path = "IQListKit/Supplementary Element Protocol";
 			sourceTree = "<group>";
 		};
 		C0BA5B96298E7AA900230100 /* Modern CollectionView */ = {
@@ -409,6 +388,14 @@
 				C0BA5BCB298E7ACB00230100 /* CustomCellListViewController.swift */,
 			);
 			path = Lists;
+			sourceTree = "<group>";
+		};
+		C0C04E922ADE66E100CF477F /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C0C04E932ADE67B000CF477F /* EmptyHeaderView.swift */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		C0C5E8ED2990D39A00705A16 /* Getting Started */ = {
@@ -711,6 +698,7 @@
 				C0BA5BF3298E7ACB00230100 /* SimpleListViewController.swift in Sources */,
 				C0EE6BA429915314005C8F1C /* ListAppearanceHeaderCell.swift in Sources */,
 				C0D6D3AD259AFC9000F5B3C4 /* User.swift in Sources */,
+				C0C04E942ADE67B000CF477F /* EmptyHeaderView.swift in Sources */,
 				C0BA5BF0298E7ACB00230100 /* EmojiDetailViewController.swift in Sources */,
 				C0BA5BD2298E7ACB00230100 /* SectionDecorationViewController.swift in Sources */,
 				C0EE6BA2299150CF005C8F1C /* CustomListCell.swift in Sources */,

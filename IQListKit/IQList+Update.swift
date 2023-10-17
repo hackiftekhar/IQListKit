@@ -122,7 +122,7 @@ public extension IQList {
         if Thread.isMainThread {
             setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
         } else {
-            OperationQueue.main.addOperation { [weak self] in
+            DispatchQueue.main.async { [weak self] in
                 self?.setIsLoading(isLoading,
                                    animated: animatingDifferences)    /// Updating the backgroundView on main thread
             }
@@ -159,7 +159,7 @@ public extension IQList {
         if Thread.isMainThread {
             setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
         } else {
-            OperationQueue.main.addOperation { [weak self] in
+            DispatchQueue.main.async { [weak self] in
                 self?.setIsLoading(isLoading,
                                    animated: animatingDifferences)    /// Updating the backgroundView on main thread
             }

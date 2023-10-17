@@ -1,5 +1,5 @@
 PODS:
-  - IQListKit (6.1.0)
+  - IQListKit (6.1.2)
   - SwiftLint (0.50.1)
 
 DEPENDENCIES:
@@ -15,9 +15,9 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  IQListKit: f85f291ea6bd0ca5d004b8a5cc5d5f82a681d79b
+  IQListKit: 5ce19fa8e00a6530ceab1b0b48b9a41d06f5a0de
   SwiftLint: 6b0cf1f4d619808dbc16e4fab064ce6fc79f090b
 
 PODFILE CHECKSUM: 2cbfa96b77f48e122b914f4358c8224f3260defa
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

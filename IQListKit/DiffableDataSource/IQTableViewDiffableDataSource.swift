@@ -76,10 +76,10 @@ internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSourc
             return false
         }
 
-         if let canEdit = dataSource?.listView(tableView, canEdit: item, at: indexPath) {
+        if let model: any IQReorderableModel = item.model as? any IQReorderableModel {
+            return model.canEdit
+        } else if let canEdit: Bool = dataSource?.listView(tableView, canEdit: item, at: indexPath) {
             return canEdit
-        } else if let cell: IQReorderableCell = tableView.cellForRow(at: indexPath) as? IQReorderableCell {
-            return cell.canEdit
         } else {
             return false
         }
@@ -101,10 +101,10 @@ internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSourc
             return false
         }
 
-         if let canMove = dataSource?.listView(tableView, canMove: item, at: indexPath) {
+        if let model: any IQReorderableModel = item.model as? any IQReorderableModel {
+            return model.canMove
+        } else if let canMove: Bool = dataSource?.listView(tableView, canMove: item, at: indexPath) {
             return canMove
-        } else if let cell: IQReorderableCell = tableView.cellForRow(at: indexPath) as? IQReorderableCell {
-            return cell.canMove
         } else {
             return false
         }
@@ -216,11 +216,13 @@ extension IQTableViewDiffableDataSource {
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return indexPath
         }
 
-        return cell.isSelectable ? indexPath : nil
+        return model.isSelectable ? indexPath : nil
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -237,11 +239,13 @@ extension IQTableViewDiffableDataSource {
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return indexPath
         }
 
-        return cell.isDeselectable ? indexPath : nil
+        return model.isDeselectable ? indexPath : nil
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -622,11 +626,12 @@ extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, canPerformPrimaryActionForRowAt indexPath: IndexPath) -> Bool {
 
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return true
         }
 
-        return cell.canPerformPrimaryAction
+        return model.canPerformPrimaryAction
     }
 
     func tableView(_ tableView: UITableView, performPrimaryActionForRowAt indexPath: IndexPath) {
@@ -643,11 +648,12 @@ extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
 
-        guard let cell: IQSelectableCell = tableView.cellForRow(at: indexPath) as? IQSelectableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return true
         }
 
-        return cell.isHighlightable
+        return model.isHighlightable
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -683,12 +689,12 @@ extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
                    editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-
-        guard let cell: IQReorderableCell = tableView.cellForRow(at: indexPath) as? IQReorderableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQReorderableModel = item.model as? any IQReorderableModel else {
             return .none
         }
 
-        return cell.editingStyle
+        return model.editingStyle
     }
 
     func tableView(_ tableView: UITableView,

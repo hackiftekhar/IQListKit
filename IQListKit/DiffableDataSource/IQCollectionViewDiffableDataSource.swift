@@ -361,11 +361,12 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
 
-        guard let cell: IQSelectableCell = collectionView.cellForItem(at: indexPath) as? IQSelectableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return true
         }
 
-        return cell.isHighlightable
+        return model.isHighlightable
     }
 
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
@@ -386,11 +387,12 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
 
-        guard let cell: IQSelectableCell = collectionView.cellForItem(at: indexPath) as? IQSelectableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return true
         }
 
-        return cell.isSelectable
+        return model.isSelectable
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -408,11 +410,12 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
 
-        guard let cell: IQSelectableCell = collectionView.cellForItem(at: indexPath) as? IQSelectableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return true
         }
 
-        return cell.isDeselectable
+        return model.isDeselectable
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -427,11 +430,12 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         canPerformPrimaryActionForItemAt indexPath: IndexPath) -> Bool {
 
-        guard let cell: IQSelectableCell = collectionView.cellForItem(at: indexPath) as? IQSelectableCell else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let model: any IQSelectableModel = item.model as? any IQSelectableModel else {
             return true
         }
 
-        return cell.canPerformPrimaryAction
+        return model.canPerformPrimaryAction
     }
 
     func collectionView(_ collectionView: UICollectionView, performPrimaryActionForItemAt indexPath: IndexPath) {

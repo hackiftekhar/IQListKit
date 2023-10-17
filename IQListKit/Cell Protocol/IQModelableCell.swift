@@ -25,7 +25,7 @@ import UIKit
 // MARK: - Main Modelable Cell Protocol
 
 public protocol IQModelableCell: IQModelModifiable, IQViewSizeProvider,
-                                 IQSelectableCell, IQCellActionsProvider, IQReorderableCell where Self: IQListCell {
+                                 IQCellActionsProvider where Self: IQListCell {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
     associatedtype Model: Hashable
@@ -56,27 +56,6 @@ public extension IQModelableCell {
     static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int {
         return 0
     }
-}
-
-public extension IQModelableCell {
-
-    var isHighlightable: Bool { true }
-
-    var isSelectable: Bool { true }
-
-    var isDeselectable: Bool { true }
-
-    var canPerformPrimaryAction: Bool { true }
-
-}
-
-public extension IQReorderableCell {
-
-    var canMove: Bool { false }
-
-    var canEdit: Bool { false }
-
-    var editingStyle: UITableViewCell.EditingStyle { .none }
 }
 
 public extension IQCellActionsProvider {

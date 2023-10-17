@@ -1,5 +1,5 @@
 //
-//  IQReorderableCell.swift
+//  IQSelectableModel.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,18 +20,32 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
+import Foundation
 
-// MARK: - Reorderable controls Provider
+// MARK: - Selection Provider
 
-public protocol IQReorderableCell where Self: IQListCell {
+public protocol IQSelectableModel where Self: Hashable {
 
-    /// Is cell can move
-    var canMove: Bool { get }
+    /// Is cell highlightable
+    var isHighlightable: Bool { get }
 
-    /// Is cell editable
-    var canEdit: Bool { get }
+    /// Is cell selectable
+    var isSelectable: Bool { get }
 
-    /// cell editing style
-    var editingStyle: UITableViewCell.EditingStyle { get }
+    /// Is cell deselectable
+    var isDeselectable: Bool { get }
+
+    /// Is cell canPerformPrimaryAction
+    var canPerformPrimaryAction: Bool { get }
+}
+
+public extension IQSelectableModel {
+
+    var isHighlightable: Bool { true }
+
+    var isSelectable: Bool { true }
+
+    var isDeselectable: Bool { true }
+
+    var canPerformPrimaryAction: Bool { true }
 }
