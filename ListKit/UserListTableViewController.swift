@@ -17,7 +17,8 @@ class UserListTableViewController: UITableViewController {
     private var users: [User] = []
     private var users2: [User] = []
 
-    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
+    private lazy var reloadQueue: DispatchQueue = DispatchQueue(label: "\(Self.self)")
+    private lazy var list = IQList(listView: tableView, delegateDataSource: self, reloadQueue: reloadQueue)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,7 +89,7 @@ extension UserListTableViewController {
             tableView.tableFooterView = footerView
         }
 
-        list.reloadData({
+        list.reloadData({ [self] in
 
 //            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
             let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)

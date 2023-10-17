@@ -45,7 +45,7 @@ extension SimpleListViewController {
 
         list.registerCell(type: SimpleListCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
             let sectionIdentifier = UUID()
             let section = IQSection(identifier: Section.main)
             list.append([section])

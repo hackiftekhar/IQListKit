@@ -86,7 +86,7 @@ extension WiFiSettingsViewController {
 
         let configItems = configurationItems.filter { !($0.type == .currentNetwork && !controller.wifiEnabled) }
 
-        list.reloadData({
+        list.reloadData({ [self] in
 
             let configSection = IQSection(identifier: Section.config)
             list.append([configSection])

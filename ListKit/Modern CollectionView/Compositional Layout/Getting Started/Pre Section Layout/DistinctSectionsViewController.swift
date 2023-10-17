@@ -83,7 +83,7 @@ extension DistinctSectionsViewController {
         list.registerCell(type: TextCell.self, registerType: .class)
         list.registerCell(type: ListCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             SectionLayoutKind.allCases.forEach {
                 let section = IQSection(identifier: $0)

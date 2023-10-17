@@ -63,7 +63,7 @@ extension ConferenceNewsFeedViewController {
 
         list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             let sectionIdentifier = UUID()
             let section = IQSection(identifier: Section.main)

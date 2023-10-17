@@ -135,7 +135,7 @@ public final class IQList: NSObject {
 
     // MARK: - Private Properties
 
-    internal let reloadQueue: DispatchQueue?
+    internal let reloadQueue: DispatchQueue
     public internal(set) var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
 
     internal private(set) var diffableDataSource: IQDiffableDataSource!
@@ -151,7 +151,7 @@ public final class IQList: NSObject {
     public convenience init(listView: IQListView,
                             delegateDataSource: IQListViewDelegateDataSource? = nil,
                             defaultRowAnimation: UITableView.RowAnimation = .fade,
-                            reloadQueue: DispatchQueue? = nil) {
+                            reloadQueue: DispatchQueue = DispatchQueue.main) {
         self.init(listView: listView,
                   delegate: delegateDataSource, dataSource: delegateDataSource,
                   defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
@@ -166,7 +166,7 @@ public final class IQList: NSObject {
     ///   - reloadQueue: queue to reload the data
     public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
                 dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade,
-                reloadQueue: DispatchQueue? = nil) {
+                reloadQueue: DispatchQueue = DispatchQueue.main) {
 
         defer { // This is to call the didSet of noItemStateView
             noItemStateView = IQNoItemStateView(noItemImage: nil,

@@ -98,7 +98,7 @@ extension ItemBadgeSupplementaryViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
                                        kind: Self.sectionFooterElementKind, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             let section = IQSection(identifier: Section.main,
                                     headerType: HeaderTitleSupplementaryView.self, headerModel: Self.sectionHeaderElementKind,

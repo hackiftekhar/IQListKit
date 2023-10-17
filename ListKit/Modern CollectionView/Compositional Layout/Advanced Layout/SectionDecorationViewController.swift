@@ -64,7 +64,7 @@ extension SectionDecorationViewController {
 
         list.registerCell(type: ListCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             let itemsPerSection = 5
             let sections = Array(0..<5)

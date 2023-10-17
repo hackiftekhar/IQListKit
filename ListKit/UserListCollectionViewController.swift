@@ -73,7 +73,7 @@ extension UserListCollectionViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.reloadData({
+        list.reloadData({ [self] in
 
             let section1: IQSection
             if Bool.random() {

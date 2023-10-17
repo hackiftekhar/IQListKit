@@ -79,7 +79,7 @@ extension EmojiExplorerListViewController {
 
         list.registerCell(type: EmojiListCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             for category in Emoji.Category.allCases.reversed() {
                 let section = IQSection(identifier: category)

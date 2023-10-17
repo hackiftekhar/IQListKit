@@ -36,7 +36,7 @@ final public class IQListWrapper<T: IQModelableCell> {
                 type: T.Type, registerType: IQList.RegisterType,
                 delegateDataSource: IQListViewDelegateDataSource? = nil,
                 defaultRowAnimation: UITableView.RowAnimation = .fade,
-                reloadQueue: DispatchQueue? = nil) {
+                reloadQueue: DispatchQueue = DispatchQueue.main) {
         list = IQList(listView: listView, delegateDataSource: delegateDataSource,
                       defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
         list.registerCell(type: type.self, registerType: registerType)
@@ -60,7 +60,7 @@ final public class IQListWrapper<T: IQModelableCell> {
 
     private func reloadData(animated: Bool, completion: (() -> Void)? = nil) {
 
-        list.reloadData({
+        list.reloadData({ [self] in
             list.append([section])
             list.append(T.self, models: models)
         }, animatingDifferences: animated, completion: completion)

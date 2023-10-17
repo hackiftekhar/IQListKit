@@ -121,7 +121,7 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
         list.registerCell(type: TextCell.self, registerType: .class)
         list.registerSupplementaryView(type: TitleSupplementaryView.self, kind: Self.headerElementKind, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             var identifierOffset = 0
             let itemsPerSection = 18

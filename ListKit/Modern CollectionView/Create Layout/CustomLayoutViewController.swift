@@ -58,7 +58,7 @@ extension CustomLayoutViewController {
 
         list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             for aSection in Section.allCases {
                 let section = IQSection(identifier: aSection)

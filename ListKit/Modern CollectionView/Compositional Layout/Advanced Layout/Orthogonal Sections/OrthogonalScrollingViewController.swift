@@ -82,7 +82,7 @@ extension OrthogonalScrollingViewController {
 
         list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             var identifierOffset = 0
             let itemsPerSection = 30

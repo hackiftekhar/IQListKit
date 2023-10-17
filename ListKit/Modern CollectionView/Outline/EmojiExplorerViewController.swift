@@ -243,7 +243,7 @@ extension EmojiExplorerViewController {
 
         // create registrations up front, then choose the appropriate one to use in the cell provider
 
-        list.reloadData({
+        list.reloadData({ [self] in
             let sections: [IQSection] = Section.allCases.map { IQSection(identifier: $0) }
             list.append(sections)
         }, completion: {

@@ -60,7 +60,7 @@ extension TwoColumnViewController {
 
         list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
             let section = IQSection(identifier: Section.main)
             list.append([section])
 

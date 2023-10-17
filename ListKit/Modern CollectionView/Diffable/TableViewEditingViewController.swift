@@ -82,7 +82,7 @@ extension TableViewEditingViewController {
     }
 
     func reloadDataSource() {
-        list.reloadData {
+        list.reloadData { [self] in
 
             let visitedSection = IQSection(identifier: SectionType.visited, header: SectionType.visited.description())
             let bucketListSection = IQSection(identifier: SectionType.bucketList,

@@ -70,7 +70,7 @@ extension CustomConfigurationViewController {
         list.clearsSelectionOnDidSelect = false
         list.registerCell(type: CustomConfigurationCell.self, registerType: .class)
 
-        list.reloadData {
+        list.reloadData { [self] in
 
             let section = IQSection(identifier: Section.main)
             list.append([section])
