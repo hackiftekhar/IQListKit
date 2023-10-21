@@ -22,8 +22,8 @@
 
 import UIKit
 
-internal protocol IQDiffableDataSource
-where Self: UIScrollViewDelegate {
+@MainActor
+internal protocol IQDiffableDataSource where Self: UIScrollViewDelegate {
 
     var registeredCells: [IQListCell.Type] { get set }
     var registeredSupplementaryViews: [String: [UIView.Type]] { get set }
@@ -57,6 +57,7 @@ where Self: UIScrollViewDelegate {
     func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot
 }
 
+@MainActor
 extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
     var defaultRowAnimation: UITableView.RowAnimation {
         get {
@@ -69,6 +70,7 @@ extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
     }
 }
 
+@MainActor
 extension IQTableViewDiffableDataSource: IQDiffableDataSource {
     @available(iOS 14.0, *)
     func apply(_ snapshot: IQList.IQDiffableDataSourceSectionSnapshot, to section: IQSection,

@@ -22,6 +22,7 @@
 
 import UIKit
 
+@MainActor
 public final class IQList: NSObject {
 
     public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>
@@ -80,6 +81,7 @@ public final class IQList: NSObject {
             }
         }
     }
+
     public var noItemImage: UIImage? {
         get {   noItemStateView?.noItemImage    }
         set {   noItemStateView?.noItemImage = newValue  }

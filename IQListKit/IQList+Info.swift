@@ -67,52 +67,52 @@ public extension IQList {
         }
     }
 
-    func snapshot() -> IQDiffableDataSourceSnapshot {
+    nonisolated func snapshot() -> IQDiffableDataSourceSnapshot {
         return diffableDataSource.snapshot()
     }
 
     @available(iOS 14.0, *)
-    func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot {
+    nonisolated func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot {
         return diffableDataSource.snapshot(for: section)
     }
 
-    var numberOfItems: Int {
+    nonisolated var numberOfItems: Int {
         diffableDataSource.snapshot().numberOfItems
     }
 
-    var numberOfSections: Int {
+    nonisolated var numberOfSections: Int {
         diffableDataSource.snapshot().numberOfSections
     }
 
-    var sectionIdentifiers: [IQSection] {
+    nonisolated var sectionIdentifiers: [IQSection] {
         diffableDataSource.snapshot().sectionIdentifiers
     }
 
-    var itemIdentifiers: [IQItem] {
+    nonisolated var itemIdentifiers: [IQItem] {
         diffableDataSource.snapshot().itemIdentifiers
     }
 
-    func numberOfItems(inSection identifier: IQSection) -> Int {
+    nonisolated func numberOfItems(inSection identifier: IQSection) -> Int {
         diffableDataSource.snapshot().numberOfItems(inSection: identifier)
     }
 
-    func itemIdentifiers(inSection identifier: IQSection) -> [IQItem] {
+    nonisolated func itemIdentifiers(inSection identifier: IQSection) -> [IQItem] {
         diffableDataSource.snapshot().itemIdentifiers(inSection: identifier)
     }
 
-    func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
+    nonisolated func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifiers.first(where: predicate)
     }
 
-    func sectionIdentifier(containingItem identifier: IQItem) -> IQSection? {
+    nonisolated func sectionIdentifier(containingItem identifier: IQItem) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifier(containingItem: identifier)
     }
 
-    func indexPath(for identifier: IQItem) -> IndexPath? {
+    nonisolated func indexPath(for identifier: IQItem) -> IndexPath? {
         diffableDataSource.indexPath(for: identifier)
     }
 
-    func indexPath(where predicate: (IQItem) -> Bool) -> IndexPath? {
+    nonisolated func indexPath(where predicate: (IQItem) -> Bool) -> IndexPath? {
 
         if let item = itemIdentifier(where: predicate) {
             return indexPath(for: item)
@@ -121,7 +121,7 @@ public extension IQList {
         return nil
     }
 
-    func indexPath<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IndexPath? {
+    nonisolated func indexPath<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IndexPath? {
 
         if let item = itemIdentifier(of: type, where: predicate) {
             return indexPath(for: item)
@@ -130,11 +130,11 @@ public extension IQList {
         return nil
     }
 
-    func itemIdentifier(for indexPath: IndexPath) -> IQItem? {
+    nonisolated func itemIdentifier(for indexPath: IndexPath) -> IQItem? {
         diffableDataSource.itemIdentifier(for: indexPath)
     }
 
-    func itemIdentifier<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IQItem? {
+    nonisolated func itemIdentifier<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IQItem? {
 
         if let item = diffableDataSource.snapshot().itemIdentifiers.first(where: {
             if let existingModel = $0.model as? T.Model {
@@ -148,7 +148,7 @@ public extension IQList {
         return nil
     }
 
-    func itemIdentifier(where predicate: (IQItem) -> Bool) -> IQItem? {
+    nonisolated func itemIdentifier(where predicate: (IQItem) -> Bool) -> IQItem? {
         diffableDataSource.snapshot().itemIdentifiers.first(where: predicate)
     }
 

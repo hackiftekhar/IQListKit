@@ -26,7 +26,7 @@ public protocol IQModelableSupplementaryView: IQModelModifiable, IQViewSizeProvi
 where Self: UIView {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
-    associatedtype Model: Hashable
+    associatedtype Model: Hashable & Sendable
 
     /// model variable which will be used to configure the cell contents
     var model: Model? { get set }

@@ -23,8 +23,7 @@
 import UIKit
 
 // MARK: - Item model of the table/collection
-
-public struct IQItem: Hashable {
+public struct IQItem: Hashable, Sendable {
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.model == rhs.model

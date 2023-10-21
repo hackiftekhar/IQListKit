@@ -24,6 +24,7 @@ import Foundation
 
 // MARK: - Selection Provider
 
+@MainActor
 public protocol IQSelectableModel where Self: Hashable {
 
     /// Is cell highlightable
@@ -39,6 +40,7 @@ public protocol IQSelectableModel where Self: Hashable {
     var canPerformPrimaryAction: Bool { get }
 }
 
+@MainActor
 public extension IQSelectableModel {
 
     var isHighlightable: Bool { true }

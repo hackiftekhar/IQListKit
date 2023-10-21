@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - A supplementary view for UICollectionView
 
+@MainActor
 public final class IQCollectionTitleSupplementaryView: UICollectionReusableView, IQModelableSupplementaryView {
 
     public let textLabel = UILabel()

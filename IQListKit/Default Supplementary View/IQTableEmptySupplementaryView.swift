@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - An empty supplementary view for UITableView
 
+@MainActor
 public final class IQTableEmptySupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
     public typealias Model = AnyHashable
 

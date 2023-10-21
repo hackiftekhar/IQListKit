@@ -23,8 +23,7 @@
 import UIKit
 
 // MARK: - Section model of the table/collection
-
-public struct IQSection: Hashable {
+public struct IQSection: Hashable, Sendable {
 
     public static func == (lhs: IQSection, rhs: IQSection) -> Bool {
         return lhs.identifier == rhs.identifier &&

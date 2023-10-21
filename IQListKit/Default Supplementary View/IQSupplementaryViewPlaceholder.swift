@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - A supplementary view for UITableView/UICollectionView
 
+@MainActor
 public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplementaryView {
     public typealias Model = String
 

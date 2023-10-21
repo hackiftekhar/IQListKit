@@ -1,9 +1,9 @@
 {
   "name": "IQListKit",
-  "version": "6.1.2",
+  "version": "7.0.0",
   "source": {
     "git": "https://github.com/hackiftekhar/IQListKit.git",
-    "tag": "6.1.2"
+    "tag": "7.0.0"
   },
   "summary": "ListKit for handling the dynamic UITableView/UICollectionView cell loading.",
   "homepage": "https://github.com/hackiftekhar/IQListKit",
@@ -15,17 +15,14 @@
     "ios": "13.0"
   },
   "swift_versions": [
-    "5.0",
-    "5.1",
-    "5.2",
-    "5.3",
-    "5.4",
     "5.5",
     "5.6",
     "5.7",
-    "5.8"
+    "5.8",
+    "5.9"
   ],
   "source_files": "IQListKit/**/*.{swift}",
+  "resources": "IQListKit/PrivacyInfo.xcprivacy",
   "frameworks": [
     "UIKit",
     "Foundation"

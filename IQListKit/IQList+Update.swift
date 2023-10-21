@@ -45,7 +45,7 @@ public extension IQList {
     ///   - updates: update block which will be called to generate the snapshot
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
-    func reloadData(_ updates: @escaping () -> Void,
+    nonisolated func reloadData(_ updates: @escaping () -> Void,
                     updateExistingSnapshot: Bool = false,
                     animatingDifferences: Bool = true, diffing: Bool? = nil,
                     animation: UITableView.RowAnimation? = nil,
@@ -69,7 +69,7 @@ public extension IQList {
         }
     }
 
-    func apply(_ snapshot: IQDiffableDataSourceSnapshot,
+    nonisolated func apply(_ snapshot: IQDiffableDataSourceSnapshot,
                animatingDifferences: Bool = true, diffing: Bool? = nil,
                animation: UITableView.RowAnimation? = nil,
                endLoadingOnCompletion: Bool = true,
@@ -84,7 +84,7 @@ public extension IQList {
         }
     }
 
-    private func privateApply(_ snapshot: IQDiffableDataSourceSnapshot,
+    nonisolated private func privateApply(_ snapshot: IQDiffableDataSourceSnapshot,
                               animatingDifferences: Bool = true, diffing: Bool? = nil,
                               animation: UITableView.RowAnimation? = nil,
                               endLoadingOnCompletion: Bool = true,
@@ -132,7 +132,7 @@ public extension IQList {
     }
 
     @available(iOS 14.0, *)
-    func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+    nonisolated func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
                to section: IQSection,
                animatingDifferences: Bool = true,
                endLoadingOnCompletion: Bool = true,
@@ -147,7 +147,7 @@ public extension IQList {
     }
 
     @available(iOS 14.0, *)
-    private func privateApply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+    nonisolated private func privateApply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
                               to section: IQSection,
                               animatingDifferences: Bool = true,
                               endLoadingOnCompletion: Bool = true,

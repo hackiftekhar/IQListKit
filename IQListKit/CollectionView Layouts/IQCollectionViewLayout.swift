@@ -74,7 +74,8 @@
 
 import UIKit
 
-final public class IQCollectionViewLayout {
+@MainActor
+public final class IQCollectionViewLayout {
 
     /*
      Examples

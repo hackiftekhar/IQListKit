@@ -24,11 +24,12 @@ import UIKit
 
 // MARK: - Main Modelable Cell Protocol
 
+@MainActor
 public protocol IQModelableCell: IQModelModifiable, IQViewSizeProvider,
                                  IQCellActionsProvider where Self: IQListCell {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
-    associatedtype Model: Hashable
+    associatedtype Model: Hashable & Sendable
 
     /// model variable which will be used to configure the cell contents
     var model: Model? { get set }
@@ -43,6 +44,7 @@ public extension IQModelableCell {
     }
 }
 
+@MainActor
 public extension IQModelableCell {
 
     static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
@@ -58,6 +60,7 @@ public extension IQModelableCell {
     }
 }
 
+@MainActor
 public extension IQCellActionsProvider {
 
     func leadingSwipeActions() -> [UIContextualAction]? { return nil }

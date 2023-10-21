@@ -24,10 +24,12 @@ import UIKit
 
 // MARK: - IQListViewDelegate
 
+@MainActor
 @objc public protocol IQListViewProxyDelegate: AnyObject {
     @objc optional func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView)
 }
 
+@MainActor
 public protocol IQListViewDelegate: UIScrollViewDelegate {
 
     /// Will give a chance to modify or other configuration of cell if necessary
@@ -139,6 +141,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
 
 // MARK: - IQListViewDataSource
 
+@MainActor
 public protocol IQListViewDataSource: AnyObject {
 
     /// Return the size of an Item, for tableView the size.height will only be effective
@@ -212,6 +215,7 @@ public typealias IQListViewDelegateDataSource = (IQListViewDelegate & IQListView
 
 // MARK: - Default implementations of protocols
 
+@MainActor
 public extension IQListViewDelegate {
 
     func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {}
@@ -246,6 +250,7 @@ public extension IQListViewDelegate {
                   animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath) {}
 }
 
+@MainActor
 public extension IQListViewDataSource {
 
     func listView(_ listView: IQListView, size item: IQItem, at indexPath: IndexPath) -> CGSize? { return nil }

@@ -22,6 +22,7 @@
 
 import UIKit
 
+@MainActor
 public protocol IQNoItemStateRepresentable where Self: UIView {
 
     var noItemImage: UIImage? { get set }
@@ -40,6 +41,7 @@ public protocol IQNoItemStateRepresentable where Self: UIView {
 }
 
 // swiftlint:disable unused_setter_value
+@MainActor
 public extension IQNoItemStateRepresentable {
 
     var noItemImage: UIImage? {

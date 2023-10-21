@@ -25,6 +25,7 @@ import UIKit
 // MARK: - Improved DiffableDataSource of UITableView
 
 // swiftlint:disable file_length
+@MainActor
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
     internal var registeredCells: [IQListCell.Type] = []
@@ -134,8 +135,8 @@ internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSourc
 //    }
 }
 
+@MainActor
 extension IQTableViewDiffableDataSource: UITableViewDelegate {
-
 
     // MARK: - Height
 
@@ -176,6 +177,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
 }
 
 // MARK: - Configuring
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
@@ -199,6 +201,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Display
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -213,6 +216,7 @@ extension IQTableViewDiffableDataSource {
 
 // MARK: - Selection
 
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
@@ -283,6 +287,7 @@ extension IQTableViewDiffableDataSource {
 
 // MARK: - Header Footer / Supplementary view
 
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
@@ -521,6 +526,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Context menu
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
@@ -600,6 +606,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Swipe actions
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
@@ -644,6 +651,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Highlights
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
@@ -674,6 +682,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Editing
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
@@ -713,6 +722,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Reordering
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
@@ -727,6 +737,7 @@ extension IQTableViewDiffableDataSource {
 }
 
 // MARK: - Focus
+@MainActor
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView,
@@ -762,6 +773,7 @@ extension IQTableViewDiffableDataSource {
     }
 }
 
+@MainActor
 extension IQTableViewDiffableDataSource: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         var items: [IQItem] = []

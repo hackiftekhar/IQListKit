@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - UICollectionView's UIScrollViewDelegate forwarder
 
+@MainActor
 extension IQCollectionViewDiffableDataSource: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -87,6 +88,7 @@ extension IQCollectionViewDiffableDataSource: UIScrollViewDelegate {
 
 // MARK: - UITableView's UIScrollViewDelegate forwarder
 
+@MainActor
 extension IQTableViewDiffableDataSource: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

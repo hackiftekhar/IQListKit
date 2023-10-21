@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - A supplementary view for UITableView
 
+@MainActor
 public final class IQTableTitleSupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
     public typealias Model = String
 

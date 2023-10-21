@@ -31,7 +31,7 @@ public extension IQList {
     /// Appends a section to the list
     /// This method can also be used in background thread
     /// - Parameter sections: sections which needs to be added to the list
-    func append(_ sections: [IQSection], beforeSection: IQSection? = nil, afterSection: IQSection? = nil) {
+    nonisolated func append(_ sections: [IQSection], beforeSection: IQSection? = nil, afterSection: IQSection? = nil) {
         if let beforeSection = beforeSection {
             batchSnapshot.insertSections(sections, beforeSection: beforeSection)
         } else if let afterSection = afterSection {
@@ -41,11 +41,11 @@ public extension IQList {
         }
     }
 
-    func reload(_ sections: [IQSection]) {
+    nonisolated func reload(_ sections: [IQSection]) {
         batchSnapshot.reloadSections(sections)
     }
 
-    func delete(_ sections: [IQSection]) {
+    nonisolated func delete(_ sections: [IQSection]) {
         batchSnapshot.deleteSections(sections)
     }
 }

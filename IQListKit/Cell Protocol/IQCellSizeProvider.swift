@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - Cell Size Provider
 
+@MainActor
 public protocol IQViewSizeProvider where Self: UIView /* IQListCell || UIView (For supplementary header/footer */ {
 
     /// Estimated size of the cell

@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - An empty supplementary view for UICollectionView
 
+@MainActor
 public final class IQCollectionEmptySupplementaryView: UICollectionReusableView, IQModelableSupplementaryView {
 
     public typealias Model = AnyHashable

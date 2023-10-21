@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - Reorderable controls Provider
 
+@MainActor
 public protocol IQReorderableModel where Self: Hashable {
 
     /// Is cell can move
@@ -36,6 +37,7 @@ public protocol IQReorderableModel where Self: Hashable {
     var editingStyle: UITableViewCell.EditingStyle { get }
 }
 
+@MainActor
 public extension IQReorderableModel {
 
     var canMove: Bool { false }

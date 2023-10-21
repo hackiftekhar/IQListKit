@@ -22,7 +22,8 @@
 
 import UIKit
 
-final public class IQCollectionViewSectionLayout {
+@MainActor
+public final class IQCollectionViewSectionLayout {
 
     public class func sectionLayout(direction: UICollectionView.ScrollDirection,
                                     itemSize: NSCollectionLayoutSize,

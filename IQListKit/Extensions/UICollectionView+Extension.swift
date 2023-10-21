@@ -22,6 +22,7 @@
 
 import UIKit
 
+@MainActor
 internal extension UICollectionView {
 
     /// Dequeuing - Supplementary view

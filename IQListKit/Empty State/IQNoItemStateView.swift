@@ -23,6 +23,7 @@
 import UIKit
 
 /// InfoView to show in the middle of the list when the list is noItem
+@MainActor
 public final class IQNoItemStateView: UIView, IQNoItemStateRepresentable {
 
     override init(frame: CGRect) {

@@ -22,8 +22,12 @@
 
 import UIKit
 
+@MainActor
 @objc public protocol IQListView where Self: UIScrollView {
 }
 
+@MainActor
 extension UICollectionView: IQListView {}
+
+@MainActor
 extension UITableView: IQListView {}

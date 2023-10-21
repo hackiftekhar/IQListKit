@@ -25,6 +25,7 @@ import UIKit
 // MARK: - Improved DiffableDataSource of UICollectionView
 
 // swiftlint:disable file_length
+@MainActor
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
     internal var registeredCells: [IQListCell.Type] = []
@@ -224,6 +225,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
 //    }
 }
 
+@MainActor
 extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout {
 
     // MARK: - Supplementary view
@@ -355,6 +357,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
     }
 }
 
+@MainActor
 extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
 
     // MARK: - Selection
@@ -578,6 +581,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
     }
 }
 
+@MainActor
 extension IQCollectionViewDiffableDataSource: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         var items: [IQItem] = []
@@ -610,6 +614,7 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDataSourcePrefetch
 
 // MARK: - Focus
 
+@MainActor
 extension IQCollectionViewDiffableDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
@@ -646,6 +651,7 @@ extension IQCollectionViewDiffableDataSource {
 }
 
 // MARK: - Reordering
+@MainActor
 extension IQCollectionViewDiffableDataSource {
     
     @available(iOS 15.0, *)
@@ -679,6 +685,7 @@ extension IQCollectionViewDiffableDataSource {
 }
 
 // MARK: - Editing
+@MainActor
 extension IQCollectionViewDiffableDataSource {
     
     @available(iOS 14.0, *)
@@ -698,6 +705,7 @@ extension IQCollectionViewDiffableDataSource {
 }
 
 // MARK: - Selection
+@MainActor
 extension IQCollectionViewDiffableDataSource {
     
     func collectionView(_ collectionView: UICollectionView,

@@ -22,6 +22,7 @@
 
 import UIKit
 
+@MainActor
 public protocol IQModelModifiable where Self: UIView {
 
     /// This is used to set the model in cellForRowAtIndexPath method

@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - Basic implementation of IQModelableCell
 
+@MainActor
 public final class IQTableViewCell: UITableViewCell, IQModelableCell {
 
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -44,7 +45,7 @@ public final class IQTableViewCell: UITableViewCell, IQModelableCell {
     }
 
     /// Model associated type for this class
-    public struct Model: Hashable {
+    public struct Model: Hashable, Sendable {
 
         public func hash(into hasher: inout Hasher) {
             hasher.combine(text)

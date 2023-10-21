@@ -24,6 +24,7 @@ import UIKit
 
 // MARK: - Leading/Trailing Actions and ContextMenu provider
 
+@MainActor
 public protocol IQCellActionsProvider where Self: IQListCell {
 
     /// leading swipe actions of cell
