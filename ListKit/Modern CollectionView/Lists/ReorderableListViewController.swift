@@ -142,7 +142,7 @@ extension ReorderableListViewController {
 
     func configureDataSource() {
 
-        list.registerCell(type: ReorderingListCell.self, registerType: .class)
+//        list.registerCell(type: ReorderingListCell.self, registerType: .class)
 
         list.reorderingHandlers?.canReorderItem = { _ in return true }
         list.reorderingHandlers?.didReorder = { [weak self] transaction in
@@ -191,7 +191,7 @@ extension ReorderableListViewController {
 
         for (section, items) in initialBackingStore() {
 
-            var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+            var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
             let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
             sectionSnapshot.append(items)
@@ -206,7 +206,7 @@ extension ReorderableListViewController {
 
         for (section, items) in backingStore {
 
-            var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+            var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
             let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
             sectionSnapshot.append(items)

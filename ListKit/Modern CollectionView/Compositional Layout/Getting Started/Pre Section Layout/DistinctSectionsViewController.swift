@@ -80,8 +80,8 @@ extension DistinctSectionsViewController {
 extension DistinctSectionsViewController {
     func configureDataSource() {
 
-        list.registerCell(type: TextCell.self, registerType: .class)
-        list.registerCell(type: ListCell.self, registerType: .class)
+//        list.registerCell(type: TextCell.self, registerType: .class)
+//        list.registerCell(type: ListCell.self, registerType: .class)
 
         list.reloadData { [self] in
 

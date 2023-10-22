@@ -59,7 +59,7 @@ extension InsetItemsGridViewController {
 extension InsetItemsGridViewController {
     func configureDataSource() {
 
-        list.registerCell(type: TextCell.self, registerType: .class)
+//        list.registerCell(type: TextCell.self, registerType: .class)
 
         list.reloadData { [self] in
             let section = IQSection(identifier: Section.main)

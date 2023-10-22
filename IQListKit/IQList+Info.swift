@@ -28,7 +28,7 @@ import UIKit
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
 
-    enum ScrollPosition: Int {
+    enum ScrollPosition: Int, Sendable {
         case none = 0
         case top = 1
         case center = 2
@@ -67,12 +67,14 @@ public extension IQList {
         }
     }
 
-    nonisolated func snapshot() -> IQDiffableDataSourceSnapshot {
+    nonisolated
+    func snapshot() -> IQDiffableDataSourceSnapshot {
         return diffableDataSource.snapshot()
     }
 
     @available(iOS 14.0, *)
-    nonisolated func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot {
+    nonisolated
+    func snapshot(for section: IQSection) -> IQDiffableDataSourceSectionSnapshot {
         return diffableDataSource.snapshot(for: section)
     }
 
@@ -92,27 +94,33 @@ public extension IQList {
         diffableDataSource.snapshot().itemIdentifiers
     }
 
-    nonisolated func numberOfItems(inSection identifier: IQSection) -> Int {
+    nonisolated
+    func numberOfItems(inSection identifier: IQSection) -> Int {
         diffableDataSource.snapshot().numberOfItems(inSection: identifier)
     }
 
-    nonisolated func itemIdentifiers(inSection identifier: IQSection) -> [IQItem] {
+    nonisolated
+    func itemIdentifiers(inSection identifier: IQSection) -> [IQItem] {
         diffableDataSource.snapshot().itemIdentifiers(inSection: identifier)
     }
 
-    nonisolated func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
+    nonisolated
+    func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifiers.first(where: predicate)
     }
 
-    nonisolated func sectionIdentifier(containingItem identifier: IQItem) -> IQSection? {
+    nonisolated
+    func sectionIdentifier(containingItem identifier: IQItem) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifier(containingItem: identifier)
     }
 
-    nonisolated func indexPath(for identifier: IQItem) -> IndexPath? {
+    @MainActor
+    func indexPath(for identifier: IQItem) -> IndexPath? {
         diffableDataSource.indexPath(for: identifier)
     }
 
-    nonisolated func indexPath(where predicate: (IQItem) -> Bool) -> IndexPath? {
+    @MainActor
+    func indexPath(where predicate: (IQItem) -> Bool) -> IndexPath? {
 
         if let item = itemIdentifier(where: predicate) {
             return indexPath(for: item)
@@ -121,7 +129,9 @@ public extension IQList {
         return nil
     }
 
-    nonisolated func indexPath<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IndexPath? {
+    @MainActor
+    func indexPath<T: IQModelableCell>(of type: T.Type,
+                                       where predicate: (T.Model) -> Bool) -> IndexPath? {
 
         if let item = itemIdentifier(of: type, where: predicate) {
             return indexPath(for: item)
@@ -130,11 +140,14 @@ public extension IQList {
         return nil
     }
 
-    nonisolated func itemIdentifier(for indexPath: IndexPath) -> IQItem? {
+    @MainActor
+    func itemIdentifier(for indexPath: IndexPath) -> IQItem? {
         diffableDataSource.itemIdentifier(for: indexPath)
     }
 
-    nonisolated func itemIdentifier<T: IQModelableCell>(of type: T.Type, where predicate: (T.Model) -> Bool) -> IQItem? {
+    nonisolated
+    func itemIdentifier<T: IQModelableCell>(of type: T.Type,
+                                            where predicate: (T.Model) -> Bool) -> IQItem? {
 
         if let item = diffableDataSource.snapshot().itemIdentifiers.first(where: {
             if let existingModel = $0.model as? T.Model {
@@ -148,7 +161,8 @@ public extension IQList {
         return nil
     }
 
-    nonisolated func itemIdentifier(where predicate: (IQItem) -> Bool) -> IQItem? {
+    nonisolated
+    func itemIdentifier(where predicate: (IQItem) -> Bool) -> IQItem? {
         diffableDataSource.snapshot().itemIdentifiers.first(where: predicate)
     }
 

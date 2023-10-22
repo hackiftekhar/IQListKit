@@ -45,7 +45,7 @@ public final class IQTableViewCell: UITableViewCell, IQModelableCell {
     }
 
     /// Model associated type for this class
-    public struct Model: Hashable, Sendable {
+    public struct Model: Hashable, @unchecked Sendable {
 
         public func hash(into hasher: inout Hasher) {
             hasher.combine(text)

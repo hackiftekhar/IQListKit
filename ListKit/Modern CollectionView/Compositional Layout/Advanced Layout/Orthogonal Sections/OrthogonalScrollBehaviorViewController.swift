@@ -118,8 +118,8 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
 
     private func configureDataSource() {
 
-        list.registerCell(type: TextCell.self, registerType: .class)
-        list.registerSupplementaryView(type: TitleSupplementaryView.self, kind: Self.headerElementKind, registerType: .class)
+//        list.registerCell(type: TextCell.self, registerType: .class)
+//        list.registerSupplementaryView(type: TitleSupplementaryView.self, kind: Self.headerElementKind, registerType: .class)
 
         list.reloadData { [self] in
 

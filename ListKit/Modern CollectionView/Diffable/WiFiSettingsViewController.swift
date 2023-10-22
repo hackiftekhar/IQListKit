@@ -71,7 +71,7 @@ extension WiFiSettingsViewController {
 
     func configureDataSource() {
 
-        list.registerCell(type: WiFiSettingsCell.self, registerType: .class)
+//        list.registerCell(type: WiFiSettingsCell.self, registerType: .class)
 
         wifiController = WiFiController { [weak self] (_: WiFiController) in
             guard let self = self else { return }

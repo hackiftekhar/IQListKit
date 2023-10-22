@@ -24,7 +24,6 @@ import UIKit
 
 // MARK: - Improved DiffableDataSource of UITableView
 
-// swiftlint:disable file_length
 @MainActor
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 

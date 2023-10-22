@@ -92,7 +92,7 @@ extension CustomCellListViewController {
     /// - Tag: CellRegistration
     private func configureDataSource() {
 
-        list.registerCell(type: CustomListCell.self, registerType: .class)
+//        list.registerCell(type: CustomListCell.self, registerType: .class)
 
         list.reloadData({ [self] in
 

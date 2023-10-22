@@ -80,7 +80,7 @@ extension OrthogonalScrollingViewController {
 
     private func configureDataSource() {
 
-        list.registerCell(type: TextCell.self, registerType: .class)
+//        list.registerCell(type: TextCell.self, registerType: .class)
 
         list.reloadData { [self] in
 

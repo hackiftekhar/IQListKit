@@ -299,7 +299,7 @@ class UsersTableViewController: UITableViewController {
             //                        footer: "I'm footer")
             
             /*Or we an also provide custom header footer view and it's model, just like the cell,
-              We just have to adopt IQModelableSupplementaryView protocol to SampleCollectionReusableView 
+              We have to adopt IQModelableSupplementaryView protocol to SampleCollectionReusableView 
               And it's also havie exactly same requirement as cell (have a model property)
               However, you also need to register this using
               list.registerSupplementaryView(type: SampleCollectionReusableView.self,

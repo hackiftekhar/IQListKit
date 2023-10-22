@@ -35,7 +35,7 @@ final class EmptyHeaderView: UIView, IQModelableSupplementaryView {
         guard let model = model as? Model else { return nil }
         return CGSize(width: listView.frame.width, height: model.height)
     }
-    
+
     static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
         guard let model = model as? Model else { return nil }
         return CGSize(width: listView.frame.width, height: model.height)

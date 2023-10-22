@@ -92,8 +92,10 @@ extension UserListTableViewController {
         list.reloadData({ [self] in
 
 //            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
-            let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
-//            let section1 = IQSection(identifier: "firstSection", headerType: EmptyHeaderView.self, headerModel: .init(identifier: "firstSection", height: 10))
+//            let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
+            let section1 = IQSection(identifier: "firstSection",
+                                     headerType: EmptyHeaderView.self, headerModel: .init(identifier: "firstSection", height: 10),
+                                     footerType: EmptyTableHeaderFooterView.self, footerModel: "Footer Title")
 
             list.append([section1])
 
@@ -104,7 +106,7 @@ extension UserListTableViewController {
 
             list.append(UserCell.self, models: users2, section: section2)
 
-        }, animatingDifferences: animated, completion: nil)
+        }, animatingDifferences: animated)
     }
 }
 

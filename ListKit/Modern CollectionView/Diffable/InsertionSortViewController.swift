@@ -98,7 +98,7 @@ final class InsertionSortViewController: UIViewController {
             layout.sectionInset = .zero
         }
 
-        list.registerCell(type: InsertionCell.self, registerType: .class)
+//        list.registerCell(type: InsertionCell.self, registerType: .class)
 
         updateSortButtonTitle()
     }

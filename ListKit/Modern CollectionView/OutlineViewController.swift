@@ -135,7 +135,7 @@ extension OutlineViewController {
 
         list.registerCell(type: OutlineCell.self, registerType: .class)
 
-        var snapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+        var snapshot = IQDiffableDataSourceSectionSnapshot()
 
         func addItems(_ items: [IQItem], to parent: IQItem?) {
 

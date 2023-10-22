@@ -80,9 +80,9 @@ extension ConferenceVideoSessionsViewController: IQListViewDelegateDataSource {
 
     private func configureDataSource() {
 
-        list.registerCell(type: ConferenceVideoCell.self, registerType: .class)
-        list.registerSupplementaryView(type: TitleSupplementaryView.self,
-                                       kind: Self.titleElementKind, registerType: .class)
+//        list.registerCell(type: ConferenceVideoCell.self, registerType: .class)
+//        list.registerSupplementaryView(type: TitleSupplementaryView.self,
+//                                       kind: Self.titleElementKind, registerType: .class)
 
         list.reloadData { [self] in
             videosController.collections.forEach {

@@ -77,7 +77,7 @@ extension TableViewEditingViewController {
 
     func configureDataSource() {
 
-        list.registerCell(type: LabelTableCell.self, registerType: .nib)
+//        list.registerCell(type: LabelTableCell.self, registerType: .nib)
         reloadDataSource()
     }
 

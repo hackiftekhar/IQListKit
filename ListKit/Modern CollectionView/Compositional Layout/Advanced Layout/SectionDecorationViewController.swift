@@ -62,7 +62,7 @@ extension SectionDecorationViewController {
 
     private func configureDataSource() {
 
-        list.registerCell(type: ListCell.self, registerType: .class)
+//        list.registerCell(type: ListCell.self, registerType: .class)
 
         list.reloadData { [self] in
 

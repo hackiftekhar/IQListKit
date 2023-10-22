@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C0003186299A61C200B2D108 /* CustomLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0003185299A61C200B2D108 /* CustomLayoutViewController.swift */; };
+		C00801CA2AE5419300E79BC0 /* EmptyTableHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00801C92AE5419300E79BC0 /* EmptyTableHeaderFooterView.swift */; };
 		C01BA2382992253B008B97EA /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01BA2372992253B008B97EA /* EmojiCell.swift */; };
 		C02A49FE2996701A00E4B327 /* CreateLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02A49FD2996701A00E4B327 /* CreateLayoutViewController.swift */; };
 		C08CDB2B264BAFC7006BD338 /* CollectionUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08CDB29264BAFC7006BD338 /* CollectionUserCell.swift */; };
@@ -100,6 +101,7 @@
 		85F60F513481884CC8186C9B /* Pods_ListKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ListKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF09D68FC465E675FA2D3C6D /* Pods-ListKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListKit.release.xcconfig"; path = "Target Support Files/Pods-ListKit/Pods-ListKit.release.xcconfig"; sourceTree = "<group>"; };
 		C0003185299A61C200B2D108 /* CustomLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLayoutViewController.swift; sourceTree = "<group>"; };
+		C00801C92AE5419300E79BC0 /* EmptyTableHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTableHeaderFooterView.swift; sourceTree = "<group>"; };
 		C01BA2372992253B008B97EA /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
 		C02A49FD2996701A00E4B327 /* CreateLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLayoutViewController.swift; sourceTree = "<group>"; };
 		C08CDB29264BAFC7006BD338 /* CollectionUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionUserCell.swift; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				C0C04E932ADE67B000CF477F /* EmptyHeaderView.swift */,
+				C00801C92AE5419300E79BC0 /* EmptyTableHeaderFooterView.swift */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -676,7 +679,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if [ $CONFIGURATION == 'Debug' ]; then\n#  \"${PODS_ROOT}/SwiftLint/swiftlint\"\n#else\n#  echo \"Not running SwiftLint/swiftlint because we are building for release\"\n#fi\n";
+			shellScript = "if [ $CONFIGURATION == 'Debug' ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\"\nelse\n  echo \"Not running SwiftLint/swiftlint because we are building for release\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -751,6 +754,7 @@
 				C0BA5BD7298E7ACB00230100 /* InsetItemsGridViewController.swift in Sources */,
 				C0D545492993BEE0009E4A74 /* NewsVideoCombinedViewController.swift in Sources */,
 				C0BA5BD4298E7ACB00230100 /* DistinctSectionsViewController.swift in Sources */,
+				C00801CA2AE5419300E79BC0 /* EmptyTableHeaderFooterView.swift in Sources */,
 				C0A2AB73259A28CA00F06BFC /* SceneDelegate.swift in Sources */,
 				C0EABEC32910FA9800F4C6FB /* InsetViewController.swift in Sources */,
 				C0EE6BA9299157E8005C8F1C /* CustomConfigurationCell.swift in Sources */,

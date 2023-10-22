@@ -77,7 +77,7 @@ extension EmojiExplorerListViewController {
 
     private func configureDataSource() {
 
-        list.registerCell(type: EmojiListCell.self, registerType: .class)
+//        list.registerCell(type: EmojiListCell.self, registerType: .class)
 
         list.reloadData { [self] in
 

@@ -236,10 +236,10 @@ extension EmojiExplorerViewController {
     /// - Tag: DequeueCells
     func configureDataSource() {
 
-        list.registerCell(type: RecentCell.self, registerType: .class)
-        list.registerCell(type: OutlineHeaderCell.self, registerType: .class)
-        list.registerCell(type: OutlineEmojiCell.self, registerType: .class)
-        list.registerCell(type: ListCell.self, registerType: .class)
+//        list.registerCell(type: RecentCell.self, registerType: .class)
+//        list.registerCell(type: OutlineHeaderCell.self, registerType: .class)
+//        list.registerCell(type: OutlineEmojiCell.self, registerType: .class)
+//        list.registerCell(type: ListCell.self, registerType: .class)
 
         // create registrations up front, then choose the appropriate one to use in the cell provider
 
@@ -252,15 +252,15 @@ extension EmojiExplorerViewController {
             if let section = self.list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.recents }) {
                 let recentEmojis = Emoji.Category.recents.emojis
                 let recentListItems: [IQItem] = recentEmojis.map { IQItem(RecentCell.self, model: $0) }
-                var recentsSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+                var recentsSnapshot = IQDiffableDataSourceSectionSnapshot()
                 recentsSnapshot.append(recentListItems)
                 self.list.apply(recentsSnapshot, to: section, animatingDifferences: false)
             }
 
             // list of all + outlines
 
-            var allSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
-            var outlineSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+            var allSnapshot = IQDiffableDataSourceSectionSnapshot()
+            var outlineSnapshot = IQDiffableDataSourceSectionSnapshot()
 
             for category in Emoji.Category.allCases where category != .recents {
                 // append to the "all items" snapshot

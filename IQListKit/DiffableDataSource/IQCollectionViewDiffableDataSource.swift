@@ -24,7 +24,6 @@ import UIKit
 
 // MARK: - Improved DiffableDataSource of UICollectionView
 
-// swiftlint:disable file_length
 @MainActor
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
@@ -90,7 +89,8 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                     identifier = String(describing: footerType)
                     model = aSection.footerModel
                 }
-            } else if let headerType = aSection.headerType, // If both types are same then it create a confusing condition, so ignoring if both are of same type
+            // If both types are same then it create a confusing condition, so ignoring if both are of same type
+            } else if let headerType = aSection.headerType,
                let footerType = aSection.footerType,
                headerType == footerType,
                supplementaryTypes.contains(where: { $0 == headerType}) {
@@ -263,45 +263,45 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         let delegate: UICollectionViewDelegateFlowLayout? = delegate as? UICollectionViewDelegateFlowLayout
 
-        // swiftlint:disable line_length
-        if let inset: UIEdgeInsets = delegate?.collectionView?(collectionView, layout: collectionViewLayout, insetForSectionAt: section) {
+        if let inset: UIEdgeInsets = delegate?.collectionView?(collectionView,
+                                                               layout: collectionViewLayout,
+                                                               insetForSectionAt: section) {
             return inset
         } else if let collectionViewLayout = collectionViewLayout as? UICollectionViewFlowLayout {
             return collectionViewLayout.sectionInset
         } else {
             return .zero
         }
-        // swiftlint:enable line_length
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         let delegate: UICollectionViewDelegateFlowLayout? = delegate as? UICollectionViewDelegateFlowLayout
 
-        // swiftlint:disable line_length
-        if let spacing: CGFloat = delegate?.collectionView?(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: section) {
+        if let spacing: CGFloat = delegate?.collectionView?(collectionView,
+                                                            layout: collectionViewLayout,
+                                                            minimumLineSpacingForSectionAt: section) {
             return spacing
         } else if let collectionViewLayout = collectionViewLayout as? UICollectionViewFlowLayout {
             return collectionViewLayout.minimumLineSpacing
         } else {
             return 0
         }
-        // swiftlint:enable line_length
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         let delegate: UICollectionViewDelegateFlowLayout? = delegate as? UICollectionViewDelegateFlowLayout
 
-        // swiftlint:disable line_length
-        if let spacing: CGFloat = delegate?.collectionView?(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: section) {
+        if let spacing: CGFloat = delegate?.collectionView?(collectionView,
+                                                            layout: collectionViewLayout,
+                                                            minimumInteritemSpacingForSectionAt: section) {
             return spacing
         } else if let collectionViewLayout = collectionViewLayout as? UICollectionViewFlowLayout {
             return collectionViewLayout.minimumInteritemSpacing
         } else {
             return 0
         }
-        // swiftlint:enable line_length
    }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -324,7 +324,8 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
         } else if let size = type.size(for: footerModel, listView: collectionView) {
             sectionSize = size
         } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            sectionSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right, height: 22)
+            sectionSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right,
+                                 height: 22)
         } else {
             sectionSize = .zero
         }
@@ -544,12 +545,10 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
                         willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
                         animator: UIContextMenuInteractionCommitAnimating) {
 
-        // swiftlint:disable line_length
         guard let indexPath = contextMenuPreviewIndexPath,
               let cell: IQCellActionsProvider = collectionView.cellForItem(at: indexPath) as? IQCellActionsProvider else {
             return
         }
-        // swiftlint:enable line_length
 
         cell.performPreviewAction(configuration: configuration, animator: animator)
     }
@@ -616,31 +615,31 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDataSourcePrefetch
 
 @MainActor
 extension IQCollectionViewDiffableDataSource {
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         canFocusItemAt indexPath: IndexPath) -> Bool {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         return delegate?.collectionView?(collectionView, canFocusItemAt: indexPath) ?? true
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         shouldUpdateFocusIn context: UICollectionViewFocusUpdateContext) -> Bool {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         return delegate?.collectionView?(collectionView, shouldUpdateFocusIn: context) ?? true
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         didUpdateFocusIn context: UICollectionViewFocusUpdateContext,
                         with coordinator: UIFocusAnimationCoordinator) {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         delegate?.collectionView?(collectionView, didUpdateFocusIn: context, with: coordinator)
     }
-    
+
     func indexPathForPreferredFocusedView(in collectionView: UICollectionView) -> IndexPath? {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         return delegate?.indexPathForPreferredFocusedView?(in: collectionView)
     }
-    
+
     @available(iOS 15.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         selectionFollowsFocusForItemAt indexPath: IndexPath) -> Bool {
@@ -653,7 +652,7 @@ extension IQCollectionViewDiffableDataSource {
 // MARK: - Reordering
 @MainActor
 extension IQCollectionViewDiffableDataSource {
-    
+
     @available(iOS 15.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath,
@@ -665,7 +664,7 @@ extension IQCollectionViewDiffableDataSource {
                                          atCurrentIndexPath: currentIndexPath,
                                          toProposedIndexPath: proposedIndexPath) ?? proposedIndexPath
     }
-    
+
     @available(iOS, introduced: 9.0, deprecated: 15.0)
     func collectionView(_ collectionView: UICollectionView,
                         targetIndexPathForMoveFromItemAt currentIndexPath: IndexPath,
@@ -675,7 +674,7 @@ extension IQCollectionViewDiffableDataSource {
                                          targetIndexPathForMoveFromItemAt: currentIndexPath,
                                          toProposedIndexPath: proposedIndexPath) ?? proposedIndexPath
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         targetContentOffsetForProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
@@ -687,7 +686,7 @@ extension IQCollectionViewDiffableDataSource {
 // MARK: - Editing
 @MainActor
 extension IQCollectionViewDiffableDataSource {
-    
+
     @available(iOS 14.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         canEditItemAt indexPath: IndexPath) -> Bool {
@@ -707,26 +706,26 @@ extension IQCollectionViewDiffableDataSource {
 // MARK: - Selection
 @MainActor
 extension IQCollectionViewDiffableDataSource {
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         return delegate?.collectionView?(collectionView,
                                          shouldBeginMultipleSelectionInteractionAt: indexPath) ?? false
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         delegate?.collectionView?(collectionView,
                                   didBeginMultipleSelectionInteractionAt: indexPath)
     }
-    
+
     func collectionViewDidEndMultipleSelectionInteraction(_ collectionView: UICollectionView) {
         let delegate: UICollectionViewDelegate? = delegate as? UICollectionViewDelegate
         delegate?.collectionViewDidEndMultipleSelectionInteraction?(collectionView)
     }
-    
+
     @available(iOS 15.0, *)
     func collectionView(_ collectionView: UICollectionView,
                         sceneActivationConfigurationForItemAt indexPath: IndexPath,

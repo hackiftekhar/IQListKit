@@ -22,6 +22,7 @@
 
 import UIKit
 
+@MainActor
 public protocol IQModelableSupplementaryView: IQModelModifiable, IQViewSizeProvider
 where Self: UIView {
 
@@ -32,6 +33,7 @@ where Self: UIView {
     var model: Model? { get set }
 }
 
+@MainActor
 public extension IQModelableSupplementaryView {
 
     func setModel(_ model: AnyHashable) {
@@ -39,6 +41,7 @@ public extension IQModelableSupplementaryView {
     }
 }
 
+@MainActor
 public extension IQModelableSupplementaryView {
 
     static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {

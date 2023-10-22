@@ -267,7 +267,7 @@ class CreateLayoutViewController: UIViewController {
         navigationItem.title = "Create Layout"
         configureHierarchy()
 
-        list.registerCell(type: CustomLayoutCell.self, registerType: .class)
+//        list.registerCell(type: CustomLayoutCell.self, registerType: .class)
 
         let doneBarButton = UIBarButtonItem(systemItem: .done, primaryAction: UIAction(handler: { _ in
             self.delegate?.createLayoutController(self, didUpdate: self.layout)
@@ -323,7 +323,7 @@ extension CreateLayoutViewController {
         let existingSnapshot = list.snapshot(for: customizeSection)
         let expandedItems: [IQItem] = existingSnapshot.items.compactMap { existingSnapshot.isExpanded($0) ? $0 : nil }
 
-        var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+        var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
         let layoutItem = IQItem(CustomLayoutCell.self, model: .init(path: "layout", title: "Layout", value: "", haveSubitems: true))
         sectionSnapshot.append([layoutItem])

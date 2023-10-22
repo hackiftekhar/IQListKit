@@ -116,13 +116,13 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
 
     private func configureDataSource() {
 
-        if #available(iOS 14.0, *) {
-            list.registerCell(type: SimpleListCell.self, registerType: .class)
-        }
-        list.registerCell(type: ConferenceVideoCell.self, registerType: .class)
-        list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
-        list.registerSupplementaryView(type: TitleSupplementaryView.self,
-                                       kind: Self.titleElementKind, registerType: .class)
+//        if #available(iOS 14.0, *) {
+//            list.registerCell(type: SimpleListCell.self, registerType: .class)
+//        }
+//        list.registerCell(type: ConferenceVideoCell.self, registerType: .class)
+//        list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
+//        list.registerSupplementaryView(type: TitleSupplementaryView.self,
+//                                       kind: Self.titleElementKind, registerType: .class)
 
         list.reloadData { [self] in
 

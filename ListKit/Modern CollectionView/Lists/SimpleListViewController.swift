@@ -43,7 +43,7 @@ extension SimpleListViewController {
 extension SimpleListViewController {
     private func configureDataSource() {
 
-        list.registerCell(type: SimpleListCell.self, registerType: .class)
+//        list.registerCell(type: SimpleListCell.self, registerType: .class)
 
         list.reloadData { [self] in
             let sectionIdentifier = UUID()

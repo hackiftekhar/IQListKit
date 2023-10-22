@@ -14,7 +14,8 @@ class UserListTComplexTableViewController: UITableViewController {
     private var users = [User]()
     private var books = [Book]()
 
-    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
+    private lazy var reloadQueue: DispatchQueue = DispatchQueue(label: "\(Self.self)")
+    private lazy var list = IQList(listView: tableView, delegateDataSource: self, reloadQueue: reloadQueue)
 
     override func viewDidLoad() {
         super.viewDidLoad()

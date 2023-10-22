@@ -23,7 +23,7 @@
 import UIKit
 
 // MARK: - Section model of the table/collection
-public struct IQSection: Hashable, Sendable {
+public struct IQSection: Hashable, @unchecked Sendable {
 
     public static func == (lhs: IQSection, rhs: IQSection) -> Bool {
         return lhs.identifier == rhs.identifier &&
@@ -84,8 +84,8 @@ public struct IQSection: Hashable, Sendable {
 
     public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  headerType: H.Type, headerModel: H.Model,
-                                                 footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
-        // swiftlint:enable line_length
+                                                 footer: String? = nil, footerView: UIView? = nil,
+                                                 footerSize: CGSize? = nil) {
         self.identifier = identifier
         self.headerType = headerType
         self.headerModel = headerModel
@@ -99,9 +99,9 @@ public struct IQSection: Hashable, Sendable {
     }
 
     public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
-                                                 header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
+                                                 header: String? = nil, headerView: UIView? = nil,
+                                                 headerSize: CGSize? = nil,
                                                  footerType: F.Type, footerModel: F.Model) {
-        // swiftlint:enable line_length
         self.identifier = identifier
         if let headerView = headerView {
             self.headerView = headerView
@@ -119,7 +119,6 @@ public struct IQSection: Hashable, Sendable {
                 F: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  headerType: H.Type, headerModel: H.Model,
                                                  footerType: F.Type, footerModel: F.Model) {
-        // swiftlint:enable line_length
         self.identifier = identifier
         self.headerType = headerType
         self.headerModel = headerModel

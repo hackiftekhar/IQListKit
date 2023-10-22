@@ -29,6 +29,7 @@ import UIKit
 public extension IQList {
 
     @available(iOS 14.0, *)
+    @MainActor
     var reorderingHandlers: UICollectionViewDiffableDataSource<IQSection, IQItem>.ReorderingHandlers? {
         get {
             (diffableDataSource as? IQCollectionViewDiffableDataSource)?.reorderingHandlers
@@ -45,7 +46,8 @@ public extension IQList {
     ///   - updates: update block which will be called to generate the snapshot
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
-    nonisolated func reloadData(_ updates: @escaping () -> Void,
+    nonisolated
+    func reloadData(_ updates: @escaping () -> Void,
                     updateExistingSnapshot: Bool = false,
                     animatingDifferences: Bool = true, diffing: Bool? = nil,
                     animation: UITableView.RowAnimation? = nil,
@@ -56,20 +58,21 @@ public extension IQList {
             guard let self = self else { return }
 
             if updateExistingSnapshot {
-                batchSnapshot = snapshot()
+                snapshotWrapper.reset(with: snapshot())
             } else {
-                batchSnapshot = IQDiffableDataSourceSnapshot()
+                snapshotWrapper.reset(with: IQDiffableDataSourceSnapshot())
             }
 
             updates()
 
-            privateApply(batchSnapshot, animatingDifferences: animatingDifferences, diffing: diffing,
-                         animation: animation, endLoadingOnCompletion: endLoadingOnCompletion,
-                         completion: completion)
+            privateApply(snapshotWrapper.batchSnapshot, animatingDifferences: animatingDifferences,
+                         diffing: diffing, animation: animation,
+                         endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
         }
     }
 
-    nonisolated func apply(_ snapshot: IQDiffableDataSourceSnapshot,
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSnapshot,
                animatingDifferences: Bool = true, diffing: Bool? = nil,
                animation: UITableView.RowAnimation? = nil,
                endLoadingOnCompletion: Bool = true,
@@ -84,55 +87,68 @@ public extension IQList {
         }
     }
 
-    nonisolated private func privateApply(_ snapshot: IQDiffableDataSourceSnapshot,
+    nonisolated
+    private func privateApply(_ snapshot: IQDiffableDataSourceSnapshot,
                               animatingDifferences: Bool = true, diffing: Bool? = nil,
                               animation: UITableView.RowAnimation? = nil,
                               endLoadingOnCompletion: Bool = true,
                               completion: (() -> Void)? = nil) {
 
-        var previousDefaultRowAnimation: UITableView.RowAnimation?
+        let previousDefaultRowAnimation: UITableView.RowAnimation?
         if let animation = animation {
-            previousDefaultRowAnimation = diffableDataSource.defaultRowAnimation
-            diffableDataSource.defaultRowAnimation = animation
+            previousDefaultRowAnimation = self.defaultRowAnimation
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                diffableDataSource.defaultRowAnimation = animation
+            }
+        } else {
+            previousDefaultRowAnimation = nil
         }
 
+        let internalCompletion: (() -> Void) = {
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+
+                if let previousDefaultRowAnimation = previousDefaultRowAnimation {
+                    diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
+                }
+                let isLoading: Bool
+                if endLoadingOnCompletion {
+                    isLoading = false
+                } else {
+                    isLoading = self.isLoading
+                }
+
+                /// Updating the backgroundView
+                setIsLoading(isLoading, animated: animatingDifferences)
+
+                completion?()
+            }
+        }
+        
         if let diffing = diffing {
             if #available(iOS 15.0, *), !animatingDifferences, !diffing {
-                diffableDataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+                diffableDataSource.applySnapshotUsingReloadData(snapshot,
+                                                                completion: internalCompletion)
             } else {
-                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences,
+                                         completion: internalCompletion)
             }
         } else {
             if #available(iOS 15.0, *), !animatingDifferences {
-                diffableDataSource.applySnapshotUsingReloadData(snapshot, completion: completion)
+                diffableDataSource.applySnapshotUsingReloadData(snapshot,
+                                                                completion: internalCompletion)
             } else {
-                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-            }
-        }
-
-        if let previousDefaultRowAnimation = previousDefaultRowAnimation {
-            diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
-        }
-
-        let isLoading: Bool
-        if endLoadingOnCompletion {
-            isLoading = false
-        } else {
-            isLoading = self.isLoading
-        }
-
-        if Thread.isMainThread {
-            setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                self?.setIsLoading(isLoading,
-                                   animated: animatingDifferences)    /// Updating the backgroundView on main thread
+                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences,
+                                         completion: internalCompletion)
             }
         }
     }
 
     @available(iOS 14.0, *)
-    nonisolated func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
                to section: IQSection,
                animatingDifferences: Bool = true,
                endLoadingOnCompletion: Bool = true,
@@ -141,35 +157,24 @@ public extension IQList {
 
             guard let self = self else { return }
 
-            privateApply(snapshot, to: section, animatingDifferences: animatingDifferences,
-                         endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
-        }
-    }
+            diffableDataSource.apply(snapshot, to: section,
+                                     animatingDifferences: animatingDifferences, completion: {
 
-    @available(iOS 14.0, *)
-    nonisolated private func privateApply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
-                              to section: IQSection,
-                              animatingDifferences: Bool = true,
-                              endLoadingOnCompletion: Bool = true,
-                              completion: (() -> Void)? = nil) {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
 
-        diffableDataSource.apply(snapshot, to: section,
-                                 animatingDifferences: animatingDifferences, completion: completion)
+                    let isLoading: Bool
+                    if endLoadingOnCompletion {
+                        isLoading = false
+                    } else {
+                        isLoading = self.isLoading
+                    }
 
-        let isLoading: Bool
-        if endLoadingOnCompletion {
-            isLoading = false
-        } else {
-            isLoading = self.isLoading
-        }
+                    setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
 
-        if Thread.isMainThread {
-            setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                self?.setIsLoading(isLoading,
-                                   animated: animatingDifferences)    /// Updating the backgroundView on main thread
-            }
+                    completion?()
+                }
+            })
         }
     }
 }

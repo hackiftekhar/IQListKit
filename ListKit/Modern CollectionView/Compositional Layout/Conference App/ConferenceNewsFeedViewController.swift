@@ -61,7 +61,7 @@ extension ConferenceNewsFeedViewController {
 
     private func configureDataSource() {
 
-        list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
+//        list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
 
         list.reloadData { [self] in
 

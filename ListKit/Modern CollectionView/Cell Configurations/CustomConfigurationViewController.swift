@@ -68,7 +68,7 @@ extension CustomConfigurationViewController {
     private func configureDataSource() {
 
         list.clearsSelectionOnDidSelect = false
-        list.registerCell(type: CustomConfigurationCell.self, registerType: .class)
+//        list.registerCell(type: CustomConfigurationCell.self, registerType: .class)
 
         list.reloadData { [self] in
 

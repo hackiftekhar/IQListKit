@@ -22,6 +22,7 @@
 
 import UIKit
 
+@MainActor
 final public class IQListWrapper<T: IQModelableCell> {
 
     var section: IQSection = IQSection(identifier: "main") {

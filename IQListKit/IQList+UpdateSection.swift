@@ -27,25 +27,43 @@ import Foundation
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
-
+    
     /// Appends a section to the list
     /// This method can also be used in background thread
     /// - Parameter sections: sections which needs to be added to the list
-    nonisolated func append(_ sections: [IQSection], beforeSection: IQSection? = nil, afterSection: IQSection? = nil) {
-        if let beforeSection = beforeSection {
-            batchSnapshot.insertSections(sections, beforeSection: beforeSection)
-        } else if let afterSection = afterSection {
-            batchSnapshot.insertSections(sections, afterSection: afterSection)
-        } else {
-            batchSnapshot.appendSections(sections)
+    nonisolated
+    func append(_ sections: [IQSection],
+                beforeSection: IQSection? = nil,
+                afterSection: IQSection? = nil) {
+        
+        if cellRegisterType == .automatic {
+            for section in sections {
+                if let headerType = section.headerType {
+                    registerSupplementaryView(type: headerType,
+                                              kind: elementKindSectionHeader,
+                                              registerType: .default)
+                }
+                
+                if let footerType = section.footerType {
+                    registerSupplementaryView(type: footerType,
+                                              kind: elementKindSectionFooter,
+                                              registerType: .default)
+                }
+            }
         }
+        
+        snapshotWrapper.append(sections,
+                               beforeSection: beforeSection,
+                               afterSection: afterSection)
     }
-
-    nonisolated func reload(_ sections: [IQSection]) {
-        batchSnapshot.reloadSections(sections)
+    
+    nonisolated
+    func reload(_ sections: [IQSection]) {
+        snapshotWrapper.reload(sections)
     }
-
-    nonisolated func delete(_ sections: [IQSection]) {
-        batchSnapshot.deleteSections(sections)
+    
+    nonisolated
+    func delete(_ sections: [IQSection]) {
+        snapshotWrapper.delete(sections)
     }
 }

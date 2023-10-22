@@ -31,7 +31,7 @@ public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplement
     public var model: Model?
 
     public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
-        
+
         if let listView = listView as? UICollectionView {
             if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
                 let model: Model = model as? Model ?? ""

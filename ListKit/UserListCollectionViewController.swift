@@ -16,7 +16,8 @@ class UserListCollectionViewController: UICollectionViewController {
     private typealias StoryboardCell = CollectionUserStoryboardCell
     private typealias Cell = CollectionUserCell
 
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
+    private lazy var reloadQueue: DispatchQueue = DispatchQueue(label: "\(Self.self)")
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: reloadQueue)
 
     override func viewDidLoad() {
         super.viewDidLoad()

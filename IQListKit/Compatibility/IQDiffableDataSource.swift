@@ -25,40 +25,45 @@ import UIKit
 @MainActor
 internal protocol IQDiffableDataSource where Self: UIScrollViewDelegate {
 
-    var registeredCells: [IQListCell.Type] { get set }
-    var registeredSupplementaryViews: [String: [UIView.Type]] { get set }
+    nonisolated var registeredCells: [IQListCell.Type] { get set }
+    nonisolated var registeredSupplementaryViews: [String: [UIView.Type]] { get set }
 
-    var proxyDelegate: IQListViewProxyDelegate? { get set }
-    var delegate: IQListViewDelegate? { get set }
-    var dataSource: IQListViewDataSource? { get set }
-    var clearsSelectionOnDidSelect: Bool { get set }
-    var defaultRowAnimation: UITableView.RowAnimation { get set }
+    @MainActor var proxyDelegate: IQListViewProxyDelegate? { get set }
+    @MainActor var delegate: IQListViewDelegate? { get set }
+    @MainActor var dataSource: IQListViewDataSource? { get set }
+    @MainActor var clearsSelectionOnDidSelect: Bool { get set }
+    @MainActor var defaultRowAnimation: UITableView.RowAnimation { get set }
 
-    func snapshot() -> IQList.IQDiffableDataSourceSnapshot
+    nonisolated func snapshot() -> IQDiffableDataSourceSnapshot
 
-    func itemIdentifier(for indexPath: IndexPath) -> IQItem?
-    func indexPath(for itemIdentifier: IQItem) -> IndexPath?
+    @MainActor func itemIdentifier(for indexPath: IndexPath) -> IQItem?
+    @MainActor func indexPath(for itemIdentifier: IQItem) -> IndexPath?
 
     @available(iOS 15.0, tvOS 15.0, *)
-    func applySnapshotUsingReloadData(_ snapshot: IQList.IQDiffableDataSourceSnapshot,
+    nonisolated
+    func applySnapshotUsingReloadData(_ snapshot: IQDiffableDataSourceSnapshot,
                                       completion: (() -> Void)?)
 
-    func apply(_ snapshot: IQList.IQDiffableDataSourceSnapshot,
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSnapshot,
                animatingDifferences: Bool,
                completion: (() -> Void)?)
 
     // For UICollectionView only
     @available(iOS 14.0, *)
-    func apply(_ snapshot: IQList.IQDiffableDataSourceSectionSnapshot, to section: IQSection,
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot, to section: IQSection,
                animatingDifferences: Bool,
                completion: (() -> Void)?)
 
     @available(iOS 14.0, *)
-    func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot
+    nonisolated
+    func snapshot(for section: IQSection) -> IQDiffableDataSourceSectionSnapshot
 }
 
 @MainActor
 extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
+
     var defaultRowAnimation: UITableView.RowAnimation {
         get {
             return .automatic
@@ -73,14 +78,16 @@ extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
 @MainActor
 extension IQTableViewDiffableDataSource: IQDiffableDataSource {
     @available(iOS 14.0, *)
-    func apply(_ snapshot: IQList.IQDiffableDataSourceSectionSnapshot, to section: IQSection,
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot, to section: IQSection,
                animatingDifferences: Bool, completion: (() -> Void)?) {
         // doesn't have any effect
         fatalError("Section snapshot isn't supported for UITableView")
     }
 
     @available(iOS 14.0, *)
-    func snapshot(for section: IQSection) -> IQList.IQDiffableDataSourceSectionSnapshot {
+    nonisolated
+    func snapshot(for section: IQSection) -> IQDiffableDataSourceSectionSnapshot {
         // doesn't have any effect
         fatalError("Section snapshot isn't supported for UITableView")
     }

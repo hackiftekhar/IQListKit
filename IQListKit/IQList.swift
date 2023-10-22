@@ -22,35 +22,46 @@
 
 import UIKit
 
+public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>
+
+@available(iOS 14.0, *)
+public typealias IQDiffableDataSourceSectionSnapshot = NSDiffableDataSourceSectionSnapshot<IQItem>
+
 @MainActor
 public final class IQList: NSObject {
 
-    public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>
-
-    @available(iOS 14.0, *)
-    public typealias IQDiffableDataSourceSectionSnapshot = NSDiffableDataSourceSectionSnapshot<IQItem>
+    @frozen public enum CellRegistrationType {
+        case automatic
+        case manual
+    }
 
     // MARK: - Public Properties
-    public private(set) var listView: IQListView
+    public let listView: IQListView
+
     public var clearsSelectionOnDidSelect: Bool = true {
         didSet {
             diffableDataSource.clearsSelectionOnDidSelect = clearsSelectionOnDidSelect
         }
     }
 
-    public var defaultRowAnimation: UITableView.RowAnimation {
+    nonisolated let elementKindSectionHeader: String
+    nonisolated let elementKindSectionFooter: String
+    nonisolated let cellRegisterType: CellRegistrationType
+
+    nonisolated public let defaultRowAnimation: UITableView.RowAnimation
+
+    nonisolated public var removeDuplicatesWhenReloading: Bool {
         get {
-            diffableDataSource.defaultRowAnimation
+            snapshotWrapper.removeDuplicatesWhenReloading
         }
         set {
-            diffableDataSource.defaultRowAnimation = newValue
+            snapshotWrapper.removeDuplicatesWhenReloading = newValue
         }
     }
 
-    public var removeDuplicatesWhenReloading: Bool = false
-
     // MARK: - noItem States
     private let noItemContainerView: UIView = UIView()
+
     public var noItemStateView: IQNoItemStateRepresentable? {
         didSet {
             oldValue?.removeFromSuperview()
@@ -86,23 +97,28 @@ public final class IQList: NSObject {
         get {   noItemStateView?.noItemImage    }
         set {   noItemStateView?.noItemImage = newValue  }
     }
+
     public var noItemTitle: String? {
         get {   noItemStateView?.noItemTitle    }
         set {   noItemStateView?.noItemTitle = newValue  }
     }
+
     public var noItemMessage: String? {
         get {   noItemStateView?.noItemMessage    }
         set {   noItemStateView?.noItemMessage = newValue  }
     }
+
     public var loadingMessage: String? {
         get {   noItemStateView?.loadingMessage    }
         set {   noItemStateView?.loadingMessage = newValue  }
     }
+
     public func noItemAction(title: String?, target: Any?, action: Selector) {
         noItemStateView?.action(title: title, target: target, action: action)
     }
 
     private var privateIsLoading: Bool = false
+
     public var isLoading: Bool {
         get {  privateIsLoading  }
         set {
@@ -111,6 +127,7 @@ public final class IQList: NSObject {
         }
     }
 
+    @MainActor
     public func setIsLoading(_ isLoading: Bool,
                              animated: Bool = false) {
 
@@ -126,21 +143,29 @@ public final class IQList: NSObject {
         }
 
         UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            self?.noItemContainerView.alpha = showNoItems ? 1.0 : 0.0
-            self?.noItemStateView?.setIsLoading(isLoading, haveRecords: haveRecords, animated: animated)
-        }, completion: { _ in
+            guard let self = self else { return }
+
+            noItemContainerView.alpha = showNoItems ? 1.0 : 0.0
+            noItemStateView?.setIsLoading(isLoading, haveRecords: haveRecords, animated: animated)
+        }, completion: {  [weak self] _ in
+            guard let self = self else { return }
+
             if !showNoItems {
-                self.noItemContainerView.isHidden = true
+                noItemContainerView.isHidden = true
             }
         })
     }
 
     // MARK: - Private Properties
 
-    internal let reloadQueue: DispatchQueue
-    public internal(set) var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
+    nonisolated internal let reloadQueue: DispatchQueue
 
-    internal private(set) var diffableDataSource: IQDiffableDataSource!
+    nonisolated internal let snapshotWrapper: IQDiffableDataSourceSnapshotWrapper = IQDiffableDataSourceSnapshotWrapper()
+//    nonisolated public func batchSnapshot() -> IQDiffableDataSourceSnapshot {
+//        snapshowWrapper.batchSnapshot
+//    }
+
+    nonisolated internal let diffableDataSource: IQDiffableDataSource
 
     // MARK: - Initialization
 
@@ -153,6 +178,7 @@ public final class IQList: NSObject {
     public convenience init(listView: IQListView,
                             delegateDataSource: IQListViewDelegateDataSource? = nil,
                             defaultRowAnimation: UITableView.RowAnimation = .fade,
+                            cellRegisterType: CellRegistrationType = .automatic,
                             reloadQueue: DispatchQueue = DispatchQueue.main) {
         self.init(listView: listView,
                   delegate: delegateDataSource, dataSource: delegateDataSource,
@@ -166,9 +192,11 @@ public final class IQList: NSObject {
     ///   - dataSource: the dataSource of the IQListView
     ///   - defaultRowAnimation: default animation when reloading table
     ///   - reloadQueue: queue to reload the data
-    public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
-                dataSource: IQListViewDataSource? = nil, defaultRowAnimation: UITableView.RowAnimation = .fade,
-                reloadQueue: DispatchQueue = DispatchQueue.main) {
+    public convenience init(listView: IQListView, delegate: IQListViewDelegate? = nil,
+                            dataSource: IQListViewDataSource? = nil,
+                            defaultRowAnimation: UITableView.RowAnimation = .fade,
+                            cellRegisterType: CellRegistrationType = .automatic,
+                            reloadQueue: DispatchQueue = DispatchQueue.main) {
 
         defer { // This is to call the didSet of noItemStateView
             noItemStateView = IQNoItemStateView(noItemImage: nil,
@@ -178,40 +206,47 @@ public final class IQList: NSObject {
             updateNoItemStateViewPosition()
         }
 
-        self.listView = listView
-        self.reloadQueue = reloadQueue
-        super.init()
-
         if let tableView = listView as? UITableView {
 
-            diffableDataSource = initializeTableViewDataSource(tableView,
-                                                               delegate: delegate, dataSource: dataSource,
-                                          defaultRowAnimation: defaultRowAnimation)
+            self.init(tableView,
+                      delegate: delegate, dataSource: dataSource,
+                      defaultRowAnimation: defaultRowAnimation,
+                      cellRegisterType: cellRegisterType,
+                      reloadQueue: reloadQueue)
 
-            registerSupplementaryView(type: IQTableTitleSupplementaryView.self, kind: "", registerType: .class)
-            registerSupplementaryView(type: IQTableEmptySupplementaryView.self, kind: "", registerType: .class)
+            registerSupplementaryView(type: IQTableTitleSupplementaryView.self,
+                                      kind: elementKindSectionHeader, registerType: .class)
+            registerSupplementaryView(type: IQTableEmptySupplementaryView.self,
+                                      kind: elementKindSectionFooter, registerType: .class)
 
         } else if let collectionView = listView as? UICollectionView {
 
-            diffableDataSource = initializeCollectionViewDataSource(collectionView,
-                                                                    delegate: delegate, dataSource: dataSource)
+            self.init(collectionView,
+                      delegate: delegate, dataSource: dataSource,
+                      cellRegisterType: cellRegisterType,
+                      reloadQueue: reloadQueue)
 
             registerSupplementaryView(type: UICollectionReusableView.self,
-                                      kind: UICollectionView.elementKindSectionHeader, registerType: .class)
+                                      kind: elementKindSectionHeader, registerType: .class)
             registerSupplementaryView(type: UICollectionReusableView.self,
-                                      kind: UICollectionView.elementKindSectionFooter, registerType: .class)
+                                      kind: elementKindSectionFooter, registerType: .class)
             registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
-                                      kind: UICollectionView.elementKindSectionHeader, registerType: .class)
+                                      kind: elementKindSectionHeader, registerType: .class)
             registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
-                                      kind: UICollectionView.elementKindSectionFooter, registerType: .class)
+                                      kind: elementKindSectionFooter, registerType: .class)
             registerSupplementaryView(type: IQCollectionEmptySupplementaryView.self,
-                                      kind: UICollectionView.elementKindSectionHeader, registerType: .class)
+                                      kind: elementKindSectionHeader, registerType: .class)
             registerSupplementaryView(type: IQCollectionEmptySupplementaryView.self,
-                                      kind: UICollectionView.elementKindSectionFooter, registerType: .class)
+                                      kind: elementKindSectionFooter, registerType: .class)
 
         } else {
             fatalError("Unable to initializa ListKit")
         }
+
+        registerSupplementaryView(type: IQSupplementaryViewPlaceholder.self,
+                                  kind: elementKindSectionHeader, registerType: .class)
+        registerSupplementaryView(type: IQSupplementaryViewPlaceholder.self,
+                                  kind: elementKindSectionFooter, registerType: .class)
     }
 
     /// Initialize the IQList with the UITableView
@@ -220,13 +255,14 @@ public final class IQList: NSObject {
     ///   - delegate: the delegate of the IQListView
     ///   - dataSource: the dataSource of the IQListView
     ///   - defaultRowAnimation: default animation when reloading table
-    private func initializeTableViewDataSource(_ tableView: UITableView, delegate: IQListViewDelegate?,
-                                               dataSource: IQListViewDataSource?,
-                                               defaultRowAnimation: UITableView.RowAnimation) -> IQDiffableDataSource {
+    private init(_ tableView: UITableView, delegate: IQListViewDelegate?,
+                 dataSource: IQListViewDataSource?,
+                 defaultRowAnimation: UITableView.RowAnimation,
+                 cellRegisterType: CellRegistrationType,
+                 reloadQueue: DispatchQueue) {
 
-        typealias CellProvider = (UITableView, IndexPath, IQItem) -> UITableViewCell?
-
-        let provider: CellProvider = { [weak self] (tableView, indexPath, item) in
+        let tableViewDiffableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
+                                                                        cellProvider: { (tableView, indexPath, item) in
             let identifier = String(describing: item.type)
             let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
 
@@ -239,22 +275,29 @@ public final class IQList: NSObject {
                     """)
             }
 
-            self?.diffableDataSource.delegate?.listView(tableView, modifyCell: cell, at: indexPath)
+            delegate?.listView(tableView, modifyCell: cell, at: indexPath)
             return cell
-        }
-
-        let tableViewDiffableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
-                                                                        cellProvider: provider)
+        })
 
         tableView.delegate = tableViewDiffableDataSource
         tableView.dataSource = tableViewDiffableDataSource
         tableView.prefetchDataSource = tableViewDiffableDataSource
         tableViewDiffableDataSource.defaultRowAnimation = defaultRowAnimation
-        tableViewDiffableDataSource.proxyDelegate = self
         tableViewDiffableDataSource.delegate = delegate
         tableViewDiffableDataSource.dataSource = dataSource
 
-        return tableViewDiffableDataSource
+        listView = tableView
+        diffableDataSource = tableViewDiffableDataSource
+        elementKindSectionHeader = UICollectionView.elementKindSectionHeader
+        elementKindSectionFooter = UICollectionView.elementKindSectionFooter
+
+        self.reloadQueue = reloadQueue
+        self.defaultRowAnimation = defaultRowAnimation
+        self.cellRegisterType = cellRegisterType
+
+        super.init()
+
+        tableViewDiffableDataSource.proxyDelegate = self
     }
 
     /// Initialize the IQList with the UITableView
@@ -262,13 +305,14 @@ public final class IQList: NSObject {
     ///   - collectionView: the UICollectionView
     ///   - delegate: the delegate of the IQListView
     ///   - dataSource: the dataSource of the IQListView
-    private func initializeCollectionViewDataSource(_ collectionView: UICollectionView,
-                                                    delegate: IQListViewDelegate?,
-                                                    dataSource: IQListViewDataSource?) -> IQDiffableDataSource {
+    private init(_ collectionView: UICollectionView,
+                 delegate: IQListViewDelegate?,
+                 dataSource: IQListViewDataSource?,
+                 cellRegisterType: CellRegistrationType,
+                 reloadQueue: DispatchQueue = DispatchQueue.main) {
 
-        typealias CellProvider = (UICollectionView, IndexPath, IQItem) -> UICollectionViewCell?
-
-        let provider: CellProvider = { [weak self] (collectionView, indexPath, item) in
+        let collectionViewDiffableDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
+                                                                                  cellProvider: { (collectionView, indexPath, item) in
             let identifier = String(describing: item.type)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
             if let cell = cell as? IQModelModifiable {
@@ -280,21 +324,28 @@ public final class IQList: NSObject {
                     """)
             }
 
-            self?.diffableDataSource.delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
+            delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
             return cell
-        }
-
-        let collectionViewDiffableDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
-                                                                                  cellProvider: provider)
+        })
 
         collectionView.delegate = collectionViewDiffableDataSource
         collectionView.dataSource = collectionViewDiffableDataSource
         collectionView.prefetchDataSource = collectionViewDiffableDataSource
-        collectionViewDiffableDataSource.proxyDelegate = self
         collectionViewDiffableDataSource.delegate = delegate
         collectionViewDiffableDataSource.dataSource = dataSource
 
-        return collectionViewDiffableDataSource
+        listView = collectionView
+        diffableDataSource = collectionViewDiffableDataSource
+        elementKindSectionHeader = UICollectionView.elementKindSectionHeader
+        elementKindSectionFooter = UICollectionView.elementKindSectionFooter
+
+        self.reloadQueue = reloadQueue
+        self.defaultRowAnimation = .automatic
+        self.cellRegisterType = cellRegisterType
+
+        super.init()
+
+        collectionViewDiffableDataSource.proxyDelegate = self
     }
 
     private func updateNoItemStateViewPosition() {

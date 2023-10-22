@@ -37,14 +37,15 @@ public extension IQList {
         case storyboard
     }
 
-    // swiftlint:disable function_body_length
     /// register a Cell manually
     /// - Parameters:
     ///   - type: Type of the cell
     ///   - bundle: The bundle in which the cell is present.
     ///   - registerType: The cell registration type
+    nonisolated
     func registerCell<T: IQModelableCell>(type: T.Type,
-                                          registerType: RegisterType, bundle: Bundle = .main) {
+                                          registerType: RegisterType,
+                                          bundle: Bundle = .main) {
 
         guard diffableDataSource.registeredCells.contains(where: { $0 == type}) == false else {
             return
@@ -52,199 +53,217 @@ public extension IQList {
 
         let identifier = String(describing: type)
 
-        func internalRegisterNib() {
-            let nib = UINib(nibName: identifier, bundle: bundle)
-            if let tableView = listView as? UITableView {
-                tableView.register(nib, forCellReuseIdentifier: identifier)
-            } else if let collectionView = listView as? UICollectionView {
-                collectionView.register(nib, forCellWithReuseIdentifier: identifier)
-            }
+        diffableDataSource.registeredCells.append(type)
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            internalRegisterCell(type: type,
+                                 identifier: identifier,
+                                 registerType: registerType,
+                                 bundle: bundle)
         }
+    }
 
-        func internalRegisterClass() {
+    @MainActor
+    private func internalRegisterCell<T: IQModelableCell>(type: T.Type,
+                                                          identifier: String,
+                                                          registerType: RegisterType,
+                                                          bundle: Bundle) {
+        switch registerType {
+        case .storyboard:
+            // Manually added the entry since it's already registered
+            break
+        case .nib:
+            internalRegisterCellNib(identifier: identifier, bundle: bundle)
+        case .class:
+            internalRegisterCellClass(type: type, identifier: identifier)
+        case .default:
+
+            var hasRegistered = false
             if let tableView = listView as? UITableView {
-                tableView.register(type.self, forCellReuseIdentifier: identifier)
-            } else if let collectionView = listView as? UICollectionView {
-                collectionView.register(type.self, forCellWithReuseIdentifier: identifier)
-            }
-        }
-
-        // swiftlint:disable cyclomatic_complexity
-        func internalRegisterCell() {
-            switch registerType {
-            case .storyboard:
-                diffableDataSource.registeredCells.append(type)    // Just manually adding the entry
-            case .nib:
-                diffableDataSource.registeredCells.append(type)
-                internalRegisterNib()
-            case .class:
-                diffableDataSource.registeredCells.append(type)
-                internalRegisterClass()
-            case .default:
-
-                var hasRegistered = false
-                if let tableView = listView as? UITableView {
-                    // Validate if the cell is configured in storyboard
-                    if tableView.dequeueReusableCell(withIdentifier: identifier) != nil {
-                        diffableDataSource.registeredCells.append(type)
-                        hasRegistered = true
-                        return
-                    }
-                } else if let collectionView = listView as? UICollectionView {
-                    // Validate if the cell is configured in storyboard
-                    
-                    let dummyIndexPath = IndexPath(item: 0, section: 0)
-                    _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
-                    diffableDataSource.registeredCells.append(type)
+                // Validate if the cell is configured in storyboard
+                if tableView.dequeueReusableCell(withIdentifier: identifier) != nil {
                     hasRegistered = true
-                }
-
-                guard !hasRegistered else {
                     return
                 }
-
-                diffableDataSource.registeredCells.append(type)
-                if bundle.path(forResource: identifier, ofType: "nib") != nil {
-                    internalRegisterNib()
-                } else {
-                    internalRegisterClass()
-                }
+            } else if let collectionView = listView as? UICollectionView {
+                // Validate if the cell is configured in storyboard
+                let dummyIndexPath = IndexPath(item: 0, section: 0)
+                _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
+                hasRegistered = true
             }
-        }
-        // swiftlint:enable cyclomatic_complexity
 
-        if Thread.isMainThread {
-            internalRegisterCell()
-        } else {
-            DispatchQueue.main.sync {
-                internalRegisterCell()
+            guard !hasRegistered else {
+                return
+            }
+
+            if bundle.path(forResource: identifier, ofType: "nib") != nil {
+                internalRegisterCellNib(identifier: identifier, bundle: bundle)
+            } else {
+                internalRegisterCellClass(type: type, identifier: identifier)
             }
         }
     }
-    // swiftlint:enable function_body_length
 
-    // swiftlint:disable function_body_length
+    @MainActor
+    private func internalRegisterCellNib(identifier: String,
+                                         bundle: Bundle) {
+        let nib = UINib(nibName: identifier, bundle: bundle)
+        if let tableView = listView as? UITableView {
+            tableView.register(nib, forCellReuseIdentifier: identifier)
+        } else if let collectionView = listView as? UICollectionView {
+            collectionView.register(nib, forCellWithReuseIdentifier: identifier)
+        }
+    }
+
+    @MainActor
+    private func internalRegisterCellClass<T: IQModelableCell>(type: T.Type,
+                                                               identifier: String) {
+        if let tableView = listView as? UITableView {
+            tableView.register(type.self, forCellReuseIdentifier: identifier)
+        } else if let collectionView = listView as? UICollectionView {
+            collectionView.register(type.self, forCellWithReuseIdentifier: identifier)
+        }
+    }
+
     /// register a supplementary view manually
     /// - Parameters:
     ///   - type: Type of the header
     ///   - bundle: The bundle in which the header is present.
+    nonisolated
     func registerSupplementaryView<T: UIView>(type: T.Type, kind: String,
                                               registerType: RegisterType,
                                               bundle: Bundle = .main) {
 
         let identifier = String(describing: type)
 
-        var existingTypes: [UIView.Type] = diffableDataSource.registeredSupplementaryViews[kind] ?? []
+        let existingTypes: [UIView.Type] = diffableDataSource.registeredSupplementaryViews[kind] ?? []
         guard existingTypes.contains(where: {$0 == type}) == false else {
             return
         }
 
-        func internalRegisterNib() {
-            let nib = UINib(nibName: identifier, bundle: bundle)
-            if let tableView = listView as? UITableView {
-                existingTypes.append(type)
-                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
-                tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
+        var newTypes: [UIView.Type] = existingTypes
+        newTypes.append(type)
+        diffableDataSource.registeredSupplementaryViews[kind] = newTypes
 
-            } else if let collectionView = listView as? UICollectionView {
-                existingTypes.append(type)
-                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
-                collectionView.register(nib, forSupplementaryViewOfKind: kind,
-                                        withReuseIdentifier: identifier)
-            }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            internalRegisterSupplementaryView(type: type, identifier: identifier,
+                                              kind: kind, registerType: registerType)
         }
+    }
 
-        func internalRegisterClass() {
+    @MainActor
+    private func internalRegisterSupplementaryView<T: UIView>(type: T.Type,
+                                                              identifier: String,
+                                                              kind: String,
+                                                              registerType: RegisterType,
+                                                              bundle: Bundle = .main) {
+
+        switch registerType {
+        case .storyboard:
+            // Manually added the entry since it's already registered
+            break
+        case .nib:
+            internalRegisterSupplementaryViewNib(type: type, identifier: identifier,
+                                                 kind: kind, bundle: bundle)
+        case .class:
+            internalRegisterSupplementaryViewClass(type: type, identifier: identifier,
+                                                   kind: kind)
+        case .default:
+
+            var hasRegistered = false
             if let tableView = listView as? UITableView {
-                existingTypes.append(type)
-                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
-                tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)
+                // Validate if the cell is configured in storyboard
+                if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
+                    hasRegistered = true
+                }
             } else if let collectionView = listView as? UICollectionView {
-                existingTypes.append(type)
-                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
-                collectionView.register(type.self,
-                                        forSupplementaryViewOfKind: kind,
-                                        withReuseIdentifier: identifier)
-            }
-        }
-
-        // swiftlint:disable cyclomatic_complexity
-        func internalRegisterSupplementaryView() {
-
-            switch registerType {
-            case .storyboard:
-                existingTypes.append(type)  // Just manually adding the entry
-                diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
-            case .nib:
-                internalRegisterNib()
-            case .class:
-                internalRegisterClass()
-            case .default:
-
-                var hasRegistered = false
-                if let tableView = listView as? UITableView {
-                    // Validate if the cell is configured in storyboard
-                    if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
-                        hasRegistered = true
-                    }
-                } else if let collectionView = listView as? UICollectionView {
-                    // Validate if the cell is configured in storyboard
+                // Validate if the cell is configured in storyboard
 #if canImport(SwiftTryCatch)
-                    SwiftTryCatch.try {
-                        let dummyIndexPath = IndexPath(item: 0, section: 0)
-                        _ = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                            withReuseIdentifier: identifier,
-                                                                            for: dummyIndexPath)
-                        hasRegistered = true
-                    } catch: { exception in
-                        if let exception = exception {
-                            if exception.name == NSExceptionName.internalInconsistencyException {
-
-                                let typeName: String = {
-                                    bundle.path(forResource: identifier, ofType: "nib") != nil ? "nib" : "class"
-                                }()
-
-                                // swiftlint:disable line_length
-                                print("""
-                                      IQListKit: To remove assertion failure log, please manually register cell using \
-                                      `list.registerSupplementaryView(type: \(identifier).self, kind: \(kind), registerType: .\(typeName))`
-                                      """)
-                                // swiftlint:enable line_length
-                            }
-                        }
-                    } finally: {
-                    }
-#else
+                SwiftTryCatch.try {
                     let dummyIndexPath = IndexPath(item: 0, section: 0)
                     _ = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                         withReuseIdentifier: identifier,
                                                                         for: dummyIndexPath)
                     hasRegistered = true
+                } catch: { exception in
+                    if let exception = exception {
+                        if exception.name == NSExceptionName.internalInconsistencyException {
+                            
+                            let typeName: String = {
+                                bundle.path(forResource: identifier, ofType: "nib") != nil ? "nib" : "class"
+                            }()
+                            
+                            // swiftlint:disable line_length
+                            print("""
+                                  IQListKit: To remove assertion failure log, please manually register cell using \
+                                  `list.registerSupplementaryView(type: \(identifier).self, kind: \(kind), registerType: .\(typeName))`
+                                  """)
+                            // swiftlint:enable line_length
+                        }
+                    }
+                } finally: {
+                }
+#else
+                do {
+                    let dummyIndexPath = IndexPath(item: 0, section: 0)
+                    _ = try collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                            withReuseIdentifier: identifier,
+                                                                            for: dummyIndexPath)
+                    hasRegistered = true
+                } catch {
+                    print(error)
+                }
 #endif
-                }
-
-                guard !hasRegistered else {
-                    existingTypes.append(type)
-                    diffableDataSource.registeredSupplementaryViews[kind] = existingTypes
-                    return
-                }
-
-                if bundle.path(forResource: identifier, ofType: "nib") != nil {
-                    internalRegisterNib()
-                } else {
-                    internalRegisterClass()
-                }
             }
-        }
-        // swiftlint:enable cyclomatic_complexity
 
-        if Thread.isMainThread {
-            internalRegisterSupplementaryView()
-        } else {
-            DispatchQueue.main.sync {
-                internalRegisterSupplementaryView()
+            guard !hasRegistered else {
+                return
+            }
+
+            if bundle.path(forResource: identifier, ofType: "nib") != nil {
+                internalRegisterSupplementaryViewNib(type: type, identifier: identifier,
+                                                     kind: kind, bundle: bundle)
+            } else {
+                internalRegisterSupplementaryViewClass(type: type, identifier: identifier,
+                                                       kind: kind)
             }
         }
     }
-    // swiftlint:enable function_body_length
+
+    @MainActor
+    private func internalRegisterSupplementaryViewNib<T: UIView>(type: T.Type,
+                                                                 identifier: String,
+                                                                 kind: String,
+                                                                 bundle: Bundle) {
+        let nib = UINib(nibName: identifier, bundle: bundle)
+        if let tableView = listView as? UITableView {
+            if type is UITableViewHeaderFooterView.Type {
+                tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
+            }
+        } else if let collectionView = listView as? UICollectionView {
+            if type is UICollectionReusableView.Type {
+                collectionView.register(nib, forSupplementaryViewOfKind: kind,
+                                        withReuseIdentifier: identifier)
+            }
+        }
+    }
+
+    @MainActor
+    private func internalRegisterSupplementaryViewClass<T: UIView>(type: T.Type,
+                                                                   identifier: String,
+                                                                   kind: String) {
+        if let tableView = listView as? UITableView {
+            if type is UITableViewHeaderFooterView.Type {
+                tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)
+            }
+        } else if let collectionView = listView as? UICollectionView {
+            if type is UICollectionReusableView.Type {
+                collectionView.register(type.self,
+                                        forSupplementaryViewOfKind: kind,
+                                        withReuseIdentifier: identifier)
+            }
+        }
+    }
 }

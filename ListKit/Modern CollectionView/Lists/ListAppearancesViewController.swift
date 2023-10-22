@@ -88,11 +88,11 @@ extension ListAppearancesViewController {
 extension ListAppearancesViewController {
     private func configureDataSource() {
 
-        list.registerCell(type: ListAppearanceHeaderCell.self, registerType: .class)
-        list.registerCell(type: ListAppearanceItemCell.self, registerType: .class)
+//        list.registerCell(type: ListAppearanceHeaderCell.self, registerType: .class)
+//        list.registerCell(type: ListAppearanceItemCell.self, registerType: .class)
 
         // initial data
-        var sectionSnapshot = IQList.IQDiffableDataSourceSnapshot()
+        var sectionSnapshot = IQDiffableDataSourceSnapshot()
 
         let sectionNumbers = Array(0..<5)
 
@@ -101,7 +101,7 @@ extension ListAppearancesViewController {
         list.apply(sectionSnapshot, animatingDifferences: false)
 
         for section in sectionNumbers {
-            var sectionSnapshot = IQList.IQDiffableDataSourceSectionSnapshot()
+            var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
             let headerItem = Item(title: "Section \(section)")
             let item = IQItem(ListAppearanceHeaderCell.self, model: headerItem)

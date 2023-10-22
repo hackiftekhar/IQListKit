@@ -26,6 +26,7 @@ internal extension Array where Element: Hashable {
 
     /// Return unique and duplicate elements from array (and an option to pass existing elements)
     @discardableResult
+    nonisolated
     func removeDuplicate(existingElements: [Element] = []) -> (unique: [Element], duplicate: [Element]) {
 
         var duplicate: [Element] = []
