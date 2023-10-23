@@ -270,8 +270,8 @@ public final class IQList: NSObject {
                 cell.setModel(item.model)
             } else {
                 print("""
-                    \(type(of: cell)) with identifier \(identifier) \
-                    does not confirm to the \(IQModelModifiable.self) protocol
+                    '\(type(of: cell))' with identifier '\(identifier)' \
+                    does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
 
@@ -319,8 +319,8 @@ public final class IQList: NSObject {
                 cell.setModel(item.model)
             } else {
                 print("""
-                    \(type(of: cell)) with identifier \(identifier) \
-                    does not confirm to the \(IQModelModifiable.self) protocol
+                    '\(type(of: cell))' with identifier '\(identifier)' \
+                    does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
 

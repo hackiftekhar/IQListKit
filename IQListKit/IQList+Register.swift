@@ -30,7 +30,7 @@ import SwiftTryCatch
 
 public extension IQList {
 
-    enum RegisterType {
+    enum RegisterType: Sendable {
         case `default`
         case nib
         case `class`
@@ -42,7 +42,7 @@ public extension IQList {
     ///   - type: Type of the cell
     ///   - bundle: The bundle in which the cell is present.
     ///   - registerType: The cell registration type
-    nonisolated
+    @MainActor
     func registerCell<T: IQModelableCell>(type: T.Type,
                                           registerType: RegisterType,
                                           bundle: Bundle = .main) {
@@ -55,13 +55,10 @@ public extension IQList {
 
         diffableDataSource.registeredCells.append(type)
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            internalRegisterCell(type: type,
-                                 identifier: identifier,
-                                 registerType: registerType,
-                                 bundle: bundle)
-        }
+        internalRegisterCell(type: type,
+                             identifier: identifier,
+                             registerType: registerType,
+                             bundle: bundle)
     }
 
     @MainActor
@@ -79,28 +76,39 @@ public extension IQList {
             internalRegisterCellClass(type: type, identifier: identifier)
         case .default:
 
-            var hasRegistered = false
-            if let tableView = listView as? UITableView {
-                // Validate if the cell is configured in storyboard
-                if tableView.dequeueReusableCell(withIdentifier: identifier) != nil {
-                    hasRegistered = true
-                    return
-                }
-            } else if let collectionView = listView as? UICollectionView {
-                // Validate if the cell is configured in storyboard
-                let dummyIndexPath = IndexPath(item: 0, section: 0)
-                _ = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: dummyIndexPath)
-                hasRegistered = true
-            }
-
-            guard !hasRegistered else {
-                return
-            }
-
             if bundle.path(forResource: identifier, ofType: "nib") != nil {
                 internalRegisterCellNib(identifier: identifier, bundle: bundle)
+                print("""
+                    Automatically registered nib of '\(type)' \
+                    with identifier '\(identifier)'
+                    """)
             } else {
-                internalRegisterCellClass(type: type, identifier: identifier)
+                if let tableView = listView as? UITableView {
+                    // Validate if the cell is configured in storyboard
+                    if tableView.dequeueReusableCell(withIdentifier: identifier) != nil {
+                        print("""
+                            Automatically registered '\(type)' \
+                            with identifier '\(identifier)' from storyboard'. \
+                            Make sure storyboard cell identifier is '\(identifier)'
+                            """)
+                    } else {
+                        internalRegisterCellClass(type: type, identifier: identifier)
+                        print("""
+                            Automatically registered class of '\(type)' \
+                            with identifier '\(identifier)'
+                            """)
+                    }
+                } else if (listView as? UICollectionView) != nil {
+                    internalRegisterCellClass(type: type, identifier: identifier)
+                    print("""
+                        Automatically registered class of '\(type)' \
+                        with identifier '\(identifier)' \
+                        If it's registered with storyboard then \
+                        manually register it using \
+                        'list.registerCell(type: \(identifier).self, registerType: .storyboard)'. \
+                        Also make sure storyboard cell identifier is '\(identifier)'.
+                        """)
+                }
             }
         }
     }
@@ -130,7 +138,7 @@ public extension IQList {
     /// - Parameters:
     ///   - type: Type of the header
     ///   - bundle: The bundle in which the header is present.
-    nonisolated
+    @MainActor
     func registerSupplementaryView<T: UIView>(type: T.Type, kind: String,
                                               registerType: RegisterType,
                                               bundle: Bundle = .main) {
@@ -172,62 +180,44 @@ public extension IQList {
                                                    kind: kind)
         case .default:
 
-            var hasRegistered = false
-            if let tableView = listView as? UITableView {
-                // Validate if the cell is configured in storyboard
-                if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
-                    hasRegistered = true
-                }
-            } else if let collectionView = listView as? UICollectionView {
-                // Validate if the cell is configured in storyboard
-#if canImport(SwiftTryCatch)
-                SwiftTryCatch.try {
-                    let dummyIndexPath = IndexPath(item: 0, section: 0)
-                    _ = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                        withReuseIdentifier: identifier,
-                                                                        for: dummyIndexPath)
-                    hasRegistered = true
-                } catch: { exception in
-                    if let exception = exception {
-                        if exception.name == NSExceptionName.internalInconsistencyException {
-                            
-                            let typeName: String = {
-                                bundle.path(forResource: identifier, ofType: "nib") != nil ? "nib" : "class"
-                            }()
-                            
-                            // swiftlint:disable line_length
-                            print("""
-                                  IQListKit: To remove assertion failure log, please manually register cell using \
-                                  `list.registerSupplementaryView(type: \(identifier).self, kind: \(kind), registerType: .\(typeName))`
-                                  """)
-                            // swiftlint:enable line_length
-                        }
-                    }
-                } finally: {
-                }
-#else
-                do {
-                    let dummyIndexPath = IndexPath(item: 0, section: 0)
-                    _ = try collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                            withReuseIdentifier: identifier,
-                                                                            for: dummyIndexPath)
-                    hasRegistered = true
-                } catch {
-                    print(error)
-                }
-#endif
-            }
-
-            guard !hasRegistered else {
-                return
-            }
-
             if bundle.path(forResource: identifier, ofType: "nib") != nil {
                 internalRegisterSupplementaryViewNib(type: type, identifier: identifier,
                                                      kind: kind, bundle: bundle)
+                print("""
+                    Automatically registered nib of '\(type)' \
+                    with identifier '\(identifier)' of kind '\(kind)'
+                    """)
             } else {
-                internalRegisterSupplementaryViewClass(type: type, identifier: identifier,
-                                                       kind: kind)
+
+                if let tableView = listView as? UITableView {
+                    // Validate cell is not configured in storyboard
+                    if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
+                        print("""
+                            Automatically registered '\(type)' \
+                            with identifier '\(identifier)' of kind '\(kind)' from storyboard'. \
+                            Make sure storyboard identifier is '\(identifier)'
+                            """)
+                    } else {
+                        internalRegisterSupplementaryViewClass(type: type, identifier: identifier,
+                                                               kind: kind)
+                        print("""
+                            Automatically registered class of '\(type)' \
+                            with identifier '\(identifier)' of kind '\(kind)'
+                            """)
+                    }
+                } else if (listView as? UICollectionView) != nil {
+
+                    internalRegisterSupplementaryViewClass(type: type, identifier: identifier,
+                                                           kind: kind)
+                    print("""
+                        Automatically registered class of '\(type)' \
+                        with identifier '\(identifier)' of kind '\(kind)'. \
+                        If it's registered with storyboard then \
+                        manually register it using \
+                        'list.registerSupplementaryView(type: \(identifier).self,
+                                       kind: \"\(kind)\", registerType: .storyboard)'
+                        """)
+                }
             }
         }
     }

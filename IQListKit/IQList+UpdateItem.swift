@@ -27,7 +27,7 @@ import Foundation
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
-    
+
     /// Append the models to the given section
     /// This method can also be used in background thread
     /// - Parameters:
@@ -43,11 +43,11 @@ public extension IQList {
         if cellRegisterType == .automatic {
             registerCell(type: type, registerType: .default)
         }
-        
+
         return snapshotWrapper.append(type, models: models, section: section,
                                       beforeItem: beforeItem, afterItem: afterItem)
     }
-    
+
     @discardableResult
     nonisolated
     func append<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, models: [T.Model],
@@ -59,12 +59,12 @@ public extension IQList {
         if cellRegisterType == .automatic {
             registerCell(type: type, registerType: .default)
         }
-        
+
         return snapshotWrapper.append(type, models: models,
                                       supplementaryType: supplementaryType, supplementaryModels: supplementaryModels,
                                       section: section, beforeItem: beforeItem, afterItem: afterItem)
     }
-    
+
     @discardableResult
     nonisolated
     func append(_ items: [IQItem],
@@ -73,7 +73,7 @@ public extension IQList {
                 afterItem: IQItem? = nil) -> [IQItem] {
         return snapshotWrapper.append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
     }
-    
+
     // We are deleting and adding new items because the batchSnapshot not able
     // to find existing element if they aren't equal. So to update an element we
     // remove the existing one and add the new one at same location.
@@ -83,7 +83,7 @@ public extension IQList {
                                     comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
         return snapshotWrapper.reload(type, models: models, comparator: comparator)
     }
-    
+
     @available(iOS 15.0, *)
     @discardableResult
     nonisolated
@@ -91,14 +91,14 @@ public extension IQList {
                                          comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
         return snapshotWrapper.reconfigure(type, models: models, comparator: comparator)
     }
-    
+
     @discardableResult
     nonisolated
     func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
         return snapshotWrapper.delete(type, models: models, comparator: comparator)
     }
-    
+
     nonisolated
     func deleteAllItems() {
         return snapshotWrapper.deleteAllItems()

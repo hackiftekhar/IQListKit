@@ -27,7 +27,7 @@ import Foundation
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
-    
+
     /// Appends a section to the list
     /// This method can also be used in background thread
     /// - Parameter sections: sections which needs to be added to the list
@@ -35,7 +35,7 @@ public extension IQList {
     func append(_ sections: [IQSection],
                 beforeSection: IQSection? = nil,
                 afterSection: IQSection? = nil) {
-        
+
         if cellRegisterType == .automatic {
             for section in sections {
                 if let headerType = section.headerType {
@@ -43,7 +43,7 @@ public extension IQList {
                                               kind: elementKindSectionHeader,
                                               registerType: .default)
                 }
-                
+
                 if let footerType = section.footerType {
                     registerSupplementaryView(type: footerType,
                                               kind: elementKindSectionFooter,
@@ -51,17 +51,17 @@ public extension IQList {
                 }
             }
         }
-        
+
         snapshotWrapper.append(sections,
                                beforeSection: beforeSection,
                                afterSection: afterSection)
     }
-    
+
     nonisolated
     func reload(_ sections: [IQSection]) {
         snapshotWrapper.reload(sections)
     }
-    
+
     nonisolated
     func delete(_ sections: [IQSection]) {
         snapshotWrapper.delete(sections)

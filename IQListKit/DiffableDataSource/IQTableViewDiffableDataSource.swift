@@ -27,14 +27,14 @@ import UIKit
 @MainActor
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
-    internal var registeredCells: [IQListCell.Type] = []
-    internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
+    @MainActor internal var registeredCells: [IQListCell.Type] = []
+    @MainActor internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
 
-    weak var proxyDelegate: IQListViewProxyDelegate?
-    weak var delegate: IQListViewDelegate?
-    weak var dataSource: IQListViewDataSource?
-    var clearsSelectionOnDidSelect = true
-    private var contextMenuPreviewIndexPath: IndexPath?
+    @MainActor weak var proxyDelegate: IQListViewProxyDelegate?
+    @MainActor weak var delegate: IQListViewDelegate?
+    @MainActor weak var dataSource: IQListViewDataSource?
+    @MainActor var clearsSelectionOnDidSelect = true
+    @MainActor private var contextMenuPreviewIndexPath: IndexPath?
 
     override init(tableView: UITableView, cellProvider: @escaping IQTableViewDiffableDataSource.CellProvider) {
         super.init(tableView: tableView, cellProvider: cellProvider)
@@ -410,8 +410,8 @@ extension IQTableViewDiffableDataSource {
                 }
             } else if supplementaryView != nil {
                 print("""
-                    \(type(of: supplementaryType)) with identifier \(identifier) \
-                    does not confirm to the \(IQModelModifiable.self) protocol
+                    '\(type(of: supplementaryType))' with identifier '\(identifier)' \
+                    does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
         } else if let headerView = aSection.headerView {
@@ -457,8 +457,8 @@ extension IQTableViewDiffableDataSource {
                 }
             } else if supplementaryView != nil {
                 print("""
-                    \(type(of: supplementaryType)) with identifier \(identifier) \
-                    does not confirm to the \(IQModelModifiable.self) protocol
+                    '\(type(of: supplementaryType))' with identifier '\(identifier)' \
+                    does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
         } else if let footerView = aSection.footerView {

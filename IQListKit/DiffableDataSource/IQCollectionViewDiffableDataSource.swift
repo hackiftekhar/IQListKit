@@ -27,15 +27,15 @@ import UIKit
 @MainActor
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
-    internal var registeredCells: [IQListCell.Type] = []
-    internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
+    @MainActor internal var registeredCells: [IQListCell.Type] = []
+    @MainActor internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
 
-    private var contextMenuPreviewIndexPath: IndexPath?
+    @MainActor private var contextMenuPreviewIndexPath: IndexPath?
 
-    weak var proxyDelegate: IQListViewProxyDelegate?
-    weak var delegate: IQListViewDelegate?
-    weak var dataSource: IQListViewDataSource?
-    var clearsSelectionOnDidSelect: Bool = true
+    @MainActor weak var proxyDelegate: IQListViewProxyDelegate?
+    @MainActor weak var delegate: IQListViewDelegate?
+    @MainActor weak var dataSource: IQListViewDataSource?
+    @MainActor var clearsSelectionOnDidSelect: Bool = true
 
     override init(collectionView: UICollectionView,
                   cellProvider: @escaping IQCollectionViewDiffableDataSource.CellProvider) {
@@ -104,7 +104,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                     identifier = ""
                     model = nil
                     print("""
-                        Header and Footer both are of same type \(headerType.self).
+                        Header and Footer both are of same type '\(headerType.self)'.
                         Please try registering different types for header and footer
                         """)
                 }
@@ -145,8 +145,8 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                 view.setModel(model)
             } else {
                 print("""
-                    \(kind) with identifier \(identifier) \
-                    does not confirm to the \(IQModelModifiable.self) protocol
+                    '\(kind)' with identifier '\(identifier)' \
+                    does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
             supplementaryView = view

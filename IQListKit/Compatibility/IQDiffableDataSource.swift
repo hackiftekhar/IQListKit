@@ -25,8 +25,8 @@ import UIKit
 @MainActor
 internal protocol IQDiffableDataSource where Self: UIScrollViewDelegate {
 
-    nonisolated var registeredCells: [IQListCell.Type] { get set }
-    nonisolated var registeredSupplementaryViews: [String: [UIView.Type]] { get set }
+    @MainActor var registeredCells: [IQListCell.Type] { get set }
+    @MainActor var registeredSupplementaryViews: [String: [UIView.Type]] { get set }
 
     @MainActor var proxyDelegate: IQListViewProxyDelegate? { get set }
     @MainActor var delegate: IQListViewDelegate? { get set }
@@ -69,7 +69,7 @@ extension IQCollectionViewDiffableDataSource: IQDiffableDataSource {
             return .automatic
         }
         set {
-            print("defaultRowAnimation \(newValue) is not supported in UICollectionView")
+            print("defaultRowAnimation '\(newValue)' is not supported in UICollectionView")
             // Not supported
         }
     }
