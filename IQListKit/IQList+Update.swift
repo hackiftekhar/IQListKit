@@ -47,14 +47,14 @@ public extension IQList {
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
     nonisolated
-    func reloadData(_ updates: @escaping () -> Void,
+    func reloadData(_ updates: @ReloadActor @escaping () -> Void,
                     updateExistingSnapshot: Bool = false,
                     animatingDifferences: Bool = true, diffing: Bool? = nil,
                     animation: UITableView.RowAnimation? = nil,
                     endLoadingOnCompletion: Bool = true,
                     completion: (() -> Void)? = nil) {
 
-        reloadQueue.async { [weak self] in
+        reloadQueue.async { @ReloadActor [weak self] in
             guard let self = self else { return }
 
             if updateExistingSnapshot {
@@ -126,7 +126,7 @@ public extension IQList {
                 completion?()
             }
         }
-        
+
         if let diffing = diffing {
             if #available(iOS 15.0, *), !animatingDifferences, !diffing {
                 diffableDataSource.applySnapshotUsingReloadData(snapshot,

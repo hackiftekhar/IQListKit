@@ -39,8 +39,9 @@ class MountainsViewController: UIViewController {
 
 extension MountainsViewController {
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (_: Int,
-            layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection in
+        // swiftlint:disable line_length
+        let layout = UICollectionViewCompositionalLayout { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection in
+            // swiftlint:enable line_length
             let contentSize = layoutEnvironment.container.effectiveContentSize
             let columns = contentSize.width > 800 ? 3 : 2
             let spacing = CGFloat(10)

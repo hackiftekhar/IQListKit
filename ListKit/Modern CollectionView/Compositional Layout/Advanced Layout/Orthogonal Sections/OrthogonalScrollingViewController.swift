@@ -95,7 +95,7 @@ extension OrthogonalScrollingViewController {
 
                 let numbers = Array(identifierOffset..<maxIdentifier)
                 var items: [TextCell.Model] = []
-                for (rowIndex, _) in numbers.enumerated() {
+                for rowIndex in numbers.indices {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)", cornerRadius: 8.0, badgeCount: nil))
                 }
 

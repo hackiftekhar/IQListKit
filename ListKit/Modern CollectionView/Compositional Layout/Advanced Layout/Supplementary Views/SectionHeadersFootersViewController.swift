@@ -71,10 +71,10 @@ extension SectionHeadersFootersViewController: IQListViewDelegateDataSource {
     private func configureDataSource() {
 
 //        list.registerCell(type: ListCell.self, registerType: .class)
-//        list.registerSupplementaryView(type: HeaderTitleSupplementaryView.self,
-//                                       kind: Self.sectionHeaderElementKind, registerType: .class)
-//        list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
-//                                       kind: Self.sectionFooterElementKind, registerType: .class)
+        list.registerSupplementaryView(type: HeaderTitleSupplementaryView.self,
+                                       kind: Self.sectionHeaderElementKind, registerType: .class)
+        list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
+                                       kind: Self.sectionFooterElementKind, registerType: .class)
 
         list.reloadData { [self] in
 

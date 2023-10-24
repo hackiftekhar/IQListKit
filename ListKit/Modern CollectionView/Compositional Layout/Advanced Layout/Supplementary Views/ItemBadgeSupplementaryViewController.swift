@@ -91,26 +91,32 @@ extension ItemBadgeSupplementaryViewController: IQListViewDelegateDataSource {
     private func configureDataSource() {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
-//        list.registerSupplementaryView(type: BadgeSupplementaryView.self,
-//                                       kind: Self.badgeElementKind, registerType: .class)
-//        list.registerSupplementaryView(type: HeaderTitleSupplementaryView.self,
-//                                       kind: Self.sectionHeaderElementKind, registerType: .class)
-//        list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
-//                                       kind: Self.sectionFooterElementKind, registerType: .class)
+        list.registerSupplementaryView(type: BadgeSupplementaryView.self,
+                                       kind: Self.badgeElementKind, registerType: .class)
+        list.registerSupplementaryView(type: HeaderTitleSupplementaryView.self,
+                                       kind: Self.sectionHeaderElementKind, registerType: .class)
+        list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
+                                       kind: Self.sectionFooterElementKind, registerType: .class)
 
         list.reloadData { [self] in
 
             let section = IQSection(identifier: Section.main,
-                                    headerType: HeaderTitleSupplementaryView.self, headerModel: Self.sectionHeaderElementKind,
-                                    footerType: FooterTitleSupplementaryView.self, footerModel: Self.sectionFooterElementKind)
+                                    headerType: HeaderTitleSupplementaryView.self,
+                                    headerModel: Self.sectionHeaderElementKind,
+                                    footerType: FooterTitleSupplementaryView.self,
+                                    footerModel: Self.sectionFooterElementKind)
             list.append([section])
 
             let models: [Model] = (0..<100).map { Model(title: "\($0)", badgeCount: Int.random(in: 0..<3)) }
 
             let badgeModels: [BadgeSupplementaryView.Model] = models.map { $0.badgeCount }
 
-            let items: [TextCell.Model] = models.map { .init(text: $0.title, cornerRadius: 8, badgeCount: $0.badgeCount) }
-            list.append(TextCell.self, models: items, supplementaryType: BadgeSupplementaryView.self, supplementaryModels: badgeModels)
+            let items: [TextCell.Model] = models.map {
+                .init(text: $0.title, cornerRadius: 8, badgeCount: $0.badgeCount)
+            }
+            list.append(TextCell.self, models: items,
+                        supplementaryType: BadgeSupplementaryView.self,
+                        supplementaryModels: badgeModels)
         }
     }
 }

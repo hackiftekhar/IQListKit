@@ -56,11 +56,11 @@ class ReorderableListViewController: UIViewController {
             if let coordinator = self.transitionCoordinator {
                 coordinator.animate(alongsideTransition: { _ in
                     self.collectionView.deselectItem(at: indexPath, animated: true)
-                }) { (context) in
+                }, completion: { (context) in
                     if context.isCancelled {
                         self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
                     }
-                }
+                })
             } else {
                 self.collectionView.deselectItem(at: indexPath, animated: animated)
             }
@@ -142,7 +142,7 @@ extension ReorderableListViewController {
 
     func configureDataSource() {
 
-//        list.registerCell(type: ReorderingListCell.self, registerType: .class)
+        list.registerCell(type: ReorderingListCell.self, registerType: .class)
 
         list.reorderingHandlers?.canReorderItem = { _ in return true }
         list.reorderingHandlers?.didReorder = { [weak self] transaction in
@@ -153,12 +153,14 @@ extension ReorderableListViewController {
 
             if self.reorderingMethod == .collectionDifference {
 
-                for sectionTransaction in transaction.sectionTransactions {
-                    if let sectionIdentifier = sectionTransaction.sectionIdentifier.identifier as? Section {
-                        if let previousSectionItems = self.backingStore[sectionIdentifier] {
-                           let previousItems = previousSectionItems.map { IQItem(ReorderingListCell.self, model: $0) }
-                            if let updatedSectionItems = previousItems.applying(sectionTransaction.difference) {
-                                self.backingStore[sectionIdentifier] = updatedSectionItems.compactMap({ $0.model as? Item })
+                for transaction in transaction.sectionTransactions {
+                    if let identifier = transaction.sectionIdentifier.identifier as? Section {
+                        if let previousItems = self.backingStore[identifier] {
+                           let previousItems = previousItems.map { IQItem(ReorderingListCell.self, model: $0) }
+                            if let updatedItems = previousItems.applying(transaction.difference) {
+                                self.backingStore[identifier] = updatedItems.compactMap({
+                                    $0.model as? Item
+                                })
                             }
                         }
                     }
@@ -168,9 +170,9 @@ extension ReorderableListViewController {
 
             } else if self.reorderingMethod == .finalSnapshot {
 
-                for sectionTransaction in transaction.sectionTransactions {
-                    if let sectionIdentifier = sectionTransaction.sectionIdentifier.identifier as? Section {
-                        let items: [Item] = sectionTransaction.finalSnapshot.items.compactMap({ $0.model as? Item })
+                for transaction in transaction.sectionTransactions {
+                    if let sectionIdentifier = transaction.sectionIdentifier.identifier as? Section {
+                        let items: [Item] = transaction.finalSnapshot.items.compactMap({ $0.model as? Item })
                         self.backingStore[sectionIdentifier] = items
                     }
                 }

@@ -166,6 +166,7 @@ public extension IQList {
         diffableDataSource.snapshot().itemIdentifiers.first(where: predicate)
     }
 
+    @MainActor
     func scrollTo(item: IQItem, at scrollPosition: IQList.ScrollPosition, animated: Bool) {
 
         guard let indexPath = indexPath(for: item) else {

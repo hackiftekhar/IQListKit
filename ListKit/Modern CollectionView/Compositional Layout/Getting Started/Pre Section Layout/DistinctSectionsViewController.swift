@@ -42,8 +42,9 @@ extension DistinctSectionsViewController {
     /// - Tag: PerSection
     func createLayout() -> UICollectionViewLayout {
 
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int,
-            _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        // swiftlint:disable line_length
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            // swiftlint:enable line_length
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let sectionLayoutKind = sectionIdentifier.identifier as? SectionLayoutKind else { return nil }

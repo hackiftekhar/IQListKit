@@ -53,7 +53,8 @@ class EmojiDetailViewController: UIViewController {
             // horizontal:
             emojiLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             emojiDescription.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            emojiDescription.leadingAnchor.constraint(greaterThanOrEqualTo: self.view.readableContentGuide.leadingAnchor)
+            emojiDescription.leadingAnchor.constraint(greaterThanOrEqualTo:
+                                                        self.view.readableContentGuide.leadingAnchor)
         ])
 
         // configure content

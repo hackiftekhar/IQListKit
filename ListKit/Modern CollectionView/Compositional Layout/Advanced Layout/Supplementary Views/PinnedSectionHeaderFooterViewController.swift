@@ -76,10 +76,10 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
     private func configureDataSource() {
 
 //        list.registerCell(type: ListCell.self, registerType: .class)
-//        list.registerSupplementaryView(type: HeaderTitleSupplementaryView.self,
-//                                       kind: Self.sectionHeaderElementKind, registerType: .class)
-//        list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
-//                                       kind: Self.sectionFooterElementKind, registerType: .class)
+        list.registerSupplementaryView(type: HeaderTitleSupplementaryView.self,
+                                       kind: Self.sectionHeaderElementKind, registerType: .class)
+        list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
+                                       kind: Self.sectionFooterElementKind, registerType: .class)
 
         list.reloadData { [self] in
 
@@ -99,7 +99,7 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
 
                 var items: [ListCell.Model] = []
-                for (rowIndex, _) in numbers.enumerated() {
+                for rowIndex in numbers.indices {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)"))
                 }
 

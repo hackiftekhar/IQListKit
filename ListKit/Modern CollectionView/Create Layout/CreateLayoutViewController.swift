@@ -8,6 +8,8 @@
 import UIKit
 import IQListKit
 
+// swiftlint:disable file_length
+
 extension NSDirectionalEdgeInsets: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine( self.top)
@@ -19,7 +21,8 @@ extension NSDirectionalEdgeInsets: Hashable {
 
 @available(iOS 14.0, *)
 protocol CreateLayoutViewControllerDelegate: AnyObject {
-    func createLayoutController(_ controller: CreateLayoutViewController, didUpdate layout: CreateLayoutViewController.Layout)
+    func createLayoutController(_ controller: CreateLayoutViewController,
+                                didUpdate layout: CreateLayoutViewController.Layout)
 }
 
 @available(iOS 14.0, *)
@@ -106,6 +109,8 @@ class CreateLayoutViewController: UIViewController {
             return group
         }
 
+        // swiftlint:disable cyclomatic_complexity
+        // swiftlint:disable function_body_length
         override func getCode() -> String {
             var code = ""
 
@@ -142,6 +147,7 @@ class CreateLayoutViewController: UIViewController {
 
             """
 
+            // swiftlint:disable line_length
             switch direction {
             case .vertical:
                 if count > 1 {
@@ -172,6 +178,7 @@ class CreateLayoutViewController: UIViewController {
             @unknown default:
                 break
             }
+            // swiftlint:enable line_length
 
             if !(interItemSpacing.isFixed && interItemSpacing.spacing == 0) {
                 code += "\ngroup.interItemSpacing = \(interItemSpacing.toString())"
@@ -185,6 +192,8 @@ class CreateLayoutViewController: UIViewController {
 
             return code
         }
+        // swiftlint:enable cyclomatic_complexity
+        // swiftlint:enable function_body_length
     }
 
     class Section {
@@ -267,7 +276,7 @@ class CreateLayoutViewController: UIViewController {
         navigationItem.title = "Create Layout"
         configureHierarchy()
 
-//        list.registerCell(type: CustomLayoutCell.self, registerType: .class)
+        list.registerCell(type: CustomLayoutCell.self, registerType: .class)
 
         let doneBarButton = UIBarButtonItem(systemItem: .done, primaryAction: UIAction(handler: { _ in
             self.delegate?.createLayoutController(self, didUpdate: self.layout)
@@ -311,19 +320,18 @@ extension CreateLayoutViewController {
     // swiftlint:disable comma
     private func reloadDataSource() {
 
-        let customizeSection: IQSection
+        var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
+        let expandedItems: [IQItem]
+        let customizeSection: IQSection
         if let section = list.snapshot().sectionIdentifiers.first {
             customizeSection = section
+            let existingSnapshot = list.snapshot(for: customizeSection)
+            expandedItems = existingSnapshot.items.compactMap { existingSnapshot.isExpanded($0) ? $0 : nil }
         } else {
             customizeSection = IQSection(identifier: "CreateLayout")
-            list.append([customizeSection])
+            expandedItems = []
         }
-
-        let existingSnapshot = list.snapshot(for: customizeSection)
-        let expandedItems: [IQItem] = existingSnapshot.items.compactMap { existingSnapshot.isExpanded($0) ? $0 : nil }
-
-        var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
         let layoutItem = IQItem(CustomLayoutCell.self, model: .init(path: "layout", title: "Layout", value: "", haveSubitems: true))
         sectionSnapshot.append([layoutItem])
@@ -550,3 +558,4 @@ extension String {
         return String(self.dropFirst(prefix.count))
     }
 }
+// swiftlint:enable file_length

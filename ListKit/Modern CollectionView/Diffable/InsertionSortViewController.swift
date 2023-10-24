@@ -180,7 +180,8 @@ final class InsertionSortViewController: UIViewController {
 
 extension InsertionSortViewController {
     func configureHierarchy() {
-        insertionCollectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
+        insertionCollectionView = UICollectionView(frame: view.bounds,
+                                                   collectionViewLayout: UICollectionViewFlowLayout())
         insertionCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(insertionCollectionView)
     }

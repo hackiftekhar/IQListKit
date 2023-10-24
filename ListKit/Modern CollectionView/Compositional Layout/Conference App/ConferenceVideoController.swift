@@ -42,6 +42,7 @@ class ConferenceVideoController {
 }
 
 extension ConferenceVideoController {
+    // swiftlint:disable function_body_length
     func generateCollections() {
         _collections = [
             VideoCollection(orthogonalScrollBehaviour: .continuous,
@@ -106,4 +107,5 @@ extension ConferenceVideoController {
                                            category: "Conference 2018", color: UIColor.systemOrange)])
                                     ]
     }
+    // swiftlint:enable function_body_length
 }

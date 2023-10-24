@@ -1,5 +1,5 @@
 //
-//  IQModelableHeader.swift
+//  IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,36 +23,32 @@
 import UIKit
 
 @MainActor
-public protocol IQModelableSupplementaryView: IQModelModifiable, IQViewSizeProvider
-where Self: UIView {
+extension IQCollectionViewDiffableDataSource: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        var items: [IQItem] = []
+        var itemIndexPaths: [IndexPath] = []
 
-    /// Dynamic model which should be implemented in cells confirming the IQModelableCell
-    associatedtype Model: Hashable & Sendable
+        indexPaths.forEach { indexPath in
+            if let item: IQItem = itemIdentifier(for: indexPath) {
+                items.append(item)
+                itemIndexPaths.append(indexPath)
+            }
+        }
 
-    /// model variable which will be used to configure the cell contents
-    var model: Model? { get set }
-}
-
-@MainActor
-public extension IQModelableSupplementaryView {
-
-    func setModel(_ model: AnyHashable) {
-        self.model = model as? Model
-    }
-}
-
-@MainActor
-public extension IQModelableSupplementaryView {
-
-    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
-        return size(for: model, listView: listView)
+        dataSource?.listView(collectionView, prefetch: items, at: itemIndexPaths)
     }
 
-    static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
-        return nil
-    }
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        var items: [IQItem] = []
+        var itemIndexPaths: [IndexPath] = []
 
-    static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int {
-        return 0
+        indexPaths.forEach { indexPath in
+            if let item: IQItem = itemIdentifier(for: indexPath) {
+                items.append(item)
+                itemIndexPaths.append(indexPath)
+            }
+        }
+
+        dataSource?.listView(collectionView, cancelPrefetch: items, at: itemIndexPaths)
     }
 }

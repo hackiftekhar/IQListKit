@@ -24,8 +24,8 @@ import UIKit
 
 // MARK: - IQListViewDelegate
 
-@MainActor
 @objc public protocol IQListViewProxyDelegate: AnyObject {
+    @MainActor
     @objc optional func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView)
 }
 

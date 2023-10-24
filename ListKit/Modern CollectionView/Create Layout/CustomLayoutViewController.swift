@@ -23,7 +23,7 @@ class CustomLayoutViewController: UIViewController {
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
     private lazy var createLayoutController = CreateLayoutViewController()
-    private lazy var createLayoutNavigationController = UINavigationController(rootViewController: createLayoutController)
+    private lazy var createLayoutNC = UINavigationController(rootViewController: createLayoutController)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +64,9 @@ extension CustomLayoutViewController {
                 let section = IQSection(identifier: aSection)
                 list.append([section])
 
-                let items: [TextCell.Model] = Array(0..<10).map { .init(text: "\(aSection.rawValue):\($0)", cornerRadius: 0, badgeCount: 0) }
+                let items: [TextCell.Model] = Array(0..<10).map {
+                    .init(text: "\(aSection.rawValue):\($0)", cornerRadius: 0, badgeCount: 0)
+                }
                 list.append(TextCell.self, models: items)
             }
         }
@@ -76,13 +78,13 @@ extension CustomLayoutViewController: CreateLayoutViewControllerDelegate, UIPopo
 
     @objc private func editLayout(_ button: UIBarButtonItem) {
         createLayoutController.layout = self.layout
-        createLayoutNavigationController.modalPresentationStyle = .popover
-        createLayoutNavigationController.popoverPresentationController?.barButtonItem = button
+        createLayoutNC.modalPresentationStyle = .popover
+        createLayoutNC.popoverPresentationController?.barButtonItem = button
 
         let heightWidth = max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-        createLayoutNavigationController.preferredContentSize = CGSize(width: heightWidth, height: heightWidth)
-        createLayoutNavigationController.popoverPresentationController?.delegate = self
-        self.present(createLayoutNavigationController, animated: true)
+        createLayoutNC.preferredContentSize = CGSize(width: heightWidth, height: heightWidth)
+        createLayoutNC.popoverPresentationController?.delegate = self
+        self.present(createLayoutNC, animated: true)
     }
 
     func createLayoutController(_ controller: CreateLayoutViewController,

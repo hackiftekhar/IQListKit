@@ -28,6 +28,7 @@ class CustomCellListViewController: UIViewController {
         }
         private let identifier = UUID()
 
+        // swiftlint:disable line_length
         static let all = [
             Item(category: .music, imageName: "headphones", title: "Headphones",
                  description: "A portable pair of earphones that are used to listen to music and other forms of audio."),
@@ -48,6 +49,7 @@ class CustomCellListViewController: UIViewController {
             Item(category: .weather, imageName: "snow", title: "Snow",
                  description: "Atmospheric water vapor frozen into ice crystals falling in light flakes.")
         ]
+        // swiftlint:enable line_length
     }
 
     private enum Section: Hashable {

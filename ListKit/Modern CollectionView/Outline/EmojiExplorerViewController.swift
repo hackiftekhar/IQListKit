@@ -55,11 +55,11 @@ class EmojiExplorerViewController: UIViewController {
             if let coordinator = self.transitionCoordinator {
                 coordinator.animate(alongsideTransition: { _ in
                     self.collectionView.deselectItem(at: indexPath, animated: true)
-                }) { (context) in
+                }, completion: { (context) in
                     if context.isCancelled {
                         self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
                     }
-                }
+                })
             } else {
                 self.collectionView.deselectItem(at: indexPath, animated: animated)
             }
@@ -84,16 +84,20 @@ extension EmojiExplorerViewController {
     /// - Tag: CreateFullLayout
     func createLayout() -> UICollectionViewLayout {
 
+        // swiftlint:disable line_length
         let sectionProvider = { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            // swiftlint:enable line_length
 
             let sectionIdentifier = self?.list.sectionIdentifiers[sectionIndex]
             guard let sectionKind = sectionIdentifier?.identifier as? Section else { return nil }
 
             switch sectionKind {
             case .recents:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .fractionalHeight(1.0))
                 let itemContentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.28), heightDimension: .fractionalWidth(0.2))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.28),
+                                                       heightDimension: .fractionalWidth(0.2))
 
                 let section = IQCollectionViewSectionLayout.sectionLayout(direction: .horizontal,
                                                                           itemSize: itemSize,
@@ -104,17 +108,20 @@ extension EmojiExplorerViewController {
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
                 return section
             case .outline:
-                let section = IQCollectionViewSectionLayout.listSectionLayout(appearance: .sidebar, layoutEnvironment: layoutEnvironment)
+                let section = IQCollectionViewSectionLayout.listSectionLayout(appearance: .sidebar,
+                                                                              layoutEnvironment: layoutEnvironment)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
                 return section
             case .list:
                 var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
                 configuration.leadingSwipeActionsConfigurationProvider = { [weak self] (indexPath) in
                     guard let self = self else { return nil }
-                    guard let item = self.list.itemIdentifier(for: indexPath), let model = item.model as? ListCell.Model else { return nil }
+                    guard let item = self.list.itemIdentifier(for: indexPath),
+                            let model = item.model as? ListCell.Model else { return nil }
                     return self.leadingSwipeActionConfigurationForListCellItem(model.item)
                 }
-                let section: NSCollectionLayoutSection = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+                let section = NSCollectionLayoutSection.list(using: configuration,
+                                                             layoutEnvironment: layoutEnvironment)
                 return section
             }
         }
@@ -127,8 +134,7 @@ extension EmojiExplorerViewController {
 
     func leadingSwipeActionConfigurationForListCellItem(_ item: Item) -> UISwipeActionsConfiguration? {
         let isStarred = self.starredEmojis.contains(item)
-        let starAction = UIContextualAction(style: .normal, title: nil) {
-            [weak self] (_, _, completion) in
+        let starAction = UIContextualAction(style: .normal, title: nil) { [weak self] (_, _, completion) in
             guard let self = self else {
                 completion(false)
                 return
@@ -151,7 +157,8 @@ extension EmojiExplorerViewController {
                         var accessories = [UICellAccessory.disclosureIndicator()]
                         if isStarred {
                             let star = UIImageView(image: UIImage(systemName: "star.fill"))
-                            accessories.append(.customView(configuration: .init(customView: star, placement: .trailing())))
+                            accessories.append(.customView(configuration: .init(customView: star,
+                                                                                placement: .trailing())))
                         }
                         cell.accessories = accessories
                     }
@@ -210,10 +217,12 @@ extension EmojiExplorerViewController {
     }
 
     class ListCell: UICollectionViewListCell, IQModelableCell {
+        // swiftlint:disable nesting
         struct Model: Hashable {
             let item: Item
             let isStarred: Bool
         }
+        // swiftlint:enable nesting
 
         var model: Model? {
             didSet {
@@ -236,10 +245,10 @@ extension EmojiExplorerViewController {
     /// - Tag: DequeueCells
     func configureDataSource() {
 
-//        list.registerCell(type: RecentCell.self, registerType: .class)
-//        list.registerCell(type: OutlineHeaderCell.self, registerType: .class)
-//        list.registerCell(type: OutlineEmojiCell.self, registerType: .class)
-//        list.registerCell(type: ListCell.self, registerType: .class)
+        list.registerCell(type: RecentCell.self, registerType: .class)
+        list.registerCell(type: OutlineHeaderCell.self, registerType: .class)
+        list.registerCell(type: OutlineEmojiCell.self, registerType: .class)
+        list.registerCell(type: ListCell.self, registerType: .class)
 
         // create registrations up front, then choose the appropriate one to use in the cell provider
 
@@ -265,7 +274,9 @@ extension EmojiExplorerViewController {
             for category in Emoji.Category.allCases where category != .recents {
                 // append to the "all items" snapshot
                 let allSnapshotItems = category.emojis.map { Item(emoji: $0) }
-                let allSnapshotListItems: [IQItem] = allSnapshotItems.map { IQItem(ListCell.self, model: .init(item: $0, isStarred: false)) }
+                let allSnapshotListItems: [IQItem] = allSnapshotItems.map {
+                    IQItem(ListCell.self, model: .init(item: $0, isStarred: false))
+                }
                 allSnapshot.append(allSnapshotListItems)
 
                 // setup our parent/child relations

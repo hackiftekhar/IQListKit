@@ -33,9 +33,11 @@ class NewsVideoCombinedViewController: UIViewController {
 }
 
 extension NewsVideoCombinedViewController {
+    // swiftlint:disable function_body_length
     func createLayout() -> UICollectionViewLayout {
-        let sectionProvider = { (sectionIndex: Int,
-                                 layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        // swiftlint:disable line_length
+        let sectionProvider = { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            // swiftlint:enable line_length
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let section = sectionIdentifier.identifier as? Section else { return nil }
@@ -98,6 +100,7 @@ extension NewsVideoCombinedViewController {
             sectionProvider: sectionProvider, configuration: config)
         return layout
     }
+    // swiftlint:enable function_body_length
 
     func configureHierarchy() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -121,8 +124,8 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
 //        }
 //        list.registerCell(type: ConferenceVideoCell.self, registerType: .class)
 //        list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
-//        list.registerSupplementaryView(type: TitleSupplementaryView.self,
-//                                       kind: Self.titleElementKind, registerType: .class)
+        list.registerSupplementaryView(type: TitleSupplementaryView.self,
+                                       kind: Self.titleElementKind, registerType: .class)
 
         list.reloadData { [self] in
 

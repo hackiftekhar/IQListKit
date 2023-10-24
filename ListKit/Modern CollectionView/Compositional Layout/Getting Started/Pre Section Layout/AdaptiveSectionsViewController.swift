@@ -42,9 +42,10 @@ class AdaptiveSectionsViewController: UIViewController {
 extension AdaptiveSectionsViewController {
     /// - Tag: Adaptive
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int,
-                                                            layoutEnvironment: NSCollectionLayoutEnvironment)
+        // swiftlint:disable line_length
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
             -> NSCollectionLayoutSection? in
+            // swiftlint:enable line_length
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let layoutKind = sectionIdentifier.identifier as? SectionLayoutKind else { return nil }

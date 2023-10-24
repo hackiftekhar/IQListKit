@@ -91,10 +91,15 @@ extension UserListTableViewController {
 
         list.reloadData({ [self] in
 
-//            let section1 = IQSection(identifier: "firstSection", headerSize: CGSize(width: list.listView.frame.width, height: 50))
-//            let section1 = IQSection(identifier: "firstSection", header: users.count > 0 ? "First Section" : nil)
+//            let headerSize: CGSize = CGSize(width: list.listView.frame.width, height: 50)
+//            let section1 = IQSection(identifier: "firstSection",
+//                                     headerSize: headerSize)
+//            let header: String? = users.count > 0 ? "First Section" : nil
+//            let section1 = IQSection(identifier: "firstSection",
+//                                     header: header)
             let section1 = IQSection(identifier: "firstSection",
-                                     headerType: EmptyHeaderView.self, headerModel: .init(identifier: "firstSection", height: 10),
+                                     headerType: EmptyHeaderView.self,
+                                     headerModel: .init(identifier: "firstSection", height: 10),
                                      footerType: EmptyTableHeaderFooterView.self, footerModel: "Footer Title")
 
             list.append([section1])
@@ -129,7 +134,8 @@ extension UserListTableViewController: IQListViewDelegateDataSource {
         }
     }
 
-    override func tableView(_ tableView: UITableView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView,
+                            shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
         return true
     }
 }

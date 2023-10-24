@@ -48,7 +48,7 @@ public extension IQModelableCell {
 public extension IQModelableCell {
 
     static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
-        return nil
+        return size(for: model, listView: listView)
     }
 
     static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {

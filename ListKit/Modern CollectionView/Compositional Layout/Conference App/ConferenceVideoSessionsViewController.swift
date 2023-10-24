@@ -26,8 +26,7 @@ class ConferenceVideoSessionsViewController: UIViewController {
 
 extension ConferenceVideoSessionsViewController {
     func createLayout() -> UICollectionViewLayout {
-        let sectionProvider = { (_: Int,
-                                 layoutEnvironment: NSCollectionLayoutEnvironment)
+        let sectionProvider = { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
             -> NSCollectionLayoutSection? in
 
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -81,8 +80,8 @@ extension ConferenceVideoSessionsViewController: IQListViewDelegateDataSource {
     private func configureDataSource() {
 
 //        list.registerCell(type: ConferenceVideoCell.self, registerType: .class)
-//        list.registerSupplementaryView(type: TitleSupplementaryView.self,
-//                                       kind: Self.titleElementKind, registerType: .class)
+        list.registerSupplementaryView(type: TitleSupplementaryView.self,
+                                       kind: Self.titleElementKind, registerType: .class)
 
         list.reloadData { [self] in
             videosController.collections.forEach {

@@ -30,8 +30,8 @@ class ItemListCell: UICollectionViewListCell, IQModelableCell {
 @available(iOS 14.0, *)
 extension UICellConfigurationState {
     var model: ItemListCell.Model? {
-        set { self[.model] = newValue }
         get { return self[.model] as? ItemListCell.Model }
+        set { self[.model] = newValue }
     }
 }
 

@@ -8,6 +8,8 @@
 import UIKit
 import IQListKit
 
+// swiftlint:disable file_length
+
 @available(iOS 14.0, *)
 protocol CustomLayoutCellDelegate: AnyObject {
     func collectionLayoutCell(_ cell: CustomLayoutCell, didChanged value: AnyHashable, at path: String)
@@ -85,19 +87,25 @@ class CustomLayoutCell: UICollectionViewListCell, IQModelableCell {
                 }
 
             case let value as NSDirectionalEdgeInsets:
-                contentConfiguration.secondaryText = "Top: \(value.top), Leading: \(value.leading), Bottom \(value.bottom), Trailing: \(value.trailing)"
+                contentConfiguration.secondaryText = """
+                                                    Top: \(value.top), \
+                                                    Leading: \(value.leading), \
+                                                    Bottom \(value.bottom), \
+                                                    Trailing: \(value.trailing)
+                                                    """
 
                 if let actions = allActions[.directionalEdgeInsets] {
                     newActions.append(contentsOf: actions)
                 }
             case let value as UICollectionLayoutSectionOrthogonalScrollingBehavior:
 
-                let supportedValues: [UICollectionLayoutSectionOrthogonalScrollingBehavior] = [.none,
-                                                                                               .continuous,
-                                                                                               .continuousGroupLeadingBoundary,
-                                                                                               .paging,
-                                                                                               .groupPaging,
-                                                                                               .groupPagingCentered]
+                typealias OrthogonalBehaviour = UICollectionLayoutSectionOrthogonalScrollingBehavior
+                let supportedValues: [OrthogonalBehaviour] = [.none,
+                                                              .continuous,
+                                                              .continuousGroupLeadingBoundary,
+                                                              .paging,
+                                                              .groupPaging,
+                                                              .groupPagingCentered]
                 let supportedValuesDisplay: [String] =  ["None", "Continuous",
                                                          "Continuous Group Leading Boundary",
                                                          "Paging",
@@ -226,8 +234,8 @@ extension CustomLayoutCell {
                 let supportedValues: [UICollectionView.ScrollDirection] = [.horizontal, .vertical]
                 var actions: [UIMenuElement] = []
                 for value in supportedValues {
-                    let identifier = option.rawValue + String(describing: value)
-                    let title = value == .horizontal ? "Horizontal" : "Vertical"
+                    let identifier: String = option.rawValue + String(describing: value)
+                    let title: String = value == .horizontal ? "Horizontal" : "Vertical"
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
                         updateValue(value: value)
                     })
@@ -240,8 +248,8 @@ extension CustomLayoutCell {
                 let supportedValues: [CGFloat] = [0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 150.0, 200.0, 300.0]
                 var actions: [UIAction] = []
                 for value in supportedValues {
-                    let identifier = option.rawValue + String(describing: value)
-                    let title = "\(value)"
+                    let identifier: String  = option.rawValue + String(describing: value)
+                    let title: String  = "\(value)"
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
                         updateValue(value: value)
                     })
@@ -254,8 +262,8 @@ extension CustomLayoutCell {
                 let supportedValues: [CGFloat] = [0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0]
                 var actions: [UIAction] = []
                 for value in supportedValues {
-                    let identifier = option.rawValue + String(describing: value)
-                    let title = "\(value)"
+                    let identifier: String  = option.rawValue + String(describing: value)
+                    let title: String  = "\(value)"
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
                         let value = NSDirectionalEdgeInsets(top: value, leading: value, bottom: value, trailing: value)
                         updateValue(value: value)
@@ -279,8 +287,8 @@ extension CustomLayoutCell {
                                                          "Group Paging Centered"]
                 var actions: [UIAction] = []
                 for (index, value) in supportedValues.enumerated() {
-                    let identifier = option.rawValue + String(describing: value)
-                    let title = supportedValuesDisplay[index]
+                    let identifier: String  = option.rawValue + String(describing: value)
+                    let title: String = supportedValuesDisplay[index]
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
                         updateValue(value: value)
                     })
@@ -304,7 +312,7 @@ extension CustomLayoutCell {
                 for direction in Direction.allCases {
                     var children: [UIMenuElement] = []
                     for dimension in LayoutDimension.allCases {
-                        var combinationActions = [UIAction]()
+                        var combinationActions: [UIAction] = []
 
                         let iteratorValues: [CGFloat]
 
@@ -316,8 +324,8 @@ extension CustomLayoutCell {
                         }
 
                         for value in iteratorValues {
-                            let identifier = option.rawValue + direction.rawValue + dimension.rawValue + String(describing: value)
-                            let title = "\(value)"
+                            let identifier: String = option.rawValue + direction.rawValue + dimension.rawValue + String(describing: value)
+                            let title: String = "\(value)"
                             let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
 
                                 let finalValue: NSCollectionLayoutDimension
@@ -332,17 +340,20 @@ extension CustomLayoutCell {
                                     finalValue = NSCollectionLayoutDimension.absolute(value)
                                 }
 
-                                if let modelValue = model?.value as? NSCollectionLayoutSize {
+                                if let modelValue: NSCollectionLayoutSize = model?.value as? NSCollectionLayoutSize {
 
                                     switch direction {
                                     case .all:
-                                        let value = NSCollectionLayoutSize(widthDimension: finalValue, heightDimension: finalValue)
+                                        let value: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: finalValue,
+                                                                                                   heightDimension: finalValue)
                                         updateValue(value: value)
                                     case .width:
-                                        let value = NSCollectionLayoutSize(widthDimension: finalValue, heightDimension: modelValue.heightDimension)
+                                        let value: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: finalValue,
+                                                                                                   heightDimension: modelValue.heightDimension)
                                         updateValue(value: value)
                                     case .height:
-                                        let value = NSCollectionLayoutSize(widthDimension: modelValue.widthDimension, heightDimension: finalValue)
+                                        let value: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: modelValue.widthDimension,
+                                                                                                   heightDimension: finalValue)
                                         updateValue(value: value)
                                     }
                                 }
@@ -377,8 +388,8 @@ extension CustomLayoutCell {
                     for dimension in Dimension.allCases {
                         var combinationActions = [UIAction]()
                         for value in absoluteValues {
-                            let identifier = option.rawValue + direction.rawValue + dimension.rawValue + String(describing: value)
-                            let title = "\(value)"
+                            let identifier: String = option.rawValue + direction.rawValue + dimension.rawValue + String(describing: value)
+                            let title: String = "\(value)"
                             let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
 
                                 let spacing: NSCollectionLayoutSpacing
@@ -440,8 +451,8 @@ extension CustomLayoutCell {
                     for dimension in Dimension.allCases {
                         var combinationActions = [UIAction]()
                         for value in absoluteValues {
-                            let identifier = option.rawValue + String(describing: value)
-                            let title = "\(value)"
+                            let identifier: String = option.rawValue + String(describing: value)
+                            let title: String = "\(value)"
                             let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
 
                                 let spacing: NSCollectionLayoutSpacing
@@ -467,8 +478,8 @@ extension CustomLayoutCell {
                 let supportedValues: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                 var actions: [UIAction] = []
                 for value in supportedValues {
-                    let identifier = option.rawValue + String(describing: value)
-                    let title = "\(value)"
+                    let identifier: String = option.rawValue + String(describing: value)
+                    let title: String = "\(value)"
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
                         updateValue(value: value)
                     })
@@ -480,8 +491,8 @@ extension CustomLayoutCell {
 
                 var actions: [UIAction] = []
                 for value in ItemType.allCases {
-                    let identifier = option.rawValue + String(describing: value)
-                    let title = "\(value.rawValue)"
+                    let identifier: String = option.rawValue + String(describing: value)
+                    let title: String = "\(value.rawValue)"
                     let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), handler: { [self] _ in
                         updateValue(value: value)
                     })
@@ -491,8 +502,8 @@ extension CustomLayoutCell {
                 allActions[option] = actions
             case .removeItem:
 
-                let identifier = option.rawValue + "Remove Item"
-                let title = "Remove Item"
+                let identifier: String = option.rawValue + "Remove Item"
+                let title: String = "Remove Item"
                 let action: UIAction = UIAction(title: title, image: nil, identifier: .init(identifier), attributes: .destructive, handler: { [self] _ in
                     updateValue(value: EditingAction.removeItem)
                 })
@@ -527,3 +538,4 @@ extension CustomLayoutCell {
         case removeItem
     }
 }
+// swiftlint:enable file_length

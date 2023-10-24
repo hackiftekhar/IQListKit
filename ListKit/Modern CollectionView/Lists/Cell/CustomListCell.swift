@@ -16,9 +16,11 @@ class CustomListCell: ItemListCell {
 
     private let categoryIconView = UIImageView()
     private let categoryLabel = UILabel()
+    // swiftlint:disable large_tuple
     private var customViewConstraints: (categoryLabelLeading: NSLayoutConstraint,
                                         categoryLabelTrailing: NSLayoutConstraint,
                                         categoryIconTrailing: NSLayoutConstraint)?
+    // swiftlint:enable large_tuple
 
     override var model: ItemListCell.Model? {
         didSet {
@@ -34,12 +36,13 @@ class CustomListCell: ItemListCell {
         contentView.addSubview(categoryLabel)
         contentView.addSubview(categoryIconView)
         listContentView.translatesAutoresizingMaskIntoConstraints = false
-        let defaultHorizontalCompressionResistance = listContentView.contentCompressionResistancePriority(for: .horizontal)
-        listContentView.setContentCompressionResistancePriority(defaultHorizontalCompressionResistance - 1, for: .horizontal)
+        let hCResistance = listContentView.contentCompressionResistancePriority(for: .horizontal)
+        listContentView.setContentCompressionResistancePriority(hCResistance - 1, for: .horizontal)
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryIconView.translatesAutoresizingMaskIntoConstraints = false
+        let listTrailing = listContentView.trailingAnchor
         let constraints = (
-            categoryLabelLeading: categoryLabel.leadingAnchor.constraint(greaterThanOrEqualTo: listContentView.trailingAnchor),
+            categoryLabelLeading: categoryLabel.leadingAnchor.constraint(greaterThanOrEqualTo: listTrailing),
             categoryLabelTrailing: categoryIconView.leadingAnchor.constraint(equalTo: categoryLabel.trailingAnchor),
             categoryIconTrailing: contentView.trailingAnchor.constraint(equalTo: categoryIconView.trailingAnchor)
         )
@@ -88,13 +91,15 @@ class CustomListCell: ItemListCell {
         // copying some of the styling from the value cell configuration.
         categoryIconView.image = state.model?.category.icon
         categoryIconView.tintColor = valueConfiguration.imageProperties.resolvedTintColor(for: tintColor)
-        categoryIconView.preferredSymbolConfiguration = .init(font: valueConfiguration.secondaryTextProperties.font, scale: .small)
+        let font = valueConfiguration.secondaryTextProperties.font
+        categoryIconView.preferredSymbolConfiguration = .init(font: font, scale: .small)
 
         // Configure custom label for the category name, copying some of the styling from the value cell configuration.
         categoryLabel.text = state.model?.category.name
         categoryLabel.textColor = valueConfiguration.secondaryTextProperties.resolvedColor()
         categoryLabel.font = valueConfiguration.secondaryTextProperties.font
-        categoryLabel.adjustsFontForContentSizeCategory = valueConfiguration.secondaryTextProperties.adjustsFontForContentSizeCategory
+        let category = valueConfiguration.secondaryTextProperties.adjustsFontForContentSizeCategory
+        categoryLabel.adjustsFontForContentSizeCategory = category
 
         // Update some of the constraints for our custom views using the system default metrics from the configurations.
         customViewConstraints?.categoryLabelLeading.constant = content.directionalLayoutMargins.trailing

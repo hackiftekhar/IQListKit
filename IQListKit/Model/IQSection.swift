@@ -54,6 +54,46 @@ public struct IQSection: Hashable, @unchecked Sendable {
     public private(set) var headerModel: AnyHashable?
     public private(set) var footerModel: AnyHashable?
 
+    public init<H: IQModelableSupplementaryView,
+                F: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 headerType: H.Type, headerModel: H.Model,
+                                                 footerType: F.Type, footerModel: F.Model) {
+        self.identifier = identifier
+        self.headerType = headerType
+        self.headerModel = headerModel
+        self.footerType = footerType
+        self.footerModel = footerModel
+    }
+
+    public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 headerType: H.Type, headerModel: H.Model,
+                                                 footer: String? = nil, footerSize: CGSize? = nil) {
+        self.identifier = identifier
+
+        self.headerType = headerType
+        self.headerModel = headerModel
+
+        if let footer = footer {
+            footerType = IQSupplementaryViewPlaceholder.self
+            footerModel = footer
+        }
+    }
+
+    public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
+                                                 header: String? = nil, headerSize: CGSize? = nil,
+                                                 footerType: F.Type, footerModel: F.Model) {
+        self.identifier = identifier
+
+        if let header = header {
+            headerType = IQSupplementaryViewPlaceholder.self
+            headerModel = header
+        }
+        self.headerSize = headerSize
+
+        self.footerType = footerType
+        self.footerModel = footerModel
+    }
+
     /// Initialization
     /// - Parameters:
     ///   - identifier: section identifier
@@ -61,6 +101,29 @@ public struct IQSection: Hashable, @unchecked Sendable {
     ///   - headerSize: header size
     ///   - footer: footer text to display
     ///   - footerSize: footer size
+    public init(identifier: AnyHashable,
+                header: String? = nil, headerSize: CGSize? = nil,
+                footer: String? = nil, footerSize: CGSize? = nil) {
+        self.identifier = identifier
+
+        if let header = header {
+            headerType = IQSupplementaryViewPlaceholder.self
+            headerModel = header
+        }
+        self.headerSize = headerSize
+
+        if let footer = footer {
+            footerType = IQSupplementaryViewPlaceholder.self
+            footerModel = footer
+        }
+        self.footerSize = footerSize
+    }
+}
+
+extension IQSection {
+
+    @available(*, deprecated, message: "Using headerView or footerView is deprecated.",
+                renamed: "init(identifier:header:headerSize:footer:footerSize:)")
     public init(identifier: AnyHashable,
                 header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
                 footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
@@ -82,6 +145,8 @@ public struct IQSection: Hashable, @unchecked Sendable {
         self.footerSize = footerSize
     }
 
+    @available(*, deprecated, message: "Using footerView is deprecated.",
+                renamed: "init(identifier:headerType:headerModel:footer:footerSize:)")
     public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  headerType: H.Type, headerModel: H.Model,
                                                  footer: String? = nil, footerView: UIView? = nil,
@@ -98,6 +163,8 @@ public struct IQSection: Hashable, @unchecked Sendable {
         self.footerSize = footerSize
     }
 
+    @available(*, deprecated, message: "Using headerView is deprecated.",
+                renamed: "init(identifier:header:headerSize:footerType:footerModel:)")
     public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  header: String? = nil, headerView: UIView? = nil,
                                                  headerSize: CGSize? = nil,
@@ -111,17 +178,6 @@ public struct IQSection: Hashable, @unchecked Sendable {
         }
         self.headerSize = headerSize
 
-        self.footerType = footerType
-        self.footerModel = footerModel
-    }
-
-    public init<H: IQModelableSupplementaryView,
-                F: IQModelableSupplementaryView>(identifier: AnyHashable,
-                                                 headerType: H.Type, headerModel: H.Model,
-                                                 footerType: F.Type, footerModel: F.Model) {
-        self.identifier = identifier
-        self.headerType = headerType
-        self.headerModel = headerModel
         self.footerType = footerType
         self.footerModel = footerModel
     }

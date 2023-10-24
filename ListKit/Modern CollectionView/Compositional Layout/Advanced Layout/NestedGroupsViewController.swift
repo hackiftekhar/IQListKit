@@ -93,7 +93,7 @@ extension NestedGroupsViewController {
             let numbers = Array(0..<100)
 
             var items: [TextCell.Model] = []
-            for (rowIndex, _) in numbers.enumerated() {
+            for rowIndex in numbers.indices {
                 items.append(.init(text: "\(0),\(rowIndex)", cornerRadius: 8.0, badgeCount: nil))
             }
 

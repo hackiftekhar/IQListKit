@@ -26,28 +26,32 @@ import Foundation
 /// Note that all these methods can also be used in a background threads since they all
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
+@ReloadActor
 public extension IQList {
 
     /// Appends a section to the list
     /// This method can also be used in background thread
     /// - Parameter sections: sections which needs to be added to the list
-    nonisolated
     func append(_ sections: [IQSection],
                 beforeSection: IQSection? = nil,
                 afterSection: IQSection? = nil) {
 
         if cellRegisterType == .automatic {
-            for section in sections {
-                if let headerType = section.headerType {
-                    registerSupplementaryView(type: headerType,
-                                              kind: elementKindSectionHeader,
-                                              registerType: .default)
-                }
+            IQList.dispatchMainSync {
+                for section in sections {
+                    if let headerType = section.headerType {
+                        internalRegisterSupplementaryView(type: headerType,
+                                                          kind: elementKindSectionHeader,
+                                                          registerType: .default,
+                                                          bundle: .main, logEnabled: true)
+                    }
 
-                if let footerType = section.footerType {
-                    registerSupplementaryView(type: footerType,
-                                              kind: elementKindSectionFooter,
-                                              registerType: .default)
+                    if let footerType = section.footerType {
+                        internalRegisterSupplementaryView(type: footerType,
+                                                          kind: elementKindSectionFooter,
+                                                          registerType: .default,
+                                                          bundle: .main, logEnabled: true)
+                    }
                 }
             }
         }
@@ -57,12 +61,10 @@ public extension IQList {
                                afterSection: afterSection)
     }
 
-    nonisolated
     func reload(_ sections: [IQSection]) {
         snapshotWrapper.reload(sections)
     }
 
-    nonisolated
     func delete(_ sections: [IQSection]) {
         snapshotWrapper.delete(sections)
     }

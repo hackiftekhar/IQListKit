@@ -1,12 +1,28 @@
 //
 //  IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift
-//  IQListKit
+//  https://github.com/hackiftekhar/IQListKit
 //
-//  Created by Iftekhar on 10/22/23.
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
 //
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 import UIKit
 
+@ReloadActor
 extension IQDiffableDataSourceSnapshotWrapper {
 
     /// Append the models to the given section
@@ -16,7 +32,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
     ///   - models: the models of type IQModelableCell.Model
     ///   - section: section in which we'll be adding the models
     @discardableResult
-    nonisolated
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     section: IQSection? = nil,
                                     beforeItem: IQItem? = nil, afterItem: IQItem? = nil) -> [IQItem] {
@@ -30,7 +45,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
     }
 
     @discardableResult
-    nonisolated
     func append<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, models: [T.Model],
                                                                      supplementaryType: S.Type,
                                                                      supplementaryModels: [S.Model],
@@ -48,7 +62,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
     }
 
     @discardableResult
-    nonisolated
     func append(_ items: [IQItem],
                 section: IQSection? = nil,
                 beforeItem: IQItem? = nil, afterItem: IQItem? = nil) -> [IQItem] {
@@ -81,7 +94,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
     // to find existing element if they aren't equal. So to update an element we
     // remove the existing one and add the new one at same location.
     @discardableResult
-    nonisolated
     func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
 
@@ -117,7 +129,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
 
     @available(iOS 15.0, *)
     @discardableResult
-    nonisolated
     func reconfigure<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                          comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
 
@@ -142,7 +153,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
     }
 
     @discardableResult
-    nonisolated
     func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
 
@@ -167,7 +177,6 @@ extension IQDiffableDataSourceSnapshotWrapper {
         return deletedItems
     }
 
-    nonisolated
     func deleteAllItems() {
         batchSnapshot.deleteAllItems()
     }

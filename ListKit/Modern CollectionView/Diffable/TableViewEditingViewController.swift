@@ -97,7 +97,10 @@ extension TableViewEditingViewController {
 
     func configureNavigationItem() {
         navigationItem.title = "UITableView: Editing"
-        let editingItem = UIBarButtonItem(title: tableView.isEditing ? "Done" : "Edit", style: .plain, target: self, action: #selector(toggleEditing))
+        let title: String = tableView.isEditing ? "Done" : "Edit"
+        let editingItem = UIBarButtonItem(title: title,
+                                          style: .plain, target: self,
+                                          action: #selector(toggleEditing))
         navigationItem.rightBarButtonItems = [editingItem]
     }
 
@@ -143,7 +146,7 @@ extension TableViewEditingViewController: IQListViewDelegateDataSource {
             bucketList.insert(sourceMountain, at: destinationIndexPath.row)
         }
 
-        reloadDataSource()
+//        reloadDataSource()
     }
 
     func listView(_ listView: IQListView, commit item: IQItem,

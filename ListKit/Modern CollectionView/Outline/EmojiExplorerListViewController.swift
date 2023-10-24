@@ -41,11 +41,11 @@ class EmojiExplorerListViewController: UIViewController {
             if let coordinator = self.transitionCoordinator {
                 coordinator.animate(alongsideTransition: { _ in
                     self.collectionView.deselectItem(at: indexPath, animated: true)
-                }) { (context) in
+                }, completion: { (context) in
                     if context.isCancelled {
                         self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
                     }
-                }
+                })
             } else {
                 self.collectionView.deselectItem(at: indexPath, animated: animated)
             }

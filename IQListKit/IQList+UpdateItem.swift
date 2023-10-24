@@ -26,7 +26,18 @@ import Foundation
 /// Note that all these methods can also be used in a background threads since they all
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
+@ReloadActor
 public extension IQList {
+
+    @preconcurrency
+    nonisolated
+    internal static func dispatchMainSync<T>(action: @Sendable () -> T) -> T {
+       if Thread.isMainThread {
+           return action()
+       } else {
+           return DispatchQueue.main.sync(execute: action)
+       }
+    }
 
     /// Append the models to the given section
     /// This method can also be used in background thread
@@ -35,13 +46,16 @@ public extension IQList {
     ///   - models: the models of type IQModelableCell.Model
     ///   - section: section in which we'll be adding the models
     @discardableResult
-    nonisolated
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     section: IQSection? = nil,
                                     beforeItem: IQItem? = nil,
                                     afterItem: IQItem? = nil) -> [IQItem] {
         if cellRegisterType == .automatic {
-            registerCell(type: type, registerType: .default)
+
+            IQList.dispatchMainSync {
+                internalRegisterCell(type: type, registerType: .default,
+                                     bundle: .main, logEnabled: true)
+            }
         }
 
         return snapshotWrapper.append(type, models: models, section: section,
@@ -49,7 +63,6 @@ public extension IQList {
     }
 
     @discardableResult
-    nonisolated
     func append<T: IQModelableCell, S: IQModelableSupplementaryView>(_ type: T.Type, models: [T.Model],
                                                                      supplementaryType: S.Type,
                                                                      supplementaryModels: [S.Model],
@@ -57,7 +70,10 @@ public extension IQList {
                                                                      beforeItem: IQItem? = nil,
                                                                      afterItem: IQItem? = nil) -> [IQItem] {
         if cellRegisterType == .automatic {
-            registerCell(type: type, registerType: .default)
+            IQList.dispatchMainSync {
+                internalRegisterCell(type: type, registerType: .default,
+                                     bundle: .main, logEnabled: true)
+            }
         }
 
         return snapshotWrapper.append(type, models: models,
@@ -66,7 +82,6 @@ public extension IQList {
     }
 
     @discardableResult
-    nonisolated
     func append(_ items: [IQItem],
                 section: IQSection? = nil,
                 beforeItem: IQItem? = nil,
@@ -78,7 +93,6 @@ public extension IQList {
     // to find existing element if they aren't equal. So to update an element we
     // remove the existing one and add the new one at same location.
     @discardableResult
-    nonisolated
     func reload<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
         return snapshotWrapper.reload(type, models: models, comparator: comparator)
@@ -86,20 +100,17 @@ public extension IQList {
 
     @available(iOS 15.0, *)
     @discardableResult
-    nonisolated
     func reconfigure<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                          comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
         return snapshotWrapper.reconfigure(type, models: models, comparator: comparator)
     }
 
     @discardableResult
-    nonisolated
     func delete<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     comparator: (T.Model, T.Model) -> Bool) -> [IQItem] {
         return snapshotWrapper.delete(type, models: models, comparator: comparator)
     }
 
-    nonisolated
     func deleteAllItems() {
         return snapshotWrapper.deleteAllItems()
     }

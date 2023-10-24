@@ -69,8 +69,9 @@ extension OrthogonalScrollBehaviorViewController {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.interSectionSpacing = 20
 
-        let layout = UICollectionViewCompositionalLayout(sectionProvider: {
-            (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        // swiftlint:disable line_length
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            // swiftlint:enable line_length
 
             let sectionIdentifier = self.list.sectionIdentifiers[sectionIndex]
             guard let sectionKind = sectionIdentifier.identifier as? SectionKind else { return nil }
@@ -119,7 +120,9 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
     private func configureDataSource() {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
-//        list.registerSupplementaryView(type: TitleSupplementaryView.self, kind: Self.headerElementKind, registerType: .class)
+        list.registerSupplementaryView(type: TitleSupplementaryView.self,
+                                       kind: Self.headerElementKind,
+                                       registerType: .class)
 
         list.reloadData { [self] in
 
@@ -129,7 +132,9 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
             for (sectionIndex, section) in SectionKind.allCases.enumerated() {
 
                 let headerModel = "." + String(describing: section)
-                let section = IQSection(identifier: section, headerType: TitleSupplementaryView.self, headerModel: headerModel)
+                let section = IQSection(identifier: section,
+                                        headerType: TitleSupplementaryView.self,
+                                        headerModel: headerModel)
                 list.append([section])
 
                 let maxIdentifier = identifierOffset + itemsPerSection
@@ -137,7 +142,7 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
                 let numbers = Array(identifierOffset..<maxIdentifier)
 
                 var items: [TextCell.Model] = []
-                for (rowIndex, _) in numbers.enumerated() {
+                for rowIndex in numbers.indices {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)", cornerRadius: 8.0, badgeCount: nil))
                 }
 

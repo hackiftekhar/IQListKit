@@ -63,7 +63,9 @@ class ListAppearancesViewController: UIViewController {
         case .insetGrouped: title = "Inset Grouped"
         default:    title = ""
         }
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(changeListAppearance))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain,
+                                                            target: self,
+                                                            action: #selector(changeListAppearance))
     }
 }
 
@@ -88,8 +90,8 @@ extension ListAppearancesViewController {
 extension ListAppearancesViewController {
     private func configureDataSource() {
 
-//        list.registerCell(type: ListAppearanceHeaderCell.self, registerType: .class)
-//        list.registerCell(type: ListAppearanceItemCell.self, registerType: .class)
+        list.registerCell(type: ListAppearanceHeaderCell.self, registerType: .class)
+        list.registerCell(type: ListAppearanceItemCell.self, registerType: .class)
 
         // initial data
         var sectionSnapshot = IQDiffableDataSourceSnapshot()
@@ -108,7 +110,8 @@ extension ListAppearancesViewController {
             sectionSnapshot.append([item])
 
             let childItems = Array(0..<3).map { Item(title: "Item \($0)") }
-            let listItems = childItems.map { IQItem(ListAppearanceItemCell.self, model: .init(item: $0, appearance: appearance)) }
+            let listItems = childItems.map { IQItem(ListAppearanceItemCell.self,
+                                                    model: .init(item: $0, appearance: appearance)) }
             sectionSnapshot.append(listItems, to: item)
 
             sectionSnapshot.expand([item])
