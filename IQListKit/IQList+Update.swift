@@ -65,9 +65,36 @@ public extension IQList {
 
             updates()
 
-            privateApply(snapshotWrapper.batchSnapshot, animatingDifferences: animatingDifferences,
-                         diffing: diffing, animation: animation,
-                         endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
+            let finalBatchSnapshot: IQDiffableDataSourceSnapshot = snapshotWrapper.batchSnapshot
+            let newCells = snapshotWrapper.newCells
+            let newSupplementaryViews = snapshotWrapper.newSupplementaryViews
+
+            snapshotWrapper.newCells = []
+            snapshotWrapper.newSupplementaryViews = [:]
+
+            if newCells.isEmpty && newSupplementaryViews.isEmpty {
+                privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
+                             diffing: diffing, animation: animation,
+                             endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
+            } else if cellRegisterType == .manual {
+                privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
+                             diffing: diffing, animation: animation,
+                             endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
+            } else {
+                DispatchQueue.main.async { @MainActor [weak self] in
+                    guard let self = self else { return }
+
+                    register(newCells: newCells, newSupplementaryViews: newSupplementaryViews)
+
+                    reloadQueue.async { [weak self] in
+                        guard let self = self else { return }
+
+                        privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
+                                     diffing: diffing, animation: animation,
+                                     endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
+                    }
+                }
+            }
         }
     }
 

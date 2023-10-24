@@ -36,26 +36,6 @@ public extension IQList {
                 beforeSection: IQSection? = nil,
                 afterSection: IQSection? = nil) {
 
-        if cellRegisterType == .automatic {
-            IQList.dispatchMainSync {
-                for section in sections {
-                    if let headerType = section.headerType {
-                        internalRegisterSupplementaryView(type: headerType,
-                                                          kind: elementKindSectionHeader,
-                                                          registerType: .default,
-                                                          bundle: .main, logEnabled: true)
-                    }
-
-                    if let footerType = section.footerType {
-                        internalRegisterSupplementaryView(type: footerType,
-                                                          kind: elementKindSectionFooter,
-                                                          registerType: .default,
-                                                          bundle: .main, logEnabled: true)
-                    }
-                }
-            }
-        }
-
         snapshotWrapper.append(sections,
                                beforeSection: beforeSection,
                                afterSection: afterSection)

@@ -35,10 +35,11 @@ extension IQDiffableDataSourceSnapshotWrapper {
     func append<T: IQModelableCell>(_ type: T.Type, models: [T.Model],
                                     section: IQSection? = nil,
                                     beforeItem: IQItem? = nil, afterItem: IQItem? = nil) -> [IQItem] {
-        var items: [IQItem] = []
-        for model in models {
-            let item = IQItem(type, model: model)
-            items.append(item)
+        let items: [IQItem] = models.map { IQItem(type, model: $0) }
+
+        if registeredCells.contains(where: { $0 == type}) == false,
+            newCells.contains(where: { $0 == type}) == false {
+            newCells.append(type)
         }
 
         return append(items, section: section, beforeItem: beforeItem, afterItem: afterItem)
@@ -51,6 +52,12 @@ extension IQDiffableDataSourceSnapshotWrapper {
                                                                      section: IQSection? = nil,
                                                                      beforeItem: IQItem? = nil,
                                                                      afterItem: IQItem? = nil) -> [IQItem] {
+
+        if registeredCells.contains(where: { $0 == type}) == false,
+            newCells.contains(where: { $0 == type}) == false {
+            newCells.append(type)
+        }
+
         var items: [IQItem] = []
         for (index, model) in models.enumerated() {
             let item = IQItem(type, model: model, supplementaryType: supplementaryType,

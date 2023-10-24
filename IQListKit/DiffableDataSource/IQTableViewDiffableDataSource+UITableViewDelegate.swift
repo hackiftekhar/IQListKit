@@ -30,13 +30,12 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
     // MARK: - Height
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let item: IQItem = itemIdentifier(for: indexPath),
-                let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
             return UITableView.automaticDimension
         }
 
         let itemSize: CGSize
-        if let size: CGSize = type.estimatedSize(for: item.model, listView: tableView) {
+        if let size: CGSize = item.type.estimatedSize(for: item.model, listView: tableView) {
             itemSize = size
         } else {
             itemSize = CGSize(width: tableView.frame.width, height: UITableView.automaticDimension)
@@ -54,8 +53,7 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
         if let size: CGSize = dataSource?.listView(tableView, size: item, at: indexPath) {
             itemSize = size
-        } else if let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type,
-        let size = type.size(for: item.model, listView: tableView) {
+        } else if let size: CGSize = item.type.size(for: item.model, listView: tableView) {
             itemSize = size
         } else {
             itemSize = CGSize(width: tableView.frame.width, height: UITableView.automaticDimension)
@@ -71,12 +69,11 @@ extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
 
-        guard let item: IQItem = itemIdentifier(for: indexPath),
-              let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
+        guard let item: IQItem = itemIdentifier(for: indexPath) else {
             return 0
         }
 
-        return type.indentationLevel(for: item.model, listView: tableView)
+        return item.type.indentationLevel(for: item.model, listView: tableView)
     }
 
     func tableView(_ tableView: UITableView,
@@ -94,11 +91,15 @@ extension IQTableViewDiffableDataSource {
 extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        delegate?.listView(tableView, willDisplay: cell, at: indexPath)
+        if let cell = cell as? any IQModelableCell {
+            delegate?.listView(tableView, willDisplay: cell, at: indexPath)
+        }
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        delegate?.listView(tableView, didEndDisplaying: cell, at: indexPath)
+        if let cell = cell as? any IQModelableCell {
+            delegate?.listView(tableView, didEndDisplaying: cell, at: indexPath)
+        }
     }
 }
 
@@ -191,7 +192,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = headerSize
         } else if let headerView: UIView = aSection.headerView {
             sectionSize = headerView.frame.size
-        } else if let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type,
+        } else if let type: IQViewSizeProvider.Type = aSection.headerType,
                   let headerModel = aSection.headerModel,
                   let size = type.estimatedSize(for: headerModel, listView: tableView) {
             sectionSize = size
@@ -214,7 +215,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = footerSize
         } else if let footerView: UIView = aSection.footerView {
             sectionSize = footerView.frame.size
-        } else if let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type,
+        } else if let type: IQViewSizeProvider.Type = aSection.footerType,
                   let footerModel = aSection.footerModel,
                   let size = type.estimatedSize(for: footerModel, listView: tableView) {
             sectionSize = size
@@ -237,7 +238,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = headerSize
         } else if let headerView: UIView = aSection.headerView {
             sectionSize = headerView.frame.size
-        } else if let type: IQViewSizeProvider.Type = aSection.headerType as? IQViewSizeProvider.Type,
+        } else if let type: IQViewSizeProvider.Type = aSection.headerType,
                   let headerModel = aSection.headerModel,
                   let size = type.size(for: headerModel, listView: tableView) {
             sectionSize = size
@@ -260,7 +261,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = footerSize
         } else if let footerView: UIView = aSection.footerView {
             sectionSize = footerView.frame.size
-        } else if let type: IQViewSizeProvider.Type = aSection.footerType as? IQViewSizeProvider.Type,
+        } else if let type: IQViewSizeProvider.Type = aSection.footerType,
                   let footerModel = aSection.footerModel,
                   let size = type.size(for: footerModel, listView: tableView) {
             sectionSize = size
@@ -312,11 +313,13 @@ extension IQTableViewDiffableDataSource {
                                                      at: indexPath)
         }
 
-        guard let supplementaryView = supplementaryView else { return nil }
+        guard let view = supplementaryView else { return nil }
 
-        delegate?.listView(tableView, modifySupplementaryElement: supplementaryView, section: aSection,
-                           kind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        return supplementaryView
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(tableView, modifySupplementaryElement: view, section: aSection,
+                               kind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        }
+        return view
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -360,10 +363,14 @@ extension IQTableViewDiffableDataSource {
                                                      at: indexPath)
         }
 
-        guard let supplementaryView = supplementaryView else { return nil }
-        delegate?.listView(tableView, modifySupplementaryElement: supplementaryView, section: aSection,
-                           kind: UICollectionView.elementKindSectionFooter, at: indexPath)
-        return supplementaryView
+        guard let view = supplementaryView else { return nil }
+
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(tableView, modifySupplementaryElement: view, section: aSection,
+                               kind: UICollectionView.elementKindSectionFooter, at: indexPath)
+        }
+
+        return view
     }
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -374,8 +381,11 @@ extension IQTableViewDiffableDataSource {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        delegate?.listView(tableView, willDisplaySupplementaryElement: view, section: aSection,
-                           kind: UICollectionView.elementKindSectionHeader, at: indexPath)
+
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(tableView, willDisplaySupplementaryElement: view, section: aSection,
+                               kind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        }
     }
 
     func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
@@ -386,8 +396,11 @@ extension IQTableViewDiffableDataSource {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
-                           kind: UICollectionView.elementKindSectionHeader, at: indexPath)
+
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
+                               kind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        }
     }
 
     func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
@@ -398,8 +411,11 @@ extension IQTableViewDiffableDataSource {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        delegate?.listView(tableView, willDisplaySupplementaryElement: view, section: aSection,
-                           kind: UICollectionView.elementKindSectionFooter, at: indexPath)
+
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(tableView, willDisplaySupplementaryElement: view, section: aSection,
+                               kind: UICollectionView.elementKindSectionFooter, at: indexPath)
+        }
     }
 
     func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
@@ -410,8 +426,11 @@ extension IQTableViewDiffableDataSource {
         let aSection: IQSection = sectionIdentifiers[section]
 
         let indexPath: IndexPath = IndexPath(row: 0, section: section)
-        delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
-                           kind: UICollectionView.elementKindSectionFooter, at: indexPath)
+
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(tableView, didEndDisplayingSupplementaryElement: view, section: aSection,
+                               kind: UICollectionView.elementKindSectionFooter, at: indexPath)
+        }
     }
 }
 

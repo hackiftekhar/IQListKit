@@ -26,7 +26,7 @@ import UIKit
 
 @MainActor
 public protocol IQModelableCell: IQModelModifiable, IQViewSizeProvider,
-                                 IQCellActionsProvider where Self: IQListCell {
+                                 IQCellActionsProvider where Self: UIView {
 
     /// Dynamic model which should be implemented in cells confirming the IQModelableCell
     associatedtype Model: Hashable & Sendable

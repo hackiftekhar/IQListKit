@@ -29,16 +29,6 @@ import Foundation
 @ReloadActor
 public extension IQList {
 
-    @preconcurrency
-    nonisolated
-    internal static func dispatchMainSync<T>(action: @Sendable () -> T) -> T {
-       if Thread.isMainThread {
-           return action()
-       } else {
-           return DispatchQueue.main.sync(execute: action)
-       }
-    }
-
     /// Append the models to the given section
     /// This method can also be used in background thread
     /// - Parameters:
@@ -50,14 +40,6 @@ public extension IQList {
                                     section: IQSection? = nil,
                                     beforeItem: IQItem? = nil,
                                     afterItem: IQItem? = nil) -> [IQItem] {
-        if cellRegisterType == .automatic {
-
-            IQList.dispatchMainSync {
-                internalRegisterCell(type: type, registerType: .default,
-                                     bundle: .main, logEnabled: true)
-            }
-        }
-
         return snapshotWrapper.append(type, models: models, section: section,
                                       beforeItem: beforeItem, afterItem: afterItem)
     }
@@ -69,13 +51,6 @@ public extension IQList {
                                                                      section: IQSection? = nil,
                                                                      beforeItem: IQItem? = nil,
                                                                      afterItem: IQItem? = nil) -> [IQItem] {
-        if cellRegisterType == .automatic {
-            IQList.dispatchMainSync {
-                internalRegisterCell(type: type, registerType: .default,
-                                     bundle: .main, logEnabled: true)
-            }
-        }
-
         return snapshotWrapper.append(type, models: models,
                                       supplementaryType: supplementaryType, supplementaryModels: supplementaryModels,
                                       section: section, beforeItem: beforeItem, afterItem: afterItem)

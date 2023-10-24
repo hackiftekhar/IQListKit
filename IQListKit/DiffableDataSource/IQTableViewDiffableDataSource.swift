@@ -27,8 +27,7 @@ import UIKit
 @MainActor
 internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSource<IQSection, IQItem> {
 
-    @MainActor internal var registeredCells: [IQListCell.Type] = []
-    @MainActor internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
+    @MainActor internal var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
 
     @MainActor weak var proxyDelegate: IQListViewProxyDelegate?
     @MainActor weak var delegate: IQListViewDelegate?

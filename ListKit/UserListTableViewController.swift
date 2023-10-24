@@ -89,21 +89,29 @@ extension UserListTableViewController {
             tableView.tableFooterView = footerView
         }
 
+        let tableFrame: CGRect = tableView.frame
         list.reloadData({ [self] in
 
-//            let headerSize: CGSize = CGSize(width: list.listView.frame.width, height: 50)
-//            let section1 = IQSection(identifier: "firstSection",
-//                                     headerSize: headerSize)
-//            let header: String? = users.count > 0 ? "First Section" : nil
-//            let section1 = IQSection(identifier: "firstSection",
-//                                     header: header)
-            let section1 = IQSection(identifier: "firstSection",
+            let section1: IQSection
+            switch Int.random(in: 0...2) {
+            case 0:
+                let headerSize: CGSize = CGSize(width: tableFrame.width, height: 50)
+                section1 = IQSection(identifier: "firstSection",
+                                     headerSize: headerSize)
+            case 1:
+                let header: String? = users.count > 0 ? "First Section header Title" : nil
+                section1 = IQSection(identifier: "firstSection",
+                                     header: header)
+            case 2:
+                section1 = IQSection(identifier: "firstSection",
                                      headerType: EmptyHeaderView.self,
                                      headerModel: .init(identifier: "firstSection", height: 10),
-                                     footerType: EmptyTableHeaderFooterView.self, footerModel: "Footer Title")
+                                     footerType: EmptyTableHeaderFooterView.self, footerModel: "Footer Model")
+            default:
+                fatalError()
+            }
 
             list.append([section1])
-
             list.append(UserCell.self, models: users, section: section1)
 
             let section2 = IQSection(identifier: "secondSection", header: users2.count > 0 ? "Second Section" : nil)
@@ -117,7 +125,7 @@ extension UserListTableViewController {
 
 extension UserListTableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: any IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? UserCell {
             cell.delegate = self
         }

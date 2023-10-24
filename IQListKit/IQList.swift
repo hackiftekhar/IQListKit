@@ -44,8 +44,8 @@ public actor IQList {
         }
     }
 
-    nonisolated let elementKindSectionHeader: String
-    nonisolated let elementKindSectionFooter: String
+    nonisolated static let elementKindSectionHeader: String = "UICollectionElementKindSectionHeader"
+    nonisolated static let elementKindSectionFooter: String = "UICollectionElementKindSectionFooter"
     nonisolated let cellRegisterType: CellRegistrationType
 
     nonisolated public let defaultRowAnimation: UITableView.RowAnimation
@@ -198,11 +198,6 @@ public actor IQList {
                       cellRegisterType: cellRegisterType,
                       reloadQueue: reloadQueue)
 
-            registerSupplementaryView(type: IQTableTitleSupplementaryView.self,
-                                      kind: elementKindSectionHeader, registerType: .class)
-            registerSupplementaryView(type: IQTableEmptySupplementaryView.self,
-                                      kind: elementKindSectionFooter, registerType: .class)
-
         } else if let collectionView = listView as? UICollectionView {
 
             self.init(collectionView,
@@ -210,27 +205,23 @@ public actor IQList {
                       cellRegisterType: cellRegisterType,
                       reloadQueue: reloadQueue)
 
-            registerSupplementaryView(type: UICollectionReusableView.self,
-                                      kind: elementKindSectionHeader, registerType: .class)
-            registerSupplementaryView(type: UICollectionReusableView.self,
-                                      kind: elementKindSectionFooter, registerType: .class)
-            registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
-                                      kind: elementKindSectionHeader, registerType: .class)
-            registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
-                                      kind: elementKindSectionFooter, registerType: .class)
-            registerSupplementaryView(type: IQCollectionEmptySupplementaryView.self,
-                                      kind: elementKindSectionHeader, registerType: .class)
-            registerSupplementaryView(type: IQCollectionEmptySupplementaryView.self,
-                                      kind: elementKindSectionFooter, registerType: .class)
+            let collectionReusableViewIdentifier: String = String(describing: UICollectionReusableView.self)
 
+            collectionView.register(UICollectionReusableView.self,
+                                    forSupplementaryViewOfKind: IQList.elementKindSectionHeader,
+                                    withReuseIdentifier: collectionReusableViewIdentifier)
+
+            collectionView.register(UICollectionReusableView.self,
+                                    forSupplementaryViewOfKind: IQList.elementKindSectionFooter,
+                                    withReuseIdentifier: collectionReusableViewIdentifier)
+
+            registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
+                                      kind: IQList.elementKindSectionHeader, registerType: .class)
+            registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
+                                      kind: IQList.elementKindSectionFooter, registerType: .class)
         } else {
             fatalError("Unable to initializa ListKit")
         }
-
-        registerSupplementaryView(type: IQSupplementaryViewPlaceholder.self,
-                                  kind: elementKindSectionHeader, registerType: .class)
-        registerSupplementaryView(type: IQSupplementaryViewPlaceholder.self,
-                                  kind: elementKindSectionFooter, registerType: .class)
     }
 
     /// Initialize the IQList with the UITableView
@@ -260,7 +251,9 @@ public actor IQList {
                     """)
             }
 
-            delegate?.listView(tableView, modifyCell: cell, at: indexPath)
+            if let cell = cell as? any IQModelableCell {
+                delegate?.listView(tableView, modifyCell: cell, at: indexPath)
+            }
             return cell
         })
 
@@ -273,8 +266,6 @@ public actor IQList {
 
         listView = tableView
         diffableDataSource = tableViewDiffableDataSource
-        elementKindSectionHeader = UICollectionView.elementKindSectionHeader
-        elementKindSectionFooter = UICollectionView.elementKindSectionFooter
 
         self.reloadQueue = reloadQueue
         self.defaultRowAnimation = defaultRowAnimation
@@ -310,7 +301,9 @@ public actor IQList {
                     """)
             }
 
-            delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
+            if let cell = cell as? any IQModelableCell {
+                delegate?.listView(collectionView, modifyCell: cell, at: indexPath)
+            }
             return cell
         })
 
@@ -322,8 +315,6 @@ public actor IQList {
 
         listView = collectionView
         diffableDataSource = collectionViewDiffableDataSource
-        elementKindSectionHeader = UICollectionView.elementKindSectionHeader
-        elementKindSectionFooter = UICollectionView.elementKindSectionFooter
 
         self.reloadQueue = reloadQueue
         self.defaultRowAnimation = .automatic

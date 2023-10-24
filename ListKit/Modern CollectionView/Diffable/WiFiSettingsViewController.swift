@@ -129,7 +129,7 @@ extension WiFiSettingsViewController {
 }
 
 extension WiFiSettingsViewController: IQListViewDelegateDataSource {
-    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: any IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? WiFiSettingsCell {
             cell.delegate = self
         }

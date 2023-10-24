@@ -117,12 +117,16 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegate {
     // MARK: - Cell
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        delegate?.listView(collectionView, willDisplay: cell, at: indexPath)
+        if let cell = cell as? any IQModelableCell {
+            delegate?.listView(collectionView, willDisplay: cell, at: indexPath)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        delegate?.listView(collectionView, didEndDisplaying: cell, at: indexPath)
+        if let cell = cell as? any IQModelableCell {
+            delegate?.listView(collectionView, didEndDisplaying: cell, at: indexPath)
+        }
     }
 
     // MARK: - Context menu

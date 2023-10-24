@@ -34,8 +34,8 @@ public struct IQItem: Hashable, @unchecked Sendable {
     }
 
     /// Type of the cell
-    public private(set) var type: IQListCell.Type
-    public private(set) var supplementaryType: UIView.Type
+    public private(set) var type: any IQModelableCell.Type
+    public private(set) var supplementaryType: any IQModelableSupplementaryView.Type
 
     /// Model of the cell
     public private(set) var model: AnyHashable

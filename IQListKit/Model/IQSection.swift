@@ -41,8 +41,8 @@ public struct IQSection: Hashable, @unchecked Sendable {
     public let identifier: AnyHashable
 
     /// Type of the cell
-    public private(set) var headerType: UIView.Type?
-    public private(set) var footerType: UIView.Type?
+    public private(set) var headerType: (any IQModelableSupplementaryView.Type)?
+    public private(set) var footerType: (any IQModelableSupplementaryView.Type)?
 
     /// Header/Footer
     public private(set) var headerView: UIView?

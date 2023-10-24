@@ -37,6 +37,23 @@ public extension IQList {
         case storyboard
     }
 
+    @MainActor
+    internal func register(newCells: [any IQModelableCell.Type],
+                           newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]]) {
+        for type in newCells {
+            privateRegisterCell(type: type, registerType: .default,
+                                bundle: .main, logEnabled: true)
+        }
+
+        for (kind, types) in newSupplementaryViews {
+            for type in types {
+                privateRegisterSupplementaryView(type: type, kind: kind,
+                                                 registerType: .default, bundle: .main,
+                                                 logEnabled: true)
+            }
+        }
+    }
+
     /// register a Cell manually
     /// - Parameters:
     ///   - type: Type of the cell
@@ -47,22 +64,24 @@ public extension IQList {
                                           registerType: RegisterType,
                                           bundle: Bundle = .main) {
 
-        internalRegisterCell(type: type,
-                             registerType: registerType,
-                             bundle: bundle, logEnabled: false)
+        privateRegisterCell(type: type,
+                            registerType: registerType,
+                            bundle: bundle, logEnabled: false)
     }
 
+    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable function_body_length
     @MainActor
-    internal func internalRegisterCell<T: IQModelableCell>(type: T.Type,
-                                                           registerType: RegisterType,
-                                                           bundle: Bundle,
-                                                           logEnabled: Bool) {
+    private func privateRegisterCell<T: IQModelableCell>(type: T.Type,
+                                                         registerType: RegisterType,
+                                                         bundle: Bundle,
+                                                         logEnabled: Bool) {
 
-        guard diffableDataSource.registeredCells.contains(where: { $0 == type}) == false else {
+        guard snapshotWrapper.registeredCells.contains(where: { $0 == type}) == false else {
             return
         }
 
-        diffableDataSource.registeredCells.append(type)
+        snapshotWrapper.registeredCells.append(type)
 
         let identifier = String(describing: type)
 
@@ -80,7 +99,7 @@ public extension IQList {
                 privateRegisterCellNib(identifier: identifier, bundle: bundle)
                 if logEnabled {
                     print("""
-                        Automatically registered \
+                        Registered \
                         'list.registerCell(type: \(identifier).self, registerType: .nib)'
                         """)
                 }
@@ -90,7 +109,7 @@ public extension IQList {
                     if tableView.dequeueReusableCell(withIdentifier: identifier) != nil {
                         if logEnabled {
                             print("""
-                                Automatically registered \
+                                Registered \
                                 'list.registerCell(type: \(identifier).self, registerType: .storyboard)'
                                 """)
                         }
@@ -98,7 +117,7 @@ public extension IQList {
                         privateRegisterCellClass(type: type, identifier: identifier)
                         if logEnabled {
                             print("""
-                                Automatically registered \
+                                Registered \
                                 'list.registerCell(type: \(identifier).self, registerType: .class)'
                                 """)
                         }
@@ -107,7 +126,7 @@ public extension IQList {
                     privateRegisterCellClass(type: type, identifier: identifier)
                     if logEnabled {
                         print("""
-                            Automatically registered \
+                            Registered \
                             'list.registerCell(type: \(identifier).self, registerType: .class)'. \
                             If it's registered with storyboard then manually register it using\
                             \n'list.registerCell(type: \(identifier).self, registerType: .storyboard)'
@@ -117,6 +136,8 @@ public extension IQList {
             }
         }
     }
+    // swiftlint:enable cyclomatic_complexity
+    // swiftlint:enable function_body_length
 
     @MainActor
     private func privateRegisterCellNib(identifier: String,
@@ -144,30 +165,32 @@ public extension IQList {
     ///   - type: Type of the header
     ///   - bundle: The bundle in which the header is present.
     @MainActor
-    func registerSupplementaryView<T: UIView>(type: T.Type, kind: String,
-                                              registerType: RegisterType,
-                                              bundle: Bundle = .main) {
+    func registerSupplementaryView<T: IQModelableSupplementaryView>(type: T.Type, kind: String,
+                                                                    registerType: RegisterType,
+                                                                    bundle: Bundle = .main) {
 
-        internalRegisterSupplementaryView(type: type, kind: kind,
-                                          registerType: registerType,
-                                          bundle: bundle, logEnabled: false)
+        privateRegisterSupplementaryView(type: type, kind: kind,
+                                         registerType: registerType,
+                                         bundle: bundle, logEnabled: false)
     }
 
+    // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_body_length
     @MainActor
-    internal func internalRegisterSupplementaryView<T: UIView>(type: T.Type,
-                                                               kind: String,
-                                                               registerType: RegisterType,
-                                                               bundle: Bundle,
-                                                               logEnabled: Bool) {
-        let existingTypes: [UIView.Type] = diffableDataSource.registeredSupplementaryViews[kind] ?? []
+    private func privateRegisterSupplementaryView<T: IQModelableSupplementaryView>(type: T.Type,
+                                                                                   kind: String,
+                                                                                   registerType: RegisterType,
+                                                                                   bundle: Bundle,
+                                                                                   logEnabled: Bool) {
+        let existingTypes = snapshotWrapper.registeredSupplementaryViews[kind] ?? []
         guard existingTypes.contains(where: {$0 == type}) == false else {
             return
         }
 
-        var newTypes: [UIView.Type] = existingTypes
+        var newTypes: [any IQModelableSupplementaryView.Type] = existingTypes
         newTypes.append(type)
-        diffableDataSource.registeredSupplementaryViews[kind] = newTypes
+        snapshotWrapper.registeredSupplementaryViews[kind] = newTypes
+        diffableDataSource.registeredSupplementaryViews = snapshotWrapper.registeredSupplementaryViews
 
         let identifier = String(describing: type)
 
@@ -189,7 +212,7 @@ public extension IQList {
                                                     kind: kind, bundle: bundle)
                 if logEnabled {
                     print("""
-                        Automatically registered \
+                        Registered \
                         'list.registerSupplementaryView(type: \(identifier).self, kind: \"\(kind)\", registerType: .nib)'
                         """)
                 }
@@ -200,7 +223,7 @@ public extension IQList {
                     if tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) != nil {
                         if logEnabled {
                             print("""
-                                Automatically registered \
+                                Registered \
                                 'list.registerSupplementaryView(type: \(identifier).self, kind: \"\(kind)\", registerType: .storyboard)'
                                 """)
                         }
@@ -209,7 +232,7 @@ public extension IQList {
                                                               kind: kind)
                         if logEnabled {
                             print("""
-                                Automatically registered \
+                                Registered \
                                 'list.registerSupplementaryView(type: \(identifier).self, kind: \"\(kind)\", registerType: .class)'
                                 """)
                         }
@@ -220,7 +243,7 @@ public extension IQList {
                                                           kind: kind)
                     if logEnabled {
                         print("""
-                            Automatically registered \
+                            Registered \
                             'list.registerSupplementaryView(type: \(identifier).self, kind: \"\(kind)\", registerType: .class)'. \
                             If it's registered with storyboard then manually register it using \
                             \n'list.registerSupplementaryView(type: \(identifier).self, kind: \"\(kind)\", registerType: .storyboard)'
@@ -232,12 +255,13 @@ public extension IQList {
         }
     }
     // swiftlint:enable function_body_length
+    // swiftlint:enable cyclomatic_complexity
 
     @MainActor
-    private func privateRegisterSupplementaryViewNib<T: UIView>(type: T.Type,
-                                                                identifier: String,
-                                                                kind: String,
-                                                                bundle: Bundle) {
+    private func privateRegisterSupplementaryViewNib<T: IQModelableSupplementaryView>(type: T.Type,
+                                                                                      identifier: String,
+                                                                                      kind: String,
+                                                                                      bundle: Bundle) {
         let nib = UINib(nibName: identifier, bundle: bundle)
         if let tableView = listView as? UITableView {
             if type is UITableViewHeaderFooterView.Type {
@@ -252,9 +276,9 @@ public extension IQList {
     }
 
     @MainActor
-    private func privateRegisterSupplementaryViewClass<T: UIView>(type: T.Type,
-                                                                  identifier: String,
-                                                                  kind: String) {
+    private func privateRegisterSupplementaryViewClass<T: IQModelableSupplementaryView>(type: T.Type,
+                                                                                        identifier: String,
+                                                                                        kind: String) {
         if let tableView = listView as? UITableView {
             if type is UITableViewHeaderFooterView.Type {
                 tableView.register(type.self, forHeaderFooterViewReuseIdentifier: identifier)

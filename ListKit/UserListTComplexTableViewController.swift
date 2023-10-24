@@ -128,7 +128,7 @@ extension UserListTComplexTableViewController {
 
 extension UserListTComplexTableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: any IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? UserCell {
             cell.delegate = self
         } else if let cell = cell as? BookCell {

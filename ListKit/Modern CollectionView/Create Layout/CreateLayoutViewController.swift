@@ -434,7 +434,7 @@ extension CreateLayoutViewController {
 
 @available(iOS 14.0, *)
 extension CreateLayoutViewController: IQListViewDelegateDataSource {
-    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: any IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? CustomLayoutCell {
             cell.delegate = self
         }

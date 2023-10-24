@@ -27,8 +27,7 @@ import UIKit
 @MainActor
 internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffableDataSource<IQSection, IQItem> {
 
-    @MainActor internal var registeredCells: [IQListCell.Type] = []
-    @MainActor internal var registeredSupplementaryViews: [String: [UIView.Type]] = [:]
+    @MainActor internal var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
 
     @MainActor internal var contextMenuPreviewIndexPath: IndexPath?
 
@@ -50,29 +49,28 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath) -> UICollectionReusableView {
 
-        guard let supplementaryTypes: [UIView.Type] = registeredSupplementaryViews[kind] else {
+        guard let registeredTypes: [any IQModelableSupplementaryView.Type] = registeredSupplementaryViews[kind] else {
             fatalError("Please register a supplementary view first for '\(kind)' kind")
         }
         let identifier: String
 
         let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers
         guard indexPath.section < sectionIdentifiers.count else {
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                       withReuseIdentifier: "UICollectionReusableView",
-                                                                       for: indexPath)
+            let view = collectionView.dequeue(UICollectionReusableView.self,
+                                              kind: kind, for: indexPath)
             return view
         }
         let aSection: IQSection = sectionIdentifiers[indexPath.section]
 
         let model: AnyHashable?
-       // It might be header or footer or may be for the 1st row
+        // It might be header or footer or may be for the 1st row
         if indexPath.row == 0 {
 
             if kind == UICollectionView.elementKindSectionHeader,
                let headerType = aSection.headerType {
 
                 if headerType == IQSupplementaryViewPlaceholder.self,
-                    let headerModel = aSection.headerModel as? IQCollectionTitleSupplementaryView.Model {
+                   let headerModel = aSection.headerModel as? IQCollectionTitleSupplementaryView.Model {
                     identifier = String(describing: IQCollectionTitleSupplementaryView.self)
                     model = headerModel
                 } else {
@@ -83,18 +81,18 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                       let footerType = aSection.footerType {
 
                 if footerType == IQSupplementaryViewPlaceholder.self,
-                    let footerModel = aSection.footerModel as? IQCollectionTitleSupplementaryView.Model {
+                   let footerModel = aSection.footerModel as? IQCollectionTitleSupplementaryView.Model {
                     identifier = String(describing: IQCollectionTitleSupplementaryView.self)
                     model = footerModel
                 } else {
                     identifier = String(describing: footerType)
                     model = aSection.footerModel
                 }
-            // If both types are same then it create a confusing condition, so ignoring if both are of same type
+                // If both types are same then it create a confusing condition, so ignoring if both are of same type
             } else if let headerType = aSection.headerType,
-               let footerType = aSection.footerType,
-               headerType == footerType,
-               supplementaryTypes.contains(where: { $0 == headerType}) {
+                      let footerType = aSection.footerType,
+                      headerType == footerType,
+                      registeredTypes.contains(where: { $0 == headerType}) {
                 if kind == UICollectionView.elementKindSectionHeader {
                     model = aSection.headerModel
                     identifier = String(describing: headerType)
@@ -110,18 +108,18 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                         """)
                 }
             } else if let headerType = aSection.headerType,
-                      supplementaryTypes.contains(where: { $0 == headerType}) {
+                      registeredTypes.contains(where: { $0 == headerType}) {
                 identifier = String(describing: headerType)
                 model = aSection.headerModel
             } else if let footerType = aSection.footerType,
-                      supplementaryTypes.contains(where: { $0 == footerType}) {
+                      registeredTypes.contains(where: { $0 == footerType}) {
                 identifier = String(describing: footerType)
                 model = aSection.footerModel
             } else if let item: IQItem = itemIdentifier(for: indexPath),
                       !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
                 identifier = String(describing: item.supplementaryType)
                 model = item.supplementaryModel
-            } else if let firstType = supplementaryTypes.first {
+            } else if let firstType = registeredTypes.first {
                 identifier = String(describing: firstType)
                 model = nil
             } else {
@@ -165,8 +163,10 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                                                        kind: kind, for: indexPath)
         }
 
-        delegate?.listView(collectionView, modifySupplementaryElement: supplementaryView,
-                           section: aSection, kind: kind, at: indexPath)
+        if let view: any IQModelableSupplementaryView = supplementaryView as? any IQModelableSupplementaryView {
+            delegate?.listView(collectionView, modifySupplementaryElement: view,
+                               section: aSection, kind: kind, at: indexPath)
+        }
 
         return supplementaryView
     }
@@ -183,8 +183,10 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
         }
         let aSection: IQSection = sectionIdentifiers[indexPath.section]
 
-        delegate?.listView(collectionView, willDisplaySupplementaryElement: view,
-                           section: aSection, kind: elementKind, at: indexPath)
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(collectionView, willDisplaySupplementaryElement: view,
+                               section: aSection, kind: elementKind, at: indexPath)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -197,8 +199,10 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
         }
         let aSection: IQSection = sectionIdentifiers[indexPath.section]
 
-        delegate?.listView(collectionView, didEndDisplayingSupplementaryElement: view,
-                           section: aSection, kind: elementKind, at: indexPath)
+        if let view: any IQModelableSupplementaryView = view as? any IQModelableSupplementaryView {
+            delegate?.listView(collectionView, didEndDisplayingSupplementaryElement: view,
+                               section: aSection, kind: elementKind, at: indexPath)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,

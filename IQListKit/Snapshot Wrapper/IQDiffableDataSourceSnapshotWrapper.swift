@@ -34,6 +34,8 @@ internal final class IQDiffableDataSourceSnapshotWrapper {
 
     private class NonIsolated {
         var removeDuplicatesWhenReloading: Bool = false
+        var registeredCells: [any IQModelableCell.Type] = []
+        var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
     }
 
     nonisolated var removeDuplicatesWhenReloading: Bool {
@@ -45,7 +47,28 @@ internal final class IQDiffableDataSourceSnapshotWrapper {
         }
     }
 
+    nonisolated var registeredCells: [any IQModelableCell.Type] {
+        get {
+            nonIsolated.registeredCells
+        }
+        set {
+            nonIsolated.registeredCells = newValue
+        }
+    }
+
+    nonisolated var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] {
+        get {
+            nonIsolated.registeredSupplementaryViews
+        }
+        set {
+            nonIsolated.registeredSupplementaryViews = newValue
+        }
+    }
+
     private let nonIsolated: NonIsolated = NonIsolated()
+
+    var newCells: [any IQModelableCell.Type] = []
+    var newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
 
     var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
 
