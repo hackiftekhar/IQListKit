@@ -8,8 +8,9 @@
 import UIKit
 import IQListKit
 
+@MainActor
 protocol BookCellDelegate: AnyObject {
-    func bookCell(_ cell: BookCell, didDelete item: Book)
+    @MainActor func bookCell(_ cell: BookCell, didDelete item: Book)
 }
 
 class BookCell: UITableViewCell, IQModelableCell {

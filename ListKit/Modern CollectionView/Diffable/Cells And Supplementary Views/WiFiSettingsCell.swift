@@ -8,6 +8,7 @@
 import UIKit
 import IQListKit
 
+@MainActor
 protocol WiFiSettingsCellDelegate: AnyObject {
     func wifiCell(_ cell: WiFiSettingsCell, wifiStateChanged enabled: Bool)
 }

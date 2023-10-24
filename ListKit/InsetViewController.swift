@@ -108,8 +108,7 @@ extension InsetViewController {
         let dipatchTime: Double = (users.count == 0) ? 0 : 1
 
         DispatchQueue.main.asyncAfter(deadline: .now() + dipatchTime, execute: { [self] in
-            list.reloadData({ [weak self] in
-                guard let self = self else { return }
+            list.reloadData({ [list, users, books, defaultCellItems] in
                 let section1 = IQSection(identifier: "firstSection")
                 list.append([section1])
 

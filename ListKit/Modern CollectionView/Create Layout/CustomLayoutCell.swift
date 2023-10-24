@@ -11,8 +11,9 @@ import IQListKit
 // swiftlint:disable file_length
 
 @available(iOS 14.0, *)
+@MainActor
 protocol CustomLayoutCellDelegate: AnyObject {
-    func collectionLayoutCell(_ cell: CustomLayoutCell, didChanged value: AnyHashable, at path: String)
+    @MainActor func collectionLayoutCell(_ cell: CustomLayoutCell, didChanged value: AnyHashable, at path: String)
 }
 
 @available(iOS 14.0, *)
@@ -32,7 +33,7 @@ class CustomLayoutCell: UICollectionViewListCell, IQModelableCell {
 
     weak var delegate: CustomLayoutCellDelegate?
 
-    struct Model: Hashable {
+    struct Model: Hashable, @unchecked Sendable {
 
         func hash(into hasher: inout Hasher) {
             hasher.combine(path)

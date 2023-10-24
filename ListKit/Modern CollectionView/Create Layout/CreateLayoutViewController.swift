@@ -20,14 +20,16 @@ extension NSDirectionalEdgeInsets: Hashable {
 }
 
 @available(iOS 14.0, *)
+@MainActor
 protocol CreateLayoutViewControllerDelegate: AnyObject {
-    func createLayoutController(_ controller: CreateLayoutViewController,
-                                didUpdate layout: CreateLayoutViewController.Layout)
+    @MainActor func createLayoutController(_ controller: CreateLayoutViewController,
+                                           didUpdate layout: CreateLayoutViewController.Layout)
 }
 
 @available(iOS 14.0, *)
 class CreateLayoutViewController: UIViewController {
 
+    @MainActor
     class Item {
         var layoutSize: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2),
                                                                         heightDimension: .fractionalHeight(1.0))
@@ -64,6 +66,8 @@ class CreateLayoutViewController: UIViewController {
             return code
         }
     }
+
+    @MainActor
     class Group: Item {
         var subitems: [Item] = [Item()]
 
@@ -196,6 +200,7 @@ class CreateLayoutViewController: UIViewController {
         // swiftlint:enable function_body_length
     }
 
+    @MainActor
     class Section {
         var group: Group = Group()
 
@@ -230,6 +235,7 @@ class CreateLayoutViewController: UIViewController {
         }
     }
 
+    @MainActor
     class Layout {
         var section: Section = Section()
 
@@ -518,7 +524,7 @@ extension CreateLayoutViewController: CustomLayoutCellDelegate {
 
             var innerPath = path.deletingPrefix("item[")
             let stringIndex = innerPath.index(innerPath.startIndex, offsetBy: 1)
-            let index: Int = Int(String(innerPath.substring(to: stringIndex))) ?? 0
+            let index: Int = Int(String(innerPath[..<stringIndex])) ?? 0
             innerPath = innerPath.deletingPrefix("\(index)].")
 
             let item = group.subitems[index]

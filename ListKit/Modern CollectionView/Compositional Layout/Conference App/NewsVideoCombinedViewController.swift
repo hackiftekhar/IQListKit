@@ -127,7 +127,7 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: TitleSupplementaryView.self,
                                        kind: Self.titleElementKind, registerType: .class)
 
-        list.reloadData { [self] in
+        list.reloadData { [list, videosController, newsController] in
 
             let itemsPerSection = 5
             var itemOffset = 0

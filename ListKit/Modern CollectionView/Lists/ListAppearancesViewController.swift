@@ -11,7 +11,7 @@ import IQListKit
 @available(iOS 14.0, *)
 class ListAppearancesViewController: UIViewController {
 
-    struct Item: Hashable {
+    struct Item: Hashable, Sendable {
         let title: String?
         private let identifier = UUID()
     }

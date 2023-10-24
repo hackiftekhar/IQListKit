@@ -90,7 +90,7 @@ extension UserListTableViewController {
         }
 
         let tableFrame: CGRect = tableView.frame
-        list.reloadData({ [self] in
+        list.reloadData({ [list, users, users2] in
 
             let section1: IQSection
             switch Int.random(in: 0...2) {

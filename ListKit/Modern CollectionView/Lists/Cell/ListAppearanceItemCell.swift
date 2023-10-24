@@ -11,7 +11,7 @@ import IQListKit
 @available(iOS 14.0, *)
 class ListAppearanceItemCell: UICollectionViewListCell, IQModelableCell {
 
-    struct Model: Hashable {
+    struct Model: Hashable, @unchecked Sendable {
         let item: ListAppearancesViewController.Item
         let appearance: UICollectionLayoutListConfiguration.Appearance
     }

@@ -81,7 +81,7 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
         list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
                                        kind: Self.sectionFooterElementKind, registerType: .class)
 
-        list.reloadData { [self] in
+        list.reloadData { [list] in
 
             let sections = Array(0..<5)
             let itemsPerSection = 5

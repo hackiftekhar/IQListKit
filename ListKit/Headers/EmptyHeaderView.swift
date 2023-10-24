@@ -26,7 +26,7 @@ final class EmptyHeaderView: UIView, IQModelableSupplementaryView {
         }
     }
 
-    struct Model: Hashable {
+    struct Model: Hashable, @unchecked Sendable {
         let identifier: AnyHashable
         let height: CGFloat
     }

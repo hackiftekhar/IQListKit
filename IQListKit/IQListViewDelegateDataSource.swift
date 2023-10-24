@@ -30,7 +30,7 @@ import UIKit
 }
 
 @MainActor
-public protocol IQListViewDelegate: UIScrollViewDelegate {
+public protocol IQListViewDelegate: UIScrollViewDelegate, Sendable {
 
     /// Will give a chance to modify or other configuration of cell if necessary
     /// - Parameters:
@@ -142,7 +142,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate {
 // MARK: - IQListViewDataSource
 
 @MainActor
-public protocol IQListViewDataSource: AnyObject {
+public protocol IQListViewDataSource: AnyObject, Sendable {
 
     /// Return the size of an Item, for tableView the size.height will only be effective
     /// - Parameters:

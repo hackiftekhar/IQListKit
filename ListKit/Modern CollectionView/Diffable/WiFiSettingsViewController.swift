@@ -86,13 +86,14 @@ extension WiFiSettingsViewController {
 
         let configItems = configurationItems.filter { !($0.type == .currentNetwork && !controller.wifiEnabled) }
 
-        list.reloadData({ [self] in
+        let wifiEnabled: Bool = wifiController.wifiEnabled
+        list.reloadData({ [list] in
 
             let configSection = IQSection(identifier: Section.config)
             list.append([configSection])
 
             let configModels: [WiFiSettingsCell.Model] = configItems.map {
-                return WiFiSettingsCell.Model(wifiEnabled: wifiController.wifiEnabled, item: $0)
+                return WiFiSettingsCell.Model(wifiEnabled: wifiEnabled, item: $0)
             }
 
             list.append(WiFiSettingsCell.self, models: configModels)
@@ -105,7 +106,7 @@ extension WiFiSettingsViewController {
                 list.append([networkSection])
 
                 let networkModels: [WiFiSettingsCell.Model] = networkItems.map {
-                    return WiFiSettingsCell.Model(wifiEnabled: wifiController.wifiEnabled, item: $0)
+                    return WiFiSettingsCell.Model(wifiEnabled: wifiEnabled, item: $0)
                 }
                 list.append(WiFiSettingsCell.self, models: networkModels, section: networkSection)
             }

@@ -26,9 +26,12 @@ public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQS
 @available(iOS 14.0, *)
 public typealias IQDiffableDataSourceSectionSnapshot = NSDiffableDataSourceSectionSnapshot<IQItem>
 
+extension DispatchQueue: @unchecked Sendable { }
+
+@preconcurrency
 public actor IQList {
 
-    @frozen public enum CellRegistrationType {
+    @frozen public enum CellRegistrationType: Sendable {
         case automatic
         case manual
     }
@@ -173,11 +176,9 @@ public actor IQList {
                       reloadQueue: reloadQueue)
 
             let collectionReusableViewIdentifier: String = String(describing: UICollectionReusableView.self)
-
             collectionView.register(UICollectionReusableView.self,
                                     forSupplementaryViewOfKind: IQList.elementKindSectionHeader,
                                     withReuseIdentifier: collectionReusableViewIdentifier)
-
             collectionView.register(UICollectionReusableView.self,
                                     forSupplementaryViewOfKind: IQList.elementKindSectionFooter,
                                     withReuseIdentifier: collectionReusableViewIdentifier)
@@ -236,7 +237,6 @@ public actor IQList {
         tableViewDiffableDataSource.defaultRowAnimation = defaultRowAnimation
         tableViewDiffableDataSource.delegate = delegate
         tableViewDiffableDataSource.dataSource = dataSource
-
         listView = tableView
         diffableDataSource = tableViewDiffableDataSource
 
@@ -254,7 +254,6 @@ public actor IQList {
 
         self.defaultRowAnimation = defaultRowAnimation
         self.cellRegisterType = cellRegisterType
-
         tableViewDiffableDataSource.proxyDelegate = self
     }
 
@@ -297,7 +296,6 @@ public actor IQList {
         collectionView.prefetchDataSource = collectionViewDiffableDataSource
         collectionViewDiffableDataSource.delegate = delegate
         collectionViewDiffableDataSource.dataSource = dataSource
-
         listView = collectionView
         diffableDataSource = collectionViewDiffableDataSource
 
@@ -315,7 +313,6 @@ public actor IQList {
 
         self.defaultRowAnimation = .automatic
         self.cellRegisterType = cellRegisterType
-
         collectionViewDiffableDataSource.proxyDelegate = self
     }
 }
@@ -382,7 +379,6 @@ extension IQList {
             .isActive = true
         noItemContainerView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
             .isActive = true
-
         noItemContainerView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
         let height = listView.frame.height - inset.top - inset.bottom
         noItemContainerView.heightAnchor.constraint(equalToConstant: height).isActive = true

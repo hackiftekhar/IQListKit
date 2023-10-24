@@ -61,7 +61,7 @@ extension InsetItemsGridViewController {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData { [self] in
+        list.reloadData { [list] in
             let section = IQSection(identifier: Section.main)
             list.append([section])
 

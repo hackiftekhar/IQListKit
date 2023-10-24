@@ -8,8 +8,9 @@
 import UIKit
 import IQListKit
 
+@MainActor
 protocol CollectionUserCellDelegate: AnyObject {
-    func userCell(_ cell: CollectionUserCell, didDelete item: User)
+    @MainActor func userCell(_ cell: CollectionUserCell, didDelete item: User)
 }
 
 class CollectionUserCell: UICollectionViewCell, IQModelableCell {

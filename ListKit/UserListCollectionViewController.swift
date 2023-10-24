@@ -75,7 +75,7 @@ extension UserListCollectionViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.reloadData({ [self] in
+        list.reloadData({ [list, users, users2] in
 
             let section1: IQSection
             if Bool.random() {

@@ -91,7 +91,7 @@ extension AdaptiveSectionsViewController {
 //        list.registerCell(type: TextCell.self, registerType: .class)
 //        list.registerCell(type: ListCell.self, registerType: .class)
 
-        list.reloadData { [self] in
+        list.reloadData { [list] in
 
             SectionLayoutKind.allCases.forEach {
                 let section = IQSection(identifier: $0)

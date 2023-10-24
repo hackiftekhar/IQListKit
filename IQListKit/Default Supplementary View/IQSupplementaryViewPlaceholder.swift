@@ -34,7 +34,7 @@ public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplement
 
         if let listView = listView as? UICollectionView {
             if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
-                let model: Model = model as? Model ?? ""
+                let model: Model = model
                 let sectionInset: UIEdgeInsets = cvfl.sectionInset
                 let width: CGFloat = listView.frame.width - sectionInset.left - sectionInset.right
                 let height: CGFloat = model.isEmpty ? 0 : 22

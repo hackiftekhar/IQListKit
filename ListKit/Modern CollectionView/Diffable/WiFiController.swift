@@ -7,7 +7,7 @@ Controller object which notifies our application when availalbe Wi-Fi APs are av
 
 import Foundation
 
-class WiFiController {
+class WiFiController: @unchecked Sendable {
 
     struct Network: Hashable {
         let name: String
@@ -93,7 +93,7 @@ class WiFiController {
         }
 
         let deadline = DispatchTime.now() + DispatchTimeInterval.milliseconds(updateInterval)
-        DispatchQueue.main.asyncAfter(deadline: deadline) {
+        DispatchQueue.main.asyncAfter(deadline: deadline) { [self] in
             self._performRandomUpdate()
         }
     }

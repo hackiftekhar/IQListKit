@@ -15,7 +15,7 @@ class OutlineViewController: UIViewController {
         case main
     }
 
-    struct OutlineItem: Hashable {
+    struct OutlineItem: Hashable, @unchecked Sendable {
         let title: String
         let subitems: [OutlineItem]
         let outlineViewController: UIViewController.Type?
