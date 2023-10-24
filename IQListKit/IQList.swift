@@ -23,7 +23,6 @@
 import UIKit
 
 public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQSection, IQItem>
-
 @available(iOS 14.0, *)
 public typealias IQDiffableDataSourceSectionSnapshot = NSDiffableDataSourceSectionSnapshot<IQItem>
 
@@ -67,31 +66,7 @@ public actor IQList {
     public var noItemStateView: IQNoItemStateRepresentable? {
         didSet {
             oldValue?.removeFromSuperview()
-
-            if let noItemStateView = noItemStateView {
-                noItemContainerView.addSubview(noItemStateView)
-                if noItemStateView.translatesAutoresizingMaskIntoConstraints {
-                    noItemStateView.center = CGPoint(x: noItemContainerView.bounds.midX,
-                                                     y: noItemContainerView.bounds.midY)
-                    noItemStateView.autoresizingMask = [.flexibleTopMargin,
-                                                        .flexibleBottomMargin,
-                                                        .flexibleLeftMargin,
-                                                        .flexibleRightMargin]
-                } else {
-                    noItemStateView.leadingAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.leadingAnchor,
-                                                             constant: 20)
-                    .isActive = true
-                    noItemStateView.trailingAnchor.constraint(lessThanOrEqualTo: noItemContainerView.trailingAnchor,
-                                                              constant: 20)
-                    .isActive = true
-                    noItemStateView.topAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.topAnchor,
-                                                         constant: 20)
-                    .isActive = true
-                    noItemStateView.bottomAnchor.constraint(lessThanOrEqualTo: noItemContainerView.bottomAnchor,
-                                                            constant: 20)
-                    .isActive = true
-                }
-            }
+            noItemStateViewChanged()
         }
     }
 
@@ -162,7 +137,7 @@ public actor IQList {
                 delegateDataSource: IQListViewDelegateDataSource? = nil,
                 defaultRowAnimation: UITableView.RowAnimation = .fade,
                 cellRegisterType: CellRegistrationType = .automatic,
-                reloadQueue: DispatchQueue = DispatchQueue.main) {
+                reloadQueue: DispatchQueue? = nil) {
         self.init(listView: listView,
                   delegate: delegateDataSource, dataSource: delegateDataSource,
                   defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
@@ -180,15 +155,7 @@ public actor IQList {
                 dataSource: IQListViewDataSource? = nil,
                 defaultRowAnimation: UITableView.RowAnimation = .fade,
                 cellRegisterType: CellRegistrationType = .automatic,
-                reloadQueue: DispatchQueue = DispatchQueue.main) {
-
-        defer { // This is to call the didSet of noItemStateView
-            noItemStateView = IQNoItemStateView(noItemImage: nil,
-                                                noItemTitle: nil,
-                                                noItemMessage: nil,
-                                                loadingMessage: nil)
-            updateNoItemStateViewPosition()
-        }
+                reloadQueue: DispatchQueue? = nil) {
 
         if let tableView = listView as? UITableView {
 
@@ -222,6 +189,11 @@ public actor IQList {
         } else {
             fatalError("Unable to initializa ListKit")
         }
+
+        noItemStateView = IQNoItemStateView(noItemImage: nil, noItemTitle: nil,
+                                            noItemMessage: nil, loadingMessage: nil)
+        noItemStateViewChanged()
+        updateNoItemStateViewPosition()
     }
 
     /// Initialize the IQList with the UITableView
@@ -235,15 +207,16 @@ public actor IQList {
                  dataSource: IQListViewDataSource?,
                  defaultRowAnimation: UITableView.RowAnimation,
                  cellRegisterType: CellRegistrationType,
-                 reloadQueue: DispatchQueue) {
+                 reloadQueue: DispatchQueue?) {
 
         let tableViewDiffableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
                                                                         cellProvider: { (tableView, indexPath, item) in
             let identifier = String(describing: item.type)
             let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
 
-            if let cell = cell as? IQModelModifiable {
-                cell.setModel(item.model)
+            if let cell = cell as? IQModelModifiable,
+               let model = item.model as? AnyHashable {
+                cell.privateSetModel(model)
             } else {
                 print("""
                     '\(type(of: cell))' with identifier '\(identifier)' \
@@ -267,7 +240,18 @@ public actor IQList {
         listView = tableView
         diffableDataSource = tableViewDiffableDataSource
 
-        self.reloadQueue = reloadQueue
+        if let reloadQueue = reloadQueue {
+            self.reloadQueue = reloadQueue
+        } else {
+            var controller: UIResponder = tableView
+            while !(controller is UIViewController) {
+                if let responder = controller.next { controller = responder
+                } else { break }
+            }
+            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)")
+            self.reloadQueue = reloadQueue
+        }
+
         self.defaultRowAnimation = defaultRowAnimation
         self.cellRegisterType = cellRegisterType
 
@@ -284,7 +268,7 @@ public actor IQList {
                  delegate: IQListViewDelegate?,
                  dataSource: IQListViewDataSource?,
                  cellRegisterType: CellRegistrationType,
-                 reloadQueue: DispatchQueue = DispatchQueue.main) {
+                 reloadQueue: DispatchQueue?) {
 
         // swiftlint:disable line_length
         let collectionViewDiffableDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
@@ -292,8 +276,9 @@ public actor IQList {
             // swiftlint:enable line_length
             let identifier = String(describing: item.type)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-            if let cell = cell as? IQModelModifiable {
-                cell.setModel(item.model)
+            if let cell = cell as? IQModelModifiable,
+               let model = item.model as? AnyHashable {
+                cell.privateSetModel(model)
             } else {
                 print("""
                     '\(type(of: cell))' with identifier '\(identifier)' \
@@ -316,7 +301,18 @@ public actor IQList {
         listView = collectionView
         diffableDataSource = collectionViewDiffableDataSource
 
-        self.reloadQueue = reloadQueue
+        if let reloadQueue = reloadQueue {
+            self.reloadQueue = reloadQueue
+        } else {
+            var controller: UIResponder = collectionView
+            while !(controller is UIViewController) {
+                if let responder = controller.next { controller = responder
+                } else { break }
+            }
+            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)")
+            self.reloadQueue = reloadQueue
+        }
+
         self.defaultRowAnimation = .automatic
         self.cellRegisterType = cellRegisterType
 
@@ -349,6 +345,32 @@ extension IQList {
 
     public func noItemAction(title: String?, target: Any?, action: Selector) {
         noItemStateView?.action(title: title, target: target, action: action)
+    }
+
+    private func noItemStateViewChanged() {
+
+        if let noItemStateView = noItemStateView {
+            noItemContainerView.addSubview(noItemStateView)
+            if noItemStateView.translatesAutoresizingMaskIntoConstraints {
+                noItemStateView.center = CGPoint(x: noItemContainerView.bounds.midX,
+                                                 y: noItemContainerView.bounds.midY)
+                noItemStateView.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin,
+                                                    .flexibleLeftMargin, .flexibleRightMargin]
+            } else {
+                noItemStateView.leadingAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.leadingAnchor,
+                                                         constant: 20)
+                .isActive = true
+                noItemStateView.trailingAnchor.constraint(lessThanOrEqualTo: noItemContainerView.trailingAnchor,
+                                                          constant: 20)
+                .isActive = true
+                noItemStateView.topAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.topAnchor,
+                                                     constant: 20)
+                .isActive = true
+                noItemStateView.bottomAnchor.constraint(lessThanOrEqualTo: noItemContainerView.bottomAnchor,
+                                                        constant: 20)
+                .isActive = true
+            }
+        }
     }
 
     private func updateNoItemStateViewPosition() {

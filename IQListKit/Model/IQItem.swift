@@ -23,10 +23,10 @@
 import UIKit
 
 // MARK: - Item model of the table/collection
-public struct IQItem: Hashable, @unchecked Sendable {
+public struct IQItem: Hashable, Sendable {
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.model == rhs.model
+        return (lhs.model as? AnyHashable) == (rhs.model as? AnyHashable)
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -34,12 +34,12 @@ public struct IQItem: Hashable, @unchecked Sendable {
     }
 
     /// Type of the cell
-    public private(set) var type: any IQModelableCell.Type
+    public private(set) var type: IQListCell.Type
     public private(set) var supplementaryType: any IQModelableSupplementaryView.Type
 
     /// Model of the cell
-    public private(set) var model: AnyHashable
-    public private(set) var supplementaryModel: AnyHashable?
+    public private(set) var model: (any Hashable & Sendable)
+    public private(set) var supplementaryModel: (any Hashable & Sendable)?
 
     /// Updating the model
     public mutating func update<T: IQModelableCell>(_ type: T.Type, model: T.Model) {

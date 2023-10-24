@@ -26,7 +26,7 @@ class SampleCollectionReusableView: UICollectionReusableView, IQModelableSupplem
         // Initialization code
     }
 
-    static func size(for model: AnyHashable?, listView: IQListView) -> CGSize {
+    static func size(for model: Model, listView: IQListView) -> CGSize? {
         return CGSize(width: listView.frame.width, height: 22)
     }
 }

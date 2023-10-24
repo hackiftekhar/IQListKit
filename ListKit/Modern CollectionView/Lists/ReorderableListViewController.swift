@@ -35,7 +35,8 @@ class ReorderableListViewController: UIViewController {
     }
 
     var collectionView: UICollectionView!
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, defaultRowAnimation: .automatic)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self,
+                                   defaultRowAnimation: .automatic, reloadQueue: .main)
     lazy var backingStore: [Section: [Item]] = { initialBackingStore() }()
 
     var reorderingMethod: ReorderingMethod = .collectionDifference

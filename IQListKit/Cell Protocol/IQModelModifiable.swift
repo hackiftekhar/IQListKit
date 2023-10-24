@@ -1,5 +1,5 @@
 //
-//  IQPlaceholderSupplementaryView.swift
+//  IQModelModifiable.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,27 +22,12 @@
 
 import UIKit
 
-// MARK: - A supplementary view for UITableView/UICollectionView
-
 @MainActor
-public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplementaryView {
-    public typealias Model = String
+public protocol IQModelModifiable where Self: UIView {
 
-    public var model: Model?
-
-    public static func size(for model: Model, listView: IQListView) -> CGSize? {
-
-        if let listView = listView as? UICollectionView {
-            if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
-                let model: Model = model as? Model ?? ""
-                let sectionInset: UIEdgeInsets = cvfl.sectionInset
-                let width: CGFloat = listView.frame.width - sectionInset.left - sectionInset.right
-                let height: CGFloat = model.isEmpty ? 0 : 22
-                return CGSize(width: width, height: height)
-            }
-        } else if let listView = listView as? UITableView {
-            return CGSize(width: listView.frame.width, height: UITableView.automaticDimension)
-        }
-        return .zero
-    }
+    /// DO NOT OVERRIDE THIS FUNCTION
+    ///
+    /// This is used to set the model in cellForRowAtIndexPath method
+    /// - Parameter model: The model to set
+    func privateSetModel(_ model: AnyHashable)
 }

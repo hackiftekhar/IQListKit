@@ -27,7 +27,9 @@ import UIKit
 @MainActor
 public final class IQCollectionEmptySupplementaryView: UICollectionReusableView, IQModelableSupplementaryView {
 
-    public typealias Model = AnyHashable
+    public struct Model: Hashable, @unchecked Sendable {
+        let model: AnyHashable
+    }
 
     public var model: Model?
     public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {

@@ -269,7 +269,7 @@ class CreateLayoutViewController: UIViewController {
 
     var collectionView: UICollectionView! = nil
 
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -434,7 +434,7 @@ extension CreateLayoutViewController {
 
 @available(iOS 14.0, *)
 extension CreateLayoutViewController: IQListViewDelegateDataSource {
-    func listView(_ listView: IQListView, modifyCell cell: any IQModelableCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: some IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? CustomLayoutCell {
             cell.delegate = self
         }

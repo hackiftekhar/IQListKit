@@ -118,7 +118,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
             } else if let item: IQItem = itemIdentifier(for: indexPath),
                       !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
                 identifier = String(describing: item.supplementaryType)
-                model = item.supplementaryModel
+                model = item.supplementaryModel as? AnyHashable
             } else if let firstType = registeredTypes.first {
                 identifier = String(describing: firstType)
                 model = nil
@@ -129,7 +129,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
         } else if let item: IQItem = itemIdentifier(for: indexPath),
                   !(item.supplementaryType is IQSupplementaryViewPlaceholder.Type) {
             identifier = String(describing: item.supplementaryType)
-            model = item.supplementaryModel
+            model = item.supplementaryModel as? AnyHashable
         } else {
             identifier = ""
             model = nil
@@ -141,7 +141,7 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
                                                                        withReuseIdentifier: identifier,
                                                                        for: indexPath)
             if let view = view as? IQModelModifiable {
-                view.setModel(model)
+                view.privateSetModel(model)
             } else {
                 print("""
                     '\(kind)' with identifier '\(identifier)' \

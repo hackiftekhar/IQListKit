@@ -1,5 +1,5 @@
 //
-//  IQModelModifiable.swift
+//  IQListCell.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,10 +22,14 @@
 
 import UIKit
 
-@MainActor
-public protocol IQModelModifiable where Self: UIView {
+// MARK: - List Cell
 
-    /// This is used to set the model in cellForRowAtIndexPath method
-    /// - Parameter model: The model to set
-    func setModel(_ model: AnyHashable)
-}
+/// This is used as a replacement of UITableViewCell/UICollectionViewCell
+@MainActor
+public protocol IQListCell where Self: UIView {}
+
+@MainActor
+extension UITableViewCell: IQListCell {}
+
+@MainActor
+extension UICollectionViewCell: IQListCell {}

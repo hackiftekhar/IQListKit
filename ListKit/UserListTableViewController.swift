@@ -125,7 +125,7 @@ extension UserListTableViewController {
 
 extension UserListTableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQListView, modifyCell cell: any IQModelableCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: some IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? UserCell {
             cell.delegate = self
         }

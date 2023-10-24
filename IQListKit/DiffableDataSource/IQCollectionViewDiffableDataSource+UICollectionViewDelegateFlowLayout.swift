@@ -43,9 +43,9 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
 
         let sectionSize: CGSize
         if type == IQSupplementaryViewPlaceholder.self,
-        let size = IQCollectionTitleSupplementaryView.size(for: headerModel, listView: collectionView) {
+        let size = IQCollectionTitleSupplementaryView.privateSize(for: headerModel, listView: collectionView) {
             sectionSize = size
-        } else if let size = type.size(for: headerModel, listView: collectionView) {
+        } else if let size = type.privateSize(for: headerModel, listView: collectionView) {
             sectionSize = size
         } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let width: CGFloat = collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right
@@ -117,9 +117,9 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
 
         let sectionSize: CGSize
         if type == IQSupplementaryViewPlaceholder.self,
-        let size = IQCollectionTitleSupplementaryView.size(for: footerModel, listView: collectionView) {
+        let size = IQCollectionTitleSupplementaryView.privateSize(for: footerModel, listView: collectionView) {
             sectionSize = size
-        } else if let size = type.size(for: footerModel, listView: collectionView) {
+        } else if let size = type.privateSize(for: footerModel, listView: collectionView) {
             sectionSize = size
         } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             sectionSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right,
@@ -136,14 +136,16 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type,
+              let model = item.model as? AnyHashable else {
             return .zero
         }
 
         let itemSize: CGSize
         if let size: CGSize = dataSource?.listView(collectionView, size: item, at: indexPath) {
             itemSize = size
-        } else if let size: CGSize = item.type.size(for: item.model, listView: collectionView) {
+        } else if let size: CGSize = type.privateSize(for: model, listView: collectionView) {
             itemSize = size
         } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let width: CGFloat = collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right

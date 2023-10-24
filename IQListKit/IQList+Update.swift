@@ -132,44 +132,39 @@ public extension IQList {
             previousDefaultRowAnimation = nil
         }
 
-        let internalCompletion: (() -> Void) = {
-
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-
-                if let previousDefaultRowAnimation = previousDefaultRowAnimation {
-                    diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
-                }
-                let isLoading: Bool
-                if endLoadingOnCompletion {
-                    isLoading = false
-                } else {
-                    isLoading = self.isLoading
-                }
-
-                /// Updating the backgroundView
-                setIsLoading(isLoading, animated: animatingDifferences)
-
-                completion?()
-            }
-        }
-
         if let diffing = diffing {
             if #available(iOS 15.0, *), !animatingDifferences, !diffing {
                 diffableDataSource.applySnapshotUsingReloadData(snapshot,
-                                                                completion: internalCompletion)
+                                                                completion: completion)
             } else {
                 diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences,
-                                         completion: internalCompletion)
+                                         completion: completion)
             }
         } else {
             if #available(iOS 15.0, *), !animatingDifferences {
                 diffableDataSource.applySnapshotUsingReloadData(snapshot,
-                                                                completion: internalCompletion)
+                                                                completion: completion)
             } else {
                 diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences,
-                                         completion: internalCompletion)
+                                         completion: completion)
             }
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            if let previousDefaultRowAnimation = previousDefaultRowAnimation {
+                diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
+            }
+            let isLoading: Bool
+            if endLoadingOnCompletion {
+                isLoading = false
+            } else {
+                isLoading = self.isLoading
+            }
+
+            /// Updating the backgroundView
+            setIsLoading(isLoading, animated: animatingDifferences)
         }
     }
 

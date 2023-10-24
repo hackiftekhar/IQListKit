@@ -18,8 +18,8 @@ class UserCell: UITableViewCell, IQModelableCell {
     // Or if we would like to use User as a model directly then
     // instead of implementing a struct, this can also be written as
     // typealias Model = User
-
-    var model: User? {
+    typealias Model = User
+    var model: Model? {
         didSet {
             guard let model = model else {
                 return
@@ -30,7 +30,7 @@ class UserCell: UITableViewCell, IQModelableCell {
         }
     }
 
-    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+    static func indentationLevel(for model: Model, listView: IQListView) -> Int {
         return 2
     }
 

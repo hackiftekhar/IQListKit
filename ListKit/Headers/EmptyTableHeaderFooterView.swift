@@ -18,11 +18,7 @@ public final class EmptyTableHeaderFooterView: UITableViewHeaderFooterView, IQMo
         }
     }
 
-    public static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
-        size(for: model, listView: listView)
-    }
-
-    public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
+    public static func size(for model: Model, listView: IQListView) -> CGSize? {
         return CGSize(width: listView.frame.width, height: 22)
     }
 }

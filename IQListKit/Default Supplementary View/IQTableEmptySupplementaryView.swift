@@ -30,7 +30,7 @@ public final class IQTableEmptySupplementaryView: UITableViewHeaderFooterView, I
 
     public var model: Model?
 
-    public static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
+    public static func size(for model: Model, listView: IQListView) -> CGSize? {
         return CGSize(width: listView.frame.width, height: 0)
     }
 }

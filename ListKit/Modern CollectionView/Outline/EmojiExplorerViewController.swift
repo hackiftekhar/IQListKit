@@ -38,7 +38,7 @@ class EmojiExplorerViewController: UIViewController {
     var starredEmojis = Set<Item>()
 
     var collectionView: UICollectionView!
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -255,7 +255,7 @@ extension EmojiExplorerViewController {
         list.reloadData({ [self] in
             let sections: [IQSection] = Section.allCases.map { IQSection(identifier: $0) }
             list.append(sections)
-        }, completion: {
+        }, completion: { [self] in
 
             // recents (orthogonal scroller)
             if let section = self.list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.recents }) {
@@ -263,7 +263,7 @@ extension EmojiExplorerViewController {
                 let recentListItems: [IQItem] = recentEmojis.map { IQItem(RecentCell.self, model: $0) }
                 var recentsSnapshot = IQDiffableDataSourceSectionSnapshot()
                 recentsSnapshot.append(recentListItems)
-                self.list.apply(recentsSnapshot, to: section, animatingDifferences: false)
+                list.apply(recentsSnapshot, to: section, animatingDifferences: false)
             }
 
             // list of all + outlines
@@ -287,12 +287,12 @@ extension EmojiExplorerViewController {
                 outlineSnapshot.append(outlineListItems, to: rootListItem)
             }
 
-            if let section = self.list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.list }) {
-                self.list.apply(allSnapshot, to: section, animatingDifferences: false)
+            if let section = list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.list }) {
+                list.apply(allSnapshot, to: section, animatingDifferences: false)
             }
 
-            if let section = self.list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.outline }) {
-                self.list.apply(outlineSnapshot, to: section, animatingDifferences: false)
+            if let section = list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.outline }) {
+                list.apply(outlineSnapshot, to: section, animatingDifferences: false)
             }
 
             // prepopulate starred emojis
@@ -300,7 +300,7 @@ extension EmojiExplorerViewController {
             let allItems = allSnapshot.items.compactMap({ $0.model as? Item })
             for _ in 0..<5 {
                 if let item = allItems.randomElement() {
-                    self.starredEmojis.insert(item)
+                    starredEmojis.insert(item)
                 }
             }
         })

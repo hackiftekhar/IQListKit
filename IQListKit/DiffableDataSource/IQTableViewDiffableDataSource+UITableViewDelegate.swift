@@ -30,12 +30,14 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
     // MARK: - Height
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+                let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
             return UITableView.automaticDimension
         }
 
         let itemSize: CGSize
-        if let size: CGSize = item.type.estimatedSize(for: item.model, listView: tableView) {
+        if let model = item.model as? AnyHashable,
+           let size: CGSize = type.privateEstimatedSize(for: model, listView: tableView) {
             itemSize = size
         } else {
             itemSize = CGSize(width: tableView.frame.width, height: UITableView.automaticDimension)
@@ -45,7 +47,8 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+                let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type else {
             return UITableView.automaticDimension
         }
 
@@ -53,7 +56,8 @@ extension IQTableViewDiffableDataSource: UITableViewDelegate {
 
         if let size: CGSize = dataSource?.listView(tableView, size: item, at: indexPath) {
             itemSize = size
-        } else if let size: CGSize = item.type.size(for: item.model, listView: tableView) {
+        } else if let model = item.model as? AnyHashable,
+                  let size: CGSize = type.privateSize(for: model, listView: tableView) {
             itemSize = size
         } else {
             itemSize = CGSize(width: tableView.frame.width, height: UITableView.automaticDimension)
@@ -69,11 +73,13 @@ extension IQTableViewDiffableDataSource {
 
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
 
-        guard let item: IQItem = itemIdentifier(for: indexPath) else {
+        guard let item: IQItem = itemIdentifier(for: indexPath),
+              let type: IQViewSizeProvider.Type = item.type as? IQViewSizeProvider.Type,
+              let model = item.model as? AnyHashable else {
             return 0
         }
 
-        return item.type.indentationLevel(for: item.model, listView: tableView)
+        return type.privateIndentationLevel(for: model, listView: tableView)
     }
 
     func tableView(_ tableView: UITableView,
@@ -194,7 +200,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = headerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.headerType,
                   let headerModel = aSection.headerModel,
-                  let size = type.estimatedSize(for: headerModel, listView: tableView) {
+                  let size = type.privateEstimatedSize(for: headerModel, listView: tableView) {
             sectionSize = size
         } else {
             sectionSize = CGSize(width: tableView.frame.width, height: tableView.estimatedSectionHeaderHeight)
@@ -217,7 +223,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = footerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.footerType,
                   let footerModel = aSection.footerModel,
-                  let size = type.estimatedSize(for: footerModel, listView: tableView) {
+                  let size = type.privateEstimatedSize(for: footerModel, listView: tableView) {
             sectionSize = size
         } else {
             sectionSize = CGSize(width: tableView.frame.width, height: tableView.estimatedSectionFooterHeight)
@@ -240,7 +246,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = headerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.headerType,
                   let headerModel = aSection.headerModel,
-                  let size = type.size(for: headerModel, listView: tableView) {
+                  let size = type.privateSize(for: headerModel, listView: tableView) {
             sectionSize = size
         } else {
             sectionSize = CGSize(width: tableView.frame.width, height: tableView.sectionHeaderHeight)
@@ -263,7 +269,7 @@ extension IQTableViewDiffableDataSource {
             sectionSize = footerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.footerType,
                   let footerModel = aSection.footerModel,
-                  let size = type.size(for: footerModel, listView: tableView) {
+                  let size = type.privateSize(for: footerModel, listView: tableView) {
             sectionSize = size
         } else {
             sectionSize = CGSize(width: tableView.frame.width, height: tableView.sectionFooterHeight)
@@ -297,7 +303,7 @@ extension IQTableViewDiffableDataSource {
 
             if let supplementaryView = supplementaryView as? IQModelModifiable {
                 if let headerModel = aSection.headerModel {
-                    supplementaryView.setModel(headerModel)
+                    supplementaryView.privateSetModel(headerModel)
                 }
             } else if supplementaryView != nil {
                 print("""
@@ -347,7 +353,7 @@ extension IQTableViewDiffableDataSource {
 
             if let supplementaryView = supplementaryView as? IQModelModifiable {
                 if let footerModel = aSection.footerModel {
-                    supplementaryView.setModel(footerModel)
+                    supplementaryView.privateSetModel(footerModel)
                 }
             } else if supplementaryView != nil {
                 print("""

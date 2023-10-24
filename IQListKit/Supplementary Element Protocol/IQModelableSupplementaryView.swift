@@ -31,28 +31,64 @@ where Self: UIView {
 
     /// model variable which will be used to configure the cell contents
     var model: Model? { get set }
+
+    /// Estimated size of the cell
+    /// - Parameters:
+    ///   - model: Cell model
+    ///   - listView: The IQListView object
+    static func estimatedSize(for model: Model, listView: IQListView) -> CGSize?
+
+    /// Size of the cell
+    /// - Parameters:
+    ///   - model: Cell model
+    ///   - listView: The IQListView object
+    static func size(for model: Model, listView: IQListView) -> CGSize?
+
+    /// indentationLevel of cell
+    /// - Parameters:
+    ///   - model: Cell model
+    ///   - listView: The IQListView object
+    static func indentationLevel(for model: Model, listView: IQListView) -> Int
+}
+
+public extension IQModelableSupplementaryView {
+
+    static func estimatedSize(for model: Model, listView: IQListView) -> CGSize? {
+        return size(for: model, listView: listView)
+    }
+
+    static func size(for model: Model, listView: IQListView) -> CGSize? {
+        return nil
+    }
+
+    static func indentationLevel(for model: Model, listView: IQListView) -> Int {
+        return 0
+    }
 }
 
 @MainActor
-public extension IQModelableSupplementaryView {
+extension IQModelableSupplementaryView where Self: IQModelModifiable {
 
-    func setModel(_ model: AnyHashable) {
+    public func privateSetModel(_ model: AnyHashable) {
         self.model = model as? Model
     }
 }
 
 @MainActor
-public extension IQModelableSupplementaryView {
+extension IQModelableSupplementaryView where Self: IQViewSizeProvider {
 
-    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
+    public static func privateEstimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        guard let model = model as? Model else { return nil }
+        return estimatedSize(for: model, listView: listView)
+    }
+
+    public static func privateSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
+        guard let model = model as? Model else { return nil }
         return size(for: model, listView: listView)
     }
 
-    static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
-        return nil
-    }
-
-    static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int {
-        return 0
+    public static func privateIndentationLevel(for model: AnyHashable, listView: IQListView) -> Int {
+        guard let model = model as? Model else { return 0 }
+        return indentationLevel(for: model, listView: listView)
     }
 }

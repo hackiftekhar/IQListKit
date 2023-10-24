@@ -37,7 +37,7 @@ final public class IQListWrapper<T: IQModelableCell> {
                 type: T.Type, registerType: IQList.RegisterType,
                 delegateDataSource: IQListViewDelegateDataSource? = nil,
                 defaultRowAnimation: UITableView.RowAnimation = .fade,
-                reloadQueue: DispatchQueue = DispatchQueue.main) {
+                reloadQueue: DispatchQueue? = nil) {
         list = IQList(listView: listView, delegateDataSource: delegateDataSource,
                       defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
         list.registerCell(type: type.self, registerType: registerType)

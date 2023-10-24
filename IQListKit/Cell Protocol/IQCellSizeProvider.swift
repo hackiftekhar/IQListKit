@@ -27,21 +27,27 @@ import UIKit
 @MainActor
 public protocol IQViewSizeProvider where Self: UIView /* IQListCell || UIView (For supplementary header/footer */ {
 
+    /// DO NOT OVERRIDE THIS FUNCTION
+    ///
     /// Estimated size of the cell
     /// - Parameters:
     ///   - model: Cell model
     ///   - listView: The IQListView object
-    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize?
+    static func privateEstimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize?
 
+    /// DO NOT OVERRIDE THIS FUNCTION
+    ///
     /// Size of the cell
     /// - Parameters:
     ///   - model: Cell model
     ///   - listView: The IQListView object
-    static func size(for model: AnyHashable, listView: IQListView) -> CGSize?
+    static func privateSize(for model: AnyHashable, listView: IQListView) -> CGSize?
 
+    /// DO NOT OVERRIDE THIS FUNCTION
+    ///
     /// indentationLevel of cell
     /// - Parameters:
     ///   - model: Cell model
     ///   - listView: The IQListView object
-    static func indentationLevel(for model: AnyHashable, listView: IQListView) -> Int
+    static func privateIndentationLevel(for model: AnyHashable, listView: IQListView) -> Int
 }

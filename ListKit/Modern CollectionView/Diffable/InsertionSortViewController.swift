@@ -123,7 +123,10 @@ final class InsertionSortViewController: UIViewController {
 
     func randmize(animated: Bool) {
 
-        let nodeSize = InsertionCell.size(for: nil, listView: insertionCollectionView)
+        let node: Node = .init(sectionId: 0, value: 0, maxValue: 0)
+        guard let nodeSize = InsertionCell.size(for: node, listView: insertionCollectionView) else {
+            return
+        }
         let rows = Int(insertionCollectionView.bounds.height / nodeSize.height) - 1
         let columns = Int(insertionCollectionView.bounds.width / nodeSize.width)
         sections.removeAll()
