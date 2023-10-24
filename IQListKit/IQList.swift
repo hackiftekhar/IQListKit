@@ -151,7 +151,7 @@ public actor IQList {
 
     // MARK: - Initialization
 
-    /// Convenience Initialization
+    /// Initialization
     /// - Parameters:
     ///   - listView: UITableView or UICollectionView
     ///   - delegateDataSource: the delegate and dataSource of the IQListView

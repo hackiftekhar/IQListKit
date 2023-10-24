@@ -25,7 +25,6 @@ import UIKit
 @MainActor
 final public class IQListWrapper<T: IQModelableCell> {
 
-    @ReloadActor
     var section: IQSection = IQSection(identifier: "main") {
         didSet {
             reloadData(animated: false)
@@ -44,10 +43,8 @@ final public class IQListWrapper<T: IQModelableCell> {
         list.registerCell(type: type.self, registerType: registerType)
     }
 
-    @ReloadActor
     private var _models: [T.Model] = []
 
-    @ReloadActor
     public var models: [T.Model] {
         get {
             return _models
@@ -59,16 +56,14 @@ final public class IQListWrapper<T: IQModelableCell> {
     }
 
     public func setModels(_ models: [T.Model], animated: Bool, completion: (() -> Void)? = nil) {
-        Task { @ReloadActor in
-            _models = models
-            reloadData(animated: animated, completion: completion)
-        }
+        _models = models
+        reloadData(animated: animated, completion: completion)
     }
 
-    @ReloadActor
     private func reloadData(animated: Bool, completion: (() -> Void)? = nil) {
 
-        list.reloadData({ [self] in
+        list.reloadData({ [weak self, section, models] in
+            guard let self = self else { return }
             list.append([section])
             list.append(T.self, models: models)
         }, animatingDifferences: animated, completion: completion)
