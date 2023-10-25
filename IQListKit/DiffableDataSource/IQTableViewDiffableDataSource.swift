@@ -35,10 +35,6 @@ internal final class IQTableViewDiffableDataSource: UITableViewDiffableDataSourc
     @MainActor internal var clearsSelectionOnDidSelect = true
     @MainActor internal var contextMenuPreviewIndexPath: IndexPath?
 
-    override init(tableView: UITableView, cellProvider: @escaping IQTableViewDiffableDataSource.CellProvider) {
-        super.init(tableView: tableView, cellProvider: cellProvider)
-    }
-
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
         let sectionIdentifiers: [IQSection] = snapshot().sectionIdentifiers

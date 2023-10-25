@@ -36,11 +36,6 @@ internal final class IQCollectionViewDiffableDataSource: UICollectionViewDiffabl
     @MainActor weak var dataSource: IQListViewDataSource?
     @MainActor internal var clearsSelectionOnDidSelect: Bool = true
 
-    override init(collectionView: UICollectionView,
-                  cellProvider: @escaping IQCollectionViewDiffableDataSource.CellProvider) {
-        super.init(collectionView: collectionView, cellProvider: cellProvider)
-    }
-
     // MARK: - Supplementary view
 
     // swiftlint:disable function_body_length
