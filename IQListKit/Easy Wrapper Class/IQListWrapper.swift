@@ -62,10 +62,9 @@ final public class IQListWrapper<T: IQModelableCell> {
 
     private func reloadData(animated: Bool, completion: (() -> Void)? = nil) {
 
-        list.reloadData({ [weak self, section, models] in
-            guard let self = self else { return }
-            list.append([section])
-            list.append(T.self, models: models)
+        list.reloadData({ [section, models] builder in
+            builder.append([section])
+            builder.append(T.self, models: models)
         }, animatingDifferences: animated, completion: completion)
     }
 }

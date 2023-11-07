@@ -63,7 +63,7 @@ class WiFiSettingsViewController: UIViewController {
         self.navigationItem.title = "Wi-Fi"
         configureTableView()
         configureDataSource()
-        updateUI(animated: false)
+        updateUI(animated: true)
     }
 }
 
@@ -71,7 +71,7 @@ extension WiFiSettingsViewController {
 
     func configureDataSource() {
 
-//        list.registerCell(type: WiFiSettingsCell.self, registerType: .class)
+        list.registerCell(type: WiFiSettingsCell.self, registerType: .class)
 
         wifiController = WiFiController { [weak self] (_: WiFiController) in
             guard let self = self else { return }
@@ -87,28 +87,28 @@ extension WiFiSettingsViewController {
         let configItems = configurationItems.filter { !($0.type == .currentNetwork && !controller.wifiEnabled) }
 
         let wifiEnabled: Bool = wifiController.wifiEnabled
-        list.reloadData({ [list] in
+        list.reloadData({ builder in
 
             let configSection = IQSection(identifier: Section.config)
-            list.append([configSection])
+            builder.append([configSection])
 
             let configModels: [WiFiSettingsCell.Model] = configItems.map {
                 return WiFiSettingsCell.Model(wifiEnabled: wifiEnabled, item: $0)
             }
 
-            list.append(WiFiSettingsCell.self, models: configModels)
+            builder.append(WiFiSettingsCell.self, models: configModels)
 
             if controller.wifiEnabled {
                 let sortedNetworks = controller.availableNetworks.sorted { $0.name < $1.name }
                 let networkItems = sortedNetworks.map { Item(network: $0) }
 
                 let networkSection = IQSection(identifier: Section.networks)
-                list.append([networkSection])
+                builder.append([networkSection])
 
                 let networkModels: [WiFiSettingsCell.Model] = networkItems.map {
                     return WiFiSettingsCell.Model(wifiEnabled: wifiEnabled, item: $0)
                 }
-                list.append(WiFiSettingsCell.self, models: networkModels, section: networkSection)
+                builder.append(WiFiSettingsCell.self, models: networkModels, section: networkSection)
             }
 
         }, animatingDifferences: animated)

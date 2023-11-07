@@ -124,7 +124,7 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
                                        kind: Self.headerElementKind,
                                        registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             var identifierOffset = 0
             let itemsPerSection = 18
@@ -135,7 +135,7 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
                 let section = IQSection(identifier: section,
                                         headerType: TitleSupplementaryView.self,
                                         headerModel: headerModel)
-                list.append([section])
+                builder.append([section])
 
                 let maxIdentifier = identifierOffset + itemsPerSection
 
@@ -146,7 +146,7 @@ extension OrthogonalScrollBehaviorViewController: IQListViewDelegateDataSource {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)", cornerRadius: 8.0, badgeCount: nil))
                 }
 
-                list.append(TextCell.self, models: items)
+                builder.append(TextCell.self, models: items)
                 identifierOffset += itemsPerSection
             }
         }

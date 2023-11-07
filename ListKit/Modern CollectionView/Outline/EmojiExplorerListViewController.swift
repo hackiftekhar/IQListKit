@@ -79,14 +79,14 @@ extension EmojiExplorerListViewController {
 
 //        list.registerCell(type: EmojiListCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             for category in Emoji.Category.allCases.reversed() {
                 let section = IQSection(identifier: category)
-                list.append([section])
+                builder.append([section])
 
                 let items = category.emojis.map { Item(emoji: $0, title: String(describing: category)) }
-                list.append(EmojiListCell.self, models: items)
+                builder.append(EmojiListCell.self, models: items)
             }
         }
     }

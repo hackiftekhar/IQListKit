@@ -63,16 +63,16 @@ extension ConferenceNewsFeedViewController {
 
 //        list.registerCell(type: ConferenceNewsFeedCell.self, registerType: .class)
 
-        list.reloadData { [list, newsController] in
+        list.reloadData { [newsController] builder in
 
             let sectionIdentifier = UUID()
             let section = IQSection(identifier: Section.main)
-            list.append([section])
+            builder.append([section])
 
             let items: [ConferenceNewsFeedCell.Model] = newsController.items.map {
                 .init(section: sectionIdentifier, item: $0, isLastCell: false)
             }
-            list.append(ConferenceNewsFeedCell.self, models: items)
+            builder.append(ConferenceNewsFeedCell.self, models: items)
         }
     }
 }

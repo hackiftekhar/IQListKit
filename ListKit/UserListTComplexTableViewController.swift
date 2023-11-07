@@ -14,8 +14,7 @@ class UserListTComplexTableViewController: UITableViewController {
     private var users = [User]()
     private var books = [Book]()
 
-    private lazy var reloadQueue: DispatchQueue = DispatchQueue(label: "\(Self.self)")
-    private lazy var list = IQList(listView: tableView, delegateDataSource: self, reloadQueue: reloadQueue)
+    private lazy var list = IQList(listView: tableView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,23 +97,23 @@ extension UserListTComplexTableViewController {
 
     func refreshUI(animated: Bool = true) {
 
-        list.reloadData({ [list, users, books, defaultCellItems] in
+        list.reloadData({ [users, books, defaultCellItems] builder in
 
             let section1 = IQSection(identifier: "firstSection")
-            list.append([section1])
+            builder.append([section1])
 
             for index in 0..<users.count {
                 if index < defaultCellItems.count {
                     let defaultCellItem = defaultCellItems[index]
-                    list.append(IQTableViewCell.self, models: [defaultCellItem], section: section1)
+                    builder.append(IQTableViewCell.self, models: [defaultCellItem], section: section1)
                 }
 
                 let user = users[index]
-                list.append(UserCell.self, models: [user], section: section1)
+                builder.append(UserCell.self, models: [user], section: section1)
 
                 if index < books.count {
                     let book = books[index]
-                    list.append(BookCell.self, models: [book], section: section1)
+                    builder.append(BookCell.self, models: [book], section: section1)
                 }
             }
 

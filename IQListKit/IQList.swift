@@ -36,6 +36,12 @@ public actor IQList {
         case manual
     }
 
+    private class NonIsolated {
+        var removeDuplicates: Bool = false
+        var registeredCells: [any IQModelableCell.Type] = []
+        var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
+    }
+
     // MARK: - Public Properties
     public let listView: IQListView
 
@@ -48,22 +54,41 @@ public actor IQList {
 
     nonisolated static let elementKindSectionHeader: String = "UICollectionElementKindSectionHeader"
     nonisolated static let elementKindSectionFooter: String = "UICollectionElementKindSectionFooter"
-    nonisolated let cellRegisterType: CellRegistrationType
+    nonisolated internal let cellRegisterType: CellRegistrationType
 
     nonisolated public let defaultRowAnimation: UITableView.RowAnimation
 
-    nonisolated public var removeDuplicatesWhenReloading: Bool {
+    private let nonIsolated: NonIsolated = NonIsolated()
+    nonisolated public var removeDuplicates: Bool {
         get {
-            snapshotWrapper.removeDuplicatesWhenReloading
+            nonIsolated.removeDuplicates
         }
         set {
-            snapshotWrapper.removeDuplicatesWhenReloading = newValue
+            nonIsolated.removeDuplicates = newValue
+        }
+    }
+
+    nonisolated internal var registeredCells: [any IQModelableCell.Type] {
+        get {
+            nonIsolated.registeredCells
+        }
+        set {
+            nonIsolated.registeredCells = newValue
+        }
+    }
+
+    nonisolated internal var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] {
+        get {
+            nonIsolated.registeredSupplementaryViews
+        }
+        set {
+            nonIsolated.registeredSupplementaryViews = newValue
         }
     }
 
     // MARK: - noItem States
     @MainActor
-    private let noItemContainerView: UIView = UIView()
+    internal let noItemContainerView: UIView = UIView()
 
     @MainActor
     public var noItemStateView: IQNoItemStateRepresentable? {
@@ -117,13 +142,6 @@ public actor IQList {
     // MARK: - Private Properties
 
     nonisolated internal let reloadQueue: DispatchQueue
-
-    @ReloadActor
-    internal let snapshotWrapper: IQDiffableDataSourceSnapshotWrapper = IQDiffableDataSourceSnapshotWrapper()
-
-    @ReloadActor public func batchSnapshot() -> IQDiffableDataSourceSnapshot {
-        snapshotWrapper.batchSnapshot
-    }
 
     nonisolated internal let diffableDataSource: IQDiffableDataSource
 
@@ -248,7 +266,8 @@ public actor IQList {
                 if let responder = controller.next { controller = responder
                 } else { break }
             }
-            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)")
+            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)",
+                                                           qos: .userInteractive, attributes: .concurrent)
             self.reloadQueue = reloadQueue
         }
 
@@ -307,81 +326,14 @@ public actor IQList {
                 if let responder = controller.next { controller = responder
                 } else { break }
             }
-            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)")
+            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)",
+                                                           qos: .userInteractive, attributes: .concurrent)
             self.reloadQueue = reloadQueue
         }
 
         self.defaultRowAnimation = .automatic
         self.cellRegisterType = cellRegisterType
         collectionViewDiffableDataSource.proxyDelegate = self
-    }
-}
-
-@MainActor
-extension IQList {
-
-    public var noItemImage: UIImage? {
-        get {   noItemStateView?.noItemImage    }
-        set {   noItemStateView?.noItemImage = newValue  }
-    }
-
-    public var noItemTitle: String? {
-        get {   noItemStateView?.noItemTitle    }
-        set {   noItemStateView?.noItemTitle = newValue  }
-    }
-
-    public var noItemMessage: String? {
-        get {   noItemStateView?.noItemMessage    }
-        set {   noItemStateView?.noItemMessage = newValue  }
-    }
-
-    public var loadingMessage: String? {
-        get {   noItemStateView?.loadingMessage    }
-        set {   noItemStateView?.loadingMessage = newValue  }
-    }
-
-    public func noItemAction(title: String?, target: Any?, action: Selector) {
-        noItemStateView?.action(title: title, target: target, action: action)
-    }
-
-    private func noItemStateViewChanged() {
-
-        if let noItemStateView = noItemStateView {
-            noItemContainerView.addSubview(noItemStateView)
-            if noItemStateView.translatesAutoresizingMaskIntoConstraints {
-                noItemStateView.center = CGPoint(x: noItemContainerView.bounds.midX,
-                                                 y: noItemContainerView.bounds.midY)
-                noItemStateView.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin,
-                                                    .flexibleLeftMargin, .flexibleRightMargin]
-            } else {
-                noItemStateView.leadingAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.leadingAnchor,
-                                                         constant: 20)
-                .isActive = true
-                noItemStateView.trailingAnchor.constraint(lessThanOrEqualTo: noItemContainerView.trailingAnchor,
-                                                          constant: 20)
-                .isActive = true
-                noItemStateView.topAnchor.constraint(greaterThanOrEqualTo: noItemContainerView.topAnchor,
-                                                     constant: 20)
-                .isActive = true
-                noItemStateView.bottomAnchor.constraint(lessThanOrEqualTo: noItemContainerView.bottomAnchor,
-                                                        constant: 20)
-                .isActive = true
-            }
-        }
-    }
-
-    private func updateNoItemStateViewPosition() {
-        listView.insertSubview(noItemContainerView, at: 0)
-        noItemContainerView.translatesAutoresizingMaskIntoConstraints = false
-
-        let inset: UIEdgeInsets = listView.adjustedContentInset
-        noItemContainerView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
-            .isActive = true
-        noItemContainerView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
-            .isActive = true
-        noItemContainerView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
-        let height = listView.frame.height - inset.top - inset.bottom
-        noItemContainerView.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
 }
 

@@ -96,12 +96,12 @@ extension CustomCellListViewController {
 
 //        list.registerCell(type: CustomListCell.self, registerType: .class)
 
-        list.reloadData({ [list] in
+        list.reloadData({ builder in
 
             let section = IQSection(identifier: Section.main)
-            list.append([section])
+            builder.append([section])
 
-            list.append(CustomListCell.self, models: Item.all)
+            builder.append(CustomListCell.self, models: Item.all)
         })
     }
 }

@@ -41,36 +41,42 @@ public extension IQList {
         }
     }
 
+    // swiftlint:disable line_length
     /// Performs the list reload
     /// - Parameters:
     ///   - updates: update block which will be called to generate the snapshot
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
-    nonisolated
-    func reloadData(_ updates: @ReloadActor @escaping () -> Void,
-                    updateExistingSnapshot: Bool = false,
-                    animatingDifferences: Bool = true, diffing: Bool? = nil,
-                    animation: UITableView.RowAnimation? = nil,
-                    endLoadingOnCompletion: Bool = true,
-                    completion: (() -> Void)? = nil) {
+    nonisolated func reloadData(_ updates: @ReloadActor @escaping (_ builder: IQDiffableDataSourceSnapshotBuilder) -> Void,
+                                updateExistingSnapshot: Bool = false,
+                                animatingDifferences: Bool = true, diffing: Bool? = nil,
+                                animation: UITableView.RowAnimation? = nil,
+                                endLoadingOnCompletion: Bool = true,
+                                completion: (@MainActor () -> Void)? = nil) {
 
-        reloadQueue.async { @ReloadActor [weak self] in
+        reloadQueue.async { @ReloadActor [removeDuplicates, registeredCells, registeredSupplementaryViews, cellRegisterType, existingSnapshot = self.snapshot(), weak self] in
             guard let self = self else { return }
 
+            let initialSnapshot: IQDiffableDataSourceSnapshot
             if updateExistingSnapshot {
-                snapshotWrapper.reset(with: snapshot())
+                initialSnapshot = existingSnapshot
             } else {
-                snapshotWrapper.reset(with: IQDiffableDataSourceSnapshot())
+                initialSnapshot = IQDiffableDataSourceSnapshot()
             }
 
-            updates()
+            let builder = IQDiffableDataSourceSnapshotBuilder(removeDuplicates: removeDuplicates,
+                                                              registeredCells: registeredCells,
+                                                              registeredSupplementaryViews: registeredSupplementaryViews,
+                                                              batchSnapshot: initialSnapshot)
 
-            let finalBatchSnapshot: IQDiffableDataSourceSnapshot = snapshotWrapper.batchSnapshot
-            let newCells = snapshotWrapper.newCells
-            let newSupplementaryViews = snapshotWrapper.newSupplementaryViews
+            updates(builder)
 
-            snapshotWrapper.newCells = []
-            snapshotWrapper.newSupplementaryViews = [:]
+            let finalBatchSnapshot: IQDiffableDataSourceSnapshot = builder.batchSnapshot
+            let newCells = builder.newCells
+            let newSupplementaryViews = builder.newSupplementaryViews
+
+            builder.newCells = []
+            builder.newSupplementaryViews = [:]
 
             if newCells.isEmpty && newSupplementaryViews.isEmpty {
                 privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
@@ -97,6 +103,7 @@ public extension IQList {
             }
         }
     }
+    // swiftlint:enable line_length
 
     nonisolated
     func apply(_ snapshot: IQDiffableDataSourceSnapshot,

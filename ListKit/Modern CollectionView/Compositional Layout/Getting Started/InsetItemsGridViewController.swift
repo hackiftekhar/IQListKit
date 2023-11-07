@@ -61,12 +61,12 @@ extension InsetItemsGridViewController {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
             let section = IQSection(identifier: Section.main)
-            list.append([section])
+            builder.append([section])
 
             let items: [TextCell.Model] = Array(0..<94).map { .init(text: "\($0)", cornerRadius: 0, badgeCount: 0) }
-            list.append(TextCell.self, models: items)
+            builder.append(TextCell.self, models: items)
         }
     }
 }

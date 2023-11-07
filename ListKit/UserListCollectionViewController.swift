@@ -10,14 +10,13 @@ import IQListKit
 
 class UserListCollectionViewController: UICollectionViewController {
 
-    private var users: [User] = []
+    private var users1: [User] = []
     private var users2: [User] = []
 
     private typealias StoryboardCell = CollectionUserStoryboardCell
     private typealias Cell = CollectionUserCell
 
-    private lazy var reloadQueue: DispatchQueue = DispatchQueue(label: "\(Self.self)")
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: reloadQueue)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,43 +38,77 @@ class UserListCollectionViewController: UICollectionViewController {
 
 extension UserListCollectionViewController {
 
+//    @IBAction func refresh(_ sender: Any) {
+//
+//        var allUsers: [User] = []
+//        allUsers.append(User(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+//        allUsers.append(User(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
+//        allUsers.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
+//        allUsers.append(User(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
+//        allUsers.append(User(id: 5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
+//        allUsers.append(User(id: 6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
+//        allUsers.append(User(id: 7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
+//        allUsers.append(User(id: 8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
+//        allUsers.append(User(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
+//        allUsers.append(User(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
+//
+//        var users1: [User] = []
+//        var users2: [User] = []
+//        for user in allUsers {
+//
+//            if Bool.random() {
+//                users1.append(user)
+//            } else {
+//                users2.append(user)
+//            }
+//        }
+//
+//        self.users1 = users1.shuffled()
+//        self.users2 = users2.shuffled()
+//        self.refreshUI()
+//    }
+
     @IBAction func refresh(_ sender: Any) {
 
-        var allUsers: [User] = []
-        allUsers.append(User(id: 1, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
-        allUsers.append(User(id: 2, name: "Feroz Muni", email: "feroz.muni.1920@gmail.com"))
-        allUsers.append(User(id: 3, name: "Himanshu Choudhary", email: "himanshu.choudhary@yahoo.co.in"))
-        allUsers.append(User(id: 4, name: "Hari Parikh", email: "hari.hari.p@gmail.com"))
-        allUsers.append(User(id: 5, name: "Imran Parveen", email: "imran.parveen.1980@gmail.com"))
-        allUsers.append(User(id: 6, name: "Valmiki Girsh", email: "valmiki.girish@gmail.com"))
-        allUsers.append(User(id: 7, name: "Abhyagni Chellaiah", email: "abhyagni.chellaiah@gmail.com"))
-        allUsers.append(User(id: 8, name: "Suresh Natasha", email: "suresh.natasha@gmail.com"))
-        allUsers.append(User(id: 9, name: "Rupak Maudgalya", email: "rupak.mudgalya@gmail.com"))
-        allUsers.append(User(id: 10, name: "Arjit Kanetkar", email: "arjit.kanetkar@gmail.com"))
+        DispatchQueue.global().async {
+            for _ in 1...1000 {
+                DispatchQueue.global().async {
+                    var allUsers: [User] = []
 
-        users.removeAll()
-        users2.removeAll()
-        for user in allUsers {
+                    for id in 1...1000 {
+                        allUsers.append(User(id: id, name: "Sid Kumar", email: "sid.kumar1@gmail.com"))
+                    }
 
-            if Bool.random() {
-                users.append(user)
-            } else {
-                users2.append(user)
+                    var users1: [User] = []
+                    var users2: [User] = []
+                    for user in allUsers {
+
+                        if Bool.random() {
+                            users1.append(user)
+                        } else {
+                            users2.append(user)
+                        }
+                    }
+
+                    DispatchQueue.main.async { [users1, users2] in
+                        self.users1 = users1.shuffled()
+                        self.users2 = users2.shuffled()
+                        self.refreshUI()
+                    }
+                }
             }
         }
-
-        refreshUI()
     }
 
     @IBAction func empty(_ sender: UIBarButtonItem) {
-        self.users.removeAll()
+        self.users1.removeAll()
         self.users2.removeAll()
         refreshUI()
     }
 
     func refreshUI(animated: Bool = true) {
 
-        list.reloadData({ [list, users, users2] in
+        list.reloadData({ [users1, users2] builder in
 
             let section1: IQSection
             if Bool.random() {
@@ -85,13 +118,13 @@ extension UserListCollectionViewController {
             } else {
                 section1 = IQSection(identifier: "firstSection", header: "First Section")
             }
-            list.append([section1])
+            builder.append([section1])
 
-            for user in users {
+            for user in users1 {
                 if Bool.random() {
-                    list.append(Cell.self, models: [user], section: section1)
+                    builder.append(Cell.self, models: [user], section: section1)
                 } else {
-                    list.append(StoryboardCell.self, models: [user], section: section1)
+                    builder.append(StoryboardCell.self, models: [user], section: section1)
                 }
             }
 
@@ -104,17 +137,17 @@ extension UserListCollectionViewController {
                 section2 = IQSection(identifier: "secondSection", header: "Second Section")
             }
 
-            list.append([section2])
+            builder.append([section2])
 
             for user in users2 {
                 if Bool.random() {
-                    list.append(Cell.self, models: [user], section: section2)
+                    builder.append(Cell.self, models: [user], section: section2)
                 } else {
-                    list.append(StoryboardCell.self, models: [user], section: section2)
+                    builder.append(StoryboardCell.self, models: [user], section: section2)
                 }
             }
 
-        }, animatingDifferences: animated, completion: nil)
+        }, animatingDifferences: animated)
     }
 }
 
@@ -140,8 +173,8 @@ extension UserListCollectionViewController: IQListViewDelegateDataSource {
 
 extension UserListCollectionViewController: CollectionUserCellDelegate {
     func userCell(_ cell: CollectionUserCell, didDelete item: User) {
-        if let index = users.firstIndex(of: item) {
-            users.remove(at: index)
+        if let index = users1.firstIndex(of: item) {
+            users1.remove(at: index)
             refreshUI()
         } else if let index = users2.firstIndex(of: item) {
             users2.remove(at: index)
@@ -152,8 +185,8 @@ extension UserListCollectionViewController: CollectionUserCellDelegate {
 
 extension UserListCollectionViewController: CollectionUserStoryboardCellDelegate {
     func userCell(_ cell: CollectionUserStoryboardCell, didDelete item: User) {
-        if let index = users.firstIndex(of: item) {
-            users.remove(at: index)
+        if let index = users1.firstIndex(of: item) {
+            users1.remove(at: index)
             refreshUI()
         } else if let index = users2.firstIndex(of: item) {
             users2.remove(at: index)

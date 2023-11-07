@@ -1,5 +1,5 @@
 //
-//  IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift
+//  IQDiffableDataSourceSnapshotBuilder+UpdateSection.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,7 @@
 import UIKit
 
 @ReloadActor
-extension IQDiffableDataSourceSnapshotWrapper {
+public extension IQDiffableDataSourceSnapshotBuilder {
 
     /// Appends a section to the list
     /// This method can also be used in background thread

@@ -1,5 +1,5 @@
 //
-//  IQDiffableDataSourceSnapshotWrapper.swift
+//  IQDiffableDataSourceSnapshotBuilder.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,47 +30,27 @@ final public actor ReloadActor: GlobalActor {
 }
 
 @ReloadActor
-internal final class IQDiffableDataSourceSnapshotWrapper {
+public final class IQDiffableDataSourceSnapshotBuilder: Sendable {
 
-    private class NonIsolated {
-        var removeDuplicatesWhenReloading: Bool = false
-        var registeredCells: [any IQModelableCell.Type] = []
-        var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
+    let removeDuplicates: Bool
+
+    internal var registeredCells: [any IQModelableCell.Type] = []
+    internal var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
+
+    internal var newCells: [any IQModelableCell.Type] = []
+    internal var newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
+
+    internal var batchSnapshot: IQDiffableDataSourceSnapshot
+
+    init(removeDuplicates: Bool,
+         registeredCells: [any IQModelableCell.Type],
+         registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]],
+         batchSnapshot: IQDiffableDataSourceSnapshot) {
+        self.removeDuplicates = removeDuplicates
+        self.registeredCells = registeredCells
+        self.registeredSupplementaryViews = registeredSupplementaryViews
+        self.batchSnapshot = batchSnapshot
     }
-
-    nonisolated var removeDuplicatesWhenReloading: Bool {
-        get {
-            nonIsolated.removeDuplicatesWhenReloading
-        }
-        set {
-            nonIsolated.removeDuplicatesWhenReloading = newValue
-        }
-    }
-
-    nonisolated var registeredCells: [any IQModelableCell.Type] {
-        get {
-            nonIsolated.registeredCells
-        }
-        set {
-            nonIsolated.registeredCells = newValue
-        }
-    }
-
-    nonisolated var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] {
-        get {
-            nonIsolated.registeredSupplementaryViews
-        }
-        set {
-            nonIsolated.registeredSupplementaryViews = newValue
-        }
-    }
-
-    private let nonIsolated: NonIsolated = NonIsolated()
-
-    var newCells: [any IQModelableCell.Type] = []
-    var newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
-
-    var batchSnapshot: IQDiffableDataSourceSnapshot = IQDiffableDataSourceSnapshot()
 
     func reset(with snapshot: IQDiffableDataSourceSnapshot) {
         batchSnapshot = snapshot

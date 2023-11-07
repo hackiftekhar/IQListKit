@@ -70,12 +70,12 @@ extension CustomConfigurationViewController {
         list.clearsSelectionOnDidSelect = false
 //        list.registerCell(type: CustomConfigurationCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             let section = IQSection(identifier: Section.main)
-            list.append([section])
+            builder.append([section])
 
-            list.append(CustomConfigurationCell.self, models: Item.all)
+            builder.append(CustomConfigurationCell.self, models: Item.all)
         }
     }
 }

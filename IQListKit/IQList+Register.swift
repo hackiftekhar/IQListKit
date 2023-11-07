@@ -77,11 +77,11 @@ public extension IQList {
                                                          bundle: Bundle,
                                                          logEnabled: Bool) {
 
-        guard snapshotWrapper.registeredCells.contains(where: { $0 == type}) == false else {
+        guard registeredCells.contains(where: { $0 == type}) == false else {
             return
         }
 
-        snapshotWrapper.registeredCells.append(type)
+        registeredCells.append(type)
 
         let identifier = String(describing: type)
 
@@ -182,15 +182,15 @@ public extension IQList {
                                                                                    registerType: RegisterType,
                                                                                    bundle: Bundle,
                                                                                    logEnabled: Bool) {
-        let existingTypes = snapshotWrapper.registeredSupplementaryViews[kind] ?? []
+        let existingTypes = registeredSupplementaryViews[kind] ?? []
         guard existingTypes.contains(where: {$0 == type}) == false else {
             return
         }
 
         var newTypes: [any IQModelableSupplementaryView.Type] = existingTypes
         newTypes.append(type)
-        snapshotWrapper.registeredSupplementaryViews[kind] = newTypes
-        diffableDataSource.registeredSupplementaryViews = snapshotWrapper.registeredSupplementaryViews
+        registeredSupplementaryViews[kind] = newTypes
+        diffableDataSource.registeredSupplementaryViews = registeredSupplementaryViews
 
         let identifier = String(describing: type)
 

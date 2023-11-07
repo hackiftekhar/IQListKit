@@ -1,5 +1,5 @@
 //
-//  IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift
+//  IQDiffableDataSourceSnapshotBuilder+UpdateItem.swift
 //  https://github.com/hackiftekhar/IQListKit
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,7 @@
 import UIKit
 
 @ReloadActor
-extension IQDiffableDataSourceSnapshotWrapper {
+public extension IQDiffableDataSourceSnapshotBuilder {
 
     /// Append the models to the given section
     /// This method can also be used in background thread
@@ -73,7 +73,7 @@ extension IQDiffableDataSourceSnapshotWrapper {
                 section: IQSection? = nil,
                 beforeItem: IQItem? = nil, afterItem: IQItem? = nil) -> [IQItem] {
         var items: [IQItem] = items
-        if removeDuplicatesWhenReloading {
+        if removeDuplicates {
             let existingItems = batchSnapshot.itemIdentifiers
             let result = items.removeDuplicate(existingElements: existingItems)
             items = result.unique

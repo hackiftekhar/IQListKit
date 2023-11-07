@@ -58,16 +58,16 @@ extension CustomLayoutViewController {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             for aSection in Section.allCases {
                 let section = IQSection(identifier: aSection)
-                list.append([section])
+                builder.append([section])
 
                 let items: [TextCell.Model] = Array(0..<10).map {
                     .init(text: "\(aSection.rawValue):\($0)", cornerRadius: 0, badgeCount: 0)
                 }
-                list.append(TextCell.self, models: items)
+                builder.append(TextCell.self, models: items)
             }
         }
     }

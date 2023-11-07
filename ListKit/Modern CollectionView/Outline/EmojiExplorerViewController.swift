@@ -38,7 +38,7 @@ class EmojiExplorerViewController: UIViewController {
     var starredEmojis = Set<Item>()
 
     var collectionView: UICollectionView!
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -252,13 +252,21 @@ extension EmojiExplorerViewController {
 
         // create registrations up front, then choose the appropriate one to use in the cell provider
 
-        list.reloadData({ [list] in
+        list.reloadData({ builder in
             let sections: [IQSection] = Section.allCases.map { IQSection(identifier: $0) }
-            list.append(sections)
+            builder.append(sections)
         }, completion: { [self] in
 
+            doWorkAfterCompletion()
+        })
+    }
+
+    private func doWorkAfterCompletion() {
+
+        DispatchQueue.global(qos: .userInteractive).async { [list] in
+
             // recents (orthogonal scroller)
-            if let section = self.list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.recents }) {
+            if let section = list.sectionIdentifier(where: { ($0.identifier as? Section) == Section.recents }) {
                 let recentEmojis = Emoji.Category.recents.emojis
                 let recentListItems: [IQItem] = recentEmojis.map { IQItem(RecentCell.self, model: $0) }
                 var recentsSnapshot = IQDiffableDataSourceSectionSnapshot()
@@ -298,12 +306,14 @@ extension EmojiExplorerViewController {
             // prepopulate starred emojis
 
             let allItems = allSnapshot.items.compactMap({ $0.model as? Item })
-            for _ in 0..<5 {
-                if let item = allItems.randomElement() {
-                    starredEmojis.insert(item)
+            DispatchQueue.main.async {
+                for _ in 0..<5 {
+                    if let item = allItems.randomElement() {
+                        self.starredEmojis.insert(item)
+                    }
                 }
             }
-        })
+        }
     }
 }
 

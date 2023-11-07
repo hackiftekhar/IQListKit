@@ -26,6 +26,13 @@ import UIKit
 public struct IQItem: Hashable, Sendable {
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
+
+//        #if targetEnvironment(simulator)
+//        if Thread.isMainThread {
+//            print("Diffing \(lhs.type) on Main Thread")
+//        }
+//        #endif
+
         return (lhs.model as? AnyHashable) == (rhs.model as? AnyHashable)
     }
 

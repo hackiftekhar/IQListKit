@@ -26,6 +26,13 @@ import UIKit
 public struct IQSection: Hashable, @unchecked Sendable {
 
     public static func == (lhs: IQSection, rhs: IQSection) -> Bool {
+
+//      #if targetEnvironment(simulator)
+//        if Thread.isMainThread {
+//            print("Diffing \(lhs.identifier) on Main Thread")
+//        }
+//      #endif
+
         return lhs.identifier == rhs.identifier &&
         lhs.headerType == rhs.headerType &&
         lhs.footerType == rhs.footerType &&

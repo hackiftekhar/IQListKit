@@ -82,16 +82,16 @@ extension TableViewEditingViewController {
     }
 
     func reloadDataSource() {
-        list.reloadData { [list, visited, bucketList] in
+        list.reloadData { [visited, bucketList] builder in
 
             let visitedSection = IQSection(identifier: SectionType.visited, header: SectionType.visited.description())
             let bucketListSection = IQSection(identifier: SectionType.bucketList,
                                               header: SectionType.bucketList.description())
 
-            list.append([visitedSection, bucketListSection])
+            builder.append([visitedSection, bucketListSection])
 
-            list.append(LabelTableCell.self, models: visited, section: visitedSection)
-            list.append(LabelTableCell.self, models: bucketList, section: bucketListSection)
+            builder.append(LabelTableCell.self, models: visited, section: visitedSection)
+            builder.append(LabelTableCell.self, models: bucketList, section: bucketListSection)
         }
     }
 

@@ -37,7 +37,8 @@ extension SectionDecorationViewController {
                                                                   itemSize: itemSize,
                                                                   groupSize: groupSize)
         section.interGroupSpacing = 5
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10,
+                                                        bottom: 10, trailing: 10)
 
         let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
             elementKind: SectionDecorationViewController.sectionBackgroundDecorationElementKind)
@@ -64,7 +65,7 @@ extension SectionDecorationViewController {
 
 //        list.registerCell(type: ListCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             let itemsPerSection = 5
             let sections = Array(0..<5)
@@ -72,7 +73,7 @@ extension SectionDecorationViewController {
 
             for (sectionIndex, sectionName) in sections.enumerated() {
                 let section = IQSection(identifier: sectionName)
-                list.append([section])
+                builder.append([section])
 
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
 
@@ -83,7 +84,7 @@ extension SectionDecorationViewController {
 
                 items[items.count - 1].isLastCell = true
 
-                list.append(ListCell.self, models: items)
+                builder.append(ListCell.self, models: items)
                 itemOffset += itemsPerSection
             }
         }

@@ -16,7 +16,7 @@ class ListAppearancesViewController: UIViewController {
         private let identifier = UUID()
     }
 
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
     private var collectionView: UICollectionView! = nil
 
     override func viewDidLoad() {
@@ -48,9 +48,10 @@ class ListAppearancesViewController: UIViewController {
         let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first
 
         let snapshot = list.snapshot()
-        list.apply(snapshot, animatingDifferences: false)
-        collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: [])
-        updateBarButtonItem()
+        list.apply(snapshot, animatingDifferences: false, completion: { [self] in
+            collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: [])
+            updateBarButtonItem()
+        })
     }
 
     private func updateBarButtonItem() {
@@ -93,31 +94,34 @@ extension ListAppearancesViewController {
         list.registerCell(type: ListAppearanceHeaderCell.self, registerType: .class)
         list.registerCell(type: ListAppearanceItemCell.self, registerType: .class)
 
-        // initial data
-        var sectionSnapshot = IQDiffableDataSourceSnapshot()
+        DispatchQueue.global(qos: .userInteractive).async { [list, appearance] in
 
-        let sectionNumbers = Array(0..<5)
+            // initial data
+            var sectionSnapshot = IQDiffableDataSourceSnapshot()
 
-        let sections: [IQSection] = sectionNumbers.map { IQSection(identifier: $0) }
-        sectionSnapshot.appendSections(sections)
-        list.apply(sectionSnapshot, animatingDifferences: false)
+            let sectionNumbers = Array(0..<5)
 
-        for section in sectionNumbers {
-            var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
+            let sections: [IQSection] = sectionNumbers.map { IQSection(identifier: $0) }
+            sectionSnapshot.appendSections(sections)
+            list.apply(sectionSnapshot, animatingDifferences: false)
 
-            let headerItem = Item(title: "Section \(section)")
-            let item = IQItem(ListAppearanceHeaderCell.self, model: headerItem)
-            sectionSnapshot.append([item])
+            for section in sectionNumbers {
+                var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
-            let childItems = Array(0..<3).map { Item(title: "Item \($0)") }
-            let listItems = childItems.map { IQItem(ListAppearanceItemCell.self,
-                                                    model: .init(item: $0, appearance: appearance)) }
-            sectionSnapshot.append(listItems, to: item)
+                let headerItem = Item(title: "Section \(section)")
+                let item = IQItem(ListAppearanceHeaderCell.self, model: headerItem)
+                sectionSnapshot.append([item])
 
-            sectionSnapshot.expand([item])
+                let childItems = Array(0..<3).map { Item(title: "Item \($0)") }
+                let listItems = childItems.map { IQItem(ListAppearanceItemCell.self,
+                                                        model: .init(item: $0, appearance: appearance)) }
+                sectionSnapshot.append(listItems, to: item)
 
-            let aSection = IQSection(identifier: section)
-            list.apply(sectionSnapshot, to: aSection)
+                sectionSnapshot.expand([item])
+
+                let aSection = IQSection(identifier: section)
+                list.apply(sectionSnapshot, to: aSection)
+            }
         }
     }
 }

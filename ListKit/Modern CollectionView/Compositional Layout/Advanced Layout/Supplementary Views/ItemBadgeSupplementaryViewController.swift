@@ -98,14 +98,14 @@ extension ItemBadgeSupplementaryViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
                                        kind: Self.sectionFooterElementKind, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             let section = IQSection(identifier: Section.main,
                                     headerType: HeaderTitleSupplementaryView.self,
                                     headerModel: Self.sectionHeaderElementKind,
                                     footerType: FooterTitleSupplementaryView.self,
                                     footerModel: Self.sectionFooterElementKind)
-            list.append([section])
+            builder.append([section])
 
             let models: [Model] = (0..<100).map { Model(title: "\($0)", badgeCount: Int.random(in: 0..<3)) }
 
@@ -114,9 +114,9 @@ extension ItemBadgeSupplementaryViewController: IQListViewDelegateDataSource {
             let items: [TextCell.Model] = models.map {
                 .init(text: $0.title, cornerRadius: 8, badgeCount: $0.badgeCount)
             }
-            list.append(TextCell.self, models: items,
-                        supplementaryType: BadgeSupplementaryView.self,
-                        supplementaryModels: badgeModels)
+            builder.append(TextCell.self, models: items,
+                           supplementaryType: BadgeSupplementaryView.self,
+                           supplementaryModels: badgeModels)
         }
     }
 }

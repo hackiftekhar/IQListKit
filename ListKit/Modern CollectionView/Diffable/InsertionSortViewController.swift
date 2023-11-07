@@ -139,12 +139,12 @@ final class InsertionSortViewController: UIViewController {
     }
 
     func refreshUI(animated: Bool = true) {
-        list.reloadData({ [list, sections] in
+        list.reloadData({ [sections] builder in
             for sectionIdentifier in sections {
                 let section = IQSection(identifier: sectionIdentifier)
-                list.append([section])
+                builder.append([section])
 
-                list.append(InsertionCell.self, models: sectionIdentifier.nodes, section: section)
+                builder.append(InsertionCell.self, models: sectionIdentifier.nodes, section: section)
             }
         }, animatingDifferences: animated, completion: nil)
     }

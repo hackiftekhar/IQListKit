@@ -82,14 +82,14 @@ extension OrthogonalScrollingViewController {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             var identifierOffset = 0
             let itemsPerSection = 30
             let sections: [Int] = Array(0..<5)
             for (sectionIndex, sectionName) in sections.enumerated() {
                 let section = IQSection(identifier: sectionName)
-                list.append([section])
+                builder.append([section])
 
                 let maxIdentifier = identifierOffset + itemsPerSection
 
@@ -99,7 +99,7 @@ extension OrthogonalScrollingViewController {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)", cornerRadius: 8.0, badgeCount: nil))
                 }
 
-                list.append(TextCell.self, models: items)
+                builder.append(TextCell.self, models: items)
                 identifierOffset += itemsPerSection
             }
         }

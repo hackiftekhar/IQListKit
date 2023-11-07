@@ -127,7 +127,7 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: TitleSupplementaryView.self,
                                        kind: Self.titleElementKind, registerType: .class)
 
-        list.reloadData { [list, videosController, newsController] in
+        list.reloadData { [videosController, newsController] builder in
 
             let itemsPerSection = 5
             var itemOffset = 0
@@ -137,32 +137,32 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
                 let videoSection = IQSection(identifier: Section.video(collection: collection),
                                              headerType: TitleSupplementaryView.self,
                                              headerModel: collection.title)
-                list.append([videoSection])
-                list.append(ConferenceVideoCell.self, models: collection.videos)
+                builder.append([videoSection])
+                builder.append(ConferenceVideoCell.self, models: collection.videos)
 
                 // Add List
                 if #available(iOS 14.0, *) {
                     let sectionIdentifier = UUID()
                     let section = IQSection(identifier: Section.list(identifier: sectionIdentifier))
-                    list.append([section])
+                    builder.append([section])
 
                     let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
                     itemOffset += itemsPerSection
 
                     let items: [SimpleListCell.Model] = numbers.map { .init(section: sectionIdentifier, text: "\($0)") }
-                    list.append(SimpleListCell.self, models: items)
+                    builder.append(SimpleListCell.self, models: items)
                 }
 
                 // Add news
                 do {
                     let sectionIdentifier = UUID()
                     let section = IQSection(identifier: Section.news(identifier: sectionIdentifier))
-                    list.append([section])
+                    builder.append([section])
 
                     let items: [ConferenceNewsFeedCell.Model] = newsController.items.map {
                         .init(section: sectionIdentifier, item: $0, isLastCell: false)
                     }
-                    list.append(ConferenceNewsFeedCell.self, models: items)
+                    builder.append(ConferenceNewsFeedCell.self, models: items)
                 }
             }
         }

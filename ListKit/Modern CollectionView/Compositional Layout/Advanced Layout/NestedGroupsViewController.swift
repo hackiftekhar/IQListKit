@@ -85,10 +85,10 @@ extension NestedGroupsViewController {
 
 //        list.registerCell(type: TextCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             let section = IQSection(identifier: Section.main)
-            list.append([section])
+            builder.append([section])
 
             let numbers = Array(0..<100)
 
@@ -97,7 +97,7 @@ extension NestedGroupsViewController {
                 items.append(.init(text: "\(0),\(rowIndex)", cornerRadius: 8.0, badgeCount: nil))
             }
 
-            list.append(TextCell.self, models: items)
+            builder.append(TextCell.self, models: items)
         }
     }
 }

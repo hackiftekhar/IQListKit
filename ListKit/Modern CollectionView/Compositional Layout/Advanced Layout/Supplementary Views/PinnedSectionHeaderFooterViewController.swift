@@ -56,7 +56,8 @@ extension PinnedSectionHeaderFooterViewController {
                                                                   itemSize: itemSize,
                                                                   groupSize: groupSize)
 
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10,
+                                                        bottom: 0, trailing: 10)
         section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
 //        section.interGroupSpacing = 5
 
@@ -81,7 +82,7 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
         list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
                                        kind: Self.sectionFooterElementKind, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             let sections = Array(0..<5)
             let itemsPerSection = 5
@@ -93,7 +94,7 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
                 let section = IQSection(identifier: sectionIndex,
                                         headerType: HeaderTitleSupplementaryView.self, headerModel: headerModel,
                                         footerType: FooterTitleSupplementaryView.self, footerModel: footerModel)
-                list.append([section])
+                builder.append([section])
 
                 itemOffset += itemsPerSection
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
@@ -103,7 +104,7 @@ extension PinnedSectionHeaderFooterViewController: IQListViewDelegateDataSource 
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)"))
                 }
 
-                list.append(ListCell.self, models: items)
+                builder.append(ListCell.self, models: items)
             }
         }
     }

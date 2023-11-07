@@ -91,11 +91,11 @@ extension AdaptiveSectionsViewController {
 //        list.registerCell(type: TextCell.self, registerType: .class)
 //        list.registerCell(type: ListCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             SectionLayoutKind.allCases.forEach {
                 let section = IQSection(identifier: $0)
-                list.append([section])
+                builder.append([section])
 
                 let itemsPerSection = 10
                 let itemOffset = $0.rawValue * itemsPerSection
@@ -105,13 +105,13 @@ extension AdaptiveSectionsViewController {
                 switch $0 {
                 case .list:
                     let items: [ListCell.Model] = numbers.map { .init(text: "\($0)") }
-                    list.append(ListCell.self, models: items)
+                    builder.append(ListCell.self, models: items)
                 case .grid5:
                     let items: [TextCell.Model] = numbers.map { .init(text: "\($0)", cornerRadius: 8, badgeCount: 0) }
-                    list.append(TextCell.self, models: items)
+                    builder.append(TextCell.self, models: items)
                 case .grid3:
                     let items: [TextCell.Model] = numbers.map { .init(text: "\($0)", cornerRadius: 0, badgeCount: 0) }
-                    list.append(TextCell.self, models: items)
+                    builder.append(TextCell.self, models: items)
                 }
             }
         }

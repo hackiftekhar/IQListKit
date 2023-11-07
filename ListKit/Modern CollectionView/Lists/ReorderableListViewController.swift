@@ -36,7 +36,7 @@ class ReorderableListViewController: UIViewController {
 
     var collectionView: UICollectionView!
     private lazy var list = IQList(listView: collectionView, delegateDataSource: self,
-                                   defaultRowAnimation: .automatic, reloadQueue: .main)
+                                   defaultRowAnimation: .automatic)
     lazy var backingStore: [Section: [Item]] = { initialBackingStore() }()
 
     var reorderingMethod: ReorderingMethod = .collectionDifference
@@ -190,33 +190,39 @@ extension ReorderableListViewController {
         return allItems
     }
 
-    func applyInitialBackingStore(animated: Bool = false) {
+    func applyInitialBackingStore(animated: Bool = true) {
 
-        for (section, items) in initialBackingStore() {
+        DispatchQueue.global(qos: .userInteractive).async { [list, backingStore = initialBackingStore()] in
 
-            var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
+            for (section, items) in backingStore {
 
-            let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
-            sectionSnapshot.append(items)
+                var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
-            let section = IQSection(identifier: section)
+                let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
+                sectionSnapshot.append(items)
 
-            list.apply(sectionSnapshot, to: section, animatingDifferences: animated)
+                let section = IQSection(identifier: section)
+
+                list.apply(sectionSnapshot, to: section, animatingDifferences: animated)
+            }
         }
     }
 
-    func applySnapshotsFromBackingStore(animated: Bool = false) {
+    func applySnapshotsFromBackingStore(animated: Bool = true) {
 
-        for (section, items) in backingStore {
+        DispatchQueue.global(qos: .userInteractive).async { [list, backingStore] in
 
-            var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
+            for (section, items) in backingStore {
 
-            let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
-            sectionSnapshot.append(items)
+                var sectionSnapshot = IQDiffableDataSourceSectionSnapshot()
 
-            let section = IQSection(identifier: section)
+                let items: [IQItem] = items.map { IQItem(ReorderingListCell.self, model: $0) }
+                sectionSnapshot.append(items)
 
-            list.apply(sectionSnapshot, to: section, animatingDifferences: animated)
+                let section = IQSection(identifier: section)
+
+                list.apply(sectionSnapshot, to: section, animatingDifferences: animated)
+            }
         }
     }
 }

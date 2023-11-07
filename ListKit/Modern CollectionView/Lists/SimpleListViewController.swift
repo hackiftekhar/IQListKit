@@ -45,16 +45,16 @@ extension SimpleListViewController {
 
 //        list.registerCell(type: SimpleListCell.self, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
             let sectionIdentifier = UUID()
             let section = IQSection(identifier: Section.main)
-            list.append([section])
+            builder.append([section])
 
             let numbers = Array(0..<94)
 
             let items: [SimpleListCell.Model] = numbers.map { .init(section: sectionIdentifier, text: "\($0)") }
 
-            list.append(SimpleListCell.self, models: items)
+            builder.append(SimpleListCell.self, models: items)
         }
     }
 }

@@ -76,7 +76,7 @@ extension SectionHeadersFootersViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: FooterTitleSupplementaryView.self,
                                        kind: Self.sectionFooterElementKind, registerType: .class)
 
-        list.reloadData { [list] in
+        list.reloadData { builder in
 
             let sections = Array(0..<5)
             let itemsPerSection = 5
@@ -88,7 +88,7 @@ extension SectionHeadersFootersViewController: IQListViewDelegateDataSource {
                 let section = IQSection(identifier: sectionIndex,
                                         headerType: HeaderTitleSupplementaryView.self, headerModel: headerModel,
                                         footerType: FooterTitleSupplementaryView.self, footerModel: footerModel)
-                list.append([section])
+                builder.append([section])
 
                 itemOffset += itemsPerSection
                 let numbers = Array(itemOffset..<itemOffset + itemsPerSection)
@@ -98,7 +98,7 @@ extension SectionHeadersFootersViewController: IQListViewDelegateDataSource {
                     items.append(.init(text: "\(sectionIndex),\(rowIndex)"))
                 }
 
-                list.append(ListCell.self, models: items)
+                builder.append(ListCell.self, models: items)
             }
         }
     }
