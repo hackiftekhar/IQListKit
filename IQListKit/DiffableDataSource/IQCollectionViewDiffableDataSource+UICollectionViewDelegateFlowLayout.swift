@@ -47,8 +47,8 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
             sectionSize = size
         } else if let size = type.privateSize(for: headerModel, listView: collectionView) {
             sectionSize = size
-        } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let width: CGFloat = collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right
+        } else if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let width: CGFloat = collectionView.frame.width - layout.sectionInset.left - layout.sectionInset.right
             sectionSize = CGSize(width: width, height: 22)
         } else {
             sectionSize = .zero
@@ -121,8 +121,9 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
             sectionSize = size
         } else if let size = type.privateSize(for: footerModel, listView: collectionView) {
             sectionSize = size
-        } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            sectionSize = CGSize(width: collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right,
+        } else if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let width: CGFloat = collectionView.frame.width - layout.sectionInset.left - layout.sectionInset.right
+            sectionSize = CGSize(width: width,
                                  height: 22)
         } else {
             sectionSize = .zero
@@ -147,8 +148,8 @@ extension IQCollectionViewDiffableDataSource: UICollectionViewDelegateFlowLayout
             itemSize = size
         } else if let size: CGSize = type.privateSize(for: model, listView: collectionView) {
             itemSize = size
-        } else if let cvfl = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let width: CGFloat = collectionView.frame.width - cvfl.sectionInset.left - cvfl.sectionInset.right
+        } else if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let width: CGFloat = collectionView.frame.width - layout.sectionInset.left - layout.sectionInset.right
             itemSize = CGSize(width: width, height: 0)
         } else {
             itemSize = .zero

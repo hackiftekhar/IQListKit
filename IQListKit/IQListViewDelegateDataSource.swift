@@ -35,7 +35,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate, Sendable {
     /// Will give a chance to modify or other configuration of cell if necessary
     /// - Parameters:
     ///   - listView: The IQListView object
-    ///   - cell: The IQModelableCell which can be typecased to your cell.
+    ///   - cell: The IQModelableCell which can be typecast to your cell.
     ///   - indexPath: indexPath in which the cell will display
     func listView(_ listView: IQListView, modifyCell cell: some IQModelableCell, at indexPath: IndexPath)
 
@@ -70,7 +70,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate, Sendable {
     /// An item is highlighted
     /// - Parameters:
     ///   - listView: The IQListView object
-    ///   - item: the item which is highlightel
+    ///   - item: the item which is highlighted
     ///   - indexPath: indexPath which is selected
     func listView(_ listView: IQListView, didHighlight item: IQItem, at indexPath: IndexPath)
 

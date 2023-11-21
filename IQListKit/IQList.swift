@@ -206,7 +206,7 @@ public actor IQList {
             registerSupplementaryView(type: IQCollectionTitleSupplementaryView.self,
                                       kind: IQList.elementKindSectionFooter, registerType: .class)
         } else {
-            fatalError("Unable to initializa ListKit")
+            fatalError("Unable to initialize ListKit")
         }
 
         noItemStateView = IQNoItemStateView(noItemImage: nil, noItemTitle: nil,

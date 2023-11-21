@@ -33,9 +33,9 @@ public final class IQSupplementaryViewPlaceholder: UIView, IQModelableSupplement
     public static func size(for model: Model, listView: IQListView) -> CGSize? {
 
         if let listView = listView as? UICollectionView {
-            if let cvfl = listView.collectionViewLayout as? UICollectionViewFlowLayout {
+            if let layout = listView.collectionViewLayout as? UICollectionViewFlowLayout {
                 let model: Model = model
-                let sectionInset: UIEdgeInsets = cvfl.sectionInset
+                let sectionInset: UIEdgeInsets = layout.sectionInset
                 let width: CGFloat = listView.frame.width - sectionInset.left - sectionInset.right
                 let height: CGFloat = model.isEmpty ? 0 : 22
                 return CGSize(width: width, height: height)
