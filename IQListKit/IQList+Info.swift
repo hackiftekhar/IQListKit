@@ -184,3 +184,13 @@ public extension IQList {
         }
     }
 }
+
+extension IQList {
+
+    @available(*, unavailable, message: "This function parameters have been changed",
+                renamed: "itemIdentifier(of:where:)")
+    public func itemIdentifier<T: IQModelableCell>(_ type: T.Type, of model: T.Model,
+                                                   comparator: (T.Model, T.Model) -> Bool) -> IQItem? {
+        fatalError("This function parameters have been changed")
+    }
+}

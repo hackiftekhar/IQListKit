@@ -188,3 +188,11 @@ public extension IQDiffableDataSourceSnapshotBuilder {
         batchSnapshot.deleteAllItems()
     }
 }
+
+extension IQDiffableDataSourceSnapshotBuilder {
+
+    @available(*, unavailable, message: "This function is renamed to accept multiple models at once",
+                renamed: "append(_:models:section:)")
+    public func append<T: IQModelableCell>(_ type: T.Type, model: T.Model?, section: IQSection? = nil) {
+    }
+}

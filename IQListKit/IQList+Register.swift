@@ -292,3 +292,16 @@ public extension IQList {
         }
     }
 }
+
+extension IQList {
+    @available(*, unavailable, message: "This function parameters are shuffled",
+                renamed: "registerCell(type:registerType:bundle:)")
+    public func registerCell<T: IQModelableCell>(type: T.Type, bundle: Bundle? = .main,
+                                                 registerType: RegisterType = .default) {
+    }
+
+    @available(*, unavailable, message: "This function has been renamed",
+                renamed: "registerSupplementaryView(type:kind:registerType:bundle:)")
+    func registerHeaderFooter<T: UIView>(type: T.Type, registerType: RegisterType, bundle: Bundle? = .main) {
+    }
+}

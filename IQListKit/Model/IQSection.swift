@@ -189,3 +189,14 @@ extension IQSection {
         self.footerModel = footerModel
     }
 }
+
+extension IQSection {
+    
+    @available(*, unavailable, message: "This function is renamed by repositioning parameters",
+                renamed: "init(identifier:header:headerSize:footer:footerSize:)")
+    public init(identifier: AnyHashable,
+                header: String? = nil, footer: String? = nil,
+                headerSize: CGSize? = nil, footerSize: CGSize? = nil) {
+        fatalError("This function is renamed to reloadData")
+    }
+}

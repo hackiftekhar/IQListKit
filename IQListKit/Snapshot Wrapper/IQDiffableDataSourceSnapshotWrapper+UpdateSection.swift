@@ -78,3 +78,12 @@ public extension IQDiffableDataSourceSnapshotBuilder {
         batchSnapshot.deleteSections(sections)
     }
 }
+
+extension IQDiffableDataSourceSnapshotBuilder {
+
+//    @available(*, unavailable, message: "This function is renamed to accept multiple parameters",
+//                renamed: "append(_:beforeSection:afterSection:)")
+//    public func append(_ section: IQSection) {
+//    }
+}
+

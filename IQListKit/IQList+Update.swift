@@ -207,3 +207,13 @@ public extension IQList {
         }
     }
 }
+
+extension IQList {
+
+    @available(*, unavailable, message: "This function is renamed to reloadData",
+                renamed: "reloadData(_:animatingDifferences:endLoadingOnUpdate:completion:)")
+    public func performUpdates(_ updates: () -> Void, animatingDifferences: Bool = true,
+                               endLoadingOnUpdate: Bool = true,
+                               completion: (() -> Void)? = nil) {
+    }
+}

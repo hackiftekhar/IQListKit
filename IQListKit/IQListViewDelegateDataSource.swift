@@ -137,6 +137,33 @@ public protocol IQListViewDelegate: UIScrollViewDelegate, Sendable {
     ///   - indexPath: indexPath in which the cell is displaying
     func listView(_ listView: IQListView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration,
                   animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:modifySupplementaryElement:section:kind:at:)")
+    func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:modifySupplementaryElement:section:kind:at:)")
+    func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:willDisplaySupplementaryElement:section:kind:at:)")
+    func listView(_ listView: IQListView, willDisplayHeaderView view: UIView, section: IQSection, at sectionIndex: Int)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:didEndDisplayingSupplementaryElement:section:kind:at:)")
+    func listView(_ listView: IQListView, didEndDisplayingHeaderView view: UIView,
+                  section: IQSection, at sectionIndex: Int)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:willDisplaySupplementaryElement:section:kind:at:)")
+    func listView(_ listView: IQListView, willDisplayFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:didEndDisplayingSupplementaryElement:section:kind:at:)")
+    func listView(_ listView: IQListView, didEndDisplayingFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int)
 }
 
 // MARK: - IQListViewDataSource
@@ -208,6 +235,14 @@ public protocol IQListViewDataSource: AnyObject, Sendable {
     ///   - indexPath: indexPath of the item
     func listView(_ listView: IQListView, commit item: IQItem,
                   style: UITableViewCell.EditingStyle, at indexPath: IndexPath)
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:supplementaryElementFor:kind:at:)")
+    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView?
+
+    @available(*, deprecated, message: "This function is renamed. You must adopt new function.",
+                renamed: "listView(_:supplementaryElementFor:kind:at:)")
+    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView?
 }
 
 // MARK: - Combined delegate/datasource
@@ -250,6 +285,20 @@ public extension IQListViewDelegate {
                   animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath) {}
 }
 
+// Deprecated functions
+public extension IQListViewDelegate {
+    func listView(_ listView: IQListView, modifyHeader headerView: UIView, section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, modifyFooter footerView: UIView, section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, willDisplayHeaderView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, didEndDisplayingHeaderView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, willDisplayFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+    func listView(_ listView: IQListView, didEndDisplayingFooterView view: UIView,
+                  section: IQSection, at sectionIndex: Int) {}
+}
+
 @MainActor
 public extension IQListViewDataSource {
 
@@ -273,4 +322,10 @@ public extension IQListViewDataSource {
 
     func listView(_ listView: IQListView, move sourceItem: IQItem,
                   at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
+}
+
+// Deprecated functions
+public extension IQListViewDataSource {
+    func listView(_ listView: IQListView, headerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
+    func listView(_ listView: IQListView, footerFor section: IQSection, at sectionIndex: Int) -> UIView? { return nil }
 }
