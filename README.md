@@ -24,7 +24,7 @@ For iOS13: Thanks to Apple for [NSDiffableDataSourceSnapshot](https://developer.
 | IQListKit (5.0.0)      | Swift    | iOS 13.0           | Xcode 14              |
 
 #### Swift versions support
-5.0 and above
+5.7 and above
 
 Installation
 ==========================
@@ -286,7 +286,7 @@ class UsersTableViewController: UITableViewController {
         //This is the actual method that reloads the data.
         //We could think it like a tableView.reloadData()
         //It does all the needed thing
-        list.reloadData({
+        list.reloadData({ [users] builder in
 
             //If we use multiple sections, then each section should be unique.
             //This should also confirm to hashable, so we can also provide a Int
@@ -310,12 +310,12 @@ class UsersTableViewController: UITableViewController {
             //                        headerType: SampleCollectionReusableView.self,
             //                        headerModel: "This is my header text for Sample Collection model")
             
-            list.append(section)
+            builder.append([section])
 
-            //Telling to the list that the models should render in UserCell
+            //Telling to the builder that the models should render in UserCell
 
             //If model created using Method 1 or Method 2
-            list.append(UserCell.self, models: users, section: section) 
+            builder.append(UserCell.self, models: users, section: section) 
             
             /*
             If model created using Method 3
@@ -324,7 +324,7 @@ class UsersTableViewController: UITableViewController {
             for user in users {
                 models.append(.init(user: user))
             }
-            list.append(UserCell.self, models: models, section: section)
+            builder.append(UserCell.self, models: models, section: section)
             */
 
         //controls if the changes should animate or not while reloading
@@ -372,7 +372,7 @@ The IQListKit is a model-driven framework, so we'll be dealing with the Cell and
 ```swift
 extension UsersTableViewController: IQListViewDelegateDataSource {
 
-    func listView(_ listView: IQListView, modifyCell cell: IQListCell, at indexPath: IndexPath) {
+    func listView(_ listView: IQListView, modifyCell cell: some IQModelableCell, at indexPath: IndexPath) {
         if let cell = cell as? UserCell { //Casting our cell as UserCell
             cell.delegate = self
             //Or additional work with the UserCell
@@ -416,11 +416,11 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
-    static func estimatedSize(for model: AnyHashable, listView: IQListView) -> CGSize? {
+    static func estimatedSize(for model: Model, listView: IQListView) -> CGSize? {
         return CGSize(width: listView.frame.width, height: 100)
     }
 
-    static func size(for model: AnyHashable, listView: IQListView) -> CGSize? {
+    static func size(for model: Model, listView: IQListView) -> CGSize? {
 
         if let model = model as? Model {
             var height: CGFloat = 100
@@ -447,7 +447,6 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
-    @available(iOS 11.0, *)
     func leadingSwipeActions() -> [UIContextualAction]? {
         let action = UIContextualAction(style: .normal, title: "Hello Leading") { (_, _, completionHandler) in
             completionHandler(true)
@@ -485,7 +484,6 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
-    @available(iOS 13.0, *)
     func contextMenuConfiguration() -> UIContextMenuConfiguration? {
 
         let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil,
@@ -508,7 +506,6 @@ class UserCell: UITableViewCell, IQModelableCell {
         return contextMenuConfiguration
     }
     
-    @available(iOS 13.0, *)
     func performPreviewAction(configuration: UIContextMenuConfiguration,
                               animator: UIContextMenuInteractionCommitAnimating) {
         if let previewViewController = animator.previewViewController, let parent = viewParentController {
@@ -540,32 +537,27 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 
     //...
 
-    //Cell will about to display
-    func listView(_ listView: IQListView, willDisplay cell: IQListCell, at indexPath: IndexPath)
-
-    //Cell did end displaying
-    func listView(_ listView: IQListView, didEndDisplaying cell: IQListCell, at indexPath: IndexPath)
+    //Cell display
+    func listView(_ listView: IQListView, willDisplay cell: some IQModelableCell, at indexPath: IndexPath)
+    func listView(_ listView: IQListView, didEndDisplaying cell: some IQModelableCell, at indexPath: IndexPath)
     
+    func listView(_ listView: IQListView, didSelect item: IQItem, at indexPath: IndexPath)
     func listView(_ listView: IQListView, didDeselect item: IQItem, at indexPath: IndexPath)
     
     func listView(_ listView: IQListView, didHighlight item: IQItem, at indexPath: IndexPath)
-    
     func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath)
     
     func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath)
     
-    func listView(_ listView: IQListView, modifySupplementaryElement view: UIView,
+    func listView(_ listView: IQListView, modifySupplementaryElement view: some IQModelableSupplementaryView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
-                  
-    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: UIView,
+    func listView(_ listView: IQListView, willDisplaySupplementaryElement view: some IQModelableSupplementaryView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
-                 
-    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: UIView,
+    func listView(_ listView: IQListView, didEndDisplayingSupplementaryElement view: some IQModelableSupplementaryView,
                   section: IQSection, kind: String, at indexPath: IndexPath)
                
     func listView(_ listView: IQListView, willDisplayContextMenu configuration: UIContextMenuConfiguration,
                   animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
-                  
     func listView(_ listView: IQListView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration,
                   animator: UIContextMenuInteractionAnimating?, item: IQItem, at indexPath: IndexPath)
 }
@@ -584,7 +576,7 @@ extension UsersTableViewController: IQListViewDelegateDataSource {
 
     //Return the custom header or footer View of section (or item in collection view)
     func listView(_ listView: IQListView, supplementaryElementFor section: IQSection,
-                  kind: String, at indexPath: IndexPath) -> UIView?
+                  kind: String, at indexPath: IndexPath) -> (any IQModelableSupplementaryView)?
 
     func sectionIndexTitles(_ listView: IQListView) -> [String]?
     
@@ -612,32 +604,17 @@ class UserCell: UITableViewCell, IQModelableCell {
 
     //...
 
-    var isHighlightable: Bool { //IQSelectableCell protocol
-        return true
-    }
+    struct Model: Hashable, IQReorderableModel, IQSelectableModel {
 
-    var isSelectable: Bool {    //IQSelectableCell protocol
-        return false
-    }
-    
-    var isDeselectable: Bool {   //IQSelectableCell protocol
-        return false
-    }
-    
-    var canPerformPrimaryAction: Bool { //IQSelectableCell protocol
-        return false
-    }
-    
-    var canMove: Bool {         //IQReorderableCell protocol
-        return false
-    }
+        // IQReorderableModel
+        var canMove: Bool { false }
+        var canEdit: Bool { false }
+        var editingStyle: UITableViewCell.EditingStyle { .none }
 
-    var canEdit: Bool {         //IQReorderableCell protocol
-        return false
-    }
-    
-    var editingStyle: UITableViewCell.EditingStyle {    //IQReorderableCell protocol
-        return .none
+        // IQSelectableModel
+        var isHighlightable: Bool { true }
+        var isDeselectable: Bool { true }
+        var canPerformPrimaryAction: Bool { true }
     }
 }
 ```
@@ -651,7 +628,7 @@ class UserCell: UITableViewCell, IQModelableCell {
     //...
     
     // IQViewSizeProvider protocol
-    static func indentationLevel(for model: AnyHashable?, listView: IQListView) -> Int {
+    static func indentationLevel(for model: Model, listView: IQListView) -> Int {
         return 1
     }
     
@@ -683,12 +660,12 @@ class UsersTableViewController: UITableViewController {
         //Reload data in background
         DispatchQueue.global().async {
 
-            self.list.reloadData({
+            self.list.reloadData({ [users] builder in
 
                 let section = IQSection(identifier: "first")
-                self.list.append(section)
+                builder.append(section)
 
-                self.list.append(UserCell.self, models: users, section: section)
+                builder.append(UserCell.self, models: users, section: section)
 
             }, animatingDifferences: animated, completion: {
                 //Hide loading indicator since the completion will be called in main thread

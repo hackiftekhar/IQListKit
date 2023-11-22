@@ -52,9 +52,7 @@ public struct IQSection: Hashable, @unchecked Sendable {
     public private(set) var footerType: (any IQModelableSupplementaryView.Type)?
 
     /// Header/Footer
-    public private(set) var headerView: UIView?
     public private(set) var headerSize: CGSize?
-    public private(set) var footerView: UIView?
     public private(set) var footerSize: CGSize?
 
     /// Model of the cell
@@ -129,64 +127,30 @@ public struct IQSection: Hashable, @unchecked Sendable {
 
 extension IQSection {
 
-    @available(*, deprecated, message: "Using headerView or footerView is deprecated.",
+    @available(*, unavailable, message: "Using headerView or footerView is not supported now.",
                 renamed: "init(identifier:header:headerSize:footer:footerSize:)")
     public init(identifier: AnyHashable,
                 header: String? = nil, headerView: UIView? = nil, headerSize: CGSize? = nil,
                 footer: String? = nil, footerView: UIView? = nil, footerSize: CGSize? = nil) {
-        self.identifier = identifier
-        if let headerView = headerView {
-            self.headerView = headerView
-        } else if let header = header {
-            headerType = IQSupplementaryViewPlaceholder.self
-            headerModel = header
-        }
-        self.headerSize = headerSize
-
-        if let footerView = footerView {
-            self.footerView = footerView
-        } else if let footer = footer {
-            footerType = IQSupplementaryViewPlaceholder.self
-            footerModel = footer
-        }
-        self.footerSize = footerSize
+        fatalError("Using headerView or footerView is not supported now.")
     }
 
-    @available(*, deprecated, message: "Using footerView is deprecated.",
+    @available(*, unavailable, message: "Using headerView or footerView is not supported now.",
                 renamed: "init(identifier:headerType:headerModel:footer:footerSize:)")
     public init<H: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  headerType: H.Type, headerModel: H.Model,
                                                  footer: String? = nil, footerView: UIView? = nil,
                                                  footerSize: CGSize? = nil) {
-        self.identifier = identifier
-        self.headerType = headerType
-        self.headerModel = headerModel
-        if let footerView = footerView {
-            self.footerView = footerView
-        } else if let footer = footer {
-            footerType = IQSupplementaryViewPlaceholder.self
-            footerModel = footer
-        }
-        self.footerSize = footerSize
+        fatalError("Using headerView or footerView is not supported now.")
     }
 
-    @available(*, deprecated, message: "Using headerView is deprecated.",
+    @available(*, unavailable, message: "Using headerView or footerView is not supported now.",
                 renamed: "init(identifier:header:headerSize:footerType:footerModel:)")
     public init<F: IQModelableSupplementaryView>(identifier: AnyHashable,
                                                  header: String? = nil, headerView: UIView? = nil,
                                                  headerSize: CGSize? = nil,
                                                  footerType: F.Type, footerModel: F.Model) {
-        self.identifier = identifier
-        if let headerView = headerView {
-            self.headerView = headerView
-        } else if let header = header {
-            headerType = IQSupplementaryViewPlaceholder.self
-            headerModel = header
-        }
-        self.headerSize = headerSize
-
-        self.footerType = footerType
-        self.footerModel = footerModel
+        fatalError("Using headerView or footerView is not supported now.")
     }
 }
 
@@ -197,6 +161,6 @@ extension IQSection {
     public init(identifier: AnyHashable,
                 header: String? = nil, footer: String? = nil,
                 headerSize: CGSize? = nil, footerSize: CGSize? = nil) {
-        fatalError("This function is renamed to reloadData")
+        fatalError("This function is renamed by repositioning parameters")
     }
 }

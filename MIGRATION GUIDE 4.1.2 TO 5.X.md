@@ -1,4 +1,4 @@
-IQListKit MIGRATION GUIDE 4.0.0 TO 4.1.2
+IQListKit MIGRATION GUIDE 4.1.2 TO 5.X
 ==========================
 
 ### 1. Register header Footer

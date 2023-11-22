@@ -110,3 +110,34 @@ public extension IQCellActionsProvider {
     func performPreviewAction(configuration: UIContextMenuConfiguration,
                               animator: UIContextMenuInteractionCommitAnimating) {}
 }
+
+// swiftlint:disable line_length
+extension IQModelableCell {
+
+    @available(*, unavailable, message: "This feature has been moved inside the Model. Now your model should now confirm to IQReorderableModel to expose this variable",
+                renamed: "Model.canMove")
+    var canMove: Bool { false }
+
+    @available(*, unavailable, message: "This feature has been moved inside the Model. Now your model should now confirm to IQReorderableModel to expose this variable",
+                renamed: "Model.canEdit")
+    var canEdit: Bool { false }
+
+    @available(*, unavailable, message: "This feature has been moved inside the Model. Now your model should now confirm to IQReorderableModel to expose this variable",
+                renamed: "Model.editingStyle")
+    var editingStyle: UITableViewCell.EditingStyle { .none }
+}
+
+extension IQModelableCell {
+
+    @available(*, unavailable, message: "This feature has been moved inside the Model. Now your model should now confirm to IQSelectableModel to expose this variable",
+                renamed: "Model.isHighlightable")
+    var isHighlightable: Bool { true }
+
+    @available(*, unavailable, message: "This feature has been moved inside the Model. Now your model should now confirm to IQSelectableModel to expose this variable",
+                renamed: "Model.isDeselectable")
+    var isDeselectable: Bool { true }
+
+    @available(*, unavailable, message: "This feature has been moved inside the Model. Now your model should now confirm to IQSelectableModel to expose this variable",
+                renamed: "Model.canPerformPrimaryAction")
+    var canPerformPrimaryAction: Bool { true }
+}

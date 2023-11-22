@@ -196,8 +196,6 @@ extension IQTableViewDiffableDataSource {
         let sectionSize: CGSize
         if let headerSize: CGSize = aSection.headerSize {
             sectionSize = headerSize
-        } else if let headerView: UIView = aSection.headerView {
-            sectionSize = headerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.headerType,
                   let headerModel = aSection.headerModel,
                   let size = type.privateEstimatedSize(for: headerModel, listView: tableView) {
@@ -219,8 +217,6 @@ extension IQTableViewDiffableDataSource {
         let sectionSize: CGSize
         if let footerSize: CGSize = aSection.footerSize {
             sectionSize = footerSize
-        } else if let footerView: UIView = aSection.footerView {
-            sectionSize = footerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.footerType,
                   let footerModel = aSection.footerModel,
                   let size = type.privateEstimatedSize(for: footerModel, listView: tableView) {
@@ -242,8 +238,6 @@ extension IQTableViewDiffableDataSource {
         let sectionSize: CGSize
         if let headerSize: CGSize = aSection.headerSize {
             sectionSize = headerSize
-        } else if let headerView: UIView = aSection.headerView {
-            sectionSize = headerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.headerType,
                   let headerModel = aSection.headerModel,
                   let size = type.privateSize(for: headerModel, listView: tableView) {
@@ -265,8 +259,6 @@ extension IQTableViewDiffableDataSource {
         let sectionSize: CGSize
         if let footerSize: CGSize = aSection.footerSize {
             sectionSize = footerSize
-        } else if let footerView: UIView = aSection.footerView {
-            sectionSize = footerView.frame.size
         } else if let type: IQViewSizeProvider.Type = aSection.footerType,
                   let footerModel = aSection.footerModel,
                   let size = type.privateSize(for: footerModel, listView: tableView) {
@@ -311,8 +303,6 @@ extension IQTableViewDiffableDataSource {
                     does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
-        } else if let headerView = aSection.headerView {
-            supplementaryView = headerView
         } else {
             supplementaryView = dataSource?.listView(tableView, supplementaryElementFor: aSection,
                                                      kind: UICollectionView.elementKindSectionHeader,
@@ -361,8 +351,6 @@ extension IQTableViewDiffableDataSource {
                     does not confirm to the '\(IQModelModifiable.self)' protocol
                     """)
             }
-        } else if let footerView = aSection.footerView {
-            supplementaryView = footerView
         } else {
             supplementaryView = dataSource?.listView(tableView, supplementaryElementFor: aSection,
                                                      kind: UICollectionView.elementKindSectionFooter,

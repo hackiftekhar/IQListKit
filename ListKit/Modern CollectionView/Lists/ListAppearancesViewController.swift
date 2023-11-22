@@ -5,7 +5,7 @@ Abstract:
 A list that can cycle through the available list appearances.
 */
 
-import UIKit
+@preconcurrency import UIKit
 import IQListKit
 
 @available(iOS 14.0, *)
