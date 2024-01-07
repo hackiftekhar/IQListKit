@@ -52,6 +52,7 @@ extension IQList {
     internal func noItemStateViewChanged() {
 
         if let noItemStateView = noItemStateView {
+            noItemStateView.removeFromSuperview()   // This is necessary to remove old constraints
             noItemContainerView.addSubview(noItemStateView)
             if noItemStateView.translatesAutoresizingMaskIntoConstraints {
                 noItemStateView.center = CGPoint(x: noItemContainerView.bounds.midX,
@@ -76,6 +77,7 @@ extension IQList {
     }
 
     internal func updateNoItemStateViewPosition() {
+        noItemContainerView.removeFromSuperview()   // This is necessary to remove old constraints
         listView.insertSubview(noItemContainerView, at: 0)
         noItemContainerView.translatesAutoresizingMaskIntoConstraints = false
 
