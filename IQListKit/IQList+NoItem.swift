@@ -77,17 +77,24 @@ extension IQList {
     }
 
     internal func updateNoItemStateViewPosition() {
-        noItemContainerView.removeFromSuperview()   // This is necessary to remove old constraints
-        listView.insertSubview(noItemContainerView, at: 0)
-        noItemContainerView.translatesAutoresizingMaskIntoConstraints = false
 
         let inset: UIEdgeInsets = listView.adjustedContentInset
-        noItemContainerView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
-            .isActive = true
-        noItemContainerView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
-            .isActive = true
-        noItemContainerView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
         let height = listView.frame.height - inset.top - inset.bottom
-        noItemContainerView.heightAnchor.constraint(equalToConstant: height).isActive = true
+
+        if noItemContainerView.superview == nil {
+            listView.insertSubview(noItemContainerView, at: 0)
+            noItemContainerView.translatesAutoresizingMaskIntoConstraints = false
+            noItemContainerView.leadingAnchor.constraint(equalTo: listView.frameLayoutGuide.leadingAnchor)
+                .isActive = true
+            noItemContainerView.trailingAnchor.constraint(equalTo: listView.frameLayoutGuide.trailingAnchor)
+                .isActive = true
+            noItemContainerView.topAnchor.constraint(equalTo: listView.topAnchor).isActive = true
+            noItemContainerView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
+
+        if let heightConstraint = noItemContainerView.constraintsAffectingLayout(for: .vertical)
+            .first(where: { $0.firstAttribute == .height && $0.secondItem == nil }) {
+                heightConstraint.constant = height
+        }
     }
 }
