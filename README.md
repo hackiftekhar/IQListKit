@@ -645,7 +645,7 @@ Workarounds
 Well. If we are creating cell in storyboard, then to work with the IQListKit we must have to put the cell identifier exactly same as it's class name. If we are using The UICollectionView then we also have to manually register our cell using **list.registerCell(type: UserCell.self, registerType: .storyboard)** method because with the UICollectionView, there is no way to detect if a cell is created in storyboard.
 
 #### I have a large data set and `list.reloadData` method takes time to animate the changes 😟. What can I do?
-You would not believe the **performUpdtes** method is **Background Thread Safe** 😍. We can call it in background and can show a loading indicator. In the completion handler we can hide the loading indicator. Under the hood, the change calculations will be done in background. Thanks again to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot). The UITableView/UICollectionView will be reloaded in main thread. Please refer the below code:-
+You would not believe the **reloadData** method already runs in a separate **Background Thread** 😍. But if you would like you can show a loadingIndicator. Thanks again to Apple for [NSDiffableDataSourceSnapshot](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot). The UITableView/UICollectionView will be reloaded in main thread. Please refer the below code:-
 
 ```swift
 class UsersTableViewController: UITableViewController {
@@ -657,21 +657,17 @@ class UsersTableViewController: UITableViewController {
         //Show loading indicator
         loadingIndicator.startAnimating()
 
-        //Reload data in background
-        DispatchQueue.global().async {
+        self.list.reloadData({ [users] builder in
 
-            self.list.reloadData({ [users] builder in
+            let section = IQSection(identifier: "section")
+            builder.append(section)
 
-                let section = IQSection(identifier: "first")
-                builder.append(section)
+            builder.append(UserCell.self, models: users, section: section)
 
-                builder.append(UserCell.self, models: users, section: section)
-
-            }, animatingDifferences: animated, completion: {
-                //Hide loading indicator since the completion will be called in main thread
-                self.loadingIndicator.stopAnimating()
-            })
-        }
+        }, animatingDifferences: animated, completion: {
+            //Hide loading indicator since the completion will be called in main thread
+            self.loadingIndicator.stopAnimating()
+        })
     }
 }
 ```
