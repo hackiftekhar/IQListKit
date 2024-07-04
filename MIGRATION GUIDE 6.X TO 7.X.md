@@ -22,6 +22,7 @@ Now `reloadData` provide a `builder`, and you should be configuring the UI with 
 Old approach
 ```swift
     list.reloadData({
+        let section: IQSection = IQSection(identifier: "section")
         list.append([section])
         list.append(TableViewCell.self, models: models)
     })
@@ -29,7 +30,8 @@ Old approach
 
 New Approach
 ```swift
-    list.reloadData({ [section, models] builder in
+    list.reloadData({ [models] builder in
+        let section: IQSection = IQSection(identifier: "section")
         builder.append([section])
         builder.append(TableViewCell.self, models: models)
     })
