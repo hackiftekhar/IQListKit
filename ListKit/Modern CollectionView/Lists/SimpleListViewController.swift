@@ -47,7 +47,7 @@ extension SimpleListViewController {
 
         list.reloadData { builder in
             let sectionIdentifier = UUID()
-            let section = IQSection(identifier: Section.main)
+            let section = IQSection(identifier: Section.main, header: "Simple list")
             builder.append([section])
 
             let numbers = Array(0..<94)

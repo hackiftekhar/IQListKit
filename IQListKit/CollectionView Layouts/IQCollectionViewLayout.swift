@@ -87,7 +87,7 @@ public final class IQCollectionViewLayout {
      */
 
     public class func layout(scrollDirection: UICollectionView.ScrollDirection,
-                             section: NSCollectionLayoutSection) -> UICollectionViewLayout {
+                             section: NSCollectionLayoutSection) -> UICollectionViewCompositionalLayout {
 
         let configuration: UICollectionViewCompositionalLayoutConfiguration = .init()
         configuration.scrollDirection = scrollDirection
@@ -96,8 +96,11 @@ public final class IQCollectionViewLayout {
     }
 
     @available(iOS 14.0, *)
-    public class func listLayout(appearance: UICollectionLayoutListConfiguration.Appearance) -> UICollectionViewLayout {
-        let config = UICollectionLayoutListConfiguration(appearance: appearance)
+    public class func listLayout(appearance: UICollectionLayoutListConfiguration.Appearance)
+    -> UICollectionViewCompositionalLayout {
+        var config = UICollectionLayoutListConfiguration(appearance: appearance)
+        config.headerMode = .supplementary
+        config.footerMode = .supplementary
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 }

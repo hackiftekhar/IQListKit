@@ -113,7 +113,8 @@ extension UserListTableViewController {
                 section1 = IQSection(identifier: "firstSection",
                                      headerType: EmptyHeaderView.self,
                                      headerModel: .init(identifier: "firstSection", height: 10),
-                                     footerType: EmptyTableHeaderFooterView.self, footerModel: "Footer Model")
+                                     footerType: EmptyTableHeaderFooterView.self,
+                                     footerModel: "Footer Model")
             default:
                 fatalError()
             }
@@ -127,6 +128,10 @@ extension UserListTableViewController {
             builder.append(UserCell.self, models: users2, section: section2)
 
         }, animatingDifferences: animated)
+    }
+
+    private func buildUser1(builder: IQDiffableDataSourceSnapshotBuilder, section: IQSection, users: [User]) {
+
     }
 }
 

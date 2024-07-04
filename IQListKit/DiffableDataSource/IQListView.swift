@@ -24,10 +24,66 @@ import UIKit
 
 @MainActor
 @objc public protocol IQListView where Self: UIScrollView {
+
+    var backgroundView: UIView? { get }
+
+    var indexPathsForSelectedItems: [IndexPath]? { get }
+    func selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: IQList.ScrollPosition)
+    func reloadData()
+
+    var numberOfSections: Int { get }
+    func numberOfItems(inSection section: Int) -> Int
+
+    func indexPathFor(cell: IQListCell) -> IndexPath?
+//    func cellForItemAt(indexPath: IndexPath) -> IQListCell?
+    var indexPathsForVisibleItems: [IndexPath] { get }
 }
 
 @MainActor
-extension UICollectionView: IQListView {}
+extension UICollectionView: IQListView {
+    public func selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: IQList.ScrollPosition) {
+        selectItem(at: indexPath, animated: animated,
+                   scrollPosition: scrollPosition.collectionViewScrollPosition)
+    }
+
+    public func indexPathFor(cell: IQListCell) -> IndexPath? {
+        guard let cell = cell as? UICollectionViewCell else {
+            return nil
+        }
+        return indexPath(for: cell)
+    }
+
+//    public func cellForItemAt(indexPath: IndexPath) -> IQListCell? {
+//        cellForItem(at: indexPath)
+//    }
+}
 
 @MainActor
-extension UITableView: IQListView {}
+extension UITableView: IQListView {
+    public var indexPathsForSelectedItems: [IndexPath]? {
+        indexPathsForSelectedRows
+    }
+
+    public func selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: IQList.ScrollPosition) {
+        selectRow(at: indexPath, animated: animated, scrollPosition: scrollPosition.tableViewScrollPosition)
+    }
+
+    public func numberOfItems(inSection section: Int) -> Int {
+        numberOfRows(inSection: section)
+    }
+
+    public func indexPathFor(cell: IQListCell) -> IndexPath? {
+        guard let cell = cell as? UITableViewCell else {
+            return nil
+        }
+        return indexPath(for: cell)
+    }
+
+    public func cellForItemAt(indexPath: IndexPath) -> IQListCell? {
+        cellForRow(at: indexPath)
+    }
+
+    public var indexPathsForVisibleItems: [IndexPath] {
+        indexPathsForVisibleRows ?? []
+    }
+}

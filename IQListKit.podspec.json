@@ -20,7 +20,7 @@
     "5.9"
   ],
   "source_files": "IQListKit/**/*.{swift}",
-  "resources": "IQListKit/PrivacyInfo.xcprivacy",
+  "resource_bundles": {"IQListKit": "IQListKit/PrivacyInfo.xcprivacy"},
   "frameworks": [
     "UIKit",
     "Foundation"

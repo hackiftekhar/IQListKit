@@ -16,7 +16,7 @@ class ListAppearancesViewController: UIViewController {
         private let identifier = UUID()
     }
 
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
     private var collectionView: UICollectionView! = nil
 
     override func viewDidLoad() {

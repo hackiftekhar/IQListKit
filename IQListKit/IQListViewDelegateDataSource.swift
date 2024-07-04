@@ -50,7 +50,7 @@ public protocol IQListViewDelegate: UIScrollViewDelegate, Sendable {
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - cell: The IQModelableCell which is about to be removed from UI
-    ///   - indexPath: indexPath in which the cell is displaying
+    ///   - indexPath: indexPath in which the cell is about the disappear
     func listView(_ listView: IQListView, didEndDisplaying cell: some IQModelableCell, at indexPath: IndexPath)
 
     /// An item is selected
@@ -71,21 +71,21 @@ public protocol IQListViewDelegate: UIScrollViewDelegate, Sendable {
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - item: the item which is highlighted
-    ///   - indexPath: indexPath which is selected
+    ///   - indexPath: indexPath which is highlighted
     func listView(_ listView: IQListView, didHighlight item: IQItem, at indexPath: IndexPath)
 
     /// An item is unhighlighted
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - item: the item which is unhighlighted.
-    ///   - indexPath: indexPath which is deselected
+    ///   - indexPath: indexPath which is unhighlighted
     func listView(_ listView: IQListView, didUnhighlight item: IQItem, at indexPath: IndexPath)
 
     /// An item is selected
     /// - Parameters:
     ///   - listView: The IQListView object
-    ///   - item: the item which is selected. item.type will be the cell type. item.model will be the Model
-    ///   - indexPath: indexPath which is selected
+    ///   - item: the item which is performing the action. item.type will be the cell type. item.model will be the Model
+    ///   - indexPath: indexPath which is performing the action
     func listView(_ listView: IQListView, performPrimaryAction item: IQItem, at indexPath: IndexPath)
 
     /// Will give a chance to modify the supplementary view before appearance
@@ -206,14 +206,14 @@ public protocol IQListViewDataSource: AnyObject, Sendable {
     ///   - indexPaths: indexPaths of the ListView
     func listView(_ listView: IQListView, cancelPrefetch items: [IQItem], at indexPaths: [IndexPath])
 
-    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// Return true if we are allowed to move the item
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - item: the item which is asked for it can move.
     ///   - indexPath: indexPath of the item
     func listView(_ listView: IQListView, canMove item: IQItem, at indexPath: IndexPath) -> Bool?
 
-    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// Your responsibility is to move source item to it's new destination
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - item: the item which is asked for it can move.
@@ -221,14 +221,14 @@ public protocol IQListViewDataSource: AnyObject, Sendable {
     func listView(_ listView: IQListView, move sourceItem: IQItem,
                   at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
 
-    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// Return true if we are allowed to edit the item
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - item: the item which is asked for it can move.
     ///   - indexPath: indexPath of the item
     func listView(_ listView: IQListView, canEdit item: IQItem, at indexPath: IndexPath) -> Bool?
 
-    /// Return the size of an Item, for tableView the size.height will only be effective
+    /// Take editing action
     /// - Parameters:
     ///   - listView: The IQListView object
     ///   - item: the item which is asked for it can move.

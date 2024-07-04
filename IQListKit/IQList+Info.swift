@@ -28,7 +28,7 @@ import UIKit
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
 public extension IQList {
 
-    enum ScrollPosition: Int, Sendable {
+    @objc enum ScrollPosition: Int, Sendable {
         case none = 0
         case top = 1
         case center = 2
@@ -36,20 +36,20 @@ public extension IQList {
         case left = 4
         case right = 5
 
-        fileprivate var tableViewScrollPosition: UITableView.ScrollPosition {
+        public var tableViewScrollPosition: UITableView.ScrollPosition {
             switch self {
-            case .none, .left, .right:
+            case .none:
                 return .none
             case .top:
                 return .top
-            case .center:
+            case .center, .left, .right:
                 return .middle
             case .bottom:
                 return .bottom
             }
         }
 
-        fileprivate var collectionViewScrollPosition: UICollectionView.ScrollPosition {
+        public var collectionViewScrollPosition: UICollectionView.ScrollPosition {
             switch self {
             case .none:
                 return []

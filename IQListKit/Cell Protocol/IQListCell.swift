@@ -26,7 +26,7 @@ import UIKit
 
 /// This is used as a replacement of UITableViewCell/UICollectionViewCell
 @MainActor
-public protocol IQListCell where Self: UIView {}
+@objc public protocol IQListCell where Self: UIView {}
 
 @MainActor
 extension UITableViewCell: IQListCell {}

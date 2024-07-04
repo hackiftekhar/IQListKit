@@ -38,7 +38,7 @@ class OutlineViewController: UIViewController {
 
     var outlineCollectionView: UICollectionView! = nil
 
-    private lazy var list = IQList(listView: outlineCollectionView, delegateDataSource: self)
+    private lazy var list = IQList(listView: outlineCollectionView, delegateDataSource: self, reloadQueue: .main)
 
     override func viewDidLoad() {
         super.viewDidLoad()

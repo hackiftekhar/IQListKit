@@ -38,7 +38,7 @@ class EmojiExplorerViewController: UIViewController {
     var starredEmojis = Set<Item>()
 
     var collectionView: UICollectionView!
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
 
     override func viewDidLoad() {
         super.viewDidLoad()
