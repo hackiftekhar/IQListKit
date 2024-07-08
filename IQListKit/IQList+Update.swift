@@ -47,14 +47,13 @@ public extension IQList {
     ///   - updates: update block which will be called to generate the snapshot
     ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
     ///   - completion: the completion block will be called after reloading the list
-    nonisolated func reloadData(_ updates: @ReloadActor @escaping (_ builder: IQDiffableDataSourceSnapshotBuilder) -> Void,
+    nonisolated func reloadData(_ updates: @escaping ( @Sendable (_ builder: inout IQDiffableDataSourceSnapshotBuilder) -> Void),
                                 updateExistingSnapshot: Bool = false,
                                 animatingDifferences: Bool = true, diffing: Bool? = nil,
                                 animation: UITableView.RowAnimation? = nil,
                                 endLoadingOnCompletion: Bool = true,
-                                completion: (@MainActor () -> Void)? = nil) {
-
-        reloadQueue.async { @ReloadActor [removeDuplicates, registeredCells, registeredSupplementaryViews, cellRegisterType, existingSnapshot = self.snapshot(), weak self] in
+                                completion: (@MainActor @Sendable () -> Void)? = nil) {
+        reloadQueue.async { [removeDuplicates, registeredCells, registeredSupplementaryViews, cellRegisterType, existingSnapshot = self.snapshot(), weak self] in
             guard let self = self else { return }
 
             let initialSnapshot: IQDiffableDataSourceSnapshot
@@ -64,12 +63,12 @@ public extension IQList {
                 initialSnapshot = IQDiffableDataSourceSnapshot()
             }
 
-            let builder = IQDiffableDataSourceSnapshotBuilder(removeDuplicates: removeDuplicates,
+            var builder = IQDiffableDataSourceSnapshotBuilder(removeDuplicates: removeDuplicates,
                                                               registeredCells: registeredCells,
                                                               registeredSupplementaryViews: registeredSupplementaryViews,
                                                               batchSnapshot: initialSnapshot)
 
-            updates(builder)
+            updates(&builder)
 
             let finalBatchSnapshot: IQDiffableDataSourceSnapshot = builder.batchSnapshot
             let newCells = builder.newCells
@@ -111,8 +110,7 @@ public extension IQList {
                animatingDifferences: Bool = true, diffing: Bool? = nil,
                animation: UITableView.RowAnimation? = nil,
                endLoadingOnCompletion: Bool = true,
-               completion: ( @MainActor () -> Void)? = nil) {
-
+               completion: ( @MainActor @Sendable () -> Void)? = nil) {
         reloadQueue.async { [weak self] in
             guard let self = self else { return }
 
@@ -127,7 +125,7 @@ public extension IQList {
                               animatingDifferences: Bool = true, diffing: Bool? = nil,
                               animation: UITableView.RowAnimation? = nil,
                               endLoadingOnCompletion: Bool = true,
-                              completion: ( @MainActor () -> Void)? = nil) {
+                              completion: ( @MainActor @Sendable () -> Void)? = nil) {
 
         let previousDefaultRowAnimation: UITableView.RowAnimation?
         if let animation = animation {
@@ -186,7 +184,7 @@ public extension IQList {
                to section: IQSection,
                animatingDifferences: Bool = true,
                endLoadingOnCompletion: Bool = true,
-               completion: ( @MainActor () -> Void)? = nil) {
+               completion: ( @MainActor @Sendable () -> Void)? = nil) {
         reloadQueue.async { [weak self] in
 
             guard let self = self else { return }

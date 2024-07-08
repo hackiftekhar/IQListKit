@@ -8,7 +8,7 @@ Controller object that manages the videos and video collection for the sample ap
 import Foundation
 import UIKit
 
-class ConferenceVideoController {
+final class ConferenceVideoController: Sendable {
 
     struct Video: Hashable {
         let title: String
@@ -20,7 +20,7 @@ class ConferenceVideoController {
         }
     }
 
-    struct VideoCollection: Hashable {
+    struct VideoCollection: Hashable, Sendable {
         let orthogonalScrollBehaviour: UICollectionLayoutSectionOrthogonalScrollingBehavior
         let title: String
         let videos: [Video]

@@ -7,9 +7,9 @@ Sample news feed controller object.
 
 import UIKit
 
-class ConferenceNewsController: NSObject {
+final class ConferenceNewsController: Sendable {
 
-    struct NewsFeedItem: Hashable {
+    struct NewsFeedItem: Hashable, Sendable {
         let title: String
         let date: Date
         let body: String
@@ -28,13 +28,13 @@ class ConferenceNewsController: NSObject {
         }
     }
 
-    lazy var items: [NewsFeedItem] = {
+    nonisolated lazy var items: [NewsFeedItem] = {
        return itemsInternal()
     }()
 }
 
 extension ConferenceNewsController {
-    func itemsInternal() -> [NewsFeedItem] {
+    nonisolated func itemsInternal() -> [NewsFeedItem] {
         return [ NewsFeedItem(title: "Conference 2019 Registration Now Open",
                               date: DateComponents(year: 2019, month: 3, day: 14), body: """
                     Register by Wednesday, March 20, 2019 at 5:00PM PSD for your chance to join us and thousands

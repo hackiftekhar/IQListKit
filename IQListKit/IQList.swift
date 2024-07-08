@@ -36,14 +36,14 @@ public actor IQList {
         case manual
     }
 
-    private class NonIsolated {
+    private class NonIsolated: @unchecked Sendable {
         var removeDuplicates: Bool = false
         var registeredCells: [any IQModelableCell.Type] = []
         var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
     }
 
     // MARK: - Public Properties
-    public let listView: IQListView
+    nonisolated public let listView: IQListView
 
     @MainActor
     public var clearsSelectionOnDidSelect: Bool = true {
@@ -58,7 +58,7 @@ public actor IQList {
 
     nonisolated public let defaultRowAnimation: UITableView.RowAnimation
 
-    private let nonIsolated: NonIsolated = NonIsolated()
+    nonisolated private let nonIsolated: NonIsolated = NonIsolated()
     nonisolated public var removeDuplicates: Bool {
         get {
             nonIsolated.removeDuplicates

@@ -26,7 +26,8 @@ import UIKit
 
 @MainActor
 public final class IQTableEmptySupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
-    public typealias Model = AnyHashable
+
+    public typealias Model = String
 
     public var model: Model?
 

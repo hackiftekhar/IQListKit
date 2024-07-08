@@ -23,7 +23,7 @@
 import UIKit
 
 @MainActor
-@objc public protocol IQListView where Self: UIScrollView {
+@objc public protocol IQListView: Sendable where Self: UIScrollView {
 
     var backgroundView: UIView? { get }
 

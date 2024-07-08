@@ -22,20 +22,12 @@
 
 import UIKit
 
-@globalActor
-final public actor ReloadActor: GlobalActor {
-
-    public static let shared: ReloadActor = ReloadActor()
-    public typealias ActorType = ReloadActor
-}
-
-@ReloadActor
-public final class IQDiffableDataSourceSnapshotBuilder: Sendable {
+public struct IQDiffableDataSourceSnapshotBuilder: Sendable {
 
     let removeDuplicates: Bool
 
-    internal var registeredCells: [any IQModelableCell.Type] = []
-    internal var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
+    internal let registeredCells: [any IQModelableCell.Type]
+    internal let registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]]
 
     internal var newCells: [any IQModelableCell.Type] = []
     internal var newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
@@ -50,9 +42,5 @@ public final class IQDiffableDataSourceSnapshotBuilder: Sendable {
         self.registeredCells = registeredCells
         self.registeredSupplementaryViews = registeredSupplementaryViews
         self.batchSnapshot = batchSnapshot
-    }
-
-    func reset(with snapshot: IQDiffableDataSourceSnapshot) {
-        batchSnapshot = snapshot
     }
 }

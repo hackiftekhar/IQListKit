@@ -22,12 +22,12 @@
 
 import UIKit
 
-@ReloadActor
 public extension IQDiffableDataSourceSnapshotBuilder {
 
     /// Appends a section to the list
     /// This method can also be used in background thread
     /// - Parameter sections: sections which needs to be added to the list
+    mutating
     func append(_ sections: [IQSection], beforeSection: IQSection? = nil, afterSection: IQSection? = nil) {
 
         let existingHeaderTypes = registeredSupplementaryViews[IQList.elementKindSectionHeader] ?? []
@@ -70,10 +70,12 @@ public extension IQDiffableDataSourceSnapshotBuilder {
         }
     }
 
+    mutating
     func reload(_ sections: [IQSection]) {
         batchSnapshot.reloadSections(sections)
     }
 
+    mutating
     func delete(_ sections: [IQSection]) {
         batchSnapshot.deleteSections(sections)
     }

@@ -23,7 +23,7 @@
 import UIKit
 
 @MainActor
-internal protocol IQDiffableDataSource where Self: UIScrollViewDelegate {
+internal protocol IQDiffableDataSource: Sendable where Self: UIScrollViewDelegate {
 
     @MainActor var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] { get set }
 
