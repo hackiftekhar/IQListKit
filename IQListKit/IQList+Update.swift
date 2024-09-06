@@ -26,6 +26,7 @@ import UIKit
 /// Note that all these methods can also be used in a background threads since they all
 /// methods deal with the models, not any UI elements.
 /// NSDiffableDataSourceSnapshot.apply is also background thread safe
+
 public extension IQList {
 
     @available(iOS 14.0, *)
@@ -40,99 +41,78 @@ public extension IQList {
             }
         }
     }
+}
 
-    // swiftlint:disable line_length
-    /// Performs the list reload
-    /// - Parameters:
-    ///   - updates: update block which will be called to generate the snapshot
-    ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
-    ///   - completion: the completion block will be called after reloading the list
-    nonisolated func reloadData(_ updates: @ReloadActor @escaping (_ builder: IQDiffableDataSourceSnapshotBuilder) -> Void,
-                                updateExistingSnapshot: Bool = false,
-                                animatingDifferences: Bool = true, diffing: Bool? = nil,
-                                animation: UITableView.RowAnimation? = nil,
-                                endLoadingOnCompletion: Bool = true,
-                                completion: (@MainActor () -> Void)? = nil) {
+// Async await version
+public extension IQList {
 
-        reloadQueue.async { @ReloadActor [removeDuplicates, registeredCells, registeredSupplementaryViews, cellRegisterType, existingSnapshot = self.snapshot(), weak self] in
-            guard let self = self else { return }
+    nonisolated
+    func reloadData(_ updates: @Sendable @ReloadActor (_ builder: IQDiffableDataSourceSnapshotBuilder) -> Void,
+                    updateExistingSnapshot: Bool = false,
+                    animatingDifferences: Bool = true, diffing: Bool? = nil,
+                    animation: UITableView.RowAnimation? = nil,
+                    endLoadingOnCompletion: Bool = true) async {
 
-            let initialSnapshot: IQDiffableDataSourceSnapshot
-            if updateExistingSnapshot {
-                initialSnapshot = existingSnapshot
-            } else {
-                initialSnapshot = IQDiffableDataSourceSnapshot()
-            }
+        let removeDuplicates = removeDuplicates
+        let registeredSupplementaryViews = registeredSupplementaryViews
+        let registeredCells = registeredCells
+        let cellRegisterType = cellRegisterType
+        let existingSnapshot = self.snapshot()
 
-            let builder = IQDiffableDataSourceSnapshotBuilder(removeDuplicates: removeDuplicates,
-                                                              registeredCells: registeredCells,
-                                                              registeredSupplementaryViews: registeredSupplementaryViews,
-                                                              batchSnapshot: initialSnapshot)
+        let initialSnapshot: IQDiffableDataSourceSnapshot
+        if updateExistingSnapshot {
+            initialSnapshot = existingSnapshot
+        } else {
+            initialSnapshot = IQDiffableDataSourceSnapshot()
+        }
 
-            updates(builder)
+        let result = await buildSnapshot(removeDuplicates: removeDuplicates,
+                                         registeredCells: registeredCells,
+                                         registeredSupplementaryViews: registeredSupplementaryViews,
+                                         initialSnapshot: initialSnapshot, updates: updates)
 
-            let finalBatchSnapshot: IQDiffableDataSourceSnapshot = builder.batchSnapshot
-            let newCells = builder.newCells
-            let newSupplementaryViews = builder.newSupplementaryViews
-
-            builder.newCells = []
-            builder.newSupplementaryViews = [:]
-
-            if newCells.isEmpty && newSupplementaryViews.isEmpty {
-                privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
-                             diffing: diffing, animation: animation,
-                             endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
-            } else if cellRegisterType == .manual {
-                privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
-                             diffing: diffing, animation: animation,
-                             endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
-            } else {
-                DispatchQueue.main.async { @MainActor [weak self] in
-                    guard let self = self else { return }
-
-                    // Registering new cells on main thread
-                    register(newCells: newCells, newSupplementaryViews: newSupplementaryViews)
-
-                    reloadQueue.async { [weak self] in
-                        guard let self = self else { return }
-
-                        privateApply(finalBatchSnapshot, animatingDifferences: animatingDifferences,
-                                     diffing: diffing, animation: animation,
-                                     endLoadingOnCompletion: endLoadingOnCompletion, completion: completion)
-                    }
-                }
+        if cellRegisterType == .automatic, !result.newCells.isEmpty || !result.newSupplementaryViews.isEmpty {
+            await MainActor.run {
+                // Registering new cells on main thread
+                register(newCells: result.newCells, newSupplementaryViews: result.newSupplementaryViews)
             }
         }
+        await apply(result.snapshot, animatingDifferences: animatingDifferences,
+                    diffing: diffing, animation: animation,
+                    endLoadingOnCompletion: endLoadingOnCompletion)
     }
-    // swiftlint:enable line_length
+
+    // swiftlint:disable line_length
+    // swiftlint:disable large_tuple
+    @ReloadActor
+    private func buildSnapshot(removeDuplicates: Bool,
+                               registeredCells: [any IQModelableCell.Type],
+                               registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]],
+                               initialSnapshot: IQDiffableDataSourceSnapshot,
+                               updates: @Sendable @ReloadActor (_ builder: IQDiffableDataSourceSnapshotBuilder) -> Void)
+    -> (snapshot: IQDiffableDataSourceSnapshot, newCells: [any IQModelableCell.Type], newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]]) {
+        // swiftlint:enable line_length
+        // swiftlint:enable large_tuple
+
+        let builder = IQDiffableDataSourceSnapshotBuilder(removeDuplicates: removeDuplicates,
+                                                          registeredCells: registeredCells,
+                                                          registeredSupplementaryViews: registeredSupplementaryViews,
+                                                          batchSnapshot: initialSnapshot)
+        updates(builder)
+
+        return (builder.batchSnapshot, builder.newCells, builder.newSupplementaryViews)
+    }
 
     nonisolated
     func apply(_ snapshot: IQDiffableDataSourceSnapshot,
                animatingDifferences: Bool = true, diffing: Bool? = nil,
                animation: UITableView.RowAnimation? = nil,
-               endLoadingOnCompletion: Bool = true,
-               completion: ( @MainActor () -> Void)? = nil) {
-
-        reloadQueue.async { [weak self] in
-            guard let self = self else { return }
-
-            privateApply(snapshot, animatingDifferences: animatingDifferences, diffing: diffing,
-                         animation: animation, endLoadingOnCompletion: endLoadingOnCompletion,
-                         completion: completion)
-        }
-    }
-
-    nonisolated
-    private func privateApply(_ snapshot: IQDiffableDataSourceSnapshot,
-                              animatingDifferences: Bool = true, diffing: Bool? = nil,
-                              animation: UITableView.RowAnimation? = nil,
-                              endLoadingOnCompletion: Bool = true,
-                              completion: ( @MainActor () -> Void)? = nil) {
+               endLoadingOnCompletion: Bool = true) async {
 
         let previousDefaultRowAnimation: UITableView.RowAnimation?
         if let animation = animation {
             previousDefaultRowAnimation = self.defaultRowAnimation
-            DispatchQueue.main.async { @MainActor [weak self] in
+            await MainActor.run { [weak self] in
                 guard let self = self else { return }
                 diffableDataSource.defaultRowAnimation = animation
             }
@@ -140,42 +120,100 @@ public extension IQList {
             previousDefaultRowAnimation = nil
         }
 
-        let internalCompletion: (() -> Void) = {
-            DispatchQueue.main.async { @MainActor [weak self] in
-                guard let self = self else { return }
+        let usingReloadData: Bool
+        if let diffing = diffing {
+            usingReloadData = !animatingDifferences && !diffing
+        } else {
+            usingReloadData = !animatingDifferences
+        }
 
-                if let previousDefaultRowAnimation = previousDefaultRowAnimation {
-                    diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
-                }
-                let isLoading: Bool
-                if endLoadingOnCompletion {
-                    isLoading = false
-                } else {
-                    isLoading = self.isLoading
-                }
+        await diffableDataSource.internalApply(snapshot, animatingDifferences: animatingDifferences,
+                                               usingReloadData: usingReloadData)
 
-                /// Updating the backgroundView
-                setIsLoading(isLoading, animated: animatingDifferences)
+        await MainActor.run { [weak self] in
+            guard let self = self else { return }
 
+            if let previousDefaultRowAnimation = previousDefaultRowAnimation {
+                diffableDataSource.defaultRowAnimation = previousDefaultRowAnimation
+            }
+            let isLoading: Bool
+            if endLoadingOnCompletion {
+                isLoading = false
+            } else {
+                isLoading = self.isLoading
+            }
+
+            /// Updating the backgroundView
+            setIsLoading(isLoading, animated: animatingDifferences)
+        }
+    }
+
+    @available(iOS 14.0, *)
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+               to section: IQSection,
+               animatingDifferences: Bool = true,
+               endLoadingOnCompletion: Bool = true) async {
+
+        await diffableDataSource.internalApply(snapshot, to: section, animatingDifferences: animatingDifferences)
+
+        await MainActor.run { [weak self] in
+            guard let self = self else { return }
+
+            let isLoading: Bool
+            if endLoadingOnCompletion {
+                isLoading = false
+            } else {
+                isLoading = self.isLoading
+            }
+
+            // Updating the backgroundView
+            setIsLoading(isLoading, animated: animatingDifferences)
+        }
+    }
+}
+
+// Completion Handler version
+public extension IQList {
+
+    // swiftlint:disable line_length
+    /// Performs the list reload
+    /// - Parameters:
+    ///   - updates: update block which will be called to generate the snapshot
+    ///   - animatingDifferences: If true then animates the differences otherwise do not animate.
+    ///   - completion: the completion block will be called after reloading the list
+    nonisolated func reloadData(_ updates: @Sendable @ReloadActor @escaping (_ builder: IQDiffableDataSourceSnapshotBuilder) -> Void,
+                                updateExistingSnapshot: Bool = false,
+                                animatingDifferences: Bool = true, diffing: Bool? = nil,
+                                animation: UITableView.RowAnimation? = nil,
+                                endLoadingOnCompletion: Bool = true,
+                                completion: ( @Sendable @MainActor () -> Void)? = nil) {
+        // swiftlint:enable line_length
+        Task.detached { [weak self] in
+            guard let self = self else { return }
+            await reloadData(updates, updateExistingSnapshot: updateExistingSnapshot,
+                             animatingDifferences: animatingDifferences, diffing: diffing,
+                             animation: animation, endLoadingOnCompletion: endLoadingOnCompletion)
+            await MainActor.run {
                 completion?()
             }
         }
+    }
 
-        if let diffing = diffing {
-            if #available(iOS 15.0, *), !animatingDifferences, !diffing {
-                diffableDataSource.applySnapshotUsingReloadData(snapshot,
-                                                                completion: internalCompletion)
-            } else {
-                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences,
-                                         completion: internalCompletion)
-            }
-        } else {
-            if #available(iOS 15.0, *), !animatingDifferences {
-                diffableDataSource.applySnapshotUsingReloadData(snapshot,
-                                                                completion: internalCompletion)
-            } else {
-                diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences,
-                                         completion: internalCompletion)
+    nonisolated
+    func apply(_ snapshot: IQDiffableDataSourceSnapshot,
+               animatingDifferences: Bool = true, diffing: Bool? = nil,
+               animation: UITableView.RowAnimation? = nil,
+               endLoadingOnCompletion: Bool = true,
+               completion: ( @Sendable @MainActor () -> Void)? = nil) {
+
+        Task.detached { [weak self] in
+            guard let self = self else { return }
+            await apply(snapshot, animatingDifferences: animatingDifferences,
+                        diffing: diffing, animation: animation,
+                        endLoadingOnCompletion: endLoadingOnCompletion)
+            await MainActor.run {
+                completion?()
             }
         }
     }
@@ -186,28 +224,14 @@ public extension IQList {
                to section: IQSection,
                animatingDifferences: Bool = true,
                endLoadingOnCompletion: Bool = true,
-               completion: ( @MainActor () -> Void)? = nil) {
-        reloadQueue.async { [weak self] in
-
+               completion: ( @Sendable @MainActor () -> Void)? = nil) {
+        Task.detached { [weak self] in
             guard let self = self else { return }
-
-            diffableDataSource.apply(snapshot, to: section,
-                                     animatingDifferences: animatingDifferences, completion: {
-                DispatchQueue.main.async { @MainActor [weak self] in
-                    guard let self = self else { return }
-
-                    let isLoading: Bool
-                    if endLoadingOnCompletion {
-                        isLoading = false
-                    } else {
-                        isLoading = self.isLoading
-                    }
-
-                    setIsLoading(isLoading, animated: animatingDifferences)    /// Updating the backgroundView
-
-                    completion?()
-                }
-            })
+            await apply(snapshot, to: section, animatingDifferences: animatingDifferences,
+                        endLoadingOnCompletion: endLoadingOnCompletion)
+            await MainActor.run {
+                completion?()
+            }
         }
     }
 }

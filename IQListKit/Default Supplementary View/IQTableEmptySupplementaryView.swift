@@ -26,7 +26,10 @@ import UIKit
 
 @MainActor
 public final class IQTableEmptySupplementaryView: UITableViewHeaderFooterView, IQModelableSupplementaryView {
-    public typealias Model = AnyHashable
+
+    public struct Model: @unchecked Sendable, Hashable {
+        let identifier: AnyHashable
+    }
 
     public var model: Model?
 

@@ -42,7 +42,7 @@ extension TwoColumnViewController {
                                                                   gridCount: 2,
                                                                   interItemSpacing: .fixed(10))
         section.interGroupSpacing = 10
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
 
         let layout = IQCollectionViewLayout.layout(scrollDirection: .vertical,
                                                        section: section)

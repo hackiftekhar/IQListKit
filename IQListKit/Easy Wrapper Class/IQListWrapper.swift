@@ -36,10 +36,9 @@ final public class IQListWrapper<T: IQModelableCell> {
     public init(listView: IQListView,
                 type: T.Type, registerType: IQList.RegisterType,
                 delegateDataSource: IQListViewDelegateDataSource? = nil,
-                defaultRowAnimation: UITableView.RowAnimation = .fade,
-                reloadQueue: DispatchQueue? = nil) {
+                defaultRowAnimation: UITableView.RowAnimation = .fade) {
         list = IQList(listView: listView, delegateDataSource: delegateDataSource,
-                      defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
+                      defaultRowAnimation: defaultRowAnimation)
         list.registerCell(type: type.self, registerType: registerType)
     }
 
@@ -55,12 +54,12 @@ final public class IQListWrapper<T: IQModelableCell> {
         }
     }
 
-    public func setModels(_ models: [T.Model], animated: Bool, completion: ( @MainActor () -> Void)? = nil) {
+    public func setModels(_ models: [T.Model], animated: Bool, completion: ( @Sendable @MainActor () -> Void)? = nil) {
         _models = models
         reloadData(animated: animated, completion: completion)
     }
 
-    private func reloadData(animated: Bool, completion: ( @MainActor () -> Void)? = nil) {
+    private func reloadData(animated: Bool, completion: ( @Sendable @MainActor () -> Void)? = nil) {
 
         list.reloadData({ [section, models] builder in
             builder.append([section])

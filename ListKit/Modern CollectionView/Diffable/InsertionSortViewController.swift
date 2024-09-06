@@ -8,7 +8,7 @@ Visual illustration of an insertion sort using diffable data sources to update t
 import UIKit
 import IQListKit
 
-struct Node: Hashable {
+struct Node: Hashable, Sendable {
 
     let sectionId: Int
     var value: Int
@@ -36,7 +36,7 @@ struct Node: Hashable {
 
 final class InsertionSortViewController: UIViewController {
 
-    final class Section: Hashable {
+    final class Section: Hashable, @unchecked Sendable {
 
         let id: Int
         var nodes: [Node]
@@ -139,7 +139,7 @@ final class InsertionSortViewController: UIViewController {
     }
 
     func refreshUI(animated: Bool = true) {
-        list.reloadData({ [sections] builder in
+        list.reloadData({ [sections = self.sections] builder in
             for sectionIdentifier in sections {
                 let section = IQSection(identifier: sectionIdentifier)
                 builder.append([section])

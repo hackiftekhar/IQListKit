@@ -10,9 +10,10 @@ import IQListKit
 
 class ItemBadgeSupplementaryViewController: UIViewController {
 
-    static let sectionHeaderElementKind = "section-header-element-kind"
-    static let sectionFooterElementKind = "section-footer-element-kind"
-    static let badgeElementKind = "badge-element-kind"
+    nonisolated static let sectionHeaderElementKind = "section-header-element-kind"
+    nonisolated static let sectionFooterElementKind = "section-footer-element-kind"
+    nonisolated static let badgeElementKind = "badge-element-kind"
+
     enum Section {
         case main
     }
@@ -56,14 +57,14 @@ extension ItemBadgeSupplementaryViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalWidth(0.2))
 
-        let itemContentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        let itemContentInsets: NSDirectionalEdgeInsets = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
 
         let section = IQCollectionViewSectionLayout.sectionLayout(direction: .horizontal,
                                                                   itemSize: itemSize,
                                                                   supplementaryItems: [badge],
                                                                   itemContentInsets: itemContentInsets,
                                                                   groupSize: groupSize)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing: 20)
 
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                      heightDimension: .estimated(44))

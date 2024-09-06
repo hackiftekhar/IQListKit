@@ -155,7 +155,7 @@ extension IQSection {
 }
 
 extension IQSection {
-    
+
     @available(*, unavailable, message: "This function is renamed by repositioning parameters",
                 renamed: "init(identifier:header:headerSize:footer:footerSize:)")
     public init(identifier: AnyHashable,

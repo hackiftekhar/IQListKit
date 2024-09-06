@@ -59,7 +59,7 @@ extension DistinctSectionsViewController {
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: groupHeight)
 
-            let itemContentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+            let itemContentInsets: NSDirectionalEdgeInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
 
             let section = IQCollectionViewSectionLayout.sectionLayout(direction: .horizontal,
                                                                       itemSize: itemSize,

@@ -83,8 +83,8 @@ extension ConferenceVideoSessionsViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: TitleSupplementaryView.self,
                                        kind: Self.titleElementKind, registerType: .class)
 
-        list.reloadData { [videosController] builder in
-            videosController.collections.forEach {
+        list.reloadData { [collections = videosController.collections] builder in
+            collections.forEach {
                 let section = IQSection(identifier: $0, headerType: TitleSupplementaryView.self, headerModel: $0.title)
                 builder.append([section])
                 builder.append(ConferenceVideoCell.self, models: $0.videos)

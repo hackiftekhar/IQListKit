@@ -275,7 +275,7 @@ class CreateLayoutViewController: UIViewController {
 
     var collectionView: UICollectionView! = nil
 
-    private lazy var list = IQList(listView: collectionView, delegateDataSource: self, reloadQueue: .main)
+    private lazy var list = IQList(listView: collectionView, delegateDataSource: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()

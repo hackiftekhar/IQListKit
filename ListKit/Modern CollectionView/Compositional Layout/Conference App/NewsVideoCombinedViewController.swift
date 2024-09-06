@@ -127,12 +127,12 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
         list.registerSupplementaryView(type: TitleSupplementaryView.self,
                                        kind: Self.titleElementKind, registerType: .class)
 
-        list.reloadData { [videosController, newsController] builder in
+        list.reloadData { [collections = videosController.collections, items = newsController.items] builder in
 
             let itemsPerSection = 5
             var itemOffset = 0
 
-            videosController.collections.forEach { collection in
+            collections.forEach { collection in
 
                 let videoSection = IQSection(identifier: Section.video(collection: collection),
                                              headerType: TitleSupplementaryView.self,
@@ -159,7 +159,7 @@ extension NewsVideoCombinedViewController: IQListViewDelegateDataSource {
                     let section = IQSection(identifier: Section.news(identifier: sectionIdentifier))
                     builder.append([section])
 
-                    let items: [ConferenceNewsFeedCell.Model] = newsController.items.map {
+                    let items: [ConferenceNewsFeedCell.Model] = items.map {
                         .init(section: sectionIdentifier, item: $0, isLastCell: false)
                     }
                     builder.append(ConferenceNewsFeedCell.self, models: items)

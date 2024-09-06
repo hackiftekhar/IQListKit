@@ -10,8 +10,8 @@ import IQListKit
 
 class SectionHeadersFootersViewController: UIViewController {
 
-    static let sectionHeaderElementKind = "section-header-element-kind"
-    static let sectionFooterElementKind = "section-footer-element-kind"
+    nonisolated static let sectionHeaderElementKind = "section-header-element-kind"
+    nonisolated static let sectionFooterElementKind = "section-footer-element-kind"
 
     var collectionView: UICollectionView! = nil
 
@@ -43,7 +43,7 @@ extension SectionHeadersFootersViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .absolute(44))
 
-        let itemContentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        let itemContentInsets: NSDirectionalEdgeInsets = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
 
         let section = IQCollectionViewSectionLayout.sectionLayout(direction: .horizontal,
                                                                   itemSize: itemSize,

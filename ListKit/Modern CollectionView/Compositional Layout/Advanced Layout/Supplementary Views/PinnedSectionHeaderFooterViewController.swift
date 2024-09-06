@@ -10,8 +10,8 @@ import IQListKit
 
 class PinnedSectionHeaderFooterViewController: UIViewController {
 
-    static let sectionHeaderElementKind = "section-header-element-kind"
-    static let sectionFooterElementKind = "section-footer-element-kind"
+    nonisolated static let sectionHeaderElementKind = "section-header-element-kind"
+    nonisolated static let sectionFooterElementKind = "section-footer-element-kind"
 
     var collectionView: UICollectionView! = nil
 
@@ -56,8 +56,7 @@ extension PinnedSectionHeaderFooterViewController {
                                                                   itemSize: itemSize,
                                                                   groupSize: groupSize)
 
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10,
-                                                        bottom: 0, trailing: 10)
+        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
         section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
 //        section.interGroupSpacing = 5
 

@@ -26,7 +26,34 @@ public typealias IQDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<IQS
 @available(iOS 14.0, *)
 public typealias IQDiffableDataSourceSectionSnapshot = NSDiffableDataSourceSectionSnapshot<IQItem>
 
-extension DispatchQueue: @unchecked Sendable { }
+public extension IQDiffableDataSourceSnapshot {
+
+    nonisolated
+    func sectionIdentifier(where predicate: (SectionIdentifierType) -> Bool) -> SectionIdentifierType? {
+        sectionIdentifiers.first(where: predicate)
+    }
+
+    nonisolated
+    func itemIdentifier(where predicate: (ItemIdentifierType) -> Bool) -> ItemIdentifierType? {
+        itemIdentifiers.first(where: predicate)
+    }
+
+    nonisolated
+    func itemIdentifier<T: IQModelableCell>(of type: T.Type,
+                                            where predicate: (T.Model) -> Bool) -> ItemIdentifierType? {
+
+        if let item = itemIdentifiers.first(where: {
+            if let existingModel = $0.model as? T.Model {
+                return predicate(existingModel)
+            }
+            return false
+        }) {
+            return item
+        }
+
+        return nil
+    }
+}
 
 @preconcurrency
 public actor IQList {
@@ -36,13 +63,14 @@ public actor IQList {
         case manual
     }
 
-    private class NonIsolated {
+    private class NonIsolated: @unchecked Sendable {
         var removeDuplicates: Bool = false
         var registeredCells: [any IQModelableCell.Type] = []
         var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
     }
 
     // MARK: - Public Properties
+    @MainActor
     public let listView: IQListView
 
     @MainActor
@@ -141,9 +169,8 @@ public actor IQList {
 
     // MARK: - Private Properties
 
-    nonisolated internal let reloadQueue: DispatchQueue
-
-    nonisolated internal let diffableDataSource: IQDiffableDataSource
+    @MainActor
+    internal let diffableDataSource: IQDiffableDataSource
 
     // MARK: - Initialization
 
@@ -152,16 +179,13 @@ public actor IQList {
     ///   - listView: UITableView or UICollectionView
     ///   - delegateDataSource: the delegate and dataSource of the IQListView
     ///   - defaultRowAnimation: default animation when reloading table
-    ///   - reloadQueue: queue to reload the data
     @MainActor
     public init(listView: IQListView,
                 delegateDataSource: IQListViewDelegateDataSource? = nil,
                 defaultRowAnimation: UITableView.RowAnimation = .fade,
-                cellRegisterType: CellRegistrationType = .automatic,
-                reloadQueue: DispatchQueue? = nil) {
+                cellRegisterType: CellRegistrationType = .automatic) {
         self.init(listView: listView,
-                  delegate: delegateDataSource, dataSource: delegateDataSource,
-                  defaultRowAnimation: defaultRowAnimation, reloadQueue: reloadQueue)
+                  delegate: delegateDataSource, dataSource: delegateDataSource)
     }
 
     /// Initialization
@@ -170,28 +194,24 @@ public actor IQList {
     ///   - delegate: the delegate of the IQListView
     ///   - dataSource: the dataSource of the IQListView
     ///   - defaultRowAnimation: default animation when reloading table
-    ///   - reloadQueue: queue to reload the data
     @MainActor
     public init(listView: IQListView, delegate: IQListViewDelegate? = nil,
                 dataSource: IQListViewDataSource? = nil,
                 defaultRowAnimation: UITableView.RowAnimation = .fade,
-                cellRegisterType: CellRegistrationType = .automatic,
-                reloadQueue: DispatchQueue? = nil) {
+                cellRegisterType: CellRegistrationType = .automatic) {
 
         if let tableView = listView as? UITableView {
 
             self.init(tableView,
                       delegate: delegate, dataSource: dataSource,
                       defaultRowAnimation: defaultRowAnimation,
-                      cellRegisterType: cellRegisterType,
-                      reloadQueue: reloadQueue)
+                      cellRegisterType: cellRegisterType)
 
         } else if let collectionView = listView as? UICollectionView {
 
             self.init(collectionView,
                       delegate: delegate, dataSource: dataSource,
-                      cellRegisterType: cellRegisterType,
-                      reloadQueue: reloadQueue)
+                      cellRegisterType: cellRegisterType)
 
             let collectionReusableViewIdentifier: String = String(describing: UICollectionReusableView.self)
             collectionView.register(UICollectionReusableView.self,
@@ -225,8 +245,7 @@ public actor IQList {
     private init(_ tableView: UITableView, delegate: IQListViewDelegate?,
                  dataSource: IQListViewDataSource?,
                  defaultRowAnimation: UITableView.RowAnimation,
-                 cellRegisterType: CellRegistrationType,
-                 reloadQueue: DispatchQueue?) {
+                 cellRegisterType: CellRegistrationType) {
 
         let tableViewDiffableDataSource = IQTableViewDiffableDataSource(tableView: tableView,
                                                                         cellProvider: { (tableView, indexPath, item) in
@@ -257,20 +276,6 @@ public actor IQList {
         tableViewDiffableDataSource.dataSource = dataSource
         listView = tableView
         diffableDataSource = tableViewDiffableDataSource
-
-        if let reloadQueue = reloadQueue {
-            self.reloadQueue = reloadQueue
-        } else {
-            var controller: UIResponder = tableView
-            while !(controller is UIViewController) {
-                if let responder = controller.next { controller = responder
-                } else { break }
-            }
-            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)",
-                                                           qos: .userInteractive, attributes: .concurrent)
-            self.reloadQueue = reloadQueue
-        }
-
         self.defaultRowAnimation = defaultRowAnimation
         self.cellRegisterType = cellRegisterType
         tableViewDiffableDataSource.proxyDelegate = self
@@ -285,8 +290,7 @@ public actor IQList {
     private init(_ collectionView: UICollectionView,
                  delegate: IQListViewDelegate?,
                  dataSource: IQListViewDataSource?,
-                 cellRegisterType: CellRegistrationType,
-                 reloadQueue: DispatchQueue?) {
+                 cellRegisterType: CellRegistrationType) {
 
         // swiftlint:disable line_length
         let collectionViewDiffableDataSource = IQCollectionViewDiffableDataSource(collectionView: collectionView,
@@ -317,19 +321,6 @@ public actor IQList {
         collectionViewDiffableDataSource.dataSource = dataSource
         listView = collectionView
         diffableDataSource = collectionViewDiffableDataSource
-
-        if let reloadQueue = reloadQueue {
-            self.reloadQueue = reloadQueue
-        } else {
-            var controller: UIResponder = collectionView
-            while !(controller is UIViewController) {
-                if let responder = controller.next { controller = responder
-                } else { break }
-            }
-            let reloadQueue: DispatchQueue = DispatchQueue(label: "IQListKit-\(type(of: controller).self)",
-                                                           qos: .userInteractive, attributes: .concurrent)
-            self.reloadQueue = reloadQueue
-        }
 
         self.defaultRowAnimation = .automatic
         self.cellRegisterType = cellRegisterType

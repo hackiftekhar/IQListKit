@@ -23,7 +23,7 @@
 import UIKit
 
 @MainActor
-internal protocol IQDiffableDataSource where Self: UIScrollViewDelegate {
+internal protocol IQDiffableDataSource: AnyObject, Sendable {
 
     @MainActor var registeredSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] { get set }
 
@@ -58,6 +58,39 @@ internal protocol IQDiffableDataSource where Self: UIScrollViewDelegate {
     @available(iOS 14.0, *)
     nonisolated
     func snapshot(for section: IQSection) -> IQDiffableDataSourceSectionSnapshot
+}
+
+extension IQDiffableDataSource {
+    nonisolated
+    func internalApply(_ snapshot: IQDiffableDataSourceSnapshot,
+                       animatingDifferences: Bool, usingReloadData: Bool) async {
+        await withCheckedContinuation { continuation in
+            if #available(iOS 15.0, *), !animatingDifferences, usingReloadData {
+                applySnapshotUsingReloadData(snapshot, completion: {
+                    continuation.resume()
+                })
+            } else {
+                apply(snapshot, animatingDifferences: animatingDifferences,
+                      completion: {
+                    continuation.resume()
+                })
+            }
+        }
+    }
+
+    @available(iOS 14.0, *)
+    nonisolated
+    func internalApply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
+                       to section: IQSection,
+                       animatingDifferences: Bool) async {
+
+        await withCheckedContinuation { continuation in
+            apply(snapshot, to: section,
+                                     animatingDifferences: animatingDifferences, completion: {
+                continuation.resume()
+            })
+        }
+    }
 }
 
 @MainActor

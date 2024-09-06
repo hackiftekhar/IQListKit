@@ -106,7 +106,7 @@ public extension IQList {
 
     nonisolated
     func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
-        diffableDataSource.snapshot().sectionIdentifiers.first(where: predicate)
+        diffableDataSource.snapshot().sectionIdentifier(where: predicate)
     }
 
     nonisolated
@@ -148,22 +148,12 @@ public extension IQList {
     nonisolated
     func itemIdentifier<T: IQModelableCell>(of type: T.Type,
                                             where predicate: (T.Model) -> Bool) -> IQItem? {
-
-        if let item = diffableDataSource.snapshot().itemIdentifiers.first(where: {
-            if let existingModel = $0.model as? T.Model {
-                return predicate(existingModel)
-            }
-            return false
-        }) {
-            return item
-        }
-
-        return nil
+        diffableDataSource.snapshot().itemIdentifier(of: type, where: predicate)
     }
 
     nonisolated
     func itemIdentifier(where predicate: (IQItem) -> Bool) -> IQItem? {
-        diffableDataSource.snapshot().itemIdentifiers.first(where: predicate)
+        diffableDataSource.snapshot().itemIdentifier(where: predicate)
     }
 
     @MainActor

@@ -76,7 +76,6 @@ public extension IQList {
                                                          registerType: RegisterType,
                                                          bundle: Bundle,
                                                          logEnabled: Bool) {
-
         guard registeredCells.contains(where: { $0 == type}) == false else {
             return
         }
