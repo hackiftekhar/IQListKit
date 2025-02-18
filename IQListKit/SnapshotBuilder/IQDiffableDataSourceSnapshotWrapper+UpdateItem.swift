@@ -106,31 +106,34 @@ public extension IQDiffableDataSourceSnapshotBuilder {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
-        var reloadedItems: [IQItem] = []
-        for model in models {
-            if let index = existingItems.firstIndex(where: {
-                if let existingModel = $0.model as? T.Model {
-                    return comparator(existingModel, model)
-                }
-                return false
-            }) {
-                batchSnapshot.deleteItems([existingItems[index]])
+        var mapping: [T.Model: IQItem?] = [:]
+        let nilItem: IQItem? = nil
+        models.forEach { mapping[$0] = nilItem }
 
-                var item = existingItems[index]
-                item.update(type, model: model)
-
-                if index == 0 {
-                    if existingItems.count > 1 {
-                        batchSnapshot.insertItems([item], beforeItem: existingItems[index+1])
-                    } else {
-                        batchSnapshot.appendItems([item])
-                    }
-                } else {
-                    batchSnapshot.insertItems([item], afterItem: existingItems[index-1])
+        for existingItem in existingItems where existingItem.model is T.Model {
+            for (model, value) in mapping where value == nil {
+                if let existingModel = existingItem.model as? T.Model,
+                   comparator(existingModel, model) {
+                    mapping[model] = existingItem
                 }
-                reloadedItems.append(item)
+            }
+
+            if mapping.allSatisfy({ $0.value != nil }) {
+                break
             }
         }
+
+        var reloadedItems: [IQItem] = []
+        for (model, item) in mapping.compactMapValues({ $0 }) {
+            var updatedItem = item
+            updatedItem.update(type, model: model)
+            if updatedItem != item {
+                batchSnapshot.insertItems([updatedItem], afterItem: item)
+                batchSnapshot.deleteItems([item])
+                reloadedItems.append(updatedItem)
+            }
+        }
+        batchSnapshot.reloadItems(reloadedItems)
         return reloadedItems
     }
 
@@ -141,17 +144,31 @@ public extension IQDiffableDataSourceSnapshotBuilder {
 
         let existingItems: [IQItem] = batchSnapshot.itemIdentifiers
 
-        var reconfiguredItems: [IQItem] = []
-        for model in models {
-            if let index = existingItems.firstIndex(where: {
-                if let existingModel = $0.model as? T.Model {
-                    return comparator(existingModel, model)
+        var mapping: [T.Model: IQItem?] = [:]
+        let nilItem: IQItem? = nil
+        models.forEach { mapping[$0] = nilItem }
+
+        for existingItem in existingItems where existingItem.model is T.Model {
+            for (model, value) in mapping where value == nil {
+                if let existingModel = existingItem.model as? T.Model,
+                   comparator(existingModel, model) {
+                    mapping[model] = existingItem
                 }
-                return false
-            }) {
-                var item = existingItems[index]
-                item.update(type, model: model)
-                reconfiguredItems.append(item)
+            }
+
+            if mapping.allSatisfy({ $0.value != nil }) {
+                break
+            }
+        }
+
+        var reconfiguredItems: [IQItem] = []
+        for (model, item) in mapping.compactMapValues({ $0 }) {
+            var updatedItem = item
+            updatedItem.update(type, model: model)
+            if updatedItem != item {
+                batchSnapshot.insertItems([updatedItem], afterItem: item)
+                batchSnapshot.deleteItems([item])
+                reconfiguredItems.append(updatedItem)
             }
         }
 
@@ -167,14 +184,13 @@ public extension IQDiffableDataSourceSnapshotBuilder {
 
         var deletedItems: [IQItem] = []
         for model in models {
-
-            if let item = existingItems.first(where: {
+            if let existingItem = existingItems.first(where: {
                 if let existingModel = $0.model as? T.Model {
                     return comparator(existingModel, model)
                 }
                 return false
             }) {
-                deletedItems.append(item)
+                deletedItems.append(existingItem)
             }
         }
 

@@ -40,7 +40,7 @@ public final class IQDiffableDataSourceSnapshotBuilder: Sendable {
     internal var newCells: [any IQModelableCell.Type] = []
     internal var newSupplementaryViews: [String: [any IQModelableSupplementaryView.Type]] = [:]
 
-    internal var batchSnapshot: IQDiffableDataSourceSnapshot
+    var batchSnapshot: IQDiffableDataSourceSnapshot
 
     init(removeDuplicates: Bool,
          registeredCells: [any IQModelableCell.Type],
