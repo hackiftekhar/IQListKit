@@ -33,36 +33,36 @@ internal protocol IQDiffableDataSource: AnyObject, Sendable {
     @MainActor var clearsSelectionOnDidSelect: Bool { get set }
     @MainActor var defaultRowAnimation: UITableView.RowAnimation { get set }
 
-    nonisolated
+    @MainActor @preconcurrency
     func snapshot() -> IQDiffableDataSourceSnapshot
 
     @MainActor func itemIdentifier(for indexPath: IndexPath) -> IQItem?
     @MainActor func indexPath(for itemIdentifier: IQItem) -> IndexPath?
 
     @available(iOS 15.0, tvOS 15.0, *)
-    nonisolated
+    @MainActor @preconcurrency
     func applySnapshotUsingReloadData(_ snapshot: IQDiffableDataSourceSnapshot,
                                       completion: (() -> Void)?)
 
-    nonisolated
+    @MainActor @preconcurrency
     func apply(_ snapshot: IQDiffableDataSourceSnapshot,
                animatingDifferences: Bool,
                completion: (() -> Void)?)
 
     // For UICollectionView only
     @available(iOS 14.0, *)
-    nonisolated
+    @MainActor @preconcurrency
     func apply(_ snapshot: IQDiffableDataSourceSectionSnapshot, to section: IQSection,
                animatingDifferences: Bool,
                completion: (() -> Void)?)
 
     @available(iOS 14.0, *)
-    nonisolated
+    @MainActor @preconcurrency
     func snapshot(for section: IQSection) -> IQDiffableDataSourceSectionSnapshot
 }
 
 extension IQDiffableDataSource {
-    nonisolated
+    @MainActor @preconcurrency
     func internalApply(_ snapshot: IQDiffableDataSourceSnapshot,
                        animatingDifferences: Bool, usingReloadData: Bool) async {
         await withCheckedContinuation { continuation in
@@ -80,7 +80,7 @@ extension IQDiffableDataSource {
     }
 
     @available(iOS 14.0, *)
-    nonisolated
+    @MainActor @preconcurrency
     func internalApply(_ snapshot: IQDiffableDataSourceSectionSnapshot,
                        to section: IQSection,
                        animatingDifferences: Bool) async {

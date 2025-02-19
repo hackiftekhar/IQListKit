@@ -67,49 +67,53 @@ public extension IQList {
         }
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func snapshot() -> IQDiffableDataSourceSnapshot {
         return diffableDataSource.snapshot()
     }
 
     @available(iOS 14.0, *)
-    nonisolated
+    @MainActor @preconcurrency
     func snapshot(for section: IQSection) -> IQDiffableDataSourceSectionSnapshot {
         return diffableDataSource.snapshot(for: section)
     }
 
-    nonisolated var numberOfItems: Int {
+    @MainActor @preconcurrency
+    var numberOfItems: Int {
         diffableDataSource.snapshot().numberOfItems
     }
 
-    nonisolated var numberOfSections: Int {
+    @MainActor @preconcurrency
+    var numberOfSections: Int {
         diffableDataSource.snapshot().numberOfSections
     }
 
-    nonisolated var sectionIdentifiers: [IQSection] {
+    @MainActor @preconcurrency
+    var sectionIdentifiers: [IQSection] {
         diffableDataSource.snapshot().sectionIdentifiers
     }
 
-    nonisolated var itemIdentifiers: [IQItem] {
+    @MainActor @preconcurrency
+    var itemIdentifiers: [IQItem] {
         diffableDataSource.snapshot().itemIdentifiers
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func numberOfItems(inSection identifier: IQSection) -> Int {
         diffableDataSource.snapshot().numberOfItems(inSection: identifier)
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func itemIdentifiers(inSection identifier: IQSection) -> [IQItem] {
         diffableDataSource.snapshot().itemIdentifiers(inSection: identifier)
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func sectionIdentifier(where predicate: (IQSection) -> Bool) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifier(where: predicate)
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func sectionIdentifier(containingItem identifier: IQItem) -> IQSection? {
         diffableDataSource.snapshot().sectionIdentifier(containingItem: identifier)
     }
@@ -145,13 +149,13 @@ public extension IQList {
         diffableDataSource.itemIdentifier(for: indexPath)
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func itemIdentifier<T: IQModelableCell>(of type: T.Type,
                                             where predicate: (T.Model) -> Bool) -> IQItem? {
         diffableDataSource.snapshot().itemIdentifier(of: type, where: predicate)
     }
 
-    nonisolated
+    @MainActor @preconcurrency
     func itemIdentifier(where predicate: (IQItem) -> Bool) -> IQItem? {
         diffableDataSource.snapshot().itemIdentifier(where: predicate)
     }

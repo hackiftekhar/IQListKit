@@ -57,7 +57,7 @@ public extension IQList {
         let registeredSupplementaryViews = registeredSupplementaryViews
         let registeredCells = registeredCells
         let cellRegisterType = cellRegisterType
-        let existingSnapshot = self.snapshot()
+        let existingSnapshot = await self.snapshot()
 
         let initialSnapshot: IQDiffableDataSourceSnapshot
         if updateExistingSnapshot {
