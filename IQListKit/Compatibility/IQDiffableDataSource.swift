@@ -33,7 +33,8 @@ internal protocol IQDiffableDataSource: AnyObject, Sendable {
     @MainActor var clearsSelectionOnDidSelect: Bool { get set }
     @MainActor var defaultRowAnimation: UITableView.RowAnimation { get set }
 
-    nonisolated func snapshot() -> IQDiffableDataSourceSnapshot
+    nonisolated
+    func snapshot() -> IQDiffableDataSourceSnapshot
 
     @MainActor func itemIdentifier(for indexPath: IndexPath) -> IQItem?
     @MainActor func indexPath(for itemIdentifier: IQItem) -> IndexPath?

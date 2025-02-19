@@ -7,84 +7,98 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C0A673172A7AFF47004EB133 /* IQDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672E72A7AFF47004EB133 /* IQDiffableDataSource.swift */; };
-		C0A673182A7AFF47004EB133 /* IQList+UpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672E82A7AFF47004EB133 /* IQList+UpdateItem.swift */; };
-		C0A673192A7AFF47004EB133 /* IQTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EA2A7AFF47004EB133 /* IQTableViewCell.swift */; };
-		C0A6731A2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EC2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift */; };
-		C0A6731B2A7AFF47004EB133 /* IQListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672ED2A7AFF47004EB133 /* IQListView.swift */; };
-		C0A6731C2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EE2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift */; };
-		C0A6731D2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672EF2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift */; };
-		C0A6731E2A7AFF47004EB133 /* IQReorderableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F12A7AFF47004EB133 /* IQReorderableCell.swift */; };
-		C0A6731F2A7AFF47004EB133 /* IQCellActionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F22A7AFF47004EB133 /* IQCellActionsProvider.swift */; };
-		C0A673202A7AFF47004EB133 /* IQCellModelModifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F32A7AFF47004EB133 /* IQCellModelModifiable.swift */; };
-		C0A673212A7AFF47004EB133 /* IQCellSizeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F42A7AFF47004EB133 /* IQCellSizeProvider.swift */; };
-		C0A673222A7AFF47004EB133 /* IQListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F52A7AFF47004EB133 /* IQListCell.swift */; };
-		C0A673232A7AFF47004EB133 /* IQModelableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F62A7AFF47004EB133 /* IQModelableCell.swift */; };
-		C0A673242A7AFF47004EB133 /* IQSelectableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F72A7AFF47004EB133 /* IQSelectableCell.swift */; };
-		C0A673252A7AFF47004EB133 /* IQList+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672F82A7AFF47004EB133 /* IQList+Update.swift */; };
-		C0A673262A7AFF47004EB133 /* IQNoItemStateRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FA2A7AFF47004EB133 /* IQNoItemStateRepresentable.swift */; };
-		C0A673272A7AFF47004EB133 /* IQNoItemStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FB2A7AFF47004EB133 /* IQNoItemStateView.swift */; };
-		C0A673282A7AFF47004EB133 /* IQList+UpdateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FC2A7AFF47004EB133 /* IQList+UpdateSection.swift */; };
-		C0A673292A7AFF47004EB133 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FE2A7AFF47004EB133 /* UICollectionView+Extension.swift */; };
-		C0A6732A2A7AFF47004EB133 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A672FF2A7AFF47004EB133 /* Array+Extension.swift */; };
-		C0A6732B2A7AFF47004EB133 /* IQList+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673002A7AFF47004EB133 /* IQList+Register.swift */; };
-		C0A6732C2A7AFF47004EB133 /* IQModelableSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673022A7AFF47004EB133 /* IQModelableSupplementaryView.swift */; };
-		C0A6732D2A7AFF47004EB133 /* IQCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673042A7AFF47004EB133 /* IQCollectionViewLayout.swift */; };
-		C0A6732E2A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673052A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift */; };
-		C0A6732F2A7AFF47004EB133 /* IQListKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C0A673062A7AFF47004EB133 /* IQListKit.h */; };
-		C0A673302A7AFF47004EB133 /* IQList+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673072A7AFF47004EB133 /* IQList+Info.swift */; };
-		C0A673312A7AFF47004EB133 /* IQSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673092A7AFF47004EB133 /* IQSection.swift */; };
-		C0A673322A7AFF47004EB133 /* IQItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730A2A7AFF47004EB133 /* IQItem.swift */; };
-		C0A673332A7AFF47004EB133 /* IQContextualAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730C2A7AFF47004EB133 /* IQContextualAction.swift */; };
-		C0A673342A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730E2A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift */; };
-		C0A673352A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6730F2A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift */; };
-		C0A673362A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673102A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift */; };
-		C0A673372A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673112A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift */; };
-		C0A673382A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673122A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift */; };
-		C0A673392A7AFF47004EB133 /* IQList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673132A7AFF47004EB133 /* IQList.swift */; };
-		C0A6733A2A7AFF47004EB133 /* IQListWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673152A7AFF47004EB133 /* IQListWrapper.swift */; };
-		C0A6733B2A7AFF47004EB133 /* IQListViewDelegateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A673162A7AFF47004EB133 /* IQListViewDelegateDataSource.swift */; };
+		C01C6D9D2D65B608000BDD13 /* IQItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D932D65B608000BDD13 /* IQItem.swift */; };
+		C01C6D9E2D65B608000BDD13 /* IQUIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D812D65B608000BDD13 /* IQUIScrollViewDelegate.swift */; };
+		C01C6D9F2D65B608000BDD13 /* IQNoItemStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D862D65B608000BDD13 /* IQNoItemStateView.swift */; };
+		C01C6DA02D65B608000BDD13 /* IQDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D6F2D65B608000BDD13 /* IQDiffableDataSource.swift */; };
+		C01C6DA12D65B608000BDD13 /* IQList+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D902D65B608000BDD13 /* IQList+Update.swift */; };
+		C01C6DA22D65B608000BDD13 /* IQListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D7D2D65B608000BDD13 /* IQListView.swift */; };
+		C01C6DA32D65B608000BDD13 /* IQNoItemStateRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D852D65B608000BDD13 /* IQNoItemStateRepresentable.swift */; };
+		C01C6DA42D65B608000BDD13 /* IQModelModifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D682D65B608000BDD13 /* IQModelModifiable.swift */; };
+		C01C6DA52D65B608000BDD13 /* IQTableTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D772D65B608000BDD13 /* IQTableTitleSupplementaryView.swift */; };
+		C01C6DA62D65B608000BDD13 /* IQSupplementaryViewPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D752D65B608000BDD13 /* IQSupplementaryViewPlaceholder.swift */; };
+		C01C6DA72D65B608000BDD13 /* IQModelableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D672D65B608000BDD13 /* IQModelableCell.swift */; };
+		C01C6DA82D65B608000BDD13 /* IQSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D942D65B608000BDD13 /* IQSection.swift */; };
+		C01C6DA92D65B608000BDD13 /* IQCollectionTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D742D65B608000BDD13 /* IQCollectionTitleSupplementaryView.swift */; };
+		C01C6DAA2D65B608000BDD13 /* IQList+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D8F2D65B608000BDD13 /* IQList+Register.swift */; };
+		C01C6DAB2D65B608000BDD13 /* IQReorderableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D692D65B608000BDD13 /* IQReorderableModel.swift */; };
+		C01C6DAC2D65B608000BDD13 /* IQCollectionViewSectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D6D2D65B608000BDD13 /* IQCollectionViewSectionLayout.swift */; };
+		C01C6DAD2D65B608000BDD13 /* IQCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D6C2D65B608000BDD13 /* IQCollectionViewLayout.swift */; };
+		C01C6DAE2D65B608000BDD13 /* IQList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D8C2D65B608000BDD13 /* IQList.swift */; };
+		C01C6DAF2D65B608000BDD13 /* IQListWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D832D65B608000BDD13 /* IQListWrapper.swift */; };
+		C01C6DB02D65B608000BDD13 /* IQList+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D8D2D65B608000BDD13 /* IQList+Info.swift */; };
+		C01C6DB12D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D7B2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegate.swift */; };
+		C01C6DB22D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D7C2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegateFlowLayout.swift */; };
+		C01C6DB32D65B608000BDD13 /* IQDiffableDataSourceSnapshotBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D972D65B608000BDD13 /* IQDiffableDataSourceSnapshotBuilder.swift */; };
+		C01C6DB42D65B608000BDD13 /* IQModelableSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D9B2D65B608000BDD13 /* IQModelableSupplementaryView.swift */; };
+		C01C6DB52D65B608000BDD13 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D882D65B608000BDD13 /* Array+Extension.swift */; };
+		C01C6DB62D65B608000BDD13 /* IQCellActionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D642D65B608000BDD13 /* IQCellActionsProvider.swift */; };
+		C01C6DB72D65B608000BDD13 /* IQSelectableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D6A2D65B608000BDD13 /* IQSelectableModel.swift */; };
+		C01C6DB82D65B608000BDD13 /* IQCellSizeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D652D65B608000BDD13 /* IQCellSizeProvider.swift */; };
+		C01C6DB92D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D992D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift */; };
+		C01C6DBA2D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D7F2D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDataSourcePrefetching.swift */; };
+		C01C6DBB2D65B608000BDD13 /* IQTableViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D7E2D65B608000BDD13 /* IQTableViewDiffableDataSource.swift */; };
+		C01C6DBC2D65B608000BDD13 /* IQListViewDelegateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D922D65B608000BDD13 /* IQListViewDelegateDataSource.swift */; };
+		C01C6DBD2D65B608000BDD13 /* IQList+NoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D8E2D65B608000BDD13 /* IQList+NoItem.swift */; };
+		C01C6DBE2D65B608000BDD13 /* IQCollectionViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D792D65B608000BDD13 /* IQCollectionViewDiffableDataSource.swift */; };
+		C01C6DBF2D65B608000BDD13 /* IQListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D662D65B608000BDD13 /* IQListCell.swift */; };
+		C01C6DC02D65B608000BDD13 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D892D65B608000BDD13 /* UICollectionView+Extension.swift */; };
+		C01C6DC12D65B608000BDD13 /* IQTableEmptySupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D762D65B608000BDD13 /* IQTableEmptySupplementaryView.swift */; };
+		C01C6DC22D65B608000BDD13 /* IQTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D712D65B608000BDD13 /* IQTableViewCell.swift */; };
+		C01C6DC32D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D982D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift */; };
+		C01C6DC42D65B608000BDD13 /* IQCollectionEmptySupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D732D65B608000BDD13 /* IQCollectionEmptySupplementaryView.swift */; };
+		C01C6DC52D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D7A2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift */; };
+		C01C6DC62D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01C6D802D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDelegate.swift */; };
+		C01C6DC72D65B608000BDD13 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C01C6D962D65B608000BDD13 /* PrivacyInfo.xcprivacy */; };
+		C01C6DC82D65B608000BDD13 /* IQListKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C01C6D912D65B608000BDD13 /* IQListKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C01C6D642D65B608000BDD13 /* IQCellActionsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCellActionsProvider.swift; sourceTree = "<group>"; };
+		C01C6D652D65B608000BDD13 /* IQCellSizeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCellSizeProvider.swift; sourceTree = "<group>"; };
+		C01C6D662D65B608000BDD13 /* IQListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQListCell.swift; sourceTree = "<group>"; };
+		C01C6D672D65B608000BDD13 /* IQModelableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQModelableCell.swift; sourceTree = "<group>"; };
+		C01C6D682D65B608000BDD13 /* IQModelModifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQModelModifiable.swift; sourceTree = "<group>"; };
+		C01C6D692D65B608000BDD13 /* IQReorderableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQReorderableModel.swift; sourceTree = "<group>"; };
+		C01C6D6A2D65B608000BDD13 /* IQSelectableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSelectableModel.swift; sourceTree = "<group>"; };
+		C01C6D6C2D65B608000BDD13 /* IQCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCollectionViewLayout.swift; sourceTree = "<group>"; };
+		C01C6D6D2D65B608000BDD13 /* IQCollectionViewSectionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCollectionViewSectionLayout.swift; sourceTree = "<group>"; };
+		C01C6D6F2D65B608000BDD13 /* IQDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQDiffableDataSource.swift; sourceTree = "<group>"; };
+		C01C6D712D65B608000BDD13 /* IQTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQTableViewCell.swift; sourceTree = "<group>"; };
+		C01C6D732D65B608000BDD13 /* IQCollectionEmptySupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCollectionEmptySupplementaryView.swift; sourceTree = "<group>"; };
+		C01C6D742D65B608000BDD13 /* IQCollectionTitleSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCollectionTitleSupplementaryView.swift; sourceTree = "<group>"; };
+		C01C6D752D65B608000BDD13 /* IQSupplementaryViewPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSupplementaryViewPlaceholder.swift; sourceTree = "<group>"; };
+		C01C6D762D65B608000BDD13 /* IQTableEmptySupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQTableEmptySupplementaryView.swift; sourceTree = "<group>"; };
+		C01C6D772D65B608000BDD13 /* IQTableTitleSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQTableTitleSupplementaryView.swift; sourceTree = "<group>"; };
+		C01C6D792D65B608000BDD13 /* IQCollectionViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCollectionViewDiffableDataSource.swift; sourceTree = "<group>"; };
+		C01C6D7A2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift"; sourceTree = "<group>"; };
+		C01C6D7B2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQCollectionViewDiffableDataSource+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
+		C01C6D7C2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQCollectionViewDiffableDataSource+UICollectionViewDelegateFlowLayout.swift"; sourceTree = "<group>"; };
+		C01C6D7D2D65B608000BDD13 /* IQListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQListView.swift; sourceTree = "<group>"; };
+		C01C6D7E2D65B608000BDD13 /* IQTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQTableViewDiffableDataSource.swift; sourceTree = "<group>"; };
+		C01C6D7F2D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDataSourcePrefetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQTableViewDiffableDataSource+UITableViewDataSourcePrefetching.swift"; sourceTree = "<group>"; };
+		C01C6D802D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQTableViewDiffableDataSource+UITableViewDelegate.swift"; sourceTree = "<group>"; };
+		C01C6D812D65B608000BDD13 /* IQUIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQUIScrollViewDelegate.swift; sourceTree = "<group>"; };
+		C01C6D832D65B608000BDD13 /* IQListWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQListWrapper.swift; sourceTree = "<group>"; };
+		C01C6D852D65B608000BDD13 /* IQNoItemStateRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQNoItemStateRepresentable.swift; sourceTree = "<group>"; };
+		C01C6D862D65B608000BDD13 /* IQNoItemStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQNoItemStateView.swift; sourceTree = "<group>"; };
+		C01C6D882D65B608000BDD13 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		C01C6D892D65B608000BDD13 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
+		C01C6D8C2D65B608000BDD13 /* IQList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQList.swift; sourceTree = "<group>"; };
+		C01C6D8D2D65B608000BDD13 /* IQList+Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQList+Info.swift"; sourceTree = "<group>"; };
+		C01C6D8E2D65B608000BDD13 /* IQList+NoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQList+NoItem.swift"; sourceTree = "<group>"; };
+		C01C6D8F2D65B608000BDD13 /* IQList+Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQList+Register.swift"; sourceTree = "<group>"; };
+		C01C6D902D65B608000BDD13 /* IQList+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQList+Update.swift"; sourceTree = "<group>"; };
+		C01C6D912D65B608000BDD13 /* IQListKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IQListKit.h; sourceTree = "<group>"; };
+		C01C6D922D65B608000BDD13 /* IQListViewDelegateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQListViewDelegateDataSource.swift; sourceTree = "<group>"; };
+		C01C6D932D65B608000BDD13 /* IQItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQItem.swift; sourceTree = "<group>"; };
+		C01C6D942D65B608000BDD13 /* IQSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSection.swift; sourceTree = "<group>"; };
+		C01C6D962D65B608000BDD13 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C01C6D972D65B608000BDD13 /* IQDiffableDataSourceSnapshotBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQDiffableDataSourceSnapshotBuilder.swift; sourceTree = "<group>"; };
+		C01C6D982D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift"; sourceTree = "<group>"; };
+		C01C6D992D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift"; sourceTree = "<group>"; };
+		C01C6D9B2D65B608000BDD13 /* IQModelableSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQModelableSupplementaryView.swift; sourceTree = "<group>"; };
 		C0A672DB2A7AFEF4004EB133 /* IQListKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IQListKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C0A672E72A7AFF47004EB133 /* IQDiffableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDiffableDataSource.swift; sourceTree = "<group>"; };
-		C0A672E82A7AFF47004EB133 /* IQList+UpdateItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+UpdateItem.swift"; sourceTree = "<group>"; };
-		C0A672EA2A7AFF47004EB133 /* IQTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableViewCell.swift; sourceTree = "<group>"; };
-		C0A672EC2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionViewDiffableDataSource.swift; sourceTree = "<group>"; };
-		C0A672ED2A7AFF47004EB133 /* IQListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListView.swift; sourceTree = "<group>"; };
-		C0A672EE2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQUIScrollViewDelegate.swift; sourceTree = "<group>"; };
-		C0A672EF2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableViewDiffableDataSource.swift; sourceTree = "<group>"; };
-		C0A672F12A7AFF47004EB133 /* IQReorderableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQReorderableCell.swift; sourceTree = "<group>"; };
-		C0A672F22A7AFF47004EB133 /* IQCellActionsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCellActionsProvider.swift; sourceTree = "<group>"; };
-		C0A672F32A7AFF47004EB133 /* IQCellModelModifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCellModelModifiable.swift; sourceTree = "<group>"; };
-		C0A672F42A7AFF47004EB133 /* IQCellSizeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCellSizeProvider.swift; sourceTree = "<group>"; };
-		C0A672F52A7AFF47004EB133 /* IQListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListCell.swift; sourceTree = "<group>"; };
-		C0A672F62A7AFF47004EB133 /* IQModelableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModelableCell.swift; sourceTree = "<group>"; };
-		C0A672F72A7AFF47004EB133 /* IQSelectableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSelectableCell.swift; sourceTree = "<group>"; };
-		C0A672F82A7AFF47004EB133 /* IQList+Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+Update.swift"; sourceTree = "<group>"; };
-		C0A672FA2A7AFF47004EB133 /* IQNoItemStateRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQNoItemStateRepresentable.swift; sourceTree = "<group>"; };
-		C0A672FB2A7AFF47004EB133 /* IQNoItemStateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQNoItemStateView.swift; sourceTree = "<group>"; };
-		C0A672FC2A7AFF47004EB133 /* IQList+UpdateSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+UpdateSection.swift"; sourceTree = "<group>"; };
-		C0A672FE2A7AFF47004EB133 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
-		C0A672FF2A7AFF47004EB133 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
-		C0A673002A7AFF47004EB133 /* IQList+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+Register.swift"; sourceTree = "<group>"; };
-		C0A673022A7AFF47004EB133 /* IQModelableSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModelableSupplementaryView.swift; sourceTree = "<group>"; };
-		C0A673042A7AFF47004EB133 /* IQCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionViewLayout.swift; sourceTree = "<group>"; };
-		C0A673052A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionViewSectionLayout.swift; sourceTree = "<group>"; };
-		C0A673062A7AFF47004EB133 /* IQListKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQListKit.h; sourceTree = "<group>"; };
-		C0A673072A7AFF47004EB133 /* IQList+Info.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IQList+Info.swift"; sourceTree = "<group>"; };
-		C0A673092A7AFF47004EB133 /* IQSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSection.swift; sourceTree = "<group>"; };
-		C0A6730A2A7AFF47004EB133 /* IQItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQItem.swift; sourceTree = "<group>"; };
-		C0A6730C2A7AFF47004EB133 /* IQContextualAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContextualAction.swift; sourceTree = "<group>"; };
-		C0A6730E2A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableEmptySupplementaryView.swift; sourceTree = "<group>"; };
-		C0A6730F2A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionTitleSupplementaryView.swift; sourceTree = "<group>"; };
-		C0A673102A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSupplementaryViewPlaceholder.swift; sourceTree = "<group>"; };
-		C0A673112A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTableTitleSupplementaryView.swift; sourceTree = "<group>"; };
-		C0A673122A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionEmptySupplementaryView.swift; sourceTree = "<group>"; };
-		C0A673132A7AFF47004EB133 /* IQList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQList.swift; sourceTree = "<group>"; };
-		C0A673152A7AFF47004EB133 /* IQListWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListWrapper.swift; sourceTree = "<group>"; };
-		C0A673162A7AFF47004EB133 /* IQListViewDelegateDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListViewDelegateDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +112,133 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C01C6D6B2D65B608000BDD13 /* Cell Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D642D65B608000BDD13 /* IQCellActionsProvider.swift */,
+				C01C6D652D65B608000BDD13 /* IQCellSizeProvider.swift */,
+				C01C6D662D65B608000BDD13 /* IQListCell.swift */,
+				C01C6D672D65B608000BDD13 /* IQModelableCell.swift */,
+				C01C6D682D65B608000BDD13 /* IQModelModifiable.swift */,
+				C01C6D692D65B608000BDD13 /* IQReorderableModel.swift */,
+				C01C6D6A2D65B608000BDD13 /* IQSelectableModel.swift */,
+			);
+			path = "Cell Protocol";
+			sourceTree = "<group>";
+		};
+		C01C6D6E2D65B608000BDD13 /* CollectionView Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D6C2D65B608000BDD13 /* IQCollectionViewLayout.swift */,
+				C01C6D6D2D65B608000BDD13 /* IQCollectionViewSectionLayout.swift */,
+			);
+			path = "CollectionView Layouts";
+			sourceTree = "<group>";
+		};
+		C01C6D702D65B608000BDD13 /* Compatibility */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D6F2D65B608000BDD13 /* IQDiffableDataSource.swift */,
+			);
+			path = Compatibility;
+			sourceTree = "<group>";
+		};
+		C01C6D722D65B608000BDD13 /* Default Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D712D65B608000BDD13 /* IQTableViewCell.swift */,
+			);
+			path = "Default Cell";
+			sourceTree = "<group>";
+		};
+		C01C6D782D65B608000BDD13 /* Default Supplementary View */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D732D65B608000BDD13 /* IQCollectionEmptySupplementaryView.swift */,
+				C01C6D742D65B608000BDD13 /* IQCollectionTitleSupplementaryView.swift */,
+				C01C6D752D65B608000BDD13 /* IQSupplementaryViewPlaceholder.swift */,
+				C01C6D762D65B608000BDD13 /* IQTableEmptySupplementaryView.swift */,
+				C01C6D772D65B608000BDD13 /* IQTableTitleSupplementaryView.swift */,
+			);
+			path = "Default Supplementary View";
+			sourceTree = "<group>";
+		};
+		C01C6D822D65B608000BDD13 /* DiffableDataSource */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D792D65B608000BDD13 /* IQCollectionViewDiffableDataSource.swift */,
+				C01C6D7A2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift */,
+				C01C6D7B2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegate.swift */,
+				C01C6D7C2D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegateFlowLayout.swift */,
+				C01C6D7D2D65B608000BDD13 /* IQListView.swift */,
+				C01C6D7E2D65B608000BDD13 /* IQTableViewDiffableDataSource.swift */,
+				C01C6D7F2D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDataSourcePrefetching.swift */,
+				C01C6D802D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDelegate.swift */,
+				C01C6D812D65B608000BDD13 /* IQUIScrollViewDelegate.swift */,
+			);
+			path = DiffableDataSource;
+			sourceTree = "<group>";
+		};
+		C01C6D842D65B608000BDD13 /* Easy Wrapper Class */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D832D65B608000BDD13 /* IQListWrapper.swift */,
+			);
+			path = "Easy Wrapper Class";
+			sourceTree = "<group>";
+		};
+		C01C6D872D65B608000BDD13 /* Empty State */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D852D65B608000BDD13 /* IQNoItemStateRepresentable.swift */,
+				C01C6D862D65B608000BDD13 /* IQNoItemStateView.swift */,
+			);
+			path = "Empty State";
+			sourceTree = "<group>";
+		};
+		C01C6D8A2D65B608000BDD13 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D882D65B608000BDD13 /* Array+Extension.swift */,
+				C01C6D892D65B608000BDD13 /* UICollectionView+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C01C6D8B2D65B608000BDD13 /* HeaderFooter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HeaderFooter;
+			sourceTree = "<group>";
+		};
+		C01C6D952D65B608000BDD13 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D932D65B608000BDD13 /* IQItem.swift */,
+				C01C6D942D65B608000BDD13 /* IQSection.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C01C6D9A2D65B608000BDD13 /* SnapshotBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D972D65B608000BDD13 /* IQDiffableDataSourceSnapshotBuilder.swift */,
+				C01C6D982D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift */,
+				C01C6D992D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift */,
+			);
+			path = SnapshotBuilder;
+			sourceTree = "<group>";
+		};
+		C01C6D9C2D65B608000BDD13 /* Supplementary Element Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C01C6D9B2D65B608000BDD13 /* IQModelableSupplementaryView.swift */,
+			);
+			path = "Supplementary Element Protocol";
+			sourceTree = "<group>";
+		};
 		C0A672D12A7AFEF4004EB133 = {
 			isa = PBXGroup;
 			children = (
@@ -117,141 +258,29 @@
 		C0A672E52A7AFF47004EB133 /* IQListKit */ = {
 			isa = PBXGroup;
 			children = (
-				C0A672E62A7AFF47004EB133 /* Compatibility */,
-				C0A672E82A7AFF47004EB133 /* IQList+UpdateItem.swift */,
-				C0A672E92A7AFF47004EB133 /* Default Cell */,
-				C0A672EB2A7AFF47004EB133 /* DiffableDataSource */,
-				C0A672F02A7AFF47004EB133 /* Cell Protocol */,
-				C0A672F82A7AFF47004EB133 /* IQList+Update.swift */,
-				C0A672F92A7AFF47004EB133 /* Empty State */,
-				C0A672FC2A7AFF47004EB133 /* IQList+UpdateSection.swift */,
-				C0A672FD2A7AFF47004EB133 /* Extensions */,
-				C0A673002A7AFF47004EB133 /* IQList+Register.swift */,
-				C0A673012A7AFF47004EB133 /* Supplementary Element Protocol */,
-				C0A673032A7AFF47004EB133 /* CollectionView Layouts */,
-				C0A673062A7AFF47004EB133 /* IQListKit.h */,
-				C0A673072A7AFF47004EB133 /* IQList+Info.swift */,
-				C0A673082A7AFF47004EB133 /* Model */,
-				C0A6730B2A7AFF47004EB133 /* Actions */,
-				C0A6730D2A7AFF47004EB133 /* Default Supplementary View */,
-				C0A673132A7AFF47004EB133 /* IQList.swift */,
-				C0A673142A7AFF47004EB133 /* Easy Wrapper Class */,
-				C0A673162A7AFF47004EB133 /* IQListViewDelegateDataSource.swift */,
+				C01C6D6B2D65B608000BDD13 /* Cell Protocol */,
+				C01C6D6E2D65B608000BDD13 /* CollectionView Layouts */,
+				C01C6D702D65B608000BDD13 /* Compatibility */,
+				C01C6D722D65B608000BDD13 /* Default Cell */,
+				C01C6D782D65B608000BDD13 /* Default Supplementary View */,
+				C01C6D822D65B608000BDD13 /* DiffableDataSource */,
+				C01C6D842D65B608000BDD13 /* Easy Wrapper Class */,
+				C01C6D872D65B608000BDD13 /* Empty State */,
+				C01C6D8A2D65B608000BDD13 /* Extensions */,
+				C01C6D8B2D65B608000BDD13 /* HeaderFooter */,
+				C01C6D8C2D65B608000BDD13 /* IQList.swift */,
+				C01C6D8D2D65B608000BDD13 /* IQList+Info.swift */,
+				C01C6D8E2D65B608000BDD13 /* IQList+NoItem.swift */,
+				C01C6D8F2D65B608000BDD13 /* IQList+Register.swift */,
+				C01C6D902D65B608000BDD13 /* IQList+Update.swift */,
+				C01C6D912D65B608000BDD13 /* IQListKit.h */,
+				C01C6D922D65B608000BDD13 /* IQListViewDelegateDataSource.swift */,
+				C01C6D952D65B608000BDD13 /* Model */,
+				C01C6D962D65B608000BDD13 /* PrivacyInfo.xcprivacy */,
+				C01C6D9A2D65B608000BDD13 /* SnapshotBuilder */,
+				C01C6D9C2D65B608000BDD13 /* Supplementary Element Protocol */,
 			);
 			path = IQListKit;
-			sourceTree = "<group>";
-		};
-		C0A672E62A7AFF47004EB133 /* Compatibility */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672E72A7AFF47004EB133 /* IQDiffableDataSource.swift */,
-			);
-			path = Compatibility;
-			sourceTree = "<group>";
-		};
-		C0A672E92A7AFF47004EB133 /* Default Cell */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672EA2A7AFF47004EB133 /* IQTableViewCell.swift */,
-			);
-			path = "Default Cell";
-			sourceTree = "<group>";
-		};
-		C0A672EB2A7AFF47004EB133 /* DiffableDataSource */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672EC2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift */,
-				C0A672ED2A7AFF47004EB133 /* IQListView.swift */,
-				C0A672EE2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift */,
-				C0A672EF2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift */,
-			);
-			path = DiffableDataSource;
-			sourceTree = "<group>";
-		};
-		C0A672F02A7AFF47004EB133 /* Cell Protocol */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672F12A7AFF47004EB133 /* IQReorderableCell.swift */,
-				C0A672F22A7AFF47004EB133 /* IQCellActionsProvider.swift */,
-				C0A672F32A7AFF47004EB133 /* IQCellModelModifiable.swift */,
-				C0A672F42A7AFF47004EB133 /* IQCellSizeProvider.swift */,
-				C0A672F52A7AFF47004EB133 /* IQListCell.swift */,
-				C0A672F62A7AFF47004EB133 /* IQModelableCell.swift */,
-				C0A672F72A7AFF47004EB133 /* IQSelectableCell.swift */,
-			);
-			path = "Cell Protocol";
-			sourceTree = "<group>";
-		};
-		C0A672F92A7AFF47004EB133 /* Empty State */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672FA2A7AFF47004EB133 /* IQNoItemStateRepresentable.swift */,
-				C0A672FB2A7AFF47004EB133 /* IQNoItemStateView.swift */,
-			);
-			path = "Empty State";
-			sourceTree = "<group>";
-		};
-		C0A672FD2A7AFF47004EB133 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				C0A672FE2A7AFF47004EB133 /* UICollectionView+Extension.swift */,
-				C0A672FF2A7AFF47004EB133 /* Array+Extension.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		C0A673012A7AFF47004EB133 /* Supplementary Element Protocol */ = {
-			isa = PBXGroup;
-			children = (
-				C0A673022A7AFF47004EB133 /* IQModelableSupplementaryView.swift */,
-			);
-			path = "Supplementary Element Protocol";
-			sourceTree = "<group>";
-		};
-		C0A673032A7AFF47004EB133 /* CollectionView Layouts */ = {
-			isa = PBXGroup;
-			children = (
-				C0A673042A7AFF47004EB133 /* IQCollectionViewLayout.swift */,
-				C0A673052A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift */,
-			);
-			path = "CollectionView Layouts";
-			sourceTree = "<group>";
-		};
-		C0A673082A7AFF47004EB133 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				C0A673092A7AFF47004EB133 /* IQSection.swift */,
-				C0A6730A2A7AFF47004EB133 /* IQItem.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		C0A6730B2A7AFF47004EB133 /* Actions */ = {
-			isa = PBXGroup;
-			children = (
-				C0A6730C2A7AFF47004EB133 /* IQContextualAction.swift */,
-			);
-			path = Actions;
-			sourceTree = "<group>";
-		};
-		C0A6730D2A7AFF47004EB133 /* Default Supplementary View */ = {
-			isa = PBXGroup;
-			children = (
-				C0A6730E2A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift */,
-				C0A6730F2A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift */,
-				C0A673102A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift */,
-				C0A673112A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift */,
-				C0A673122A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift */,
-			);
-			path = "Default Supplementary View";
-			sourceTree = "<group>";
-		};
-		C0A673142A7AFF47004EB133 /* Easy Wrapper Class */ = {
-			isa = PBXGroup;
-			children = (
-				C0A673152A7AFF47004EB133 /* IQListWrapper.swift */,
-			);
-			path = "Easy Wrapper Class";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,7 +290,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0A6732F2A7AFF47004EB133 /* IQListKit.h in Headers */,
+				C01C6DC82D65B608000BDD13 /* IQListKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C01C6DC72D65B608000BDD13 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,42 +363,48 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0A6731C2A7AFF47004EB133 /* IQUIScrollViewDelegate.swift in Sources */,
-				C0A673242A7AFF47004EB133 /* IQSelectableCell.swift in Sources */,
-				C0A673322A7AFF47004EB133 /* IQItem.swift in Sources */,
-				C0A6733A2A7AFF47004EB133 /* IQListWrapper.swift in Sources */,
-				C0A6732C2A7AFF47004EB133 /* IQModelableSupplementaryView.swift in Sources */,
-				C0A673222A7AFF47004EB133 /* IQListCell.swift in Sources */,
-				C0A673212A7AFF47004EB133 /* IQCellSizeProvider.swift in Sources */,
-				C0A673372A7AFF47004EB133 /* IQTableTitleSupplementaryView.swift in Sources */,
-				C0A673342A7AFF47004EB133 /* IQTableEmptySupplementaryView.swift in Sources */,
-				C0A673202A7AFF47004EB133 /* IQCellModelModifiable.swift in Sources */,
-				C0A673392A7AFF47004EB133 /* IQList.swift in Sources */,
-				C0A673362A7AFF47004EB133 /* IQSupplementaryViewPlaceholder.swift in Sources */,
-				C0A6731F2A7AFF47004EB133 /* IQCellActionsProvider.swift in Sources */,
-				C0A6731B2A7AFF47004EB133 /* IQListView.swift in Sources */,
-				C0A673232A7AFF47004EB133 /* IQModelableCell.swift in Sources */,
-				C0A6732D2A7AFF47004EB133 /* IQCollectionViewLayout.swift in Sources */,
-				C0A6731D2A7AFF47004EB133 /* IQTableViewDiffableDataSource.swift in Sources */,
-				C0A6731E2A7AFF47004EB133 /* IQReorderableCell.swift in Sources */,
-				C0A6731A2A7AFF47004EB133 /* IQCollectionViewDiffableDataSource.swift in Sources */,
-				C0A6732A2A7AFF47004EB133 /* Array+Extension.swift in Sources */,
-				C0A6733B2A7AFF47004EB133 /* IQListViewDelegateDataSource.swift in Sources */,
-				C0A673252A7AFF47004EB133 /* IQList+Update.swift in Sources */,
-				C0A673262A7AFF47004EB133 /* IQNoItemStateRepresentable.swift in Sources */,
-				C0A673172A7AFF47004EB133 /* IQDiffableDataSource.swift in Sources */,
-				C0A673282A7AFF47004EB133 /* IQList+UpdateSection.swift in Sources */,
-				C0A6732E2A7AFF47004EB133 /* IQCollectionViewSectionLayout.swift in Sources */,
-				C0A673182A7AFF47004EB133 /* IQList+UpdateItem.swift in Sources */,
-				C0A673292A7AFF47004EB133 /* UICollectionView+Extension.swift in Sources */,
-				C0A673382A7AFF47004EB133 /* IQCollectionEmptySupplementaryView.swift in Sources */,
-				C0A673302A7AFF47004EB133 /* IQList+Info.swift in Sources */,
-				C0A673272A7AFF47004EB133 /* IQNoItemStateView.swift in Sources */,
-				C0A673192A7AFF47004EB133 /* IQTableViewCell.swift in Sources */,
-				C0A6732B2A7AFF47004EB133 /* IQList+Register.swift in Sources */,
-				C0A673352A7AFF47004EB133 /* IQCollectionTitleSupplementaryView.swift in Sources */,
-				C0A673332A7AFF47004EB133 /* IQContextualAction.swift in Sources */,
-				C0A673312A7AFF47004EB133 /* IQSection.swift in Sources */,
+				C01C6D9D2D65B608000BDD13 /* IQItem.swift in Sources */,
+				C01C6D9E2D65B608000BDD13 /* IQUIScrollViewDelegate.swift in Sources */,
+				C01C6D9F2D65B608000BDD13 /* IQNoItemStateView.swift in Sources */,
+				C01C6DA02D65B608000BDD13 /* IQDiffableDataSource.swift in Sources */,
+				C01C6DA12D65B608000BDD13 /* IQList+Update.swift in Sources */,
+				C01C6DA22D65B608000BDD13 /* IQListView.swift in Sources */,
+				C01C6DA32D65B608000BDD13 /* IQNoItemStateRepresentable.swift in Sources */,
+				C01C6DA42D65B608000BDD13 /* IQModelModifiable.swift in Sources */,
+				C01C6DA52D65B608000BDD13 /* IQTableTitleSupplementaryView.swift in Sources */,
+				C01C6DA62D65B608000BDD13 /* IQSupplementaryViewPlaceholder.swift in Sources */,
+				C01C6DA72D65B608000BDD13 /* IQModelableCell.swift in Sources */,
+				C01C6DA82D65B608000BDD13 /* IQSection.swift in Sources */,
+				C01C6DA92D65B608000BDD13 /* IQCollectionTitleSupplementaryView.swift in Sources */,
+				C01C6DAA2D65B608000BDD13 /* IQList+Register.swift in Sources */,
+				C01C6DAB2D65B608000BDD13 /* IQReorderableModel.swift in Sources */,
+				C01C6DAC2D65B608000BDD13 /* IQCollectionViewSectionLayout.swift in Sources */,
+				C01C6DAD2D65B608000BDD13 /* IQCollectionViewLayout.swift in Sources */,
+				C01C6DAE2D65B608000BDD13 /* IQList.swift in Sources */,
+				C01C6DAF2D65B608000BDD13 /* IQListWrapper.swift in Sources */,
+				C01C6DB02D65B608000BDD13 /* IQList+Info.swift in Sources */,
+				C01C6DB12D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegate.swift in Sources */,
+				C01C6DB22D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDelegateFlowLayout.swift in Sources */,
+				C01C6DB32D65B608000BDD13 /* IQDiffableDataSourceSnapshotBuilder.swift in Sources */,
+				C01C6DB42D65B608000BDD13 /* IQModelableSupplementaryView.swift in Sources */,
+				C01C6DB52D65B608000BDD13 /* Array+Extension.swift in Sources */,
+				C01C6DB62D65B608000BDD13 /* IQCellActionsProvider.swift in Sources */,
+				C01C6DB72D65B608000BDD13 /* IQSelectableModel.swift in Sources */,
+				C01C6DB82D65B608000BDD13 /* IQCellSizeProvider.swift in Sources */,
+				C01C6DB92D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateSection.swift in Sources */,
+				C01C6DBA2D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDataSourcePrefetching.swift in Sources */,
+				C01C6DBB2D65B608000BDD13 /* IQTableViewDiffableDataSource.swift in Sources */,
+				C01C6DBC2D65B608000BDD13 /* IQListViewDelegateDataSource.swift in Sources */,
+				C01C6DBD2D65B608000BDD13 /* IQList+NoItem.swift in Sources */,
+				C01C6DBE2D65B608000BDD13 /* IQCollectionViewDiffableDataSource.swift in Sources */,
+				C01C6DBF2D65B608000BDD13 /* IQListCell.swift in Sources */,
+				C01C6DC02D65B608000BDD13 /* UICollectionView+Extension.swift in Sources */,
+				C01C6DC12D65B608000BDD13 /* IQTableEmptySupplementaryView.swift in Sources */,
+				C01C6DC22D65B608000BDD13 /* IQTableViewCell.swift in Sources */,
+				C01C6DC32D65B608000BDD13 /* IQDiffableDataSourceSnapshotWrapper+UpdateItem.swift in Sources */,
+				C01C6DC42D65B608000BDD13 /* IQCollectionEmptySupplementaryView.swift in Sources */,
+				C01C6DC52D65B608000BDD13 /* IQCollectionViewDiffableDataSource+UICollectionViewDataSourcePrefetching.swift in Sources */,
+				C01C6DC62D65B608000BDD13 /* IQTableViewDiffableDataSource+UITableViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
