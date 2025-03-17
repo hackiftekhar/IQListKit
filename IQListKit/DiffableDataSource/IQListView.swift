@@ -34,8 +34,8 @@ import UIKit
     var numberOfSections: Int { get }
     func numberOfItems(inSection section: Int) -> Int
 
-    func indexPathFor(cell: IQListCell) -> IndexPath?
-//    func cellForItemAt(indexPath: IndexPath) -> IQListCell?
+    func indexPathOf(cell: IQListCell) -> IndexPath? //
+    func cellOfItemAt(indexPath: IndexPath) -> IQListCell?
     var indexPathsForVisibleItems: [IndexPath] { get }
 }
 
@@ -46,16 +46,16 @@ extension UICollectionView: IQListView {
                    scrollPosition: scrollPosition.collectionViewScrollPosition)
     }
 
-    public func indexPathFor(cell: IQListCell) -> IndexPath? {
+    public func indexPathOf(cell: IQListCell) -> IndexPath? {
         guard let cell = cell as? UICollectionViewCell else {
             return nil
         }
         return indexPath(for: cell)
     }
 
-//    public func cellForItemAt(indexPath: IndexPath) -> IQListCell? {
-//        cellForItem(at: indexPath)
-//    }
+    public func cellOfItemAt(indexPath: IndexPath) -> IQListCell? {
+        cellForItem(at: indexPath)
+    }
 }
 
 @MainActor
@@ -72,14 +72,14 @@ extension UITableView: IQListView {
         numberOfRows(inSection: section)
     }
 
-    public func indexPathFor(cell: IQListCell) -> IndexPath? {
+    public func indexPathOf(cell: IQListCell) -> IndexPath? {
         guard let cell = cell as? UITableViewCell else {
             return nil
         }
         return indexPath(for: cell)
     }
 
-    public func cellForItemAt(indexPath: IndexPath) -> IQListCell? {
+    public func cellOfItemAt(indexPath: IndexPath) -> IQListCell? {
         cellForRow(at: indexPath)
     }
 
