@@ -166,3 +166,21 @@ class UserCell: UITableViewCell, IQModelableCell {
 ```
 
 ---
+
+## 📌 **Additinal Model configurations**
+```swift
+class UserCell: UITableViewCell, IQModelableCell {
+
+    struct Model: Hashable, IQReorderableModel, IQSelectableModel {
+
+        var canMove: Bool { false }
+        var canEdit: Bool { false }
+        var editingStyle: UITableViewCell.EditingStyle { .none }
+
+        var isHighlightable: Bool { true }
+        var isDeselectable: Bool { true }
+        var canPerformPrimaryAction: Bool { true }
+    }
+}
+```
+---
